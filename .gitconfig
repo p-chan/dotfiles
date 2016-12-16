@@ -1,0 +1,11 @@
+[user]
+  name = P-Chan
+  email = hello@0x50.io
+
+[core]
+  excludesfile = ~/.gitexclude
+  editor = vim
+  pager = less -R
+
+[color]
+  ui = auto
