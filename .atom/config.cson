@@ -4,5 +4,8 @@
       "predawn-ui"
       "predawn-syntax"
     ]
+  editor:
+    fontFamily: "Source Han Code JP"
+    fontSize: 13
   "exception-reporting":
     userId: "b11fca1a-c7d4-f53c-8213-722c2f0f6210"
