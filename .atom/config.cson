@@ -1,3 +1,8 @@
 "*":
+  core:
+    themes: [
+      "predawn-ui"
+      "predawn-syntax"
+    ]
   "exception-reporting":
     userId: "b11fca1a-c7d4-f53c-8213-722c2f0f6210"
