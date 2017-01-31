@@ -3,3 +3,6 @@
 
 # Windows
 Thumbs.db
+
+# config
+.config/*
