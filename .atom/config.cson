@@ -1,5 +1,6 @@
 "*":
   core:
+    allowPendingPaneItems: false
     disabledPackages: [
       "whitespace"
     ]
