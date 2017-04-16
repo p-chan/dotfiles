@@ -9,7 +9,7 @@
       "predawn-ui"
       "predawn-syntax"
     ]
-    useCustomTitleBar: true
+    titleBar: "custom"
   editor:
     fontFamily: "Source Han Code JP"
     fontSize: 13
