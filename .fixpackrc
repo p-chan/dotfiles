@@ -47,8 +47,6 @@
   ],
   "warnOnPrivate": [
     "description",
-    "homepage",
-    "bugs",
     "license",
     "author",
     "main",
