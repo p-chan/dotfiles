@@ -1,5 +1,9 @@
 "*":
   core:
+    disabledPackages: [
+      "whitespace"
+      "spell-check"
+    ]
     titleBar: "custom"
   editor:
     fontFamily: "Source Han Code JP"
