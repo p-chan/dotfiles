@@ -1,6 +1,6 @@
 editorconfig@2.2.2
 language-fish-shell@1.1.0
-language-twig@1.6.3
+language-twig-patch@1.6.4
 remote-ftp@2.2.0
 sort-lines@0.18.0
 
