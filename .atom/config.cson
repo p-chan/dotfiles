@@ -10,6 +10,19 @@
   "exception-reporting":
     userId: "950d8342-f9fd-4ff0-b611-39f1613aa66e"
   "linter-ui-default": {}
+  "prettier-atom":
+    formatOnSaveOptions:
+      enabled: true
+      isDisabledIfNoConfigFile: true
+      isDisabledIfNotInPackageJson: true
+      showInStatusBar: true
+    prettierOptions:
+      arrowParens: "always"
+      semi: false
+      singleQuote: true
+      tabWidth: 2
+    useEslint: true
+    useStylelint: true
   "remote-ftp":
     notifications:
       enableTransfer: true
