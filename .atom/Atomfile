@@ -1,6 +1,7 @@
 busy-signal@1.4.3
 editorconfig@2.2.2
 intentions@1.1.5
+language-dotenv@1.1.1
 language-fish-shell@1.1.0
 language-twig-patch@1.6.4
 linter@2.2.0
