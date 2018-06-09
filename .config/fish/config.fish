@@ -8,6 +8,9 @@ set -x PATH $HOME/.nodebrew/current/bin $PATH
 # rbenv
 rbenv init - | source
 
+# aliases
+alias bx 'bundle exec'
+
 # functions
 function apme -d 'Export atom packages'
   apm list --installed --bare > ~/.atom/Atomfile
