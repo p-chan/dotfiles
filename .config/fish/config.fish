@@ -13,6 +13,7 @@ set -x PATH $HOME/.nodebrew/current/bin $PATH
 # aliases
 ##
 
+alias a 'atom'
 alias bx 'bundle exec'
 
 ##
