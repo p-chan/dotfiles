@@ -7,3 +7,12 @@ set -x PATH $HOME/.nodebrew/current/bin $PATH
 
 # rbenv
 rbenv init - | source
+
+# functions
+function apme -d 'Export atom packages'
+  apm list --installed --bare > ~/.atom/Atomfile
+end
+
+function apmi -d 'Import atom packages'
+  apm install --packages-file ~/.atom/Atomfile
+end
