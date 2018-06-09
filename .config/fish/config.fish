@@ -27,6 +27,10 @@ function apmi -d 'Import atom packages'
   apm install --packages-file ~/.atom/Atomfile
 end
 
+function zoi -d 'Ganbaruzoi'
+  cd (ghq root)/(ghq list | fzf)
+end
+
 ##
 # others
 ##
