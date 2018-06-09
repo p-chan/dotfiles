@@ -15,6 +15,8 @@ set -x PATH $HOME/.nodebrew/current/bin $PATH
 
 alias a 'atom'
 alias g 'git'
+alias v 'vim'
+
 alias bx 'bundle exec'
 
 ##
