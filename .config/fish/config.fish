@@ -13,25 +13,25 @@ set -x PATH $HOME/.nodebrew/current/bin $PATH
 # aliases
 ##
 
-alias a 'atom'
-alias g 'git'
-alias v 'vim'
+alias a "atom"
+alias g "git"
+alias v "vim"
 
-alias bx 'bundle exec'
+alias bx "bundle exec"
 
 ##
 # functions
 ##
 
-function apme -d 'Export atom packages'
+function apme -d "Export atom packages"
   apm list --installed --bare > ~/.atom/Atomfile
 end
 
-function apmi -d 'Import atom packages'
+function apmi -d "Import atom packages"
   apm install --packages-file ~/.atom/Atomfile
 end
 
-function zoi -d 'Ganbaruzoi'
+function zoi -d "Ganbaruzoi"
   cd (ghq root)/(ghq list | fzf)
 end
 
