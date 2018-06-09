@@ -9,7 +9,16 @@
     fontFamily: "Source Han Code JP"
   "exception-reporting":
     userId: "950d8342-f9fd-4ff0-b611-39f1613aa66e"
-  "linter-ui-default": {}
+  "language-dotenv":
+    dotenvFileNames: [
+      ".env"
+      ".env.example"
+      ".env.development"
+      ".env.test"
+      ".env.production"
+    ]
+  "linter-ui-default":
+    showPanel: true
   "prettier-atom":
     formatOnSaveOptions:
       enabled: true
