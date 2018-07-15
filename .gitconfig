@@ -17,6 +17,11 @@
   undo = reset --mixed HEAD~
   graph = log --graph --oneline --decorate
 
+  b = branch
+  c = commit
+  co = checkout
+  st = status
+
 [filter "lfs"]
   clean = git-lfs clean -- %f
   smudge = git-lfs smudge -- %f
