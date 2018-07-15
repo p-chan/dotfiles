@@ -2,6 +2,7 @@ blob-store
 compile-cache
 dev
 packages
+recovery
 storage
 .apm
 .node-gyp
