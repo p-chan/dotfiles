@@ -9,6 +9,12 @@ set -x LC_ALL ja_JP.UTF-8
 # nodebrew
 set -x PATH $HOME/.nodebrew/current/bin $PATH
 
+
+# google cloud sdk
+if test -f "$HOME/google-cloud-sdk/path.fish.inc"
+  source "$HOME/google-cloud-sdk/path.fish.inc"
+end
+
 ##
 # aliases
 ##
