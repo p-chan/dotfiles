@@ -10,6 +10,7 @@ function npm_install
 
   set -l packages\
     @adonisjs/cli\
+    @google-cloud/functions-emulator\
     commitizen\
     cz-conventional-changelog\
     fixpack\
