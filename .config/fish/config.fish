@@ -25,6 +25,8 @@ alias v "vim"
 
 alias bx "bundle exec"
 
+alias funcs "functions-emulator"
+
 ##
 # functions
 ##
