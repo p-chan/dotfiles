@@ -1,5 +1,5 @@
 function npm_install
-  set -l use_npm_version 5
+  set -l use_npm_version 6
 
   if not test npm
     printf "[error] npm is required"
