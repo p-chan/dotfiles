@@ -20,6 +20,7 @@ end
 ##
 
 alias a "atom"
+alias c "code"
 alias g "git"
 alias v "vim"
 
