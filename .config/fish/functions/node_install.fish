@@ -1,5 +1,5 @@
 function node_install
-  set -l use_node_version 8
+  set -l use_node_version 10
 
   if not test nodebrew
     printf "[error] nodebrew is required"
