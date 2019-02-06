@@ -12,7 +12,7 @@ set -x PATH $HOME/.nodebrew/current/bin $PATH
 
 # google cloud sdk
 if test -f "$HOME/google-cloud-sdk/path.fish.inc"
-  source "$HOME/google-cloud-sdk/path.fish.inc"
+    source "$HOME/google-cloud-sdk/path.fish.inc"
 end
 
 ##
@@ -33,15 +33,15 @@ alias funcs "functions-emulator"
 ##
 
 function apme -d "Export atom packages"
-  apm list --installed --bare > ~/.atom/Atomfile
+    apm list --installed --bare >~/.atom/Atomfile
 end
 
 function apmi -d "Import atom packages"
-  apm install --packages-file ~/.atom/Atomfile
+    apm install --packages-file ~/.atom/Atomfile
 end
 
 function zoi -d "Ganbaruzoi"
-  cd (ghq root)/(ghq list | fzf)
+    cd (ghq root)/(ghq list | fzf)
 end
 
 ##

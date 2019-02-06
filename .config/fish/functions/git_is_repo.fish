@@ -1,5 +1,5 @@
 function git_is_repo
-  if not command git rev-parse --is-inside-work-tree > /dev/null ^ /dev/null
-    return 1
-  end
+    if not command git rev-parse --is-inside-work-tree >/dev/null ^/dev/null
+        return 1
+    end
 end

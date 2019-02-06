@@ -1,22 +1,22 @@
 function npm_install
-  set -l use_npm_version 6
+    set -l use_npm_version 6
 
-  if not test npm
-    printf "[error] npm is required"
-    return $status
-  end
+    if not test npm
+        printf "[error] npm is required"
+        return $status
+    end
 
-  npm i -g npm@$use_npm_version
+    npm i -g npm@$use_npm_version
 
-  set -l packages\
-    @adonisjs/cli\
-    @google-cloud/functions-emulator\
-    commitizen\
-    cz-conventional-changelog\
-    fixpack\
-    npm-check-updates
+    set -l packages\
+ @adonisjs/cli\
+ @google-cloud/functions-emulator\
+ commitizen\
+ cz-conventional-changelog\
+ fixpack\
+ npm-check-updates
 
-  for package in $packages
-    npm i -g $package
-  end
+    for package in $packages
+        npm i -g $package
+    end
 end
