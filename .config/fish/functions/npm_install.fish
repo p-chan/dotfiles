@@ -11,6 +11,7 @@ function npm_install
     set -l packages\
  @adonisjs/cli\
  @google-cloud/functions-emulator\
+ @vue/cli\
  commitizen\
  cz-conventional-changelog\
  fixpack\
