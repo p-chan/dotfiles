@@ -15,6 +15,7 @@ function npm_install
  commitizen\
  cz-conventional-changelog\
  fixpack\
+ knex\
  npm-check-updates
 
     for package in $packages
