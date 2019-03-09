@@ -14,6 +14,7 @@ function npm_install
  @vue/cli\
  commitizen\
  cz-conventional-changelog\
+ express-generator\
  fixpack\
  knex\
  npm-check-updates\
