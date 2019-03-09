@@ -16,7 +16,8 @@ function npm_install
  cz-conventional-changelog\
  fixpack\
  knex\
- npm-check-updates
+ npm-check-updates\
+ serve
 
     for package in $packages
         npm i -g $package
