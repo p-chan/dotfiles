@@ -19,7 +19,6 @@ end
 # aliases
 ##
 
-alias a "atom"
 alias c "code"
 alias g "git"
 alias v "vim"
@@ -31,14 +30,6 @@ alias funcs "functions-emulator"
 ##
 # functions
 ##
-
-function apme -d "Export atom packages"
-    apm list --installed --bare >~/.atom/Atomfile
-end
-
-function apmi -d "Import atom packages"
-    apm install --packages-file ~/.atom/Atomfile
-end
 
 function zoi -d "Ganbaruzoi"
     cd (ghq root)/(ghq list | fzf)
