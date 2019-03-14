@@ -6,6 +6,9 @@
 set -x LANG ja_JP.UTF-8
 set -x LC_ALL ja_JP.UTF-8
 
+# editor
+set -x EDITOR vim
+
 # nodebrew
 set -x PATH $HOME/.nodebrew/current/bin $PATH
 
@@ -38,6 +41,9 @@ end
 ##
 # others
 ##
+
+# direnv
+direnv hook fish | source
 
 # rbenv
 rbenv init - | source
