@@ -18,7 +18,8 @@ function npm_install
  fixpack\
  knex\
  npm-check-updates\
- serve
+ serve\
+ yarn
 
     for package in $packages
         npm i -g $package
