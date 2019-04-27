@@ -24,7 +24,9 @@ end
 
 alias c "code"
 alias g "git"
+alias n "npm"
 alias v "vim"
+alias y "yarn"
 
 alias bx "bundle exec"
 
