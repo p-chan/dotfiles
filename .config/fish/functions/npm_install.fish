@@ -9,17 +9,12 @@ function npm_install
     npm i -g npm@$use_npm_version
 
     set -l packages\
- @adonisjs/cli\
- @google-cloud/functions-emulator\
- @vue/cli\
  commitizen\
  cz-conventional-changelog\
- express-generator\
  fixpack\
- knex\
- npm-check-updates\
- serve\
- yarn
+ now\
+ npkill\
+ npm-check-updates
 
     for package in $packages
         npm i -g $package
