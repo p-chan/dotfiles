@@ -1,2 +1,5 @@
 fishd.*
 fish_variables
+
+secret.fish
+*.secret.fish
