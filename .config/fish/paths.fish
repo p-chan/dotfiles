@@ -1,3 +1,5 @@
+set -U fish_user_paths "/usr/local/bin" "/usr/local/sbin" $fish_user_paths
+
 # direnv
 if type -q direnv
     direnv hook fish | source
