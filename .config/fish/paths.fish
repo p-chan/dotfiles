@@ -1,22 +1,12 @@
-set -U fish_user_paths "/usr/local/bin" "/usr/local/sbin" $fish_user_paths
-
 # direnv
-if type -q direnv
-    direnv hook fish | source
-end
+direnv hook fish | source
 
 # rbenv
-if type -q rbenv
-    rbenv init - | source
-end
+rbenv init - | source
 
 # nodenv
-if type -q nodenv
-    status --is-interactive
-    and source (nodenv init -|psub)
-end
+status --is-interactive
+and source (nodenv init -|psub)
 
 # google cloud sdk
-if type -q gcloud
-    source "$HOME/google-cloud-sdk/path.fish.inc"
-end
+source "$HOME/google-cloud-sdk/path.fish.inc"
