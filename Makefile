@@ -9,6 +9,8 @@ all:
 deploy:
 	@echo 'Deploy dotfiles to home directory...'
 	@$(foreach val, ${DOTFILES}, ln -sfnv $(abspath $(val)) $(HOME)/$(val);)
+	@echo 'Deploy ~/.macos/karabiner to ~/.config/karabiner'
+  ln -sfnv $HOME/.macos/karabiner $HOME/.config/karabiner
 
 update:
 	@echo 'Pull dotfiles from remote repository...'
