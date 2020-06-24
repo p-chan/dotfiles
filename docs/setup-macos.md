@@ -2,6 +2,7 @@
 
 ## Table of Contents
 
+0. [Chrome & 1Password](#0.-chrome-&-1password)
 1. [Xcode](#1.-xcode)
 2. [dotfiles](#2.-dotfiles)
 3. [macOS defaults](#3.-macos-defaults)
@@ -14,6 +15,13 @@
   - [Dock](#dock)
   - [Launchpad](#launchpad)
 
+## 0. Chrome & 1Password
+
+Install Chrome and 1Password first.
+
+- Chrome
+- 1Password
+
 ## 1. Xcode
 
 - Install Xcode from App Store
@@ -25,8 +33,19 @@
 
 ## 2. dotfiles
 
+- Generate ssh key and ssh config for GitHub
+  - `ssh-keygen -t rsa -b 4096 -f ~/.ssh/id_rsa -C "" -N ""`
+  - `pbcopy < ~/.ssh/id_rsa.pub`
+  - `echo -e "Host github.com\n\tHostName github.com\n\tIdentityFile ~/.ssh/id_rsa\n\tUser git" > ~/.ssh/config`
+- Register public key to GitHub
+  - [Add new SSH keys](https://github.com/settings/ssh/new) to GitHub
+- Verify authentication from GitHub
+  - `ssh -T github.com`
+  - `Hi p-chan! You've successfully authenticated, but GitHub does not provide shell access.`
 - Clone dotfiles repository
   - `git clone git@github.com:p-chan/dotfiles.git ~/src/github.com/p-chan/dotfiles`
+- Delete temporary .ssh directory
+  - `rm -rf ~/.ssh`
 - Deploy dotfiles to home directory
   - `make deploy`
 
@@ -65,8 +84,6 @@
   - `gem -v`
 
 ## 6. Applications
-
-Install Chrome and 1Password first.
 
 | Category          | Name                     | Note                         |
 | :---------------- | :----------------------- | :--------------------------- |
