@@ -20,8 +20,6 @@
 - Read Xcode license and agree
   - `sudo xcodebuild -license`
   - `agree`
-- Install Command Line Tools for Xcode
-  - `xcode-select --install`
 
 <small>Note: I can use git command when installed Xcode</small>
 
