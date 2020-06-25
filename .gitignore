@@ -3,3 +3,6 @@
 
 # Windows
 Thumbs.db
+
+# Homebrew
+Brewfile.lock.json
