@@ -85,50 +85,50 @@ Install Chrome and 1Password first.
 
 ## 6. Applications
 
-| Category          | Name                     | Note                         |
-| :---------------- | :----------------------- | :--------------------------- |
-| Business          | Slack                    |                              |
-|                   | Zoom                     |                              |
-| Developer Tools   | VSCode                   | [Settings](./vscode.md)      |
-|                   | iTerm2                   | [Settings](./iterm2.md)      |
-|                   | Docker for Mac           |                              |
-|                   | Sequel Pro               |                              |
-|                   | Postico                  |                              |
-|                   | GraphiQL                 |                              |
-|                   | Insomnia                 |                              |
-|                   | Cyberduck                |                              |
-|                   | ImageOptim               |                              |
-| Graphics & Design | Sketch                   |                              |
-|                   | Abstract                 |                              |
-|                   | Figma                    |                              |
-|                   | IconJar 2                |                              |
-|                   | RightFont 5              |                              |
-|                   | Adobe Photoshop 2020     | Require Adobe Creative Cloud |
-|                   | Adobe Illustrator 2020   | Require Adobe Creative Cloud |
-|                   | Adobe XD                 | Require Adobe Creative Cloud |
-| Music             | Spotify                  |                              |
-|                   | DaftCloud                |                              |
-|                   | Loopback 2               |                              |
-|                   | LadioCast                |                              |
-| News              | NewNewsWire 5            |                              |
-| Productivity      | 1Password                | Install first                |
-|                   | Fantastical              |                              |
-|                   | Mimestream               |                              |
-|                   | Things 3                 |                              |
-| Utilities         | Chrome                   | Install first                |
-|                   | Firefox                  |                              |
-|                   | Edge                     |                              |
-|                   | Alfred 4                 | TODO: Add document           |
-|                   | App Cleaner              |                              |
-|                   | iStat Menus 6            | TODO: Add document           |
-|                   | Google Drive File Stream |                              |
-|                   | Logicool Options         | TODO: Add document           |
-|                   | Karabiner-Elements       | TODO: Add document           |
-|                   | Google Japanese Input    | TODO: Add document           |
-|                   | Adobe Creative Cloud     |                              |
-| Social Networking | Discord                  |                              |
-|                   | Tweetbot 3               |                              |
-|                   | BathyScaphe              | TODO: Add document           |
+| Category          | Name                     | Note                                                                                       |
+| :---------------- | :----------------------- | :----------------------------------------------------------------------------------------- |
+| Business          | Slack                    |                                                                                            |
+|                   | Zoom                     |                                                                                            |
+| Developer Tools   | VSCode                   | [Document](./vscode.md)                                                                    |
+|                   | iTerm2                   | [Document](./iterm2.md)                                                                    |
+|                   | Docker for Mac           |                                                                                            |
+|                   | Sequel Pro               |                                                                                            |
+|                   | Postico                  |                                                                                            |
+|                   | GraphiQL                 |                                                                                            |
+|                   | Insomnia                 |                                                                                            |
+|                   | Cyberduck                |                                                                                            |
+|                   | ImageOptim               |                                                                                            |
+| Graphics & Design | Sketch                   |                                                                                            |
+|                   | Abstract                 |                                                                                            |
+|                   | Figma                    |                                                                                            |
+|                   | IconJar 2                |                                                                                            |
+|                   | RightFont 5              |                                                                                            |
+|                   | Adobe Photoshop 2020     | Require Adobe Creative Cloud                                                               |
+|                   | Adobe Illustrator 2020   | Require Adobe Creative Cloud                                                               |
+|                   | Adobe XD                 | Require Adobe Creative Cloud                                                               |
+| Music             | Spotify                  |                                                                                            |
+|                   | DaftCloud                | From App Store                                                                             |
+|                   | Loopback 2               |                                                                                            |
+|                   | LadioCast                |                                                                                            |
+| News              | NewNewsWire 5            |                                                                                            |
+| Productivity      | 1Password                | Install first                                                                              |
+|                   | Fantastical              |                                                                                            |
+|                   | Mimestream               |                                                                                            |
+|                   | Things 3                 | From App Store                                                                             |
+| Utilities         | Chrome                   | Install first                                                                              |
+|                   | Firefox                  |                                                                                            |
+|                   | Edge                     |                                                                                            |
+|                   | Alfred 4                 | Hotkey: `Ctrl + Space`                                                                     |
+|                   | App Cleaner              |                                                                                            |
+|                   | iStat Menus 6            | TODO: Add document                                                                         |
+|                   | Google Drive File Stream |                                                                                            |
+|                   | Logicool Options         | [Document](./logicool-options.md)                                                          |
+|                   | Karabiner-Elements       | [Settings](../.macos/karabiner)                                                            |
+|                   | Google Japanese Input    | TODO: Add document                                                                         |
+|                   | Adobe Creative Cloud     |                                                                                            |
+| Social Networking | Discord                  |                                                                                            |
+|                   | Tweetbot 3               | From App Store                                                                             |
+|                   | BathyScaphe              | Install Beta version from [Bitbucket](https://bitbucket.org/bathyscaphe/public/downloads/) |
 
 <small>Note: Categories are based on the App Store</small>
 
