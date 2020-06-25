@@ -2,14 +2,14 @@
 
 ## Table of Contents
 
-0. [Chrome & 1Password](#0.-chrome-&-1password)
-1. [Xcode](#1.-xcode)
-2. [dotfiles](#2.-dotfiles)
-3. [macOS defaults](#3.-macos-defaults)
-4. [Homebrew](#4.-homebrew)
-5. [Languages](#5.-languages)
-6. [Applications](#6.-applications)
-7. [Fonts](#7.-fonts)
+0. [Chrome & 1Password](#0-chrome--1password)
+1. [Xcode](#1-xcode)
+2. [dotfiles](#2-dotfiles)
+3. [macOS defaults](#3-macos-defaults)
+4. [Homebrew](#4-homebrew)
+5. [Languages](#5-languages)
+6. [Applications](#6-applications)
+7. [Fonts](#7-fonts)
 
 - [Screenshots](#screenshots)
   - [Dock](#dock)
@@ -58,10 +58,10 @@ Install Chrome and 1Password first.
 ## 4. Homebrew
 
 - Install Homebrew
-  - `/bin/bash -c "\$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"`
+  - `/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"`
 - Install Formulas (Use Brewfile)
   - `brew bundle`
-- Install Google Cloud SDK from [Google Cloud](https://cloud.google.com/sdk/install)
+- Install Google Cloud SDK from [Google Cloud](https://cloud.google.com/sdk/docs/downloads-interactive)
 
 ## 5. Languages
 
@@ -89,8 +89,8 @@ Install Chrome and 1Password first.
 | :---------------- | :----------------------- | :--------------------------- |
 | Business          | Slack                    |                              |
 |                   | Zoom                     |                              |
-| Developer Tools   | VSCode                   |                              |
-|                   | iTerm2                   |                              |
+| Developer Tools   | VSCode                   | [Settings](./vscode.md)      |
+|                   | iTerm2                   | [Settings](./iterm2.md)      |
 |                   | Docker for Mac           |                              |
 |                   | Sequel Pro               |                              |
 |                   | Postico                  |                              |
@@ -118,17 +118,17 @@ Install Chrome and 1Password first.
 | Utilities         | Chrome                   | Install first                |
 |                   | Firefox                  |                              |
 |                   | Edge                     |                              |
-|                   | Alfred 4                 |                              |
+|                   | Alfred 4                 | TODO: Add document           |
 |                   | App Cleaner              |                              |
-|                   | iStat Menus 6            |                              |
+|                   | iStat Menus 6            | TODO: Add document           |
 |                   | Google Drive File Stream |                              |
-|                   | Logicool Options         |                              |
-|                   | Karabiner-Elements       |                              |
-|                   | Google Japanese Input    |                              |
+|                   | Logicool Options         | TODO: Add document           |
+|                   | Karabiner-Elements       | TODO: Add document           |
+|                   | Google Japanese Input    | TODO: Add document           |
 |                   | Adobe Creative Cloud     |                              |
 | Social Networking | Discord                  |                              |
 |                   | Tweetbot 3               |                              |
-|                   | BathyScaphe              |                              |
+|                   | BathyScaphe              | TODO: Add document           |
 
 <small>Note: Categories are based on the App Store</small>
 
@@ -143,8 +143,8 @@ Install Chrome and 1Password first.
 
 ### Dock
 
-TBD
+TODO: Add screenshot
 
 ### Launchpad
 
-TBD
+TODO: Add screenshot
