@@ -52,7 +52,9 @@ Install Chrome and 1Password first.
 ## 3. macOS defaults
 
 - Setup System Preferences
+  - `sh ~/.macos/finder/settings.sh`
 - Setup Finder settings
+  - `sh ~/.macos/system-preferences/settings.sh`
 - Reboot
 
 ## 4. Homebrew
