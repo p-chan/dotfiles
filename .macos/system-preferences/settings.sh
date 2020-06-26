@@ -1,5 +1,7 @@
 #!/bin/bash
 
+sudo -v
+
 ##
 # 1-1. General
 ##
@@ -159,9 +161,6 @@ defaults write NSGlobalDomain AppleLanguages -array "en" "ja"
 # 3-3. Bluetooth
 ##
 
-# Turn Blootooth On
-defaults write /Library/Preferences/com.apple.Bluetooth ControllerPowerState -int 1
-
 # Show Bluetooth in menu bar
 # Write Ex. Menu Bar
 
@@ -253,7 +252,7 @@ defaults write com.apple.menuextra.clock DateFormat -string "EEE MMM d HH:mm:ss"
 ##
 
 # Computer Name
-systemsetup -setcomputername "Macbook Air"
+sudo systemsetup -setcomputername "Macbook Air"
 
 ##
 # 4-6. Time Machine
