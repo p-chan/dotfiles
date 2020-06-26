@@ -1,3 +1,6 @@
+# homebrew
+set -x PATH /usr/local/sbin $PATH
+
 # direnv
 direnv hook fish | source
 
