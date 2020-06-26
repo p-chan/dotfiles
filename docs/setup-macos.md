@@ -122,7 +122,7 @@ Install Chrome and 1Password first.
 |                   | Edge                     |                                                                                            |
 |                   | Alfred 4                 | Hotkey: `Ctrl + Space`                                                                     |
 |                   | App Cleaner              |                                                                                            |
-|                   | iStat Menus 6            | TODO: Add document                                                                         |
+|                   | iStat Menus 6            | [Document](./istat-menus-6.md)                                                             |
 |                   | Google Drive File Stream |                                                                                            |
 |                   | Logicool Options         | [Document](./logicool-options.md)                                                          |
 |                   | Karabiner-Elements       | [Settings](../.macos/karabiner)                                                            |
