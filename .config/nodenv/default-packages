@@ -3,4 +3,5 @@ cz-conventional-changelog
 firebase-tools
 fixpack
 npm-check-updates
+typesync
 yarn
