@@ -2,6 +2,7 @@ commitizen
 cz-conventional-changelog
 firebase-tools
 fixpack
+lerna
 npm-check-updates
-typesync
+vercel
 yarn
