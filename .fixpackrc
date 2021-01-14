@@ -44,7 +44,6 @@
     "bugs",
     "license",
     "author",
-    "main",
     "repository"
   ],
   "requiredOnPrivate": [
@@ -55,7 +54,6 @@
     "description",
     "license",
     "author",
-    "main",
     "repository"
   ],
   "sortedSubItems": [
