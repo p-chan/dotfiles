@@ -9,8 +9,10 @@
     "license",
     "author",
     "contributors",
+    "funding",
     "files",
     "main",
+    "browser",
     "bin",
     "man",
     "directories",
@@ -20,13 +22,16 @@
     "dependencies",
     "devDependencies",
     "peerDependencies",
+    "peerDependenciesMeta",
     "bundledDependencies",
     "optionalDependencies",
     "engines",
+    "engineStrict",
     "os",
     "cpu",
     "private",
-    "publishConfig"
+    "publishConfig",
+    "workspaces"
   ],
   "required": [
     "name",
@@ -59,6 +64,7 @@
     "dependencies",
     "devDependencies",
     "peerDependencies",
+    "peerDependenciesMeta",
     "bundledDependencies",
     "optionalDependencies"
   ]
