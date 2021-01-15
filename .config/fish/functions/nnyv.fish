@@ -1,5 +1,5 @@
 function nnyv -d "Display versions of node, npm, yarn"
-    # Utilitie
+    # Utility
     set VERTICAL_LINE (set_color brblack)"|"
 
     # Prefix
