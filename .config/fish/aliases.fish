@@ -1,5 +1,6 @@
 alias c "code"
 alias g "git"
+alias l "lerna"
 alias n "npm"
 alias v "vim"
 alias y "yarn"
