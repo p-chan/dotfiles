@@ -1,4 +1,5 @@
 alias c "code"
+alias fp "fixpack"
 alias g "git"
 alias l "lerna"
 alias n "npm"
