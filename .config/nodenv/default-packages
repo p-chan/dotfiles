@@ -1,4 +1,5 @@
 commitizen
+conventional-github-releaser
 cz-conventional-changelog
 firebase-tools
 fixpack
