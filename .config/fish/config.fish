@@ -21,6 +21,9 @@ rbenv init - | source
 status --is-interactive
 and source (nodenv init -|psub)
 
+# google cloud sdk
+set -x CLOUDSDK_PYTHON python2
+
 # secret
 if test -f "$HOME/.config/fish/secret.fish"
     source "$HOME/.config/fish/secret.fish"
