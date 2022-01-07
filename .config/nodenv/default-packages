@@ -3,7 +3,6 @@ conventional-github-releaser
 cz-conventional-changelog
 firebase-tools
 fixpack
-lerna
 npm-check-updates
 vercel
 yarn
