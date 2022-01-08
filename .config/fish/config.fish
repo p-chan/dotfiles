@@ -22,8 +22,7 @@ end
 
 # nodenv
 if type -q "nodenv"
-  status --is-interactive
-  and source (nodenv init -|psub)
+  nodenv init - | source
 end
 
 # google cloud sdk
