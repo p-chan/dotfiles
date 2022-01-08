@@ -11,17 +11,25 @@ source "$HOME/.config/fish/aliases.fish"
 source "$HOME/.config/fish/paths.fish"
 
 # direnv
-direnv hook fish | source
+if type -q "direnv"
+  direnv hook fish | source
+end
 
 # rbenv
-rbenv init - | source
+if type -q "rbenv"
+  rbenv init - | source
+end
 
 # nodenv
-status --is-interactive
-and source (nodenv init -|psub)
+if type -q "nodenv"
+  status --is-interactive
+  and source (nodenv init -|psub)
+end
 
 # google cloud sdk
-set -x CLOUDSDK_PYTHON python2
+if type -q "gcloud"
+  set -x CLOUDSDK_PYTHON python2
+end
 
 # secret
 if test -f "$HOME/.config/fish/secret.fish"
