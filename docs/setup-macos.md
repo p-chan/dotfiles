@@ -92,7 +92,6 @@ Install Chrome and 1Password first.
 | Business          | Slack                    |                                                                                            |
 |                   | Zoom                     |                                                                                            |
 | Developer Tools   | VSCode                   | [Document](./vscode.md)                                                                    |
-|                   | iTerm2                   | [Document](./iterm2.md)                                                                    |
 |                   | Docker for Mac           | [Document](./docker-for-mac.md)                                                            |
 |                   | Sequel Pro               |                                                                                            |
 |                   | Postico                  |                                                                                            |
