@@ -16,3 +16,5 @@ set incsearch
 set ignorecase
 set smartcase
 set wrapscan
+
+set backspace=2
