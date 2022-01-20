@@ -188,7 +188,9 @@ defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 61 "<dic
 ##
 
 # Tap to click
-defaults -currentHost write -globalDomain com.apple.mouse.tapBehavior -int 1
+defaults write com.apple.AppleMultitouchTrackpad Clicking -bool true
+defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true
+defaults -currentHost write -g com.apple.mouse.tapBehavior -bool true
 
 # Click
 defaults write com.apple.AppleMultitouchTrackpad FirstClickThreshold -int 0
