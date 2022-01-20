@@ -1,7 +1,5 @@
 #!/bin/bash
 
-sudo -v
-
 ##
 # 1-1. General
 ##
@@ -247,9 +245,6 @@ defaults write com.apple.menuextra.clock DateFormat -string "EEE MMM d HH:mm:ss"
 ##
 # 4-5. Sharing
 ##
-
-# Computer Name
-sudo systemsetup -setcomputername "Macbook Air"
 
 ##
 # 4-6. Time Machine
