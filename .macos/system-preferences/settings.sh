@@ -199,9 +199,6 @@ defaults write com.apple.AppleMultitouchTrackpad SecondClickThreshold -int 2
 # Tracking Speed (0~3)
 defaults write NSGlobalDomain com.apple.trackpad.scaling -float 1.5
 
-# Silent clicking
-defaults write com.apple.AppleMultitouchTrackpad ActuationStrength -int 0
-
 # TODO: Others
 
 ##
