@@ -1,6 +1,6 @@
 # homebrew
-if test -d "/usr/local/sbin"
-  set -x PATH /usr/local/sbin $PATH
+if test -d "/opt/homebrew/bin"
+  set -x PATH "/opt/homebrew/bin" $PATH
 end
 
 # composer

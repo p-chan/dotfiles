@@ -36,7 +36,7 @@ module.exports = {
       lightCyan: '#b2eeef',
       lightWhite: '#ffffff',
     },
-    shell: '/usr/local/bin/fish',
+    shell: '/opt/homebrew/bin/fish',
     shellArgs: ['--login'],
     env: {},
     windowSize: [],
