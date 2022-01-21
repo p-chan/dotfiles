@@ -17,7 +17,7 @@ module.exports = {
     selectionColor: '#656565',
     borderColor: '',
     css: '',
-    padding: '0 4px',
+    padding: '8px',
     colors: {
       black: '#232323',
       red: '#c42d29',
