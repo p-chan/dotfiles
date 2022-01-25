@@ -15,5 +15,5 @@ end
 
 # google cloud sdk
 if type -q "gcloud"
-  source "$HOME/google-cloud-sdk/path.fish.inc"
+  source "/opt/homebrew/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.fish.inc"
 end
