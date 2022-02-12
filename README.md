@@ -4,7 +4,8 @@
 
 ## Requirement
 
-- macOS 10.15.5+
+- Apple Silicon
+- macOS 12 or later
 
 ## Setup
 
