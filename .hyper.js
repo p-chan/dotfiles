@@ -17,7 +17,7 @@ module.exports = {
     selectionColor: '#656565',
     borderColor: '',
     css: '',
-    padding: '0 4px',
+    padding: '8px',
     colors: {
       black: '#232323',
       red: '#c42d29',
@@ -36,7 +36,7 @@ module.exports = {
       lightCyan: '#b2eeef',
       lightWhite: '#ffffff',
     },
-    shell: '/usr/local/bin/fish',
+    shell: '/opt/homebrew/bin/fish',
     shellArgs: ['--login'],
     env: {},
     windowSize: [],

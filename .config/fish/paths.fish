@@ -1,6 +1,6 @@
 # homebrew
-if test -d "/usr/local/sbin"
-  set -x PATH /usr/local/sbin $PATH
+if test -d "/opt/homebrew/bin"
+  set -x PATH "/opt/homebrew/bin" $PATH
 end
 
 # composer
@@ -15,5 +15,5 @@ end
 
 # google cloud sdk
 if type -q "gcloud"
-  source "$HOME/google-cloud-sdk/path.fish.inc"
+  source "/opt/homebrew/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.fish.inc"
 end

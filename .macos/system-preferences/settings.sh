@@ -1,7 +1,5 @@
 #!/bin/bash
 
-sudo -v
-
 ##
 # 1-1. General
 ##
@@ -190,7 +188,9 @@ defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 61 "<dic
 ##
 
 # Tap to click
-defaults -currentHost write -globalDomain com.apple.mouse.tapBehavior -int 1
+defaults write com.apple.AppleMultitouchTrackpad Clicking -bool true
+defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true
+defaults -currentHost write -g com.apple.mouse.tapBehavior -bool true
 
 # Click
 defaults write com.apple.AppleMultitouchTrackpad FirstClickThreshold -int 0
@@ -198,9 +198,6 @@ defaults write com.apple.AppleMultitouchTrackpad SecondClickThreshold -int 2
 
 # Tracking Speed (0~3)
 defaults write NSGlobalDomain com.apple.trackpad.scaling -float 1.5
-
-# Silent clicking
-defaults write com.apple.AppleMultitouchTrackpad ActuationStrength -int 0
 
 # TODO: Others
 
@@ -250,9 +247,6 @@ defaults write com.apple.menuextra.clock DateFormat -string "EEE MMM d HH:mm:ss"
 ##
 # 4-5. Sharing
 ##
-
-# Computer Name
-sudo systemsetup -setcomputername "Macbook Air"
 
 ##
 # 4-6. Time Machine
