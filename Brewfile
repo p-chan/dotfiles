@@ -20,7 +20,10 @@ brew "vim"
 brew "vips"
 brew "nodenv/nodenv/nodenv-default-packages"
 cask "1password"
+cask "android-studio"
 cask "appcleaner"
+cask "cyberduck"
+cask "discord"
 cask "docker"
 cask "fantastical"
 cask "figma"
@@ -44,6 +47,9 @@ cask "slack"
 cask "spotify"
 cask "visual-studio-code"
 cask "zoom"
+mas "Bear", id: 1091189122
+mas "DaftCloud", id: 1320450034
+mas "One Thing", id: 1604176982
 mas "Tweetbot", id: 1384080005
 mas "Twitter", id: 1482454543
 mas "Xcode", id: 497799835
