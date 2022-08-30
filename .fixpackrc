@@ -12,6 +12,7 @@
     "funding",
     "files",
     "main",
+    "module",
     "types",
     "browser",
     "bin",
