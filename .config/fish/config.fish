@@ -20,6 +20,11 @@ if type -q "rbenv"
   rbenv init - | source
 end
 
+# pyenv
+if type -q "pyenv"
+  pyenv init - | source
+end
+
 # nodenv
 if type -q "nodenv"
   nodenv init - | source
