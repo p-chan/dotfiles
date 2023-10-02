@@ -68,10 +68,3 @@ cask "slack"
 cask "spotify"
 cask "visual-studio-code"
 cask "zoom"
-mas "Bear", id: 1091189122
-mas "DaftCloud", id: 1320450034
-mas "One Thing", id: 1604176982
-mas "Things", id: 904280696
-mas "Tweetbot", id: 1384080005
-mas "Twitter", id: 1482454543
-mas "Xcode", id: 497799835
