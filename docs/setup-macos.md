@@ -38,8 +38,9 @@
   - `git clone git@github.com:p-chan/dotfiles.git ~/src/github.com/p-chan/dotfiles`
 - Delete temporary .ssh directory
   - `rm -rf ~/.ssh`
-- Deploy dotfiles to home directory
-  - `make deploy`
+- Link dotfiles to home directory
+  - `cd ~/src/github.com/p-chan/dotfiles`
+  - `sh link.sh`
 
 ## 3. macOS defaults
 
