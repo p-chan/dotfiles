@@ -2,7 +2,6 @@
 
 ## Table of Contents
 
-0. [Chrome & 1Password](#0-chrome--1password)
 1. [Xcode](#1-xcode)
 2. [dotfiles](#2-dotfiles)
 3. [macOS defaults](#3-macos-defaults)
@@ -14,13 +13,6 @@
 - [Screenshots](#screenshots)
   - [Dock](#dock)
   - [Launchpad](#launchpad)
-
-## 0. Chrome & 1Password
-
-Install Chrome and 1Password first.
-
-- Chrome
-- 1Password
 
 ## 1. Xcode
 
