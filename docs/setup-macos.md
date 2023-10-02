@@ -45,9 +45,9 @@
 ## 3. macOS defaults
 
 - Setup System Preferences
-  - `sh ~/.macos/finder/settings.sh`
+  - `sh .macos/finder/settings.sh`
 - Setup Finder settings
-  - `sh ~/.macos/system-preferences/settings.sh`
+  - `sh .macos/system-preferences/settings.sh`
 - Reboot
 
 ## 4. Homebrew
