@@ -56,7 +56,6 @@
   - `/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"`
 - Install Formulas (Use Brewfile)
   - `brew bundle`
-- Install Google Cloud SDK from [Google Cloud](https://cloud.google.com/sdk/docs/downloads-interactive)
 
 ## 5. Languages
 
