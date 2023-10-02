@@ -1,6 +1,5 @@
 tap "homebrew/bundle"
 tap "homebrew/cask"
-tap "homebrew/cask-drivers"
 tap "homebrew/core"
 tap "nodenv/nodenv"
 brew "awscli"
