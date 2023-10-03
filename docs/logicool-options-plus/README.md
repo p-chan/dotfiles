@@ -1,4 +1,4 @@
-# Logicool Options
+# Logicool Options+
 
 - Sync settings
   - Open `Mouse` tab

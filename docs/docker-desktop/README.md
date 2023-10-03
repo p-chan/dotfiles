@@ -1,4 +1,4 @@
-# Docker for Mac
+# Docker Desktop
 
 - Adjust resources
   - Open `Preferences / Resources / ADVANCED`

@@ -79,49 +79,42 @@
 
 ## 6. Applications
 
-| Category          | Name                     | Note                                                                                       |
-| :---------------- | :----------------------- | :----------------------------------------------------------------------------------------- |
-| Business          | Slack                    |                                                                                            |
-|                   | Zoom                     |                                                                                            |
-| Developer Tools   | VSCode                   | [Document](./vscode.md)                                                                    |
-|                   | Docker for Mac           | [Document](./docker-for-mac.md)                                                            |
-|                   | Sequel Pro               |                                                                                            |
-|                   | Postico                  |                                                                                            |
-|                   | GraphiQL                 |                                                                                            |
-|                   | Insomnia                 |                                                                                            |
-|                   | Cyberduck                |                                                                                            |
-|                   | ImageOptim               |                                                                                            |
-| Graphics & Design | Sketch                   |                                                                                            |
-|                   | Abstract                 |                                                                                            |
-|                   | Figma                    |                                                                                            |
-|                   | IconJar 2                |                                                                                            |
-|                   | RightFont 5              |                                                                                            |
-|                   | Adobe Photoshop 2020     | Require Adobe Creative Cloud                                                               |
-|                   | Adobe Illustrator 2020   | Require Adobe Creative Cloud                                                               |
-|                   | Adobe XD                 | Require Adobe Creative Cloud                                                               |
-| Music             | Spotify                  |                                                                                            |
-|                   | DaftCloud                | From App Store                                                                             |
-|                   | Loopback 2               |                                                                                            |
-|                   | LadioCast                |                                                                                            |
-| News              | NewNewsWire 5            |                                                                                            |
-| Productivity      | 1Password                | Install first                                                                              |
-|                   | Fantastical              |                                                                                            |
-|                   | Mimestream               |                                                                                            |
-|                   | Things 3                 | From App Store                                                                             |
-| Utilities         | Chrome                   | Install first                                                                              |
-|                   | Firefox                  |                                                                                            |
-|                   | Edge                     |                                                                                            |
-|                   | Alfred 4                 | Hotkey: `Ctrl + Space`                                                                     |
-|                   | App Cleaner              |                                                                                            |
-|                   | iStat Menus 6            | [Document](./istat-menus-6.md)                                                             |
-|                   | Google Drive File Stream |                                                                                            |
-|                   | Logicool Options         | [Document](./logicool-options.md)                                                          |
-|                   | Karabiner-Elements       | [Settings](../.macos/karabiner)                                                            |
-|                   | Google Japanese Input    | TODO: Add document                                                                         |
-|                   | Adobe Creative Cloud     |                                                                                            |
-| Social Networking | Discord                  |                                                                                            |
-|                   | Tweetbot 3               | From App Store                                                                             |
-|                   | BathyScaphe              | Install Beta version from [Bitbucket](https://bitbucket.org/bathyscaphe/public/downloads/) |
+- From
+  - :beer: from Homebrew
+  - :apple: from Mac App Store
+
+| Category          | Name                  | From    | Note                                            |
+| :---------------- | :-------------------- | :------ | :---------------------------------------------- |
+| Business          | Slack                 | :beer:  |                                                 |
+|                   | Zoom                  | :beer:  |                                                 |
+| Developer Tools   | Android Studio        | :beer:  |                                                 |
+|                   | Cyberduck             | :beer:  |                                                 |
+|                   | Docker Desktop        | :beer:  | [Document](./docker-desktop/README.md)          |
+|                   | Hyper                 | :beer:  |                                                 |
+|                   | ImageOptim            | :beer:  |                                                 |
+|                   | Insomnia              | :beer:  |                                                 |
+|                   | Postico               | :beer:  |                                                 |
+|                   | Sequel Ace            | :beer:  |                                                 |
+|                   | VSCode                | :beer:  | [Document](./vscode/README.md)                  |
+|                   | Xcode                 | :apple: |                                                 |
+| Graphics & Design | Adobe Creative Cloud  | :beer:  |                                                 |
+|                   | Figma                 | :beer:  |                                                 |
+| Music             | Spotify               | :beer:  |                                                 |
+| News              | NewNewsWire           | :beer:  |                                                 |
+| Productivity      | 1Password             | :beer:  | TODO: Add document                              |
+|                   | Fantastical           | :beer:  | TODO: Add document                              |
+|                   | Mimestream            | :beer:  |                                                 |
+|                   | Things                | :apple: | [Document](./things/README.md)                  |
+| Utilities         | AppCleaner            | :beer:  |                                                 |
+|                   | Google Chrome         | :beer:  |                                                 |
+|                   | Google Drive          | :beer:  |                                                 |
+|                   | Google Japanese Input | :beer:  | TODO: Add document                              |
+|                   | iStat Menus           | :beer:  | [Document](./istat-menus/README.md)             |
+|                   | Karabiner-Elements    | :beer:  | [Settings](../.config/karabiner/karabiner.json) |
+|                   | Logicool Options+     | :beer:  | [Document](./logicool-options-plus/README.md)   |
+|                   | One Drive             | :beer:  |                                                 |
+|                   | Raycasts              | :beer:  | [Document](./raycast/README.md)                 |
+| Social Networking | Discord               | :beer:  |                                                 |
 
 <small>Note: Categories are based on the App Store</small>
 
