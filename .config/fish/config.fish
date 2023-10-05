@@ -10,6 +10,11 @@ source "$HOME/.config/fish/aliases.fish"
 # paths
 source "$HOME/.config/fish/paths.fish"
 
+# 1Password
+if type -q "op"
+  op completion fish | source
+end
+
 # direnv
 if type -q "direnv"
   direnv hook fish | source
