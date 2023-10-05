@@ -298,6 +298,9 @@ defaults write com.apple.systemuiserver menuExtras -array \
 # Ex. Others
 ##
 
+# Control Center
+defaults write com.apple.menuextra.clock.plist ShowSeconds -bool true
+
 # Show ~/Library directory
 chflags nohidden ~/Library
 
