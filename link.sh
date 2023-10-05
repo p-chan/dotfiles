@@ -15,11 +15,8 @@ ln -sfnv $DIRNAME/.config/karabiner $HOME/.config/karabiner
 rm -rf $HOME/.config/nodenv
 ln -sfnv $DIRNAME/.config/nodenv $HOME/.config/nodenv
 
-if [ ! -d $HOME/.ssh ]; then
-  mkdir $HOME/.ssh
-fi
-
-ln -sfnv $DIRNAME/.ssh/config $HOME/.ssh/config
+rm -rf $HOME/.ssh
+ln -sfnv $DIRNAME/.ssh $HOME/.ssh
 
 rm -rf $HOME/.vim
 ln -sfnv $DIRNAME/.vim $HOME/.vim
