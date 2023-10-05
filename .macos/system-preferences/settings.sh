@@ -7,6 +7,9 @@
 # Appearance
 defaults write NSGlobalDomain AppleInterfaceStyle -string "Dark"
 
+# AirDrop & Handoff
+defaults -currentHost write com.apple.controlcenter.plist AirplayRecieverEnabled -bool false
+
 # TODO: Others
 
 ##
