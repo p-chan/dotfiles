@@ -80,41 +80,44 @@
 ## 6. Applications
 
 - From
-  - :beer: from Homebrew
-  - :apple: from Mac App Store
+  - :beer:: Homebrew
+  - :apple:: Mac App Store
+  - :wave:: Manually
 
-| Category          | Name                  | From    | Note                                            |
-| :---------------- | :-------------------- | :------ | :---------------------------------------------- |
-| Business          | Slack                 | :beer:  |                                                 |
-|                   | Zoom                  | :beer:  |                                                 |
-| Developer Tools   | Android Studio        | :beer:  |                                                 |
-|                   | Cyberduck             | :beer:  |                                                 |
-|                   | Docker Desktop        | :beer:  | [Document](./docker-desktop/README.md)          |
-|                   | Hyper                 | :beer:  |                                                 |
-|                   | ImageOptim            | :beer:  |                                                 |
-|                   | Insomnia              | :beer:  |                                                 |
-|                   | Postico               | :beer:  |                                                 |
-|                   | Sequel Ace            | :beer:  |                                                 |
-|                   | VSCode                | :beer:  | [Document](./vscode/README.md)                  |
-|                   | Xcode                 | :apple: |                                                 |
-| Graphics & Design | Adobe Creative Cloud  | :beer:  |                                                 |
-|                   | Figma                 | :beer:  |                                                 |
-| Music             | Spotify               | :beer:  |                                                 |
-| News              | NewNewsWire           | :beer:  |                                                 |
-| Productivity      | 1Password             | :beer:  | TODO: Add document                              |
-|                   | Fantastical           | :beer:  | TODO: Add document                              |
-|                   | Mimestream            | :beer:  |                                                 |
-|                   | Things                | :apple: | [Document](./things/README.md)                  |
-| Utilities         | AppCleaner            | :beer:  |                                                 |
-|                   | Google Chrome         | :beer:  |                                                 |
-|                   | Google Drive          | :beer:  |                                                 |
-|                   | Google Japanese Input | :beer:  | TODO: Add document                              |
-|                   | iStat Menus           | :beer:  | [Document](./istat-menus/README.md)             |
-|                   | Karabiner-Elements    | :beer:  | [Settings](../.config/karabiner/karabiner.json) |
-|                   | Logicool Options+     | :beer:  | [Document](./logicool-options-plus/README.md)   |
-|                   | One Drive             | :beer:  |                                                 |
-|                   | Raycasts              | :beer:  | [Document](./raycast/README.md)                 |
-| Social Networking | Discord               | :beer:  |                                                 |
+| Category          | Name                                | From    | Note                                            |
+| :---------------- | :---------------------------------- | :------ | :---------------------------------------------- |
+| Business          | Slack                               | :beer:  |                                                 |
+|                   | Zoom                                | :beer:  |                                                 |
+| Developer Tools   | Android Studio                      | :beer:  |                                                 |
+|                   | Cyberduck                           | :beer:  |                                                 |
+|                   | Docker Desktop                      | :beer:  | [Document](./docker-desktop/README.md)          |
+|                   | Hyper                               | :beer:  |                                                 |
+|                   | ImageOptim                          | :beer:  |                                                 |
+|                   | Insomnia                            | :beer:  |                                                 |
+|                   | Postico                             | :beer:  |                                                 |
+|                   | Sequel Ace                          | :beer:  |                                                 |
+|                   | VSCode                              | :beer:  | [Document](./vscode/README.md)                  |
+|                   | Xcode                               | :apple: |                                                 |
+| Graphics & Design | Adobe Creative Cloud                | :beer:  |                                                 |
+|                   | Figma                               | :beer:  |                                                 |
+| Music             | Spotify                             | :beer:  |                                                 |
+| News              | NewNewsWire                         | :beer:  |                                                 |
+| Productivity      | 1Password                           | :beer:  | TODO: Add document                              |
+|                   | Fantastical                         | :beer:  | TODO: Add document                              |
+|                   | Mimestream                          | :beer:  |                                                 |
+|                   | Things                              | :apple: | [Document](./things/README.md)                  |
+| Utilities         | AppCleaner                          | :beer:  |                                                 |
+|                   | Google Chrome                       | :beer:  |                                                 |
+|                   | Google Drive                        | :beer:  |                                                 |
+|                   | Google Japanese Input               | :beer:  | TODO: Add document                              |
+|                   | iStat Menus                         | :beer:  | [Document](./istat-menus/README.md)             |
+|                   | Karabiner-Elements                  | :beer:  | [Settings](../.config/karabiner/karabiner.json) |
+|                   | Logicool Options+                   | :beer:  | [Document](./logicool-options-plus/README.md)   |
+|                   | One Drive                           | :beer:  |                                                 |
+|                   | Raycasts                            | :beer:  | [Document](./raycast/README.md)                 |
+|                   | Yamaha Steinberg USB Controll Panel | :wave:  |                                                 |
+|                   | Yamaha ZG Controller                | :wave:  |                                                 |
+| Social Networking | Discord                             | :beer:  |                                                 |
 
 <small>Note: Categories are based on the App Store</small>
 
