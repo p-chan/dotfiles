@@ -186,6 +186,12 @@ defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 60 "<dic
 # Shortcut / Input Sources / Select next source in Input menu
 defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 61 "<dict><key>enabled</key><false/></dict>"
 
+# Keyboard Shortcuts / Spotlight / Show Spotlight search
+defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 64 "<dict><key>enabled</key><false/></dict>"
+
+# Keyboard Shortcuts / Spotlight / Show Finder search window
+defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 65 "<dict><key>enabled</key><false/></dict>"
+
 ##
 # 3-7. Trackpad
 ##
