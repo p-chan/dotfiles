@@ -4,5 +4,6 @@ cz-conventional-changelog
 firebase-tools
 fixpack
 npm-check-updates
+pnpm
 vercel
 yarn
