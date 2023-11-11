@@ -21,6 +21,7 @@
   c = commit
   co = checkout
   st = status
+  sw = switch
 
 [pull]
   rebase = false
