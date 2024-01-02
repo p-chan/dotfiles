@@ -23,6 +23,9 @@
   st = status
   sw = switch
 
+[init]
+  defaultBranch = main
+
 [pull]
   rebase = false
 
