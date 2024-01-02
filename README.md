@@ -5,7 +5,7 @@
 ## Requirement
 
 - Apple Silicon
-- macOS 12 or later
+- macOS 14 or later
 
 ## Setup
 
