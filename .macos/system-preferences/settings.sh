@@ -285,8 +285,8 @@ defaults write com.apple.menuextra.clock DateFormat -string "EEE MMM d HH:mm:ss"
 defaults write com.apple.systemuiserver "NSStatusItem Visible Siri" -bool false
 defaults write com.apple.systemuiserver "NSStatusItem Visible com.apple.menuextra.airport" -bool true
 defaults write com.apple.systemuiserver "NSStatusItem Visible com.apple.menuextra.vpn" -bool true
-defaults write com.apple.systemuiserver "NSStatusItem Visible com.apple.menuextra.bluetooth" -bool true
-defaults write com.apple.systemuiserver "NSStatusItem Visible com.apple.menuextra.volume" -bool true
+defaults write com.apple.controlcenter.plist Bluetooth -int 18
+defaults write com.apple.controlcenter.plist Sound -int 18
 defaults write com.apple.systemuiserver "NSStatusItem Visible com.apple.menuextra.battery" -bool true
 defaults write com.apple.systemuiserver "NSStatusItem Visible com.apple.menuextra.clock" -bool true
 defaults write com.apple.systemuiserver "NSStatusItem Visible com.apple.menuextra.TimeMachine" -bool false
