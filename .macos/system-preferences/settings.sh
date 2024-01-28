@@ -242,7 +242,7 @@ defaults write com.apple.sidecar.display doubleTapEnabled -bool false
 # Write Ex. Menu Bar
 
 # Advanced: Show Parcent
-defaults write com.apple.menuextra.battery ShowPercent -string "YES"
+defaults write com.apple.controlcenter.plist BatteryShowPercentage -bool true
 
 ##
 # 4-4. Data & Time
