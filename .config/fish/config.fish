@@ -40,7 +40,16 @@ if type -q "gcloud"
   set -x CLOUDSDK_PYTHON /opt/homebrew/bin/python3
 end
 
-# secret
+# fish
+
+## Install fzf key bindings and fuzzy completion
+## https://github.com/junegunn/fzf?tab=readme-ov-file#using-homebrew
+if not test -f "$HOME/.config/fish/functions/fzf_key_bindings.fish"
+    set PREFIX (brew --prefix)
+    "$PREFIX/opt/fzf/install"
+end
+
+## secret scripts
 if test -f "$HOME/.config/fish/secret.fish"
     source "$HOME/.config/fish/secret.fish"
 end
