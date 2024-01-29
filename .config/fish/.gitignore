@@ -1,5 +1,7 @@
 fishd.*
 fish_variables
 
+functions/fzf_key_bindings.fish
+
 secret.fish
 *.secret.fish
