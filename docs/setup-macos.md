@@ -86,6 +86,7 @@
 
 | Category          | Name                                | From    | Note                                            |
 | :---------------- | :---------------------------------- | :------ | :---------------------------------------------- |
+| Books             | Amazon Kindle                       | :apple: |                                                 |
 | Business          | Slack                               | :beer:  |                                                 |
 |                   | Zoom                                | :beer:  |                                                 |
 | Developer Tools   | Android Studio                      | :beer:  |                                                 |
