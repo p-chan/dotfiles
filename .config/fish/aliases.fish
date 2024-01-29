@@ -1,4 +1,5 @@
 alias c "code"
+alias cr "cd (ghq root)/(ghq list | fzf)"
 alias fp "fixpack"
 alias g "git"
 alias github-release "conventional-github-releaser -p angular"
