@@ -18,11 +18,11 @@ ln -sfnv $DIRNAME/.config/karabiner $HOME/.config/karabiner
 rm -rf $HOME/.config/nodenv
 ln -sfnv $DIRNAME/.config/nodenv $HOME/.config/nodenv
 
+rm -rf $HOME/.config/vim
+ln -sfnv $DIRNAME/.config/vim $HOME/.config/vim
+
 rm -rf $HOME/.ssh
 ln -sfnv $DIRNAME/.ssh $HOME/.ssh
-
-rm -rf $HOME/.vim
-ln -sfnv $DIRNAME/.vim $HOME/.vim
 
 ln -sfnv $DIRNAME/.editorconfig $HOME/.editorconfig
 ln -sfnv $DIRNAME/.gitconfig $HOME/.gitconfig
