@@ -3,7 +3,6 @@
   email = hello@0x50.io
 
 [core]
-  excludesfile = ~/.gitexclude
   editor = vim
   pager = less -R
 
