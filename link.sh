@@ -6,9 +6,6 @@ if [ ! -d $HOME/.config ]; then
   mkdir $HOME/.config
 fi
 
-rm -rf $HOME/.config/fish
-ln -sfnv $DIRNAME/home/.config/fish $HOME/.config/fish
-
 rm -rf $HOME/.config/fixpack
 ln -sfnv $DIRNAME/home/.config/fixpack $HOME/.config/fixpack
 
