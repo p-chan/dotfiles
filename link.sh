@@ -18,9 +18,6 @@ ln -sfnv $DIRNAME/home/.config/karabiner $HOME/.config/karabiner
 rm -rf $HOME/.config/mise
 ln -sfnv $DIRNAME/home/.config/mise $HOME/.config/mise
 
-rm -rf $HOME/.config/nodenv
-ln -sfnv $DIRNAME/home/.config/nodenv $HOME/.config/nodenv
-
 rm -rf $HOME/.config/vim
 ln -sfnv $DIRNAME/home/.config/vim $HOME/.config/vim
 
