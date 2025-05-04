@@ -25,7 +25,6 @@ rm -rf $HOME/.ssh
 ln -sfnv $DIRNAME/home/.ssh $HOME/.ssh
 
 ln -sfnv $DIRNAME/home/.editorconfig $HOME/.editorconfig
-ln -sfnv $DIRNAME/home/.hyper.js $HOME/.hyper.js
 ln -sfnv $DIRNAME/home/.zprofile $HOME/.zprofile
 ln -sfnv $DIRNAME/home/.zshenv $HOME/.zshenv
 ln -sfnv $DIRNAME/home/.zshrc $HOME/.zshrc
