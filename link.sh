@@ -9,6 +9,9 @@ fi
 rm -rf $HOME/.config/fish
 ln -sfnv $DIRNAME/.config/fish $HOME/.config/fish
 
+rm -rf $HOME/.config/fixpack
+ln -sfnv $DIRNAME/.config/fixpack $HOME/.config/fixpack
+
 rm -rf $HOME/.config/karabiner
 ln -sfnv $DIRNAME/.config/karabiner $HOME/.config/karabiner
 
@@ -22,7 +25,6 @@ rm -rf $HOME/.vim
 ln -sfnv $DIRNAME/.vim $HOME/.vim
 
 ln -sfnv $DIRNAME/.editorconfig $HOME/.editorconfig
-ln -sfnv $DIRNAME/.fixpackrc $HOME/.fixpackrc
 ln -sfnv $DIRNAME/.gitconfig $HOME/.gitconfig
 ln -sfnv $DIRNAME/.gitexclude $HOME/.gitexclude
 ln -sfnv $DIRNAME/.hyper.js $HOME/.hyper.js
