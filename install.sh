@@ -2,7 +2,7 @@
 
 set -e
 
-DOTFILES_DIR="$HOME/src/github.com/p-chan/dotfiles"
+DOTFILES_DIR="${DOTFILES_DIR:-$HOME/src/github.com/p-chan/dotfiles}"
 
 log_info () {
   echo "ℹ️ $1"
