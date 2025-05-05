@@ -1,28 +1,47 @@
 #!/bin/bash
 
-DIRNAME=$(cd $(dirname $0) && pwd)
+DOTFILES_DIR="$HOME/src/github.com/p-chan/dotfiles"
 
-if [ ! -d $HOME/.config ]; then
-  mkdir $HOME/.config
-fi
+dotfiles=(
+  ".config/fixpack"
+  ".config/git"
+  ".config/karabiner"
+  ".config/mise"
+  ".config/vim"
+  ".ssh"
+  ".editorconfig"
+  ".zprofile"
+  ".zshenv"
+  ".zshrc"
+)
 
-rm -rf $HOME/.config/fish
-ln -sfnv $DIRNAME/.config/fish $HOME/.config/fish
+for dotfile in "${dotfiles[@]}"; do
+  source_file="$DOTFILES_DIR/home/$dotfile"
+  destination_file="$HOME/$dotfile"
+  destination_parent_dir=$(dirname "$destination_file")
 
-rm -rf $HOME/.config/karabiner
-ln -sfnv $DIRNAME/.config/karabiner $HOME/.config/karabiner
+  if [ ! -e "$source_file" ]; then
+    echo "$source_file not found. Skipping."
 
-rm -rf $HOME/.config/nodenv
-ln -sfnv $DIRNAME/.config/nodenv $HOME/.config/nodenv
+    continue
+  fi
 
-rm -rf $HOME/.ssh
-ln -sfnv $DIRNAME/.ssh $HOME/.ssh
+  if [ ! -d "$destination_parent_dir" ]; then
+    mkdir -p "$destination_parent_dir"
+  fi
 
-rm -rf $HOME/.vim
-ln -sfnv $DIRNAME/.vim $HOME/.vim
+  if [ ! -e "$destination_file" ]; then
+    ln -sv "$source_file" "$destination_file"
+  else
+    read -n 1 -p "[?] $destination_file already exists. Overwrite? (y/N)" confirm
 
-ln -sfnv $DIRNAME/.editorconfig $HOME/.editorconfig
-ln -sfnv $DIRNAME/.fixpackrc $HOME/.fixpackrc
-ln -sfnv $DIRNAME/.gitconfig $HOME/.gitconfig
-ln -sfnv $DIRNAME/.gitexclude $HOME/.gitexclude
-ln -sfnv $DIRNAME/.hyper.js $HOME/.hyper.js
+    if [[ "$confirm" =~ ^[Yy]$ ]]; then
+      echo ""
+
+      rm -rf "$destination_file"
+      ln -sv "$source_file" "$destination_file"
+    else
+      echo "Skipping override."
+    fi;
+  fi
+done
