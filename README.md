@@ -14,7 +14,6 @@
 ## Philosophy
 
 - Do more with less
-- Do not pursue automation of setup
 
 ## Author
 
