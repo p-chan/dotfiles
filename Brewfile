@@ -1,6 +1,8 @@
+brew "editorconfig-checker"
 brew "ghq"
 brew "git"
 brew "mise"
+brew "shellcheck"
 brew "vim"
 brew "zsh"
 cask "1password"
