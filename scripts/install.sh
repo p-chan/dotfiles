@@ -43,7 +43,7 @@ fi;
 if [ -d "$DOTFILES_DIR" ]; then
   log_info "Linking dotfiles..."
 
-  sh "$DOTFILES_DIR/link.sh"
+  sh "$DOTFILES_DIR/scripts/link.sh"
 
   log_success "Successfully linked dotfiles."
 else
