@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DOTFILES_DIR="$HOME/src/github.com/p-chan/dotfiles"
+DOTFILES_DIR="${DOTFILES_DIR:-$HOME/src/github.com/p-chan/dotfiles}"
 
 dotfiles=(
   ".config/fixpack"

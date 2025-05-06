@@ -1,0 +1,14 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+
+jobs:
+  install:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - run: DOTFILES_DIR=$GITHUB_WORKSPACE sh install.sh
