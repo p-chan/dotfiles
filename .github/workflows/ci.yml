@@ -7,15 +7,36 @@ on:
   pull_request:
 
 jobs:
+  get-cask-packages:
+    runs-on: macos-15
+    outputs:
+      packages: ${{ steps.get.outputs.packages }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: get
+        run: |
+          echo "packages=$(
+            grep '^cask ' Brewfile | \
+            sed 's/^cask //g' | \
+            xargs
+          )" >> $GITHUB_OUTPUT
   install:
+    needs: [get-cask-packages]
     runs-on: macos-15
     steps:
       - uses: actions/checkout@v4
-      - run: DOTFILES_DIR=$GITHUB_WORKSPACE sh install.sh
+      - run: |
+          DOTFILES_DIR=$GITHUB_WORKSPACE \
+          HOMEBREW_BUNDLE_CASK_SKIP="${{ needs.get-cask-packages.outputs.packages }}" \
+          sh install.sh
   check:
+    needs: [get-cask-packages]
     runs-on: macos-15
     steps:
       - uses: actions/checkout@v4
-      - run: DOTFILES_DIR=$GITHUB_WORKSPACE sh install.sh
+      - run: |
+          DOTFILES_DIR=$GITHUB_WORKSPACE \
+          HOMEBREW_BUNDLE_CASK_SKIP="${{ needs.get-cask-packages.outputs.packages }}" \
+          sh install.sh
       - run: editorconfig-checker
       - run: shellcheck *.sh
