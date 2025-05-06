@@ -33,7 +33,7 @@ for dotfile in "${dotfiles[@]}"; do
   if [ ! -e "$destination_file" ]; then
     ln -sv "$source_file" "$destination_file"
   else
-    read -n 1 -p "[?] $destination_file already exists. Overwrite? (y/N)" confirm
+    read -rn 1 -p "[?] $destination_file already exists. Overwrite? (y/N)" confirm
 
     if [[ "$confirm" =~ ^[Yy]$ ]]; then
       echo ""
