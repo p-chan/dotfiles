@@ -7,6 +7,12 @@
 - Apple Silicon
 - macOS 14 or later
 
+## Install
+
+```sh
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/p-chan/dotfiles/master/scripts/install.sh)"
+```
+
 ## Setup
 
 - [macOS](./docs/setup-macos.md)
