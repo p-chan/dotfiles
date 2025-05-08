@@ -59,7 +59,7 @@ fi
 if ! type brew &>/dev/null; then
   log_info "Installing Homebrew..."
 
-  NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
   log_success "Successfully installed Homebrew."
 else

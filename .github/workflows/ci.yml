@@ -27,6 +27,7 @@ jobs:
       - uses: actions/checkout@v4
       - run: |
           DOTFILES_DIR=$GITHUB_WORKSPACE \
+          NONINTERACTIVE=1 \
           HOMEBREW_BUNDLE_CASK_SKIP="${{ needs.get-cask-packages.outputs.packages }}" \
           sh scripts/install.sh
   check:
@@ -36,6 +37,7 @@ jobs:
       - uses: actions/checkout@v4
       - run: |
           DOTFILES_DIR=$GITHUB_WORKSPACE \
+          NONINTERACTIVE=1 \
           HOMEBREW_BUNDLE_CASK_SKIP="${{ needs.get-cask-packages.outputs.packages }}" \
           sh scripts/install.sh
       - run: editorconfig-checker
@@ -47,6 +49,7 @@ jobs:
       - uses: actions/checkout@v4
       - run: |
           DOTFILES_DIR=$GITHUB_WORKSPACE \
+          NONINTERACTIVE=1 \
           HOMEBREW_BUNDLE_CASK_SKIP="${{ needs.get-cask-packages.outputs.packages }}" \
           sh scripts/install.sh
       - run: sh scripts/install.test.sh
