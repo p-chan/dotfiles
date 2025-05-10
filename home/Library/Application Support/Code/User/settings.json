@@ -1,0 +1,11 @@
+{
+  "editor.fontFamily": "\"Source Han Code JP\", monospace",
+  "editor.fontSize": 13,
+  "editor.formatOnSave": true,
+  "editor.scrollBeyondLastLine": false,
+  "editor.stickyScroll.enabled": false,
+  "editor.minimap.enabled": false,
+  "files.insertFinalNewline": true,
+  "workbench.colorTheme": "One Dark Pro",
+  "workbench.iconTheme": "file-icons"
+}
