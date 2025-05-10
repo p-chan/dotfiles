@@ -9,6 +9,8 @@ dotfiles=(
   ".config/mise"
   ".config/vim"
   ".ssh"
+  "Library/Application Support/Code/User/keybindings.json"
+  "Library/Application Support/Code/User/settings.json"
   ".editorconfig"
   ".zprofile"
   ".zshenv"
