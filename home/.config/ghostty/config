@@ -1,0 +1,18 @@
+font-family = "Source Han Code JP"
+font-feature = -calt
+font-feature = -liga
+font-feature = -dlig
+font-size = 13
+font-thicken = true
+theme = one-dark-pro
+cursor-style = block
+background-opacity = 0.9
+fullscreen = true
+keybind = global:alt+space=toggle_visibility
+keybind = cmd+r=clear_screen
+window-padding-x = 8
+window-padding-y = 8
+shell-integration-features = no-cursor
+macos-non-native-fullscreen = visible-menu
+# https://github.com/ghostty-org/ghostty/issues/6086#issuecomment-2829417634
+macos-window-shadow = false

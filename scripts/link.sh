@@ -4,6 +4,7 @@ DOTFILES_DIR="${DOTFILES_DIR:-$HOME/src/github.com/p-chan/dotfiles}"
 
 dotfiles=(
   ".config/fixpack"
+  ".config/ghostty"
   ".config/git"
   ".config/karabiner"
   ".config/mise"
