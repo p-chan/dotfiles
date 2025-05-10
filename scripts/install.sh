@@ -47,6 +47,20 @@ else
 fi;
 
 if [ -d "$DOTFILES_DIR" ]; then
+  log_info "Change remote URL of dotfiles to SSH from HTTPS..."
+
+  cd "$DOTFILES_DIR"
+
+  git remote set-url origin git@github.com:p-chan/dotfiles.git
+
+  cd "$HOME"
+
+  log_success "Successfully changed remote URL of dotfiles."
+else
+  log_warn "$DOTFILES_DIR not found. Skipping dotfiles remote URL changing."
+fi
+
+if [ -d "$DOTFILES_DIR" ]; then
   log_info "Linking dotfiles..."
 
   sh "$DOTFILES_DIR/scripts/link.sh"
