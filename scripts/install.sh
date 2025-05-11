@@ -16,11 +16,15 @@ log_success () {
   echo "✅ $1"
 }
 
-log_info "Installing Rosetta 2"
+if ! pgrep oahd >&/dev/null; then
+  log_info "Installing Rosetta 2..."
 
-sudo softwareupdate --install-rosetta --agree-to-license
+  sudo softwareupdate --install-rosetta --agree-to-license
 
-log_success "Successfully installed Rosetta 2."
+  log_success "Successfully installed Rosetta 2."
+else
+  log_info "Rosetta 2 already installed."
+fi
 
 if ! xcode-select -p &>/dev/null; then
   log_info "Installing Command Line Tools..."
