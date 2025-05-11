@@ -11,6 +11,7 @@ type ghq
 type git
 type mise
 type shellcheck
+type starship
 type vim
 type zsh
 type node
