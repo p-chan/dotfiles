@@ -1,0 +1,20 @@
+"$schema" = "https://starship.rs/config-schema.json"
+
+format = "$character$directory$git_branch"
+right_format = "$time"
+add_newline = false
+
+[character]
+format = "[⋊>](blue) "
+
+[directory]
+truncation_length = 1
+format = "[$path](yellow) "
+fish_style_pwd_dir_length = 1
+
+[git_branch]
+format = "on [$branch](green) "
+
+[time]
+format = "[$time](#999999)"
+disabled = false
