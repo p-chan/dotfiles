@@ -10,6 +10,7 @@ type editorconfig-checker
 type ghq
 type git
 type mise
+type sheldon
 type shellcheck
 type starship
 type vim
