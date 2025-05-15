@@ -8,6 +8,7 @@ dotfiles=(
   ".config/git"
   ".config/karabiner"
   ".config/mise"
+  ".config/sheldon"
   ".config/vim"
   ".config/starship.toml"
   ".ssh"
