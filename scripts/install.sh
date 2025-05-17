@@ -113,3 +113,13 @@ if type mise &>/dev/null; then
 else
   log_warn "mise command not found. Skipping mise tool installation."
 fi
+
+if [ "$CI" != "true" ]; then
+  log_info "Provisioning macOS..."
+
+  sh "$DOTFILES_DIR/scripts/provisioning.sh"
+
+  log_success "Successfully provisioned macOS."
+else
+  log_info "CI environment detected. Skipping macOS provisioning."
+fi

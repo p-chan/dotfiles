@@ -1,3 +1,4 @@
+brew "defaultbrowser"
 brew "editorconfig-checker"
 brew "ghq"
 brew "git"
