@@ -1,3 +1,6 @@
 [tools]
 node = "lts"
 "npm:fixpack" = "latest"
+
+[settings]
+idiomatic_version_file_enable_tools = ['node']
