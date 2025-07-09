@@ -8,5 +8,6 @@
   "editor.minimap.enabled": false,
   "files.insertFinalNewline": true,
   "workbench.colorTheme": "One Dark Pro",
-  "workbench.iconTheme": "file-icons"
+  "workbench.iconTheme": "file-icons",
+  "terminal.integrated.fontSize": 13
 }
