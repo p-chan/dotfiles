@@ -1,6 +1,7 @@
 {
   "editor.fontFamily": "\"Source Han Code JP\", monospace",
   "editor.fontSize": 13,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
   "editor.scrollBeyondLastLine": false,
   "editor.stickyScroll.enabled": false,
