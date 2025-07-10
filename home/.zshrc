@@ -1,3 +1,4 @@
+alias c="code"
 alias g="git"
 alias n="npm"
 alias p="pnpm"
