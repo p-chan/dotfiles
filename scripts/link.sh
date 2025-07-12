@@ -10,14 +10,13 @@ dotfiles=(
   ".config/mise"
   ".config/sheldon"
   ".config/vim"
+  ".config/zsh"
   ".config/starship.toml"
   ".ssh"
   "Library/Application Support/Code/User/keybindings.json"
   "Library/Application Support/Code/User/settings.json"
   ".editorconfig"
-  ".zprofile"
   ".zshenv"
-  ".zshrc"
 )
 
 for dotfile in "${dotfiles[@]}"; do
