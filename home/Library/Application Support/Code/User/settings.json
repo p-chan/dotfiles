@@ -14,7 +14,7 @@
   "workbench.colorTheme": "One Dark Pro",
   "workbench.iconTheme": "file-icons",
   "terminal.integrated.fontSize": 13,
-
+  "git.autofetch": true,
   "git.blame.editorDecoration.enabled": true,
   // Refered to GitLens
   "git.blame.editorDecoration.template": "${authorName}, ${authorDateAgo} • ${subject}",
