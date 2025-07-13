@@ -29,3 +29,7 @@ ZSH_HIGHLIGHT_STYLES[single-hyphen-option]='fg=cyan'
 ZSH_HIGHLIGHT_STYLES[double-hyphen-option]='fg=cyan'
 ZSH_HIGHLIGHT_STYLES[arg0]='fg=blue'
 ZSH_HIGHLIGHT_STYLES[default]='fg=cyan'
+
+if [[ -f "${ZDOTDIR:-$HOME}/.zshrc.local" ]]; then
+  source "${ZDOTDIR:-$HOME}/.zshrc.local"
+fi

@@ -40,3 +40,6 @@
 
 [ghq]
   root = ~/src
+
+[include]
+  path = config.local
