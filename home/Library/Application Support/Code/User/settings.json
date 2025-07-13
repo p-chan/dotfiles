@@ -7,8 +7,16 @@
   "editor.stickyScroll.enabled": false,
   "editor.minimap.enabled": false,
   "files.insertFinalNewline": true,
+  "workbench.colorCustomizations": {
+    // Refered to GitLens
+    "git.blame.editorDecorationForeground": "#99999959"
+  },
   "workbench.colorTheme": "One Dark Pro",
   "workbench.iconTheme": "file-icons",
   "terminal.integrated.fontSize": 13,
+
+  "git.blame.editorDecoration.enabled": true,
+  // Refered to GitLens
+  "git.blame.editorDecoration.template": "${authorName}, ${authorDateAgo} • ${subject}",
   "github.copilot.nextEditSuggestions.enabled": true
 }
