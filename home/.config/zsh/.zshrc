@@ -18,6 +18,10 @@ if type starship &>/dev/null; then
   eval "$(starship init zsh)"
 fi
 
+if type fzf &>/dev/null; then
+  source <(fzf --zsh)
+fi
+
 # zsh-syntax-highlighting
 # https://github.com/zsh-users/zsh-syntax-highlighting/tree/master/highlighters/main
 

@@ -1,5 +1,6 @@
 brew "defaultbrowser"
 brew "editorconfig-checker"
+brew "fzf"
 brew "ghq"
 brew "git"
 brew "mise"
