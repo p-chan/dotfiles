@@ -1,9 +1,6 @@
 autoload -Uz compinit
 compinit
 
-zstyle ':completion:*' menu select
-zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
-
 alias c="code"
 alias g="git"
 alias n="npm"
