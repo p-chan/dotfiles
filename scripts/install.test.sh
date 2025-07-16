@@ -17,6 +17,7 @@ type vim
 type zsh
 type node
 type fixpack
+type ni
 type npmrc
 type pnpm
 type yarn
