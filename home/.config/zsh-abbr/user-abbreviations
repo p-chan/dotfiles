@@ -1,0 +1,5 @@
+abbr "c"="code"
+abbr "g"="git"
+abbr "n"="npm"
+abbr "p"="pnpm"
+abbr "y"="yarn"

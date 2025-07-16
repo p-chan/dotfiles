@@ -1,12 +1,6 @@
 autoload -Uz compinit
 compinit
 
-alias c="code"
-alias g="git"
-alias n="npm"
-alias p="pnpm"
-alias y="yarn"
-
 if type sheldon &>/dev/null; then
   eval "$(sheldon source)"
 fi
