@@ -10,7 +10,7 @@
 ## Install
 
 ```sh
-bash -c "$(curl -fsSL https://raw.githubusercontent.com/p-chan/dotfiles/master/scripts/install.sh)"
+DOTFILES_DIR="$HOME/src/github.com/p-chan/dotfiles" bash -c "$(curl -fsSL https://raw.githubusercontent.com/p-chan/dotfiles/master/scripts/install.sh)"
 ```
 
 ## Setup
