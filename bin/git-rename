@@ -1,0 +1,11 @@
+#!/bin/zsh
+
+if [ -z "$1" ]; then
+  echo "fatal: You must specify a new branch name.
+
+usage: git rename <new-branch-name>"
+
+  exit 0
+fi
+
+git branch -m "$(git rev-parse --abbrev-ref HEAD)" "$1"
