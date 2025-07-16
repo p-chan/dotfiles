@@ -1,7 +1,5 @@
 #!/bin/bash
 
-DOTFILES_DIR="${DOTFILES_DIR:-$HOME/src/github.com/p-chan/dotfiles}"
-
 dotfiles=(
   ".config/fixpack"
   ".config/ghostty"
@@ -19,6 +17,11 @@ dotfiles=(
   ".editorconfig"
   ".zshenv"
 )
+
+if [ -z "$DOTFILES_DIR" ]; then
+  echo "DOTFILES_DIR is not defined"
+  exit 1
+fi
 
 for dotfile in "${dotfiles[@]}"; do
   source_file="$DOTFILES_DIR/home/$dotfile"

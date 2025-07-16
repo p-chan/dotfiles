@@ -2,8 +2,6 @@
 
 set -e
 
-DOTFILES_DIR="${DOTFILES_DIR:-$HOME/src/github.com/p-chan/dotfiles}"
-
 log_info () {
   echo "ℹ️ $1"
 }
@@ -15,6 +13,11 @@ log_warn () {
 log_success () {
   echo "✅ $1"
 }
+
+if [ -z "$DOTFILES_DIR" ]; then
+  echo "DOTFILES_DIR is not defined"
+  exit 1
+fi
 
 if ! pgrep oahd >&/dev/null; then
   log_info "Installing Rosetta 2..."
