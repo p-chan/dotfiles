@@ -11,6 +11,7 @@ dotfiles=(
   ".config/sheldon"
   ".config/vim"
   ".config/zsh"
+  ".config/zsh-abbr"
   ".config/starship.toml"
   ".ssh"
   "Library/Application Support/Code/User/keybindings.json"
