@@ -10,16 +10,9 @@
   ui = auto
 
 [alias]
-  unstage = reset --mixed HEAD
-  discard = checkout .
-  save = commit -m
-  undo = reset --mixed HEAD~
-  graph = log --graph --oneline --decorate
-
   b = branch
   c = commit
   co = checkout
-  st = status
   sw = switch
 
 [init]
