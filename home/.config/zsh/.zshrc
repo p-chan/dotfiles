@@ -45,6 +45,14 @@ function reload() {
   source "${ZDOTDIR:-$HOME}/.zshrc"
 }
 
+function _ghq_fuzzy_cd() {
+  LBUFFER="cd $(ghq root)/$(ghq list | fzf)"
+  zle accept-line
+}
+
+zle -N _ghq_fuzzy_cd
+bindkey "^G" _ghq_fuzzy_cd
+
 if [[ -f "${ZDOTDIR:-$HOME}/.zshrc.local" ]]; then
   source "${ZDOTDIR:-$HOME}/.zshrc.local"
 fi
