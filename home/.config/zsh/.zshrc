@@ -39,6 +39,12 @@ ZSH_HIGHLIGHT_STYLES[double-hyphen-option]='fg=cyan'
 ZSH_HIGHLIGHT_STYLES[arg0]='fg=blue'
 ZSH_HIGHLIGHT_STYLES[default]='fg=cyan'
 
+function reload() {
+  source "${ZDOTDIR:-$HOME}/.zshenv"
+  source "${ZDOTDIR:-$HOME}/.zprofile"
+  source "${ZDOTDIR:-$HOME}/.zshrc"
+}
+
 if [[ -f "${ZDOTDIR:-$HOME}/.zshrc.local" ]]; then
   source "${ZDOTDIR:-$HOME}/.zshrc.local"
 fi
