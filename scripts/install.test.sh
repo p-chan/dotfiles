@@ -10,6 +10,7 @@ type editorconfig-checker
 type ghq
 type git
 type mise
+type python3
 type sheldon
 type shellcheck
 type starship
