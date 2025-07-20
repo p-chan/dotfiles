@@ -45,6 +45,26 @@ function reload() {
   source "${ZDOTDIR:-$HOME}/.zshrc"
 }
 
+function _gh_pr_fuzzy_checkout() {
+  number=$(
+    GH_FORCE_TTY=100% \
+    gh pr list --limit 100 \
+    --json number,title,headRefName,isDraft \
+    --template '{{range .}}{{ $color := "green" }}{{if .isDraft}}{{ $color = "black+h" }}{{end}}{{tablerow (color $color (printf "#%.0f" .number)) .title (color "cyan" .headRefName)}}{{end}}{{tablerender}}' \
+    | fzf --ansi \
+    | awk '{print $1}' \
+    | sed 's/^#//'
+  )
+
+  if [[ -n "$number" ]]; then
+    BUFFER="gh pr checkout $number"
+    zle accept-line
+  fi
+}
+
+zle -N _gh_pr_fuzzy_checkout
+bindkey "^P" _gh_pr_fuzzy_checkout
+
 if [[ -f "${ZDOTDIR:-$HOME}/.zshrc.local" ]]; then
   source "${ZDOTDIR:-$HOME}/.zshrc.local"
 fi
