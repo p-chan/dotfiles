@@ -46,7 +46,7 @@ function reload() {
 }
 
 function _ghq_fuzzy_cd() {
-  LBUFFER="cd $(ghq root)/$(ghq list | fzf)"
+  BUFFER="cd $(ghq root)/$(ghq list | fzf)"
   zle accept-line
 }
 
