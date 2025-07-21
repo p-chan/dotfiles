@@ -1,6 +1,8 @@
 autoload -Uz compinit
 compinit
 
+bindkey -v
+
 # Backward word (Shift + Arrow Left)
 bindkey '^[[1;2D' backward-word
 # Forward word (Shift + Arrow Right)
