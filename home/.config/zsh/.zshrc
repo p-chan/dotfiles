@@ -1,6 +1,13 @@
 autoload -Uz compinit
 compinit
 
+bindkey -v
+
+# Backward word (Shift + Arrow Left)
+bindkey '^[[1;2D' backward-word
+# Forward word (Shift + Arrow Right)
+bindkey '^[[1;2C' forward-word
+
 if type sheldon &>/dev/null; then
   eval "$(sheldon source)"
 fi
@@ -64,6 +71,14 @@ function _gh_pr_fuzzy_checkout() {
 
 zle -N _gh_pr_fuzzy_checkout
 bindkey "^P" _gh_pr_fuzzy_checkout
+
+function _ghq_fuzzy_cd() {
+  BUFFER="cd $(ghq root)/$(ghq list | fzf)"
+  zle accept-line
+}
+
+zle -N _ghq_fuzzy_cd
+bindkey "^G" _ghq_fuzzy_cd
 
 if [[ -f "${ZDOTDIR:-$HOME}/.zshrc.local" ]]; then
   source "${ZDOTDIR:-$HOME}/.zshrc.local"
