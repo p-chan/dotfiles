@@ -1,6 +1,8 @@
 autoload -Uz compinit
 compinit
 
+bindkey -v
+
 if type sheldon &>/dev/null; then
   eval "$(sheldon source)"
 fi
