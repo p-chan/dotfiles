@@ -20,6 +20,8 @@ if type fzf &>/dev/null; then
   source <(fzf --zsh)
 fi
 
+export FZF_DEFAULT_OPTS="--layout=reverse"
+
 HISTSIZE=100000
 SAVEHIST=100000
 setopt inc_append_history
