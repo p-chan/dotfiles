@@ -3,6 +3,11 @@ compinit
 
 bindkey -v
 
+# Backward word (Shift + Arrow Left)
+bindkey '^[[1;2D' backward-word
+# Forward word (Shift + Arrow Right)
+bindkey '^[[1;2C' forward-word
+
 if type sheldon &>/dev/null; then
   eval "$(sheldon source)"
 fi
