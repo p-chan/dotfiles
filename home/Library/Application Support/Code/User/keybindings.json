@@ -67,5 +67,10 @@
     "key": "cmd+9",
     "command": "workbench.action.terminal.focusAtIndex9",
     "when": "terminalFocus"
+  },
+  {
+    "key": "cmd+shift+r",
+    "command": "typescript.restartTsServer",
+    "when": "editorLangId == typescript || editorLangId == typescriptreact"
   }
 ]
