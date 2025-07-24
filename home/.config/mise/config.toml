@@ -1,7 +1,9 @@
 [tools]
 node = "lts"
-"npm:fixpack" = "latest"
 "npm:@antfu/ni" = "latest"
+"npm:@anthropic-ai/claude-code" = "latest"
+"npm:@google/gemini-cli" = "latest"
+"npm:fixpack" = "latest"
 "npm:npmrc" = "latest"
 "npm:pnpm" = "latest"
 "npm:yarn" = "latest"
