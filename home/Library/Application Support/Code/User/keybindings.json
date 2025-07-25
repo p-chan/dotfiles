@@ -69,6 +69,14 @@
     "when": "terminalFocus"
   },
   {
+    "key": "shift+enter",
+    "command": "workbench.action.terminal.sendSequence",
+    "args": {
+      "text": "\\\r\n"
+    },
+    "when": "terminalFocus"
+  },
+  {
     "key": "cmd+shift+r",
     "command": "typescript.restartTsServer",
     "when": "editorLangId == typescript || editorLangId == typescriptreact"
