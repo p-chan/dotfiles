@@ -10,6 +10,8 @@ background-opacity = 0.9
 fullscreen = true
 keybind = global:alt+space=toggle_visibility
 keybind = cmd+r=clear_screen
+# https://github.com/anthropics/claude-code/issues/1282
+keybind = shift+enter=text:\n
 window-padding-x = 8
 window-padding-y = 8
 shell-integration-features = no-cursor
