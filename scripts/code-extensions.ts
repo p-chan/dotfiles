@@ -24,9 +24,9 @@ const importCommand = define({
 
     echo(`${extensions.length} extensions found to install.\n`);
 
-    for (const extension of extensions) {
-      const textEncoder = new TextEncoder();
+    const textEncoder = new TextEncoder();
 
+    for (const extension of extensions) {
       await Deno.stdout.write(textEncoder.encode(`Installing ${extension}...`));
 
       await $`code --install-extension ${extension}`;
