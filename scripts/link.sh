@@ -1,6 +1,7 @@
 #!/bin/bash
 
 dotfiles=(
+  ".claude/settings.json"
   ".config/fixpack"
   ".config/ghostty"
   ".config/git"
