@@ -71,6 +71,11 @@ Deno.test("Invalid PR titles", async (t) => {
         "Error: PR title does not conform to Angular-flavored Conventional Commits-like format",
     },
     {
+      title: "feat:  ",
+      expectedError:
+        "Error: PR title does not conform to Angular-flavored Conventional Commits-like format",
+    },
+    {
       title: "unknown: some change",
       expectedError:
         "Error: PR title does not conform to Angular-flavored Conventional Commits-like format",
