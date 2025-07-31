@@ -1,72 +1,72 @@
-import { echo } from "jsr:@webpod/zx@8.7.1";
 import { parseArgs } from "jsr:@std/cli@1.0.21";
 
 const ANGULAR_FLAVORED_CONVENTIONAL_COMMITS_PREFIX_REGEX =
   /^(build|ci|docs|feat|fix|perf|refactor|style|test)(\(.+\))?: .+/;
 
-const args = parseArgs(Deno.args, {
-  boolean: ["help", "version"],
-  alias: {
-    h: "help",
-    v: "version",
-  },
-});
+type ValidationResult = { valid: true } | { valid: false; error: string };
 
-if (args.help) {
-  echo("Check PR title with Angular-flavored Conventional Commits-like format");
-  echo("");
-  echo("Usage:");
-  echo("  deno run -A check-pr-title.ts <title>");
-  echo("");
-  echo("Options:");
-  echo("  -h, --help     Show help");
-  echo("  -v, --version  Show version");
+export function checkTitle(title: string): ValidationResult {
+  if (!title) {
+    return { valid: false, error: "Error: PR title is empty" };
+  }
 
-  Deno.exit(0);
+  if (!ANGULAR_FLAVORED_CONVENTIONAL_COMMITS_PREFIX_REGEX.test(title)) {
+    return {
+      valid: false,
+      error:
+        "Error: PR title does not conform to Angular-flavored Conventional Commits-like format",
+    };
+  }
+
+  return { valid: true };
 }
 
-if (args.version) {
-  echo("check-pr-title 1.0.0");
+if (import.meta.main) {
+  const args = parseArgs(Deno.args, {
+    boolean: ["help", "version"],
+    alias: {
+      h: "help",
+      v: "version",
+    },
+  });
 
-  Deno.exit(0);
-}
+  if (args.help) {
+    console.log(
+      "Check PR title with Angular-flavored Conventional Commits-like format"
+    );
+    console.log("");
+    console.log("Usage:");
+    console.log("  deno run -A check-pr-title.ts <title>");
+    console.log("");
+    console.log("Options:");
+    console.log("  -h, --help     Show help");
+    console.log("  -v, --version  Show version");
 
-if (args._.length === 0) {
-  echo("Error: PR title is not specified");
+    Deno.exit(0);
+  }
 
-  Deno.exit(1);
-}
+  if (args.version) {
+    console.log("check-pr-title 1.0.0");
 
-const title = args._.join(" ");
+    Deno.exit(0);
+  }
 
-if (!title) {
-  echo("Error: PR title is empty");
+  if (args._.length === 0) {
+    console.error("Error: PR title is not specified");
 
-  Deno.exit(1);
-}
+    Deno.exit(1);
+  }
 
-if (!ANGULAR_FLAVORED_CONVENTIONAL_COMMITS_PREFIX_REGEX.test(title)) {
-  echo(
-    "Error: PR title does not conform to Angular-flavored Conventional Commits-like format"
+  const title = args._.join(" ");
+  const result = checkTitle(title);
+
+  if (!result.valid) {
+    console.error(result.error);
+
+    Deno.exit(1);
+  }
+
+  console.log(
+    "PR title conforms to Angular-flavored Conventional Commits-like format"
   );
-
-  Deno.exit(1);
 }
-
-const match = title.match(/^([a-z]+)(\(.+\))?: (.+)$/);
-
-if (!match) {
-  echo("Error: Title format is incorrect");
-
-  Deno.exit(1);
-}
-
-const [, _type, _scope, summary] = match;
-
-if (summary.length === 0) {
-  echo("Error: Summary is empty");
-
-  Deno.exit(1);
-}
-
-echo("PR title conforms to Angular-flavored Conventional Commits-like format");
