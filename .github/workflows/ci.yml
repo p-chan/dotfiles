@@ -6,6 +6,10 @@ on:
       - master
   pull_request:
 
+defaults:
+  run:
+    shell: zsh -l {0}
+
 jobs:
   get-cask-packages:
     runs-on: macos-15
