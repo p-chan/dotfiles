@@ -57,3 +57,4 @@ jobs:
           HOMEBREW_BUNDLE_CASK_SKIP="${{ needs.get-cask-packages.outputs.packages }}" \
           sh scripts/install.sh
       - run: sh scripts/install.test.sh
+      - run: deno test -A scripts/

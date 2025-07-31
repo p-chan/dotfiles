@@ -1,0 +1,17 @@
+name: Check PR Title
+
+on:
+  pull_request:
+    types: [opened, edited]
+
+jobs:
+  check-title:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+      - name: Check PR Title
+        run: |
+          deno run -A scripts/check-pr-title.ts "${{ github.event.pull_request.title }}"
