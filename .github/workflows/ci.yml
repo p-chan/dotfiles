@@ -45,6 +45,8 @@ jobs:
           HOMEBREW_BUNDLE_CASK_SKIP="${{ needs.get-cask-packages.outputs.packages }}" \
           sh scripts/install.sh
       - run: editorconfig-checker
+      - run: deno fmt --check
+      - run: deno lint
       - run: shellcheck scripts/*.sh
   test:
     needs: [get-cask-packages]

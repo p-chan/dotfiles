@@ -1,4 +1,5 @@
 {
+  "editor.defaultFormatter": "denoland.vscode-deno",
   "files.associations": {
     "**/home/.config/ghostty/**": "properties"
   },
