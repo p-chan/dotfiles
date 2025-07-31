@@ -116,6 +116,7 @@ Deno.test("Invalid PR titles", async (t) => {
 Deno.test("Angular types are supported", async (t) => {
   const angularTypes = [
     "build",
+    "chore",
     "ci",
     "docs",
     "feat",
