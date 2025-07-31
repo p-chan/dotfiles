@@ -1,7 +1,6 @@
 import * as path from "jsr:@std/path@1.1.1";
-import { $, echo } from "jsr:@webpod/zx@8.7.1";
-import { cli, define } from "jsr:@kazupon/gunshi@0.26.3";
-import { renderUsage } from "jsr:@kazupon/gunshi@0.26.3/renderer";
+import { $ } from "jsr:@webpod/zx@8.7.1";
+import { parseArgs } from "jsr:@std/cli@1.0.21";
 
 const dotfilesDirectoryPath = Deno.env.get("DOTFILES_DIR");
 
@@ -15,57 +14,64 @@ const extensionsFilePath = path.resolve(
   "code-extensions",
 );
 
-const importCommand = define({
-  name: "import",
-  run: async () => {
-    const extensions = (await Deno.readTextFile(extensionsFilePath))
-      .split("\n")
-      .filter((extension) => extension);
+async function importExtensions() {
+  const extensions = (await Deno.readTextFile(extensionsFilePath))
+    .split("\n")
+    .filter((extension) => extension);
 
-    echo(`${extensions.length} extensions found to install.\n`);
+  console.log(`${extensions.length} extensions found to install.\n`);
 
-    const textEncoder = new TextEncoder();
+  const textEncoder = new TextEncoder();
 
-    for (const extension of extensions) {
-      await Deno.stdout.write(textEncoder.encode(`Installing ${extension}...`));
+  for (const extension of extensions) {
+    await Deno.stdout.write(textEncoder.encode(`Installing ${extension}...`));
 
-      await $`code --install-extension ${extension}`;
+    await $`code --install-extension ${extension}`;
 
-      await Deno.stdout.write(
-        textEncoder.encode(`\r\x1b[KInstalled ${extension}\n`),
-      );
-    }
+    await Deno.stdout.write(
+      textEncoder.encode(`\r\x1b[KInstalled ${extension}\n`),
+    );
+  }
 
-    echo("\nAll extensions have been installed.");
-  },
-});
+  console.log("\nAll extensions have been installed.");
+}
 
-const exportCommand = define({
-  name: "export",
-  run: async () => {
-    const { stdout: extensions } = await $`code --list-extensions`;
+async function exportExtensions() {
+  const { stdout: extensions } = await $`code --list-extensions`;
 
-    await Deno.writeTextFile(extensionsFilePath, extensions);
+  await Deno.writeTextFile(extensionsFilePath, extensions);
 
-    echo(`Extensions have been exported to ${extensionsFilePath}`);
-  },
-});
+  console.log(`Extensions have been exported to ${extensionsFilePath}`);
+}
 
-await cli(
-  Deno.args,
-  {
-    run: async (ctx) => {
-      const usage = await renderUsage(ctx);
+function showHelp() {
+  console.log(`code-extensions v1.0.0
 
-      echo(usage);
-    },
-  },
-  {
-    name: "code-extensions",
-    version: "1.0.0",
-    subCommands: new Map([
-      ["import", importCommand],
-      ["export", exportCommand],
-    ]),
-  },
-);
+Usage:
+  code-extensions <command>
+
+Commands:
+  import    Install extensions from code-extensions file
+  export    Export installed extensions to code-extensions file
+  help      Show this help message`);
+}
+
+const args = parseArgs(Deno.args);
+const command = args._[0];
+
+switch (command) {
+  case "import":
+    await importExtensions();
+    break;
+  case "export":
+    await exportExtensions();
+    break;
+  case "help":
+  case undefined:
+    showHelp();
+    break;
+  default:
+    console.log(`Unknown command: ${command}\n`);
+    showHelp();
+    Deno.exit(1);
+}
