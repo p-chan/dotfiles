@@ -1,7 +1,7 @@
 import { parseArgs } from "jsr:@std/cli@1.0.21";
 
 const ANGULAR_FLAVORED_CONVENTIONAL_COMMITS_PREFIX_REGEX =
-  /^(build|ci|docs|feat|fix|perf|refactor|style|test)(\(.+\))?: \S.*/;
+  /^(build|chore|ci|docs|feat|fix|perf|refactor|style|test)(\(.+\))?: \S.*/;
 
 type ValidationResult = { valid: true } | { valid: false; error: string };
 
