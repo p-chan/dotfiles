@@ -32,7 +32,7 @@ if (import.meta.main) {
 
   if (args.help) {
     console.log(
-      "Check PR title with Angular-flavored Conventional Commits-like format"
+      "Check PR title with Angular-flavored Conventional Commits-like format",
     );
     console.log("");
     console.log("Usage:");
@@ -67,6 +67,6 @@ if (import.meta.main) {
   }
 
   console.log(
-    "PR title conforms to Angular-flavored Conventional Commits-like format"
+    "PR title conforms to Angular-flavored Conventional Commits-like format",
   );
 }

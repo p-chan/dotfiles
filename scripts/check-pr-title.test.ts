@@ -2,7 +2,7 @@ import { assertEquals } from "jsr:@std/assert@1.0.13";
 import { checkTitle } from "./check-pr-title.ts";
 
 async function runCLI(
-  args: string[]
+  args: string[],
 ): Promise<{ code: number; stdout: string; stderr: string }> {
   const cmd = new Deno.Command("deno", {
     args: ["run", "-A", "scripts/check-pr-title.ts", ...args],
@@ -11,11 +11,11 @@ async function runCLI(
   });
 
   const { code, stdout, stderr } = await cmd.output();
-  
-  return { 
-    code, 
+
+  return {
+    code,
     stdout: new TextDecoder().decode(stdout),
-    stderr: new TextDecoder().decode(stderr)
+    stderr: new TextDecoder().decode(stderr),
   };
 }
 
@@ -44,7 +44,7 @@ Deno.test(
         assertEquals(result.valid, true, `Expected "${title}" to be valid`);
       });
     }
-  }
+  },
 );
 
 Deno.test("Invalid PR titles", async (t) => {
@@ -106,7 +106,7 @@ Deno.test("Invalid PR titles", async (t) => {
         assertEquals(
           result.error,
           expectedError,
-          `Expected specific error for "${title}"`
+          `Expected specific error for "${title}"`,
         );
       }
     });
@@ -161,7 +161,7 @@ Deno.test("Scope variations", async (t) => {
     if (!result.valid) {
       assertEquals(
         result.error,
-        "Error: PR title does not conform to Angular-flavored Conventional Commits-like format"
+        "Error: PR title does not conform to Angular-flavored Conventional Commits-like format",
       );
     }
   });
@@ -174,9 +174,9 @@ Deno.test("CLI Integration Tests", async (t) => {
     assertEquals(code, 0);
     assertEquals(
       stdout.includes(
-        "PR title conforms to Angular-flavored Conventional Commits-like format"
+        "PR title conforms to Angular-flavored Conventional Commits-like format",
       ),
-      true
+      true,
     );
     assertEquals(stderr.trim(), "");
   });
