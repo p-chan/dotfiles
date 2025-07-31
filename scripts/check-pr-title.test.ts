@@ -35,6 +35,8 @@ Deno.test(
       "feat(router): add lazy loading",
       "fix(auth): handle token expiry",
       "docs(api): update endpoints",
+      "feat: add `console.log` for debugging",
+      "docs: update `README.md` file",
     ];
 
     for (const title of validTitles) {
