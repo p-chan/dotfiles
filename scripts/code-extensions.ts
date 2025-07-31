@@ -12,7 +12,7 @@ if (!dotfilesDirectoryPath) {
 
 const extensionsFilePath = path.resolve(
   dotfilesDirectoryPath,
-  "code-extensions"
+  "code-extensions",
 );
 
 const importCommand = define({
@@ -32,7 +32,7 @@ const importCommand = define({
       await $`code --install-extension ${extension}`;
 
       await Deno.stdout.write(
-        textEncoder.encode(`\r\x1b[KInstalled ${extension}\n`)
+        textEncoder.encode(`\r\x1b[KInstalled ${extension}\n`),
       );
     }
 
@@ -67,5 +67,5 @@ await cli(
       ["import", importCommand],
       ["export", exportCommand],
     ]),
-  }
+  },
 );
