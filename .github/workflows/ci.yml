@@ -29,6 +29,12 @@ jobs:
     runs-on: macos-15
     steps:
       - uses: actions/checkout@v4
+      # stabilize gpg for temporary workaround
+      # https://github.com/actions/runner-images/issues/9777#issuecomment-2102603197
+      - run: |
+          mkdir -p ~/.gnupg/
+          touch ~/.gnupg/dirmngr.conf
+          echo "standard-resolver" >  ~/.gnupg/dirmngr.conf
       # Temporary workaround
       # https://github.com/Dokploy/dokploy/issues/2291
       - run: gpg --keyserver hkps://keyserver.ubuntu.com --recv-keys 5BE8A3F6C8A5C01D106C0AD820B1A390B168D356
@@ -42,6 +48,12 @@ jobs:
     runs-on: macos-15
     steps:
       - uses: actions/checkout@v4
+      # stabilize gpg for temporary workaround
+      # https://github.com/actions/runner-images/issues/9777#issuecomment-2102603197
+      - run: |
+          mkdir -p ~/.gnupg/
+          touch ~/.gnupg/dirmngr.conf
+          echo "standard-resolver" >  ~/.gnupg/dirmngr.conf
       # Temporary workaround
       # https://github.com/Dokploy/dokploy/issues/2291
       - run: gpg --keyserver hkps://keyserver.ubuntu.com --recv-keys 5BE8A3F6C8A5C01D106C0AD820B1A390B168D356
@@ -60,6 +72,12 @@ jobs:
     runs-on: macos-15
     steps:
       - uses: actions/checkout@v4
+      # stabilize gpg for temporary workaround
+      # https://github.com/actions/runner-images/issues/9777#issuecomment-2102603197
+      - run: |
+          mkdir -p ~/.gnupg/
+          touch ~/.gnupg/dirmngr.conf
+          echo "standard-resolver" >  ~/.gnupg/dirmngr.conf
       # Temporary workaround
       # https://github.com/Dokploy/dokploy/issues/2291
       - run: gpg --keyserver hkps://keyserver.ubuntu.com --recv-keys 5BE8A3F6C8A5C01D106C0AD820B1A390B168D356
