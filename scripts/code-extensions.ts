@@ -2,50 +2,122 @@ import * as path from "jsr:@std/path@1.1.1";
 import { $ } from "jsr:@webpod/zx@8.7.1";
 import { parseArgs } from "jsr:@std/cli@1.0.21";
 
-const dotfilesDirectoryPath = Deno.env.get("DOTFILES_DIR");
+export type FileOperations = {
+  readTextFile: (path: string) => Promise<string>;
+  writeTextFile: (path: string, content: string) => Promise<void>;
+};
 
-if (!dotfilesDirectoryPath) {
-  console.error("DOTFILES_DIR environment variable is not set.");
-  Deno.exit(1);
+export type RuntimeEnvironment = {
+  runCommand: (command: string[]) => Promise<{ stdout: string }>;
+  writeStdout: (data: Uint8Array) => Promise<number>;
+  getEnv: (name: string) => string | undefined;
+  exit: (code: number) => never;
+  log: (message: string) => void;
+  error: (message: string) => void;
+};
+
+export type Dependencies = {
+  fileOperations: FileOperations;
+  runtimeEnvironment: RuntimeEnvironment;
+};
+
+const defaultFileOperations: FileOperations = {
+  readTextFile: Deno.readTextFile,
+  writeTextFile: Deno.writeTextFile,
+};
+
+const defaultRuntimeEnvironment: RuntimeEnvironment = {
+  runCommand: async (args: string[]) => {
+    const result = await $`${args}`;
+    return { stdout: result.stdout };
+  },
+  writeStdout: (data: Uint8Array) => Deno.stdout.write(data),
+  getEnv: Deno.env.get,
+  exit: Deno.exit,
+  log: console.log,
+  error: console.error,
+};
+
+const defaultDependencies: Dependencies = {
+  fileOperations: defaultFileOperations,
+  runtimeEnvironment: defaultRuntimeEnvironment,
+};
+
+export function parseExtensionsList(content: string): string[] {
+  return content
+    .split("\n")
+    .map((line) => line.trim())
+    .filter((line) => line && !line.startsWith("#"));
 }
 
-const extensionsFilePath = path.resolve(
-  dotfilesDirectoryPath,
-  "code-extensions",
-);
+export async function importExtensions(
+  extensionsFilePath: string,
+  dependencies: Dependencies = defaultDependencies,
+): Promise<void> {
+  const { fileOperations, runtimeEnvironment } = dependencies;
+  const content = await fileOperations.readTextFile(extensionsFilePath);
+  const extensions = parseExtensionsList(content);
 
-async function importExtensions() {
-  const extensions = (await Deno.readTextFile(extensionsFilePath))
-    .split("\n")
-    .filter((extension) => extension);
-
-  console.log(`${extensions.length} extensions found to install.\n`);
+  runtimeEnvironment.log(`${extensions.length} extensions found to install.\n`);
 
   const textEncoder = new TextEncoder();
 
   for (const extension of extensions) {
-    await Deno.stdout.write(textEncoder.encode(`Installing ${extension}...`));
+    await runtimeEnvironment.writeStdout(
+      textEncoder.encode(`Installing ${extension}...`),
+    );
 
-    await $`code --install-extension ${extension}`;
+    await runtimeEnvironment.runCommand([
+      "code",
+      "--install-extension",
+      extension,
+    ]);
 
-    await Deno.stdout.write(
+    await runtimeEnvironment.writeStdout(
       textEncoder.encode(`\r\x1b[KInstalled ${extension}\n`),
     );
   }
 
-  console.log("\nAll extensions have been installed.");
+  runtimeEnvironment.log("\nAll extensions have been installed.");
 }
 
-async function exportExtensions() {
-  const { stdout: extensions } = await $`code --list-extensions`;
+export async function exportExtensions(
+  extensionsFilePath: string,
+  dependencies: Dependencies = defaultDependencies,
+): Promise<void> {
+  const { fileOperations, runtimeEnvironment } = dependencies;
+  const { stdout: extensions } = await runtimeEnvironment.runCommand([
+    "code",
+    "--list-extensions",
+  ]);
 
-  await Deno.writeTextFile(extensionsFilePath, extensions);
+  await fileOperations.writeTextFile(extensionsFilePath, extensions);
 
-  console.log(`Extensions have been exported to ${extensionsFilePath}`);
+  runtimeEnvironment.log(
+    `Extensions have been exported to ${extensionsFilePath}`,
+  );
 }
 
-function showHelp() {
-  console.log(`code-extensions v1.0.0
+function getExtensionsFilePath(
+  dependencies: Dependencies = defaultDependencies,
+): string {
+  const { runtimeEnvironment } = dependencies;
+  const dotfilesDirectoryPath = runtimeEnvironment.getEnv("DOTFILES_DIR");
+
+  if (!dotfilesDirectoryPath) {
+    runtimeEnvironment.error("DOTFILES_DIR environment variable is not set.");
+    runtimeEnvironment.exit(1);
+    throw new Error("Process should have exited"); // TypeScript control flow hint
+  }
+
+  return path.resolve(dotfilesDirectoryPath, "code-extensions");
+}
+
+export function showHelp(
+  dependencies: Dependencies = defaultDependencies,
+): void {
+  const { runtimeEnvironment } = dependencies;
+  runtimeEnvironment.log(`code-extensions v1.0.0
 
 Usage:
   code-extensions <command>
@@ -56,22 +128,32 @@ Commands:
   help      Show this help message`);
 }
 
-const args = parseArgs(Deno.args);
-const command = args._[0];
+export async function main(
+  args: string[] = Deno.args,
+  dependencies: Dependencies = defaultDependencies,
+): Promise<void> {
+  const parsedArgs = parseArgs(args);
+  const command = parsedArgs._[0];
+  const extensionsFilePath = getExtensionsFilePath(dependencies);
 
-switch (command) {
-  case "import":
-    await importExtensions();
-    break;
-  case "export":
-    await exportExtensions();
-    break;
-  case "help":
-  case undefined:
-    showHelp();
-    break;
-  default:
-    console.log(`Unknown command: ${command}\n`);
-    showHelp();
-    Deno.exit(1);
+  switch (command) {
+    case "import":
+      await importExtensions(extensionsFilePath, dependencies);
+      break;
+    case "export":
+      await exportExtensions(extensionsFilePath, dependencies);
+      break;
+    case "help":
+    case undefined:
+      showHelp(dependencies);
+      break;
+    default:
+      dependencies.runtimeEnvironment.log(`Unknown command: ${command}\n`);
+      showHelp(dependencies);
+      dependencies.runtimeEnvironment.exit(1);
+  }
+}
+
+if (import.meta.main) {
+  await main();
 }
