@@ -84,7 +84,11 @@ if ! type brew &>/dev/null; then
 
   log_success "Successfully installed Homebrew."
 else
-  log_info "Homebrew already installed."
+  log_info "Homebrew already installed. Upgrading Homebrew..."
+
+  brew upgrade
+
+  log_success "Successfully upgraded Homebrew."
 fi;
 
 if [ -f /opt/homebrew/bin/brew ]; then
