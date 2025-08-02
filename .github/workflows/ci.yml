@@ -29,6 +29,9 @@ jobs:
     runs-on: macos-15
     steps:
       - uses: actions/checkout@v4
+      # Temporary workaround
+      # https://github.com/Dokploy/dokploy/issues/2291
+      - run: gpg --keyserver hkps://keyserver.ubuntu.com --recv-keys 5BE8A3F6C8A5C01D106C0AD820B1A390B168D356
       - run: |
           DOTFILES_DIR=$GITHUB_WORKSPACE \
           NONINTERACTIVE=1 \
@@ -39,6 +42,9 @@ jobs:
     runs-on: macos-15
     steps:
       - uses: actions/checkout@v4
+      # Temporary workaround
+      # https://github.com/Dokploy/dokploy/issues/2291
+      - run: gpg --keyserver hkps://keyserver.ubuntu.com --recv-keys 5BE8A3F6C8A5C01D106C0AD820B1A390B168D356
       - run: |
           DOTFILES_DIR=$GITHUB_WORKSPACE \
           NONINTERACTIVE=1 \
@@ -54,6 +60,9 @@ jobs:
     runs-on: macos-15
     steps:
       - uses: actions/checkout@v4
+      # Temporary workaround
+      # https://github.com/Dokploy/dokploy/issues/2291
+      - run: gpg --keyserver hkps://keyserver.ubuntu.com --recv-keys 5BE8A3F6C8A5C01D106C0AD820B1A390B168D356
       - run: |
           DOTFILES_DIR=$GITHUB_WORKSPACE \
           NONINTERACTIVE=1 \
