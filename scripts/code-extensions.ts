@@ -107,9 +107,10 @@ function getExtensionsFilePath(
   if (!dotfilesDirectoryPath) {
     runtimeEnvironment.error("DOTFILES_DIR environment variable is not set.");
     runtimeEnvironment.exit(1);
+    throw new Error("Process should have exited"); // TypeScript control flow hint
   }
 
-  return path.resolve(dotfilesDirectoryPath!, "code-extensions");
+  return path.resolve(dotfilesDirectoryPath, "code-extensions");
 }
 
 export function showHelp(
