@@ -1,6 +1,6 @@
 # dotfiles
 
-> The dotfiles for fuckin' awesome feeling development environment
+> The dotfiles for fuckin' awesome development environment
 
 ## Requirement
 
