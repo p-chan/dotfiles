@@ -31,6 +31,12 @@ defaults write com.apple.dock autohide -bool true
 # Set default browser to Arc
 defaultbrowser browser
 
+# Set Hot Corners (Top Right to Mission Control, Bottom Right to Desktop)
+defaults write com.apple.dock wvous-tr-corner -int 2
+defaults write com.apple.dock wvous-tr-modifier -int 0
+defaults write com.apple.dock wvous-bl-corner -int 4
+defaults write com.apple.dock wvous-bl-modifier -int 0
+
 # Keyboard ---------------------------------------------------------------------
 
 # Disable "Select the previous input source" shortcut (Ctrl + Space)
