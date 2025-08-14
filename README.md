@@ -25,6 +25,25 @@ DOTFILES_DIR="$HOME/src/github.com/p-chan/dotfiles" bash -c "$(curl -fsSL https:
 - [Keepa](https://chromewebstore.google.com/detail/neebplgakaahbhdphmkckjjcegoiijjo)
 - [Wappalyzer](https://chromewebstore.google.com/detail/gppongmhjkpfnbhagpmjfkannfbllamg)
 
+## Maintenance
+
+### Homebrew
+
+#### Upgrade packages
+
+```sh
+brew update
+brew upgrade
+```
+
+### mise
+
+#### Upgrade tools
+
+```sh
+mise up
+```
+
 ## Author
 
 [@p-chan](https://github.com/p-chan)
