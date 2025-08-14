@@ -117,6 +117,16 @@ else
   log_warn "mise command not found. Skipping mise tool installation."
 fi
 
+if [ "$CI" != "true" ] && type deno &>/dev/null && type code &>/dev/null; then
+  log_info "Installing VSCode extensions..."
+
+  deno run -A "$DOTFILES_DIR/scripts/code-extensions.ts" import
+
+  log_success "Successfully installed VSCode extensions."
+else
+  log_warn "deno or code command not found. Skipping VSCode extensions import."
+fi
+
 if [ "$CI" != "true" ]; then
   log_info "Provisioning macOS..."
 
