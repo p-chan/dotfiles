@@ -79,6 +79,6 @@
   {
     "key": "cmd+shift+r",
     "command": "typescript.restartTsServer",
-    "when": "editorLangId == typescript || editorLangId == typescriptreact"
+    "when": "editorLangId == typescript || editorLangId == typescriptreact || resourceFilename == tsconfig.json"
   }
 ]
