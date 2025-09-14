@@ -19,5 +19,6 @@
   // Refered to GitLens
   "git.blame.editorDecoration.template": "${authorName}, ${authorDateAgo} • ${subject}",
   "git.blame.statusBarItem.enabled": false,
-  "github.copilot.nextEditSuggestions.enabled": true
+  "github.copilot.nextEditSuggestions.enabled": true,
+  "typescript.referencesCodeLens.enabled": true
 }
