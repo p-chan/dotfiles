@@ -2,6 +2,8 @@
 
 set -e
 
+is_darwin=0
+
 log_info () {
   echo "ℹ️ $1"
 }
@@ -14,34 +16,44 @@ log_success () {
   echo "✅ $1"
 }
 
+if [[ "$(uname)" == "Darwin" ]]; then
+  is_darwin=1
+
+  echo "🍎 Setting up dotfiles on macOS"
+fi
+
 if [ -z "$DOTFILES_DIR" ]; then
   echo "DOTFILES_DIR is not defined"
   exit 1
 fi
 
-if ! pgrep oahd >&/dev/null; then
-  log_info "Installing Rosetta 2..."
+if [ "$is_darwin" -eq 1 ]; then
+  if ! pgrep oahd >&/dev/null; then
+    log_info "Installing Rosetta 2..."
 
-  sudo softwareupdate --install-rosetta --agree-to-license
+    sudo softwareupdate --install-rosetta --agree-to-license
 
-  log_success "Successfully installed Rosetta 2."
-else
-  log_info "Rosetta 2 already installed."
+    log_success "Successfully installed Rosetta 2."
+  else
+    log_info "Rosetta 2 already installed."
+  fi
 fi
 
-if ! xcode-select -p &>/dev/null; then
-  log_info "Installing Command Line Tools..."
+if [ "$is_darwin" -eq 1 ]; then
+  if ! xcode-select -p &>/dev/null; then
+    log_info "Installing Command Line Tools..."
 
-  xcode-select --install
+    xcode-select --install
 
-  until xcode-select -p &>/dev/null; do
-    sleep 10
-  done
+    until xcode-select -p &>/dev/null; do
+      sleep 10
+    done
 
-  log_success "Successfully installed Command Line Tools."
-else
-  log_info "Command Line Tools already installed."
-fi;
+    log_success "Successfully installed Command Line Tools."
+  else
+    log_info "Command Line Tools already installed."
+  fi;
+fi
 
 if [ ! -d "$DOTFILES_DIR" ]; then
   log_info "Cloning dotfiles..."
@@ -77,34 +89,40 @@ else
   log_warn "$DOTFILES_DIR not found. Skipping dotfiles linking."
 fi
 
-if ! type brew &>/dev/null; then
-  log_info "Installing Homebrew..."
+if [ "$is_darwin" -eq 1 ]; then
+  if ! type brew &>/dev/null; then
+    log_info "Installing Homebrew..."
 
-  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
-  log_success "Successfully installed Homebrew."
-else
-  log_info "Homebrew already installed."
+    log_success "Successfully installed Homebrew."
+  else
+    log_info "Homebrew already installed."
+  fi;
 fi;
 
-if [ -f /opt/homebrew/bin/brew ]; then
-  log_info "Setting up Homebrew."
+if [ "$is_darwin" -eq 1 ]; then
+  if [ -f /opt/homebrew/bin/brew ]; then
+    log_info "Setting up Homebrew."
 
-  eval "$(/opt/homebrew/bin/brew shellenv)"
+    eval "$(/opt/homebrew/bin/brew shellenv)"
 
-  log_success "Successfully set up Homebrew."
-else
-  log_warn "/opt/homebrew/bin/brew not found. Skipping Homebrew setup."
+    log_success "Successfully set up Homebrew."
+  else
+    log_warn "/opt/homebrew/bin/brew not found. Skipping Homebrew setup."
+  fi
 fi
 
-if type brew &>/dev/null; then
-  log_info "Installing Homebrew packages..."
+if [ "$is_darwin" -eq 1 ]; then
+  if type brew &>/dev/null; then
+    log_info "Installing Homebrew packages..."
 
-  brew bundle --file="$DOTFILES_DIR/Brewfile"
+    brew bundle --file="$DOTFILES_DIR/Brewfile"
 
-  log_success "Successfully installed Homebrew packages."
-else
-  log_warn "brew command not found. Skipping Homebrew package installation."
+    log_success "Successfully installed Homebrew packages."
+  else
+    log_warn "brew command not found. Skipping Homebrew package installation."
+  fi
 fi
 
 if type mise &>/dev/null; then
@@ -131,12 +149,14 @@ else
   log_info "CI environment detected. Skipping VSCode extensions import."
 fi
 
-if [ "$CI" != "true" ]; then
-  log_info "Provisioning macOS..."
+if [ "$is_darwin" -eq 1 ]; then
+  if [ "$CI" != "true" ]; then
+    log_info "Provisioning macOS..."
 
-  sh "$DOTFILES_DIR/scripts/provisioning.sh"
+    sh "$DOTFILES_DIR/scripts/provisioning.sh"
 
-  log_success "Successfully provisioned macOS."
-else
-  log_info "CI environment detected. Skipping macOS provisioning."
+    log_success "Successfully provisioned macOS."
+  else
+    log_info "CI environment detected. Skipping macOS provisioning."
+  fi
 fi
