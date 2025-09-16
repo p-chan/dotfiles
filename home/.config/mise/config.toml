@@ -1,6 +1,17 @@
 [tools]
 node = "lts"
 deno = "latest"
+rust = "latest"
+"cargo:eza" = "latest"
+"github:cli/cli" = "latest"
+"github:editorconfig-checker/editorconfig-checker" = "latest"
+"github:jkfran/killport" = "latest"
+"github:junegunn/fzf" = "latest"
+"github:koalaman/shellcheck" = "latest"
+"github:rossmacarthur/sheldon" = "latest"
+"github:starship/starship" = "latest"
+"github:suzuki-shunsuke/pinact" = "latest"
+"github:x-motemen/ghq" = "latest"
 "npm:@antfu/ni" = "latest"
 "npm:@anthropic-ai/claude-code" = "latest"
 "npm:@google/gemini-cli" = "latest"
@@ -10,4 +21,5 @@ deno = "latest"
 "npm:yarn" = "latest"
 
 [settings]
+experimental = true
 idiomatic_version_file_enable_tools = ['node']
