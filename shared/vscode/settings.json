@@ -1,0 +1,24 @@
+{
+  "editor.fontFamily": "\"Source Han Code JP\", monospace",
+  "editor.fontSize": 13,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "editor.scrollBeyondLastLine": false,
+  "editor.stickyScroll.enabled": false,
+  "editor.minimap.enabled": false,
+  "files.insertFinalNewline": true,
+  "workbench.colorCustomizations": {
+    // Refered to GitLens
+    "git.blame.editorDecorationForeground": "#99999959"
+  },
+  "workbench.colorTheme": "One Dark Pro",
+  "workbench.iconTheme": "file-icons",
+  "terminal.integrated.fontSize": 13,
+  "git.autofetch": true,
+  "git.blame.editorDecoration.enabled": true,
+  // Refered to GitLens
+  "git.blame.editorDecoration.template": "${authorName}, ${authorDateAgo} • ${subject}",
+  "git.blame.statusBarItem.enabled": false,
+  "github.copilot.nextEditSuggestions.enabled": true,
+  "typescript.referencesCodeLens.enabled": true
+}
