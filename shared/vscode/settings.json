@@ -8,7 +8,7 @@
   "editor.minimap.enabled": false,
   "files.insertFinalNewline": true,
   "workbench.colorCustomizations": {
-    // Refered to GitLens
+    // Referred to GitLens
     "git.blame.editorDecorationForeground": "#99999959"
   },
   "workbench.colorTheme": "One Dark Pro",
@@ -16,7 +16,7 @@
   "terminal.integrated.fontSize": 13,
   "git.autofetch": true,
   "git.blame.editorDecoration.enabled": true,
-  // Refered to GitLens
+  // Referred to GitLens
   "git.blame.editorDecoration.template": "${authorName}, ${authorDateAgo} • ${subject}",
   "git.blame.statusBarItem.enabled": false,
   "github.copilot.nextEditSuggestions.enabled": true,
