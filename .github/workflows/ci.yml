@@ -10,6 +10,9 @@ defaults:
   run:
     shell: zsh -l {0}
 
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
 jobs:
   get-cask-packages:
     runs-on: macos-15
