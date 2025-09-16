@@ -1,6 +1,7 @@
 #!/bin/bash
 
 dotfiles=(
+  ".claude/CLAUDE.md"
   ".claude/settings.json"
   ".config/fixpack"
   ".config/ghostty"
