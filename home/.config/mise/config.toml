@@ -1,6 +1,7 @@
 [tools]
 node = "lts"
 deno = "latest"
+go = "latest"
 rust = "latest"
 "cargo:eza" = "latest"
 "github:cli/cli" = "latest"
@@ -11,6 +12,7 @@ rust = "latest"
 "github:starship/starship" = "latest"
 "github:suzuki-shunsuke/pinact" = "latest"
 "github:x-motemen/ghq" = "latest"
+"go:github.com/editorconfig-checker/editorconfig-checker" = "latest"
 "npm:@antfu/ni" = "latest"
 "npm:@anthropic-ai/claude-code" = "latest"
 "npm:@google/gemini-cli" = "latest"
@@ -18,10 +20,6 @@ rust = "latest"
 "npm:npmrc" = "latest"
 "npm:pnpm" = "latest"
 "npm:yarn" = "latest"
-
-[tools."github:editorconfig-checker/editorconfig-checker"]
-version = "latest"
-bin = "editorconfig-checker"
 
 [settings]
 experimental = true
