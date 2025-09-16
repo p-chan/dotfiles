@@ -4,7 +4,6 @@ deno = "latest"
 rust = "latest"
 "cargo:eza" = "latest"
 "github:cli/cli" = "latest"
-"github:editorconfig-checker/editorconfig-checker" = "latest"
 "github:jkfran/killport" = "latest"
 "github:junegunn/fzf" = "latest"
 "github:koalaman/shellcheck" = "latest"
@@ -19,6 +18,10 @@ rust = "latest"
 "npm:npmrc" = "latest"
 "npm:pnpm" = "latest"
 "npm:yarn" = "latest"
+
+[tools."github:editorconfig-checker/editorconfig-checker"]
+version = "latest"
+bin = "editorconfig-checker"
 
 [settings]
 experimental = true
