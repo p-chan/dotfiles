@@ -5,7 +5,7 @@ async function runCLI(
   args: string[],
 ): Promise<{ code: number; stdout: string; stderr: string }> {
   const cmd = new Deno.Command("deno", {
-    args: ["run", "-A", "scripts/check-pr-title.ts", ...args],
+    args: ["run", "-A", ".github/scripts/check-pr-title.ts", ...args],
     stdout: "piped",
     stderr: "piped",
   });
