@@ -1,6 +1,6 @@
 #!/bin/bash
 
-is_darwin=0
+export is_darwin=0
 
 if [[ "$(uname)" == "Darwin" ]]; then
   is_darwin=1
