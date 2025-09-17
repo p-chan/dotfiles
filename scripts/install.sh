@@ -2,7 +2,9 @@
 
 set -e
 
-is_darwin=0
+is_darwin() {
+  [[ "$(uname)" == "Darwin" ]]
+}
 
 log_info () {
   echo "ℹ️ $1"
@@ -16,9 +18,7 @@ log_success () {
   echo "✅ $1"
 }
 
-if [[ "$(uname)" == "Darwin" ]]; then
-  is_darwin=1
-
+if is_darwin; then
   echo "🍎 Setting up dotfiles on macOS"
 fi
 
@@ -27,7 +27,7 @@ if [ -z "$DOTFILES_DIR" ]; then
   exit 1
 fi
 
-if [ "$is_darwin" -eq 1 ]; then
+if is_darwin; then
   if ! pgrep oahd >&/dev/null; then
     log_info "Installing Rosetta 2..."
 
@@ -39,7 +39,7 @@ if [ "$is_darwin" -eq 1 ]; then
   fi
 fi
 
-if [ "$is_darwin" -eq 1 ]; then
+if is_darwin; then
   if ! xcode-select -p &>/dev/null; then
     log_info "Installing Command Line Tools..."
 
@@ -89,7 +89,7 @@ else
   log_warn "$DOTFILES_DIR not found. Skipping dotfiles linking."
 fi
 
-if [ "$is_darwin" -eq 1 ]; then
+if is_darwin; then
   if ! type brew &>/dev/null; then
     log_info "Installing Homebrew..."
 
@@ -101,7 +101,7 @@ if [ "$is_darwin" -eq 1 ]; then
   fi;
 fi;
 
-if [ "$is_darwin" -eq 1 ]; then
+if is_darwin; then
   if [ -f /opt/homebrew/bin/brew ]; then
     log_info "Setting up Homebrew."
 
@@ -113,7 +113,7 @@ if [ "$is_darwin" -eq 1 ]; then
   fi
 fi
 
-if [ "$is_darwin" -eq 1 ]; then
+if is_darwin; then
   if type brew &>/dev/null; then
     log_info "Installing Homebrew packages..."
 
@@ -149,7 +149,7 @@ else
   log_info "CI environment detected. Skipping VSCode extensions import."
 fi
 
-if [ "$is_darwin" -eq 1 ]; then
+if is_darwin; then
   if [ "$CI" != "true" ]; then
     log_info "Provisioning macOS..."
 
