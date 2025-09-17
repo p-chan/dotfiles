@@ -2,23 +2,9 @@
 
 set -e
 
-is_darwin=0
+source "$(dirname "$0")/utils.sh"
 
-log_info () {
-  echo "ℹ️ $1"
-}
-
-log_warn () {
-  echo "⚠️ $1"
-}
-
-log_success () {
-  echo "✅ $1"
-}
-
-if [[ "$(uname)" == "Darwin" ]]; then
-  is_darwin=1
-
+if [ "$is_darwin" -eq 1 ]; then
   echo "🍎 Setting up dotfiles on macOS"
 fi
 
