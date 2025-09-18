@@ -36,7 +36,7 @@ jobs:
           DOTFILES_DIR=$GITHUB_WORKSPACE \
           NONINTERACTIVE=1 \
           HOMEBREW_BUNDLE_CASK_SKIP="${{ needs.get-cask-packages.outputs.packages }}" \
-          sh scripts/install.sh
+          sh install.sh
   check:
     needs: [get-cask-packages]
     runs-on: macos-15
@@ -46,7 +46,7 @@ jobs:
           DOTFILES_DIR=$GITHUB_WORKSPACE \
           NONINTERACTIVE=1 \
           HOMEBREW_BUNDLE_CASK_SKIP="${{ needs.get-cask-packages.outputs.packages }}" \
-          sh scripts/install.sh
+          sh install.sh
       - run: editorconfig-checker
       - run: deno check
       - run: deno fmt --check
@@ -61,6 +61,6 @@ jobs:
           DOTFILES_DIR=$GITHUB_WORKSPACE \
           NONINTERACTIVE=1 \
           HOMEBREW_BUNDLE_CASK_SKIP="${{ needs.get-cask-packages.outputs.packages }}" \
-          sh scripts/install.sh
+          sh install.sh
       - run: sh scripts/doctor.sh
       - run: deno test -A
