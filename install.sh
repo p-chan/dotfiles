@@ -2,8 +2,18 @@
 
 set -e
 
+dotfiles_dir="$DOTFILES_DIR"
+
 is_darwin() {
   [[ "$(uname)" == "Darwin" ]]
+}
+
+is_linux() {
+  [[ "$(uname)" == "Linux" ]]
+}
+
+is_codespaces() {
+  [[ "$CODESPACES" == "true" ]]
 }
 
 log_info () {
@@ -22,8 +32,16 @@ if is_darwin; then
   echo "🍎 Setting up dotfiles on macOS"
 fi
 
-if [ -z "$DOTFILES_DIR" ]; then
-  echo "DOTFILES_DIR is not defined"
+if is_linux; then
+  echo "🐧 Setting up dotfiles on Linux"
+fi
+
+if is_codespaces; then
+  dotfiles_dir="/workspaces/.codespaces/.persistedshare/dotfiles"
+fi
+
+if [ -z "$dotfiles_dir" ]; then
+  echo "dotfiles_dir is not defined"
   exit 1
 fi
 
@@ -55,20 +73,20 @@ if is_darwin; then
   fi;
 fi
 
-if [ ! -d "$DOTFILES_DIR" ]; then
+if [ ! -d "$dotfiles_dir" ]; then
   log_info "Cloning dotfiles..."
 
-  git clone https://github.com/p-chan/dotfiles.git "$DOTFILES_DIR"
+  git clone https://github.com/p-chan/dotfiles.git "$dotfiles_dir"
 
   log_success "Successfully cloned dotfiles."
 else
   log_info "dotfiles already cloned."
 fi;
 
-if [ -d "$DOTFILES_DIR" ]; then
+if [ -d "$dotfiles_dir" ]; then
   log_info "Change remote URL of dotfiles to SSH from HTTPS..."
 
-  cd "$DOTFILES_DIR"
+  cd "$dotfiles_dir"
 
   git remote set-url origin git@github.com:p-chan/dotfiles.git
 
@@ -76,17 +94,17 @@ if [ -d "$DOTFILES_DIR" ]; then
 
   log_success "Successfully changed remote URL of dotfiles."
 else
-  log_warn "$DOTFILES_DIR not found. Skipping dotfiles remote URL changing."
+  log_warn "$dotfiles_dir not found. Skipping dotfiles remote URL changing."
 fi
 
-if [ -d "$DOTFILES_DIR" ]; then
+if [ -d "$dotfiles_dir" ]; then
   log_info "Linking dotfiles..."
 
-  sh "$DOTFILES_DIR/scripts/link.sh"
+  bash "$dotfiles_dir/scripts/link.sh"
 
   log_success "Successfully linked dotfiles."
 else
-  log_warn "$DOTFILES_DIR not found. Skipping dotfiles linking."
+  log_warn "$dotfiles_dir not found. Skipping dotfiles linking."
 fi
 
 if is_darwin; then
@@ -117,13 +135,25 @@ if is_darwin; then
   if type brew &>/dev/null; then
     log_info "Installing Homebrew packages..."
 
-    brew bundle --file="$DOTFILES_DIR/Brewfile"
+    brew bundle --file="$dotfiles_dir/Brewfile"
 
     log_success "Successfully installed Homebrew packages."
   else
     log_warn "brew command not found. Skipping Homebrew package installation."
   fi
 fi
+
+if is_linux; then
+  if ! type mise &>/dev/null; then
+    log_info "Installing mise..."
+
+    curl https://mise.run | sh
+
+    log_success "Successfully installed mise."
+  else
+    log_info "mise already installed."
+  fi;
+fi;
 
 if type mise &>/dev/null; then
   log_info "Installing mise tools..."
@@ -139,7 +169,7 @@ if [ "$CI" != "true" ]; then
   if type deno &>/dev/null && type code &>/dev/null; then
     log_info "Installing VSCode extensions..."
 
-    deno run -A "$DOTFILES_DIR/scripts/code-extensions.ts" import
+    deno run -A "$dotfiles_dir/scripts/code-extensions.ts" import
 
     log_success "Successfully installed VSCode extensions."
   else
@@ -153,7 +183,7 @@ if is_darwin; then
   if [ "$CI" != "true" ]; then
     log_info "Provisioning macOS..."
 
-    sh "$DOTFILES_DIR/scripts/provisioning.sh"
+    bash "$dotfiles_dir/scripts/provisioning.sh"
 
     log_success "Successfully provisioned macOS."
   else

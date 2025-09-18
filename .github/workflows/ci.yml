@@ -29,24 +29,40 @@ jobs:
           )" >> $GITHUB_OUTPUT
   install:
     needs: [get-cask-packages]
-    runs-on: macos-15
+    strategy:
+      matrix:
+        os: [macos-15, ubuntu-24.04]
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
+      - if: matrix.os == 'ubuntu-24.04'
+        shell: bash
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y zsh
       - run: |
           DOTFILES_DIR=$GITHUB_WORKSPACE \
           NONINTERACTIVE=1 \
           HOMEBREW_BUNDLE_CASK_SKIP="${{ needs.get-cask-packages.outputs.packages }}" \
-          sh install.sh
+          bash install.sh
   check:
     needs: [get-cask-packages]
-    runs-on: macos-15
+    strategy:
+      matrix:
+        os: [macos-15, ubuntu-24.04]
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
+      - if: matrix.os == 'ubuntu-24.04'
+        shell: bash
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y zsh
       - run: |
           DOTFILES_DIR=$GITHUB_WORKSPACE \
           NONINTERACTIVE=1 \
           HOMEBREW_BUNDLE_CASK_SKIP="${{ needs.get-cask-packages.outputs.packages }}" \
-          sh install.sh
+          bash install.sh
       - run: editorconfig-checker
       - run: deno check
       - run: deno fmt --check
@@ -54,13 +70,21 @@ jobs:
       - run: shellcheck scripts/*.sh
   test:
     needs: [get-cask-packages]
-    runs-on: macos-15
+    strategy:
+      matrix:
+        os: [macos-15, ubuntu-24.04]
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
+      - if: matrix.os == 'ubuntu-24.04'
+        shell: bash
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y zsh
       - run: |
           DOTFILES_DIR=$GITHUB_WORKSPACE \
           NONINTERACTIVE=1 \
           HOMEBREW_BUNDLE_CASK_SKIP="${{ needs.get-cask-packages.outputs.packages }}" \
-          sh install.sh
-      - run: sh scripts/doctor.sh
+          bash install.sh
+      - run: bash scripts/doctor.sh
       - run: deno test -A
