@@ -3,6 +3,7 @@
 set -e
 
 SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+# shellcheck source=scripts/utils.sh
 source "$SCRIPT_DIR/utils.sh"
 
 required_commands=("zsh" "vim" "git" "mise" "deno" "go" "node" "rustc")
