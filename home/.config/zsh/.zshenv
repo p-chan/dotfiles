@@ -4,8 +4,12 @@ export VISUAL="vim"
 export DOTFILES_DIR="${DOTFILES_DIR:-$HOME/src/github.com/p-chan/dotfiles}"
 export PATH="$DOTFILES_DIR/bin:$PATH"
 
-if [ -f /opt/homebrew/bin/brew ]; then
-  eval "$(/opt/homebrew/bin/brew shellenv)"
+if [ -x /opt/homebrew/bin/brew ]; then
+  export PATH="/opt/homebrew/bin:$PATH"
+fi
+
+if type mise &>/dev/null; then
+  eval "$(mise activate zsh --shims)"
 fi
 
 if [[ -f "${ZDOTDIR:-$HOME}/.zshenv.local" ]]; then
