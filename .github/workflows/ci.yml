@@ -28,9 +28,14 @@ jobs:
 
   install-ubuntu:
     runs-on: ubuntu-24.04
+    defaults:
+      run:
+        shell: zsh -l {0}
     steps:
       - uses: actions/checkout@v5
-      - run: |
+      - name: Install zsh
+        shell: bash
+        run: |
           sudo apt update
           sudo apt install -y zsh
       - run: DOTFILES_DIR=$GITHUB_WORKSPACE bash install.sh
