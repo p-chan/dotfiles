@@ -43,12 +43,13 @@ jobs:
       run:
         shell: zsh -l {0}
     steps:
+      - uses: actions/checkout@v5
       - run: |
           DOTFILES_DIR=$GITHUB_WORKSPACE \
           NONINTERACTIVE=1 \
           HOMEBREW_BUNDLE_CASK_SKIP="${{ needs.get-cask-packages.outputs.packages }}" \
           bash install.sh
-        run: bash scripts/doctor.sh
+      - run: bash scripts/doctor.sh
 
   check:
     runs-on: ubuntu-latest
