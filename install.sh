@@ -144,6 +144,19 @@ if is_darwin; then
 fi
 
 if is_linux; then
+  if ! type zsh &>/dev/null; then
+    log_info "Installing zsh..."
+
+    sudo apt update
+    sudo apt install -y zsh
+
+    log_success "Successfully installed zsh."
+  else
+    log_info "zsh already installed."
+  fi;
+fi;
+
+if is_linux; then
   if ! type mise &>/dev/null; then
     log_info "Installing mise..."
 
