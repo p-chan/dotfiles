@@ -1,12 +1,14 @@
 #!/bin/bash
 
+SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+source "$SCRIPT_DIR/utils.sh"
+
 dotfiles=(
   ".claude/CLAUDE.md"
   ".claude/settings.json"
   ".config/fixpack"
   ".config/ghostty"
   ".config/git"
-  ".config/karabiner"
   ".config/mise"
   ".config/sheldon"
   ".config/vim"
@@ -14,11 +16,28 @@ dotfiles=(
   ".config/zsh-abbr"
   ".config/starship.toml"
   ".ssh"
-  "Library/Application Support/Code/User/keybindings.json"
-  "Library/Application Support/Code/User/settings.json"
   ".editorconfig"
   ".zshenv"
 )
+
+darwin_only_dotfiles=(
+  ".config/karabiner"
+  "Library/Application Support/Code/User/keybindings.json"
+  "Library/Application Support/Code/User/settings.json"
+)
+
+linux_only_dotfiles=(
+  ".config/Code/User/keybindings.json"
+  ".config/Code/User/settings.json"
+)
+
+if is_darwin; then
+  dotfiles+=("${darwin_only_dotfiles[@]}")
+fi
+
+if is_linux; then
+  dotfiles+=("${linux_only_dotfiles[@]}")
+fi
 
 if [ -z "$DOTFILES_DIR" ]; then
   echo "DOTFILES_DIR is not defined"
