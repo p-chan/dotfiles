@@ -75,7 +75,7 @@ jobs:
       - run: deno check
       - run: deno fmt --check
       - name: shellcheck
-        run: shellcheck **/*.sh
+        run: shellcheck -x **/*.sh
 
   lint:
     runs-on: ubuntu-latest
