@@ -100,7 +100,7 @@ fi
 if [ -d "$dotfiles_dir" ]; then
   log_info "Linking dotfiles..."
 
-  bash "$dotfiles_dir/scripts/link.sh"
+  DOTFILES_DIR=$dotfiles_dir bash "$dotfiles_dir/scripts/link.sh"
 
   log_success "Successfully linked dotfiles."
 else
