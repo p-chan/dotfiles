@@ -102,13 +102,8 @@ function getExtensionsFilePath(
   dependencies: Dependencies = defaultDependencies,
 ): string {
   const { runtimeEnvironment } = dependencies;
-  const dotfilesDirectoryPath = runtimeEnvironment.getEnv("DOTFILES_DIR");
-
-  if (!dotfilesDirectoryPath) {
-    runtimeEnvironment.error("DOTFILES_DIR environment variable is not set.");
-    runtimeEnvironment.exit(1);
-    throw new Error("Process should have exited"); // TypeScript control flow hint
-  }
+  const dotfilesDirectoryPath = runtimeEnvironment.getEnv("DOTFILES_DIR") ||
+    path.join(runtimeEnvironment.getEnv("HOME") || "~", "dotfiles");
 
   return path.resolve(dotfilesDirectoryPath, "code-extensions");
 }
@@ -134,22 +129,19 @@ export async function main(
 ): Promise<void> {
   const parsedArgs = parseArgs(args);
   const command = parsedArgs._[0];
+  const extensionsFilePath = getExtensionsFilePath(dependencies);
 
   switch (command) {
+    case "import":
+      await importExtensions(extensionsFilePath, dependencies);
+      break;
+    case "export":
+      await exportExtensions(extensionsFilePath, dependencies);
+      break;
     case "help":
     case undefined:
       showHelp(dependencies);
       break;
-    case "import":
-    case "export": {
-      const extensionsFilePath = getExtensionsFilePath(dependencies);
-      if (command === "import") {
-        await importExtensions(extensionsFilePath, dependencies);
-      } else {
-        await exportExtensions(extensionsFilePath, dependencies);
-      }
-      break;
-    }
     default:
       dependencies.runtimeEnvironment.log(`Unknown command: ${command}\n`);
       showHelp(dependencies);
