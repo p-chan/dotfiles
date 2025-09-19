@@ -58,7 +58,8 @@ jobs:
           deno-version: v2.x
       - run: deno check
       - run: deno fmt --check
-      - run: shellcheck scripts/*.sh
+      - name: shellcheck
+        run: shellcheck **/*.sh
 
   lint:
     runs-on: ubuntu-latest
