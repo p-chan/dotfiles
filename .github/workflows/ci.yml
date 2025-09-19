@@ -26,23 +26,39 @@ jobs:
             xargs
           )" >> $GITHUB_OUTPUT
 
-  install:
+  install-darwin:
     needs: [get-cask-packages]
     runs-on: macos-15
     defaults:
       run:
         shell: zsh -l {0}
     steps:
-      - name: Checkout
-        uses: actions/checkout@v5
+      - uses: actions/checkout@v5
       - name: Install
         run: |
           DOTFILES_DIR=$GITHUB_WORKSPACE \
           NONINTERACTIVE=1 \
           HOMEBREW_BUNDLE_CASK_SKIP="${{ needs.get-cask-packages.outputs.packages }}" \
-          sh install.sh
+          bash install.sh
       - name: Doctor
-        run: sh scripts/doctor.sh
+        run: bash scripts/doctor.sh
+
+  install-ubuntu:
+    runs-on: ubuntu-24.04
+    defaults:
+      run:
+        shell: zsh -l {0}
+    steps:
+      - uses: actions/checkout@v5
+      - name: Install zsh
+        shell: bash
+        run: |
+          sudo apt update
+          sudo apt install -y zsh
+      - name: Install
+        run: DOTFILES_DIR=$GITHUB_WORKSPACE bash install.sh
+      - name: Doctor
+        run: bash scripts/doctor.sh
 
   check:
     runs-on: ubuntu-latest
@@ -59,7 +75,7 @@ jobs:
       - run: deno check
       - run: deno fmt --check
       - name: shellcheck
-        run: shellcheck **/*.sh
+        run: shellcheck -x **/*.sh
 
   lint:
     runs-on: ubuntu-latest
