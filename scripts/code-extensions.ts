@@ -134,19 +134,22 @@ export async function main(
 ): Promise<void> {
   const parsedArgs = parseArgs(args);
   const command = parsedArgs._[0];
-  const extensionsFilePath = getExtensionsFilePath(dependencies);
 
   switch (command) {
-    case "import":
-      await importExtensions(extensionsFilePath, dependencies);
-      break;
-    case "export":
-      await exportExtensions(extensionsFilePath, dependencies);
-      break;
     case "help":
     case undefined:
       showHelp(dependencies);
       break;
+    case "import":
+    case "export": {
+      const extensionsFilePath = getExtensionsFilePath(dependencies);
+      if (command === "import") {
+        await importExtensions(extensionsFilePath, dependencies);
+      } else {
+        await exportExtensions(extensionsFilePath, dependencies);
+      }
+      break;
+    }
     default:
       dependencies.runtimeEnvironment.log(`Unknown command: ${command}\n`);
       showHelp(dependencies);
