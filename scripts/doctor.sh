@@ -1,10 +1,23 @@
-#!/bin/bash
+#!/usr/bin/env zsh
 
 set -e
 
-SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
-# shellcheck source=scripts/utils.sh
-source "$SCRIPT_DIR/utils.sh"
+is_darwin() {
+  [[ "$(uname)" == "Darwin" ]]
+}
+
+log_info () {
+  echo "ℹ️ $1"
+}
+
+log_error () {
+  echo "❌ $1"
+}
+
+log_success () {
+  echo "✅ $1"
+}
+
 
 required_commands=("zsh" "vim" "git" "mise" "deno" "go" "node" "rustc")
 darwin_required_commands=("xcode-select" "brew")
