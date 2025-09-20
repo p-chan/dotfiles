@@ -154,6 +154,14 @@ if is_linux; then
   else
     log_info "zsh already installed."
   fi;
+
+  if [ "$CI" != "true" ] && ! is_codespaces; then
+    log_info "Changing default shell to zsh..."
+
+    chsh -s "$(command -v zsh)" "$(whoami)"
+
+    log_success "Successfully changed default shell to zsh (will take effect on next login)."
+  fi;
 fi;
 
 if is_linux; then
@@ -203,3 +211,4 @@ if is_darwin; then
     log_info "CI environment detected. Skipping macOS provisioning."
   fi
 fi
+
