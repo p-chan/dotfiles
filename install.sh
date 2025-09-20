@@ -148,7 +148,7 @@ if is_linux; then
     log_info "Installing zsh..."
 
     sudo apt update
-    sudo apt install -y zsh
+    sudo apt install zsh -y
 
     log_success "Successfully installed zsh."
   else
