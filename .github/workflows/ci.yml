@@ -70,9 +70,9 @@ jobs:
       - name: shellcheck
         run: |
           # only bash
-          shellcheck install.sh
-          shellcheck scripts/link.sh
-          shellcheck scripts/provisioning.sh
+          shellcheck -x install.sh
+          shellcheck -x scripts/link.sh
+          shellcheck -x scripts/provisioning.sh
 
   lint:
     runs-on: ubuntu-latest
