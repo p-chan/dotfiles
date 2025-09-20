@@ -1,8 +1,12 @@
 #!/bin/bash
 
-SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
-# shellcheck source=scripts/utils.sh
-source "$SCRIPT_DIR/utils.sh"
+is_darwin() {
+  [[ "$(uname)" == "Darwin" ]]
+}
+
+is_linux() {
+  [[ "$(uname)" == "Linux" ]]
+}
 
 dotfiles=(
   ".claude/CLAUDE.md"
