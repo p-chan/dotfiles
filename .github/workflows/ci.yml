@@ -41,7 +41,7 @@ jobs:
           HOMEBREW_BUNDLE_CASK_SKIP="${{ needs.get-cask-packages.outputs.packages }}" \
           bash install.sh
       - name: Doctor
-        run: scripts/doctor.sh
+        run: zsh scripts/doctor.sh
 
   install-ubuntu:
     runs-on: ubuntu-24.04
@@ -51,7 +51,7 @@ jobs:
         run: DOTFILES_DIR=$GITHUB_WORKSPACE bash install.sh
       - name: Doctor
         shell: zsh -l {0}
-        run: scripts/doctor.sh
+        run: zsh scripts/doctor.sh
 
   check:
     runs-on: ubuntu-latest
