@@ -3,7 +3,6 @@ node = "lts"
 deno = "latest"
 go = "latest"
 rust = "latest"
-"cargo:eza" = { version = "latest", os = ["macos"] }
 "github:cli/cli" = "latest"
 "github:eza-community/eza" = { version = "latest", os = ["linux"] }
 "github:jkfran/killport" = "latest"

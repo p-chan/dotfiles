@@ -1,4 +1,5 @@
 brew "defaultbrowser"
+brew "eza"
 brew "git"
 brew "mise"
 brew "python"
