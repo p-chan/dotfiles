@@ -3,8 +3,9 @@ node = "lts"
 deno = "latest"
 go = "latest"
 rust = "latest"
-"cargo:eza" = "latest"
+"cargo:eza" = { version = "latest", os = ["macos"] }
 "github:cli/cli" = "latest"
+"github:eza-community/eza" = { version = "latest", os = ["linux"] }
 "github:jkfran/killport" = "latest"
 "github:junegunn/fzf" = "latest"
 "github:koalaman/shellcheck" = "latest"
