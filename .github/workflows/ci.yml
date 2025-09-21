@@ -60,10 +60,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
+      - name: Setup editorconfig-checker
+        uses: editorconfig-checker/action-editorconfig-checker@main
       - name: Setup Deno
         uses: denoland/setup-deno@v2
         with:
           deno-version: v2.x
+      - run: editorconfig-checker
       - run: deno check
       - run: deno fmt --check
 
@@ -72,13 +75,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v5
-      - name: Setup editorconfig-checker
-        uses: editorconfig-checker/action-editorconfig-checker@main
       - name: Setup Deno
         uses: denoland/setup-deno@v2
         with:
           deno-version: v2.x
-      - run: editorconfig-checker
       - run: deno lint
 
   test:
