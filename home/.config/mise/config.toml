@@ -7,7 +7,6 @@ rust = "latest"
 "github:eza-community/eza" = { version = "latest", os = ["linux"] }
 "github:jkfran/killport" = "latest"
 "github:junegunn/fzf" = "latest"
-"github:koalaman/shellcheck" = "latest"
 "github:rossmacarthur/sheldon" = "latest"
 "github:starship/starship" = "latest"
 "github:suzuki-shunsuke/pinact" = "latest"
