@@ -41,7 +41,7 @@ jobs:
           HOMEBREW_BUNDLE_CASK_SKIP="${{ needs.get-cask-packages.outputs.packages }}" \
           bash install.sh
       - name: Doctor
-        run: bash scripts/doctor.sh
+        run: zsh scripts/doctor.sh
 
   install-ubuntu:
     runs-on: ubuntu-24.04
@@ -49,9 +49,12 @@ jobs:
       - uses: actions/checkout@v5
       - name: Install
         run: DOTFILES_DIR=$GITHUB_WORKSPACE bash install.sh
-      - name: Doctor
+      - name: Doctor (login shell)
         shell: zsh -l {0}
-        run: bash scripts/doctor.sh
+        run: zsh scripts/doctor.sh
+      - name: Doctor (non-login shell)
+        shell: zsh {0}
+        run: zsh scripts/doctor.sh
 
   check:
     runs-on: ubuntu-latest
@@ -68,7 +71,11 @@ jobs:
       - run: deno check
       - run: deno fmt --check
       - name: shellcheck
-        run: shellcheck -x **/*.sh
+        run: |
+          # only bash
+          shellcheck -x install.sh
+          shellcheck -x scripts/link.sh
+          shellcheck -x scripts/provisioning.sh
 
   lint:
     runs-on: ubuntu-latest

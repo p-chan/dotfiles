@@ -2,6 +2,7 @@
 
 set -e
 
+# shellcheck disable=SC2153
 dotfiles_dir="$DOTFILES_DIR"
 
 is_darwin() {
