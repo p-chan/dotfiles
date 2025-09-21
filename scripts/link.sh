@@ -8,6 +8,10 @@ is_linux() {
   [[ "$(uname)" == "Linux" ]]
 }
 
+is_codespaces() {
+  [[ "$CODESPACES" == "true" ]]
+}
+
 dotfiles=(
   ".claude/CLAUDE.md"
   ".claude/settings.json"
@@ -36,12 +40,21 @@ linux_only_dotfiles=(
   ".config/Code/User/settings.json"
 )
 
+codespaces_only_dotfiles=(
+  ".vscode-remote/data/Machine/keybindings.json"
+  ".vscode-remote/data/Machine/settings.json"
+)
+
 if is_darwin; then
   dotfiles+=("${darwin_only_dotfiles[@]}")
 fi
 
 if is_linux; then
   dotfiles+=("${linux_only_dotfiles[@]}")
+fi
+
+if is_codespaces; then
+  dotfiles+=("${codespaces_only_dotfiles[@]}")
 fi
 
 if [ -z "$DOTFILES_DIR" ]; then
