@@ -179,6 +179,8 @@ fi;
 if type mise &>/dev/null; then
   log_info "Installing mise tools..."
 
+  eval "$(mise env -s bash)"
+
   mise install
 
   log_success "Successfully installed mise tools."
