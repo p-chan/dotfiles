@@ -5,7 +5,7 @@ export DOTFILES_DIR="${DOTFILES_DIR:-$HOME/src/github.com/p-chan/dotfiles}"
 export PATH="$DOTFILES_DIR/bin:$PATH"
 
 if type mise &>/dev/null; then
-  eval "$(mise activate zsh)"
+  eval "$(mise env -s zsh)"
 fi
 
 if [[ -f "${ZDOTDIR:-$HOME}/.zshenv.local" ]]; then
