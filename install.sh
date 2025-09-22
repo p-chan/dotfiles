@@ -192,6 +192,8 @@ if [ "$CI" != "true" ]; then
   if type deno &>/dev/null && type code &>/dev/null; then
     log_info "Installing VSCode extensions..."
 
+    echo "CODE_COMMAND_PATH=$(command -v code || echo "")"
+
     CODE_COMMAND_PATH=$(command -v code || echo "") \
     DOTFILES_DIR=$dotfiles_dir \
     deno run -A "$dotfiles_dir/scripts/code-extensions.ts" import
