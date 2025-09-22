@@ -77,6 +77,12 @@ for dotfile in "${dotfiles[@]}"; do
     mkdir -p "$destination_parent_dir"
   fi
 
+  if is_codespaces; then
+    rm -rf "$destination_file"
+    ln -sv "$source_file" "$destination_file"
+    continue
+  fi
+
   if [ ! -e "$destination_file" ]; then
     ln -sv "$source_file" "$destination_file"
   else
