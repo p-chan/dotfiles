@@ -203,7 +203,7 @@ if [ "$CI" != "true" ]; then
   if type deno &>/dev/null && type code &>/dev/null; then
     log_info "Installing VSCode extensions..."
 
-    deno run -A "$dotfiles_dir/scripts/code-extensions.ts" import
+    DOTFILES_DIR=$dotfiles_dir deno run -A "$dotfiles_dir/scripts/code-extensions.ts" import
 
     log_success "Successfully installed VSCode extensions."
   else
