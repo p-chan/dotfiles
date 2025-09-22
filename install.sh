@@ -188,17 +188,6 @@ else
   log_warn "mise command not found. Skipping mise tool installation."
 fi
 
-if is_codespaces; then
-  echo "Checking code and deno in Codespaces..."
-  type code || echo "code not found"
-  which code || echo "code not in PATH"
-
-  type deno || echo "deno not found"
-  which deno || echo "deno not in PATH"
-
-  echo "PATH=$PATH"
-fi
-
 if [ "$CI" != "true" ]; then
   if type deno &>/dev/null && type code &>/dev/null; then
     log_info "Installing VSCode extensions..."
