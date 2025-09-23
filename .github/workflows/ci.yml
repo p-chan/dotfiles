@@ -48,6 +48,7 @@ jobs:
     steps:
       - uses: actions/checkout@v5
       - name: Install
+        shell: bash {0}
         run: DOTFILES_DIR=$GITHUB_WORKSPACE bash install.sh
       - name: Doctor (login shell)
         shell: zsh -l {0}
