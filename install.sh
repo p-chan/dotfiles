@@ -194,6 +194,10 @@ if [ "$CI" != "true" ]; then
 
     echo "CODE_COMMAND_PATH=$(command -v code || echo "")"
 
+    echo "code all paths"
+
+    which -a code || true
+
     CODE_COMMAND_PATH=$(command -v code || echo "") \
     DOTFILES_DIR=$dotfiles_dir \
     deno run -A "$dotfiles_dir/scripts/code-extensions.ts" import
