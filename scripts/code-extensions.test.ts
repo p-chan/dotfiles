@@ -383,25 +383,19 @@ Deno.test("main function", async (t) => {
   });
 
   await t.step(
-    "should use default path when DOTFILES_DIR is missing",
+    "should throw error when DOTFILES_DIR is missing",
     async () => {
-      const logs: string[] = [];
-
       const mockDependencies = createMockDependencies({
-        fileOperations: createMockFileOperations({
-          readTextFile: () => Promise.resolve("ext1"),
-        }),
         runtimeEnvironment: createMockRuntimeEnvironment({
-          getEnv: (name) => name === "HOME" ? "/home/user" : undefined,
-          log: (msg) => logs.push(msg),
-          writeStdout: () => Promise.resolve(0),
-          runCommand: () => Promise.resolve({ stdout: "" }),
+          getEnv: () => undefined,
         }),
       });
 
-      await main(["import"], mockDependencies);
-
-      assertEquals(logs.some((log) => log.includes("extensions found")), true);
+      await assertRejects(
+        () => main(["import"], mockDependencies),
+        Error,
+        "DOTFILES_DIR is not defined",
+      );
     },
   );
 
@@ -440,19 +434,22 @@ Deno.test("CLI Integration Tests", async (t) => {
     assertEquals(stdout.includes("Unknown command"), true);
   });
 
-  await t.step("should use default path when no DOTFILES_DIR", async () => {
-    const cmd = new Deno.Command("deno", {
-      args: ["run", "-A", "scripts/code-extensions.ts", "help"],
-      stdout: "piped",
-      stderr: "piped",
-      env: { PATH: Deno.env.get("PATH") || "" },
-      clearEnv: true,
-    });
+  await t.step(
+    "should show help when no DOTFILES_DIR but help command",
+    async () => {
+      const cmd = new Deno.Command("deno", {
+        args: ["run", "-A", "scripts/code-extensions.ts", "help"],
+        stdout: "piped",
+        stderr: "piped",
+        env: { PATH: Deno.env.get("PATH") || "" },
+        clearEnv: true,
+      });
 
-    const { code, stdout } = await cmd.output();
-    const stdoutText = new TextDecoder().decode(stdout);
+      const { code, stdout } = await cmd.output();
+      const stdoutText = new TextDecoder().decode(stdout);
 
-    assertEquals(code, 0);
-    assertEquals(stdoutText.includes("code-extensions v1.0.0"), true);
-  });
+      assertEquals(code, 0);
+      assertEquals(stdoutText.includes("code-extensions v1.0.0"), true);
+    },
+  );
 });

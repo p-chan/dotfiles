@@ -39,7 +39,7 @@ jobs:
           DOTFILES_DIR=$GITHUB_WORKSPACE \
           NONINTERACTIVE=1 \
           HOMEBREW_BUNDLE_CASK_SKIP="${{ needs.get-cask-packages.outputs.packages }}" \
-          bash install.sh
+          bash scripts/install.sh
       - name: Doctor
         run: zsh scripts/doctor.sh
 
@@ -48,7 +48,7 @@ jobs:
     steps:
       - uses: actions/checkout@v5
       - name: Install
-        run: DOTFILES_DIR=$GITHUB_WORKSPACE bash install.sh
+        run: DOTFILES_DIR=$GITHUB_WORKSPACE bash scripts/install.sh
       - name: Doctor (login shell)
         shell: zsh -l {0}
         run: zsh scripts/doctor.sh
