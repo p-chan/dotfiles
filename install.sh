@@ -192,13 +192,13 @@ if [ "$CI" != "true" ]; then
   if type deno &>/dev/null && type code &>/dev/null; then
     log_info "Installing VSCode extensions..."
 
-    echo "CODE_COMMAND_PATH=$(command -v code || echo "")"
+    CODE_COMMAND_PATH=$(command -v code || true)
 
-    echo "code all paths"
+    if is_codespaces; then
+      CODE_COMMAND_PATH=$(ls -dt /vscode/bin/linux-x64/*/bin/remote-cli/code | head -n1)
+    fi
 
-    which -a code || true
-
-    CODE_COMMAND_PATH=$(command -v code || echo "") \
+    CODE_COMMAND_PATH=$CODE_COMMAND_PATH \
     DOTFILES_DIR=$dotfiles_dir \
     deno run -A "$dotfiles_dir/scripts/code-extensions.ts" import
 
@@ -209,6 +209,7 @@ if [ "$CI" != "true" ]; then
 else
   log_info "CI environment detected. Skipping VSCode extensions import."
 fi
+
 
 if is_darwin; then
   if [ "$CI" != "true" ]; then
