@@ -4,6 +4,7 @@ denoland.vscode-deno
 editorconfig.editorconfig
 esbenp.prettier-vscode
 file-icons.file-icons
+github.codespaces
 github.copilot-chat
 github.copilot
 ms-vscode-remote.remote-ssh-edit
