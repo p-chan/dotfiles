@@ -1,7 +1,6 @@
 [tools]
 node = "lts"
 deno = "latest"
-go = "latest"
 rust = "latest"
 "github:cli/cli" = "latest"
 "github:eza-community/eza" = { version = "latest", os = ["linux"] }
@@ -11,9 +10,9 @@ rust = "latest"
 "github:starship/starship" = "latest"
 "github:suzuki-shunsuke/pinact" = "latest"
 "github:x-motemen/ghq" = "latest"
-"go:github.com/editorconfig-checker/editorconfig-checker/v3/cmd/editorconfig-checker" = "latest"
 "npm:@anthropic-ai/claude-code" = "latest"
 "npm:@google/gemini-cli" = "latest"
+"npm:editorconfig-checker" = "latest"
 "npm:fixpack" = "latest"
 "npm:npmrc" = "latest"
 "npm:pnpm" = "latest"
