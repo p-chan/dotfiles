@@ -104,8 +104,9 @@ function getExtensionsFilePath(
   dependencies: Dependencies = defaultDependencies,
 ): string {
   const { runtimeEnvironment } = dependencies;
-  const dotfilesDirectoryPath = runtimeEnvironment.getEnv("DOTFILES_DIR") ||
-    path.join(runtimeEnvironment.getEnv("HOME") || "~", "dotfiles");
+  const dotfilesDirectoryPath = runtimeEnvironment.getEnv("DOTFILES_DIR");
+
+  if (!dotfilesDirectoryPath) throw new Error("DOTFILES_DIR is not defined");
 
   return path.resolve(dotfilesDirectoryPath, "code-extensions");
 }
@@ -131,15 +132,18 @@ export async function main(
 ): Promise<void> {
   const parsedArgs = parseArgs(args);
   const command = parsedArgs._[0];
-  const extensionsFilePath = getExtensionsFilePath(dependencies);
 
   switch (command) {
-    case "import":
+    case "import": {
+      const extensionsFilePath = getExtensionsFilePath(dependencies);
       await importExtensions(extensionsFilePath, dependencies);
       break;
-    case "export":
+    }
+    case "export": {
+      const extensionsFilePath = getExtensionsFilePath(dependencies);
       await exportExtensions(extensionsFilePath, dependencies);
       break;
+    }
     case "help":
     case undefined:
       showHelp(dependencies);
