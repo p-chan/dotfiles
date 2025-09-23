@@ -19,7 +19,7 @@ log_success () {
 }
 
 
-required_commands=("zsh" "vim" "git" "mise" "deno" "go" "node" "rustc")
+required_commands=("zsh" "vim" "git" "mise" "deno" "go" "node")
 darwin_required_commands=("xcode-select" "brew")
 
 log_info "Checking required commands..."
