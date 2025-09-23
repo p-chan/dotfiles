@@ -69,8 +69,6 @@ export async function importExtensions(
 
     const codeCommand = Deno.env.get("CODE_COMMAND_PATH") ?? "code";
 
-    runtimeEnvironment.log(`CODE_COMMAND_PATH: ${codeCommand}`);
-
     await runtimeEnvironment.runCommand([
       codeCommand,
       "--install-extension",
