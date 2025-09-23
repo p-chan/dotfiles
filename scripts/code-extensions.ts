@@ -88,8 +88,11 @@ export async function exportExtensions(
   dependencies: Dependencies = defaultDependencies,
 ): Promise<void> {
   const { fileOperations, runtimeEnvironment } = dependencies;
+
+  const codeCommand = Deno.env.get("CODE_COMMAND_PATH") ?? "code";
+
   const { stdout: extensions } = await runtimeEnvironment.runCommand([
-    "code",
+    codeCommand,
     "--list-extensions",
   ]);
 
