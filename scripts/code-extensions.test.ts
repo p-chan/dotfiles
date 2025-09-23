@@ -394,7 +394,7 @@ Deno.test("main function", async (t) => {
       await assertRejects(
         () => main(["import"], mockDependencies),
         Error,
-        "DOTFILES_DIR is not defined"
+        "DOTFILES_DIR is not defined",
       );
     },
   );
@@ -434,19 +434,22 @@ Deno.test("CLI Integration Tests", async (t) => {
     assertEquals(stdout.includes("Unknown command"), true);
   });
 
-  await t.step("should show help when no DOTFILES_DIR but help command", async () => {
-    const cmd = new Deno.Command("deno", {
-      args: ["run", "-A", "scripts/code-extensions.ts", "help"],
-      stdout: "piped",
-      stderr: "piped",
-      env: { PATH: Deno.env.get("PATH") || "" },
-      clearEnv: true,
-    });
+  await t.step(
+    "should show help when no DOTFILES_DIR but help command",
+    async () => {
+      const cmd = new Deno.Command("deno", {
+        args: ["run", "-A", "scripts/code-extensions.ts", "help"],
+        stdout: "piped",
+        stderr: "piped",
+        env: { PATH: Deno.env.get("PATH") || "" },
+        clearEnv: true,
+      });
 
-    const { code, stdout } = await cmd.output();
-    const stdoutText = new TextDecoder().decode(stdout);
+      const { code, stdout } = await cmd.output();
+      const stdoutText = new TextDecoder().decode(stdout);
 
-    assertEquals(code, 0);
-    assertEquals(stdoutText.includes("code-extensions v1.0.0"), true);
-  });
+      assertEquals(code, 0);
+      assertEquals(stdoutText.includes("code-extensions v1.0.0"), true);
+    },
+  );
 });
