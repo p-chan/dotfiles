@@ -183,19 +183,11 @@ else
   log_warn "mise command not found. Skipping mise tool installation."
 fi
 
-if [ "$CI" != "true" ]; then
+if [ "$CI" != "true" ] && ! is_codespaces; then
   if type deno &>/dev/null && type code &>/dev/null; then
     log_info "Installing VSCode extensions..."
 
-    CODE_COMMAND_PATH=$(command -v code || true)
-
-    if is_codespaces; then
-      CODE_COMMAND_PATH=$(ls -dt /vscode/bin/linux-x64/*/bin/remote-cli/code | head -n1)
-    fi
-
-    CODE_COMMAND_PATH=$CODE_COMMAND_PATH \
-    DOTFILES_DIR=$DOTFILES_DIR \
-    deno run -A "$DOTFILES_DIR/scripts/code-extensions.ts" import
+    DOTFILES_DIR=$DOTFILES_DIR deno run -A "$DOTFILES_DIR/scripts/code-extensions.ts" import
 
     log_success "Successfully installed VSCode extensions."
   else
