@@ -40,21 +40,12 @@ linux_only_dotfiles=(
   ".config/Code/User/settings.json"
 )
 
-codespaces_only_dotfiles=(
-  ".vscode-remote/data/Machine/keybindings.json"
-  ".vscode-remote/data/Machine/settings.json"
-)
-
 if is_darwin; then
   dotfiles+=("${darwin_only_dotfiles[@]}")
 fi
 
 if is_linux; then
   dotfiles+=("${linux_only_dotfiles[@]}")
-fi
-
-if is_codespaces; then
-  dotfiles+=("${codespaces_only_dotfiles[@]}")
 fi
 
 if [ -z "$DOTFILES_DIR" ]; then
@@ -75,12 +66,6 @@ for dotfile in "${dotfiles[@]}"; do
 
   if [ ! -d "$destination_parent_dir" ]; then
     mkdir -p "$destination_parent_dir"
-  fi
-
-  if is_codespaces; then
-    rm -rf "$destination_file"
-    ln -sv "$source_file" "$destination_file"
-    continue
   fi
 
   if [ ! -e "$destination_file" ]; then
