@@ -41,7 +41,9 @@ jobs:
           HOMEBREW_BUNDLE_CASK_SKIP="${{ needs.get-cask-packages.outputs.packages }}" \
           bash scripts/install.sh
       - name: Add DOTFILES_DIR
-        run: echo $GITHUB_WORKSPACE >> "$HOME/.config/dotfiles/dotfiles-dir"
+        run: |
+          mkdir -p "$HOME/.config/dotfiles"
+          echo $GITHUB_WORKSPACE >> "$HOME/.config/dotfiles/dotfiles-dir"
       - name: DEBUG
         run: echo $DOTFILES_DIR
       - name: Doctor
@@ -55,7 +57,9 @@ jobs:
         run: |
           DOTFILES_DIR=$GITHUB_WORKSPACE bash scripts/install.sh
       - name: Add DOTFILES_DIR
-        run: echo $GITHUB_WORKSPACE >> "$HOME/.config/dotfiles/dotfiles-dir"
+        run: |
+          mkdir -p "$HOME/.config/dotfiles"
+          echo $GITHUB_WORKSPACE >> "$HOME/.config/dotfiles/dotfiles-dir"
       - name: DEBUG
         shell: zsh -l {0}
         run: echo $DOTFILES_DIR
