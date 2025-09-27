@@ -36,7 +36,7 @@ fi
 
 
 if [ -z "$DOTFILES_DIR" ]; then
-  echo "dotfiles_dir is not defined"
+  echo "DOTFILES_DIR is not defined"
   exit 1
 fi
 
