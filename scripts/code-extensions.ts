@@ -53,6 +53,7 @@ export function parseExtensionsList(content: string): string[] {
 export async function importExtensions(
   extensionsFilePath: string,
   dependencies: Dependencies = defaultDependencies,
+  useInsiders: boolean = false,
 ): Promise<void> {
   const { fileOperations, runtimeEnvironment } = dependencies;
   const content = await fileOperations.readTextFile(extensionsFilePath);
@@ -67,7 +68,8 @@ export async function importExtensions(
       textEncoder.encode(`Installing ${extension}...`),
     );
 
-    const codeCommand = Deno.env.get("CODE_COMMAND_PATH") ?? "code";
+    const codeCommand = Deno.env.get("CODE_COMMAND_PATH") ??
+      (useInsiders ? "code-insiders" : "code");
 
     await runtimeEnvironment.runCommand([
       codeCommand,
@@ -86,10 +88,12 @@ export async function importExtensions(
 export async function exportExtensions(
   extensionsFilePath: string,
   dependencies: Dependencies = defaultDependencies,
+  useInsiders: boolean = false,
 ): Promise<void> {
   const { fileOperations, runtimeEnvironment } = dependencies;
 
-  const codeCommand = Deno.env.get("CODE_COMMAND_PATH") ?? "code";
+  const codeCommand = Deno.env.get("CODE_COMMAND_PATH") ??
+    (useInsiders ? "code-insiders" : "code");
 
   const { stdout: extensions } = await runtimeEnvironment.runCommand([
     codeCommand,
@@ -121,30 +125,36 @@ export function showHelp(
   runtimeEnvironment.log(`code-extensions v1.0.0
 
 Usage:
-  code-extensions <command>
+  code-extensions <command> [options]
 
 Commands:
   import    Install extensions from code-extensions file
   export    Export installed extensions to code-extensions file
-  help      Show this help message`);
+  help      Show this help message
+
+Options:
+  --insiders    Use code-insiders command instead of code`);
 }
 
 export async function main(
   args: string[] = Deno.args,
   dependencies: Dependencies = defaultDependencies,
 ): Promise<void> {
-  const parsedArgs = parseArgs(args);
+  const parsedArgs = parseArgs(args, {
+    boolean: ["insiders"],
+  });
   const command = parsedArgs._[0];
+  const useInsiders = parsedArgs.insiders || false;
 
   switch (command) {
     case "import": {
       const extensionsFilePath = getExtensionsFilePath(dependencies);
-      await importExtensions(extensionsFilePath, dependencies);
+      await importExtensions(extensionsFilePath, dependencies, useInsiders);
       break;
     }
     case "export": {
       const extensionsFilePath = getExtensionsFilePath(dependencies);
-      await exportExtensions(extensionsFilePath, dependencies);
+      await exportExtensions(extensionsFilePath, dependencies, useInsiders);
       break;
     }
     case "help":
