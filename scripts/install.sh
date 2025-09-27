@@ -34,11 +34,7 @@ if is_linux; then
   echo "🐧 Setting up dotfiles on Linux"
 fi
 
-
-if [ -z "$DOTFILES_DIR" ]; then
-  echo "DOTFILES_DIR is not defined"
-  exit 1
-fi
+DOTFILES_DIR="${DOTFILES_DIR:-$HOME/src/github.com/p-chan/dotfiles}"
 
 if is_darwin; then
   if ! pgrep oahd >&/dev/null; then
