@@ -44,10 +44,6 @@ jobs:
         run: |
           mkdir -p "$HOME/.config/dotfiles"
           echo $GITHUB_WORKSPACE >> "$HOME/.config/dotfiles/dotfiles-dir"
-      - name: DEBUG
-        run: |
-          echo $GITHUB_WORKSPACE
-          echo $DOTFILES_DIR
       - name: Doctor
         run: zsh scripts/doctor.sh
 
@@ -62,11 +58,6 @@ jobs:
         run: |
           mkdir -p "$HOME/.config/dotfiles"
           echo $GITHUB_WORKSPACE >> "$HOME/.config/dotfiles/dotfiles-dir"
-      - name: DEBUG
-        shell: zsh -l {0}
-        run: |
-          echo $GITHUB_WORKSPACE
-          echo $DOTFILES_DIR
       - name: Doctor (login shell)
         shell: zsh -l {0}
         run: zsh scripts/doctor.sh
