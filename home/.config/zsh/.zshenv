@@ -17,6 +17,6 @@ if type mise &>/dev/null; then
   eval "$(mise env -s zsh)"
 fi
 
-if [[ -f "$HOME/.zshenv.local" ]]; then
-  source "$HOME/.zshenv.local"
+if [[ -f "${ZDOTDIR:-$HOME}/.zshenv.local" ]]; then
+  source "${ZDOTDIR:-$HOME}/.zshenv.local"
 fi
