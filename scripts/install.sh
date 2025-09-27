@@ -184,14 +184,44 @@ else
 fi
 
 if [ "$CI" != "true" ] && ! is_codespaces; then
-  if type deno &>/dev/null && type code &>/dev/null; then
-    log_info "Installing VSCode extensions..."
+  if type deno &>/dev/null; then
+    has_code=false
+    has_code_insiders=false
 
-    DOTFILES_DIR=$DOTFILES_DIR deno run -A "$DOTFILES_DIR/scripts/code-extensions.ts" import
+    if type code &>/dev/null; then
+      has_code=true
+    fi
 
-    log_success "Successfully installed VSCode extensions."
+    if type code-insiders &>/dev/null; then
+      has_code_insiders=true
+    fi
+
+    if [ "$has_code" = true ] || [ "$has_code_insiders" = true ]; then
+      if [ "$has_code" = true ] && [ "$has_code_insiders" = true ]; then
+        log_info "Installing VSCode extensions for VSCode and VSCode Insiders..."
+
+        DOTFILES_DIR=$DOTFILES_DIR deno run -A "$DOTFILES_DIR/scripts/code-extensions.ts" import
+        DOTFILES_DIR=$DOTFILES_DIR deno run -A "$DOTFILES_DIR/scripts/code-extensions.ts" import --insiders
+
+        log_success "Successfully installed VSCode extensions for VSCode and VSCode Insiders."
+      elif [ "$has_code" = true ]; then
+        log_info "Installing VSCode extensions for VSCode..."
+
+        DOTFILES_DIR=$DOTFILES_DIR deno run -A "$DOTFILES_DIR/scripts/code-extensions.ts" import
+
+        log_success "Successfully installed VSCode extensions for VSCode."
+      elif [ "$has_code_insiders" = true ]; then
+        log_info "Installing VSCode extensions for VSCode Insiders..."
+
+        DOTFILES_DIR=$DOTFILES_DIR deno run -A "$DOTFILES_DIR/scripts/code-extensions.ts" import --insiders
+
+        log_success "Successfully installed VSCode extensions for VSCode Insiders."
+      fi
+    else
+      log_warn "Neither code nor code-insiders command found. Skipping VSCode extensions import."
+    fi
   else
-    log_warn "deno or code command not found. Skipping VSCode extensions import."
+    log_warn "deno command not found. Skipping VSCode extensions import."
   fi
 else
   log_info "CI environment detected. Skipping VSCode extensions import."
