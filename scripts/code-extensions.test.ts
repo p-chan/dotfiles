@@ -156,36 +156,47 @@ Deno.test("importExtensions", async (t) => {
     assertEquals(commands[1], ["code", "--install-extension", "ext2"]);
   });
 
-  await t.step("should use code-insiders when useInsiders is true", async () => {
-    const logs: string[] = [];
-    const stdout: Uint8Array[] = [];
-    const commands: string[][] = [];
+  await t.step(
+    "should use code-insiders when useInsiders is true",
+    async () => {
+      const logs: string[] = [];
+      const stdout: Uint8Array[] = [];
+      const commands: string[][] = [];
 
-    const mockDependencies = createMockDependencies({
-      fileOperations: createMockFileOperations({
-        readTextFile: () => Promise.resolve("ext1\next2"),
-      }),
-      runtimeEnvironment: createMockRuntimeEnvironment({
-        log: (msg) => logs.push(msg),
-        writeStdout: (data) => {
-          stdout.push(data);
-          return Promise.resolve(data.length);
-        },
-        runCommand: (args) => {
-          commands.push(args);
-          return Promise.resolve({ stdout: "" });
-        },
-      }),
-    });
+      const mockDependencies = createMockDependencies({
+        fileOperations: createMockFileOperations({
+          readTextFile: () => Promise.resolve("ext1\next2"),
+        }),
+        runtimeEnvironment: createMockRuntimeEnvironment({
+          log: (msg) => logs.push(msg),
+          writeStdout: (data) => {
+            stdout.push(data);
+            return Promise.resolve(data.length);
+          },
+          runCommand: (args) => {
+            commands.push(args);
+            return Promise.resolve({ stdout: "" });
+          },
+        }),
+      });
 
-    await importExtensions("/test/path", mockDependencies, true);
+      await importExtensions("/test/path", mockDependencies, true);
 
-    assertEquals(logs[0], "2 extensions found to install.\n");
-    assertEquals(logs[1], "\nAll extensions have been installed.");
-    assertEquals(commands.length, 2);
-    assertEquals(commands[0], ["code-insiders", "--install-extension", "ext1"]);
-    assertEquals(commands[1], ["code-insiders", "--install-extension", "ext2"]);
-  });
+      assertEquals(logs[0], "2 extensions found to install.\n");
+      assertEquals(logs[1], "\nAll extensions have been installed.");
+      assertEquals(commands.length, 2);
+      assertEquals(commands[0], [
+        "code-insiders",
+        "--install-extension",
+        "ext1",
+      ]);
+      assertEquals(commands[1], [
+        "code-insiders",
+        "--install-extension",
+        "ext2",
+      ]);
+    },
+  );
 
   await t.step("should handle file read error", async () => {
     const mockDependencies = createMockDependencies({
@@ -268,39 +279,42 @@ Deno.test("exportExtensions", async (t) => {
     );
   });
 
-  await t.step("should use code-insiders when useInsiders is true", async () => {
-    const logs: string[] = [];
-    const writeOperations: Array<{ path: string; content: string }> = [];
-    const commands: string[][] = [];
+  await t.step(
+    "should use code-insiders when useInsiders is true",
+    async () => {
+      const logs: string[] = [];
+      const writeOperations: Array<{ path: string; content: string }> = [];
+      const commands: string[][] = [];
 
-    const mockDependencies = createMockDependencies({
-      fileOperations: createMockFileOperations({
-        writeTextFile: (path, content) => {
-          writeOperations.push({ path, content });
-          return Promise.resolve();
-        },
-      }),
-      runtimeEnvironment: createMockRuntimeEnvironment({
-        runCommand: (args) => {
-          commands.push(args);
-          return Promise.resolve({ stdout: "ext1\next2\n" });
-        },
-        log: (msg) => logs.push(msg),
-      }),
-    });
+      const mockDependencies = createMockDependencies({
+        fileOperations: createMockFileOperations({
+          writeTextFile: (path, content) => {
+            writeOperations.push({ path, content });
+            return Promise.resolve();
+          },
+        }),
+        runtimeEnvironment: createMockRuntimeEnvironment({
+          runCommand: (args) => {
+            commands.push(args);
+            return Promise.resolve({ stdout: "ext1\next2\n" });
+          },
+          log: (msg) => logs.push(msg),
+        }),
+      });
 
-    await exportExtensions("/test/path", mockDependencies, true);
+      await exportExtensions("/test/path", mockDependencies, true);
 
-    assertEquals(commands.length, 1);
-    assertEquals(commands[0], ["code-insiders", "--list-extensions"]);
-    assertEquals(writeOperations.length, 1);
-    assertEquals(writeOperations[0].path, "/test/path");
-    assertEquals(writeOperations[0].content, "ext1\next2\n");
-    assertEquals(
-      logs[0],
-      "Extensions have been exported to /test/path",
-    );
-  });
+      assertEquals(commands.length, 1);
+      assertEquals(commands[0], ["code-insiders", "--list-extensions"]);
+      assertEquals(writeOperations.length, 1);
+      assertEquals(writeOperations[0].path, "/test/path");
+      assertEquals(writeOperations[0].content, "ext1\next2\n");
+      assertEquals(
+        logs[0],
+        "Extensions have been exported to /test/path",
+      );
+    },
+  );
 
   await t.step("should handle command execution error", async () => {
     const mockDependencies = createMockDependencies({

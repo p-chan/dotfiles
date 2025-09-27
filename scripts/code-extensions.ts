@@ -68,7 +68,8 @@ export async function importExtensions(
       textEncoder.encode(`Installing ${extension}...`),
     );
 
-    const codeCommand = Deno.env.get("CODE_COMMAND_PATH") ?? (useInsiders ? "code-insiders" : "code");
+    const codeCommand = Deno.env.get("CODE_COMMAND_PATH") ??
+      (useInsiders ? "code-insiders" : "code");
 
     await runtimeEnvironment.runCommand([
       codeCommand,
@@ -91,7 +92,8 @@ export async function exportExtensions(
 ): Promise<void> {
   const { fileOperations, runtimeEnvironment } = dependencies;
 
-  const codeCommand = Deno.env.get("CODE_COMMAND_PATH") ?? (useInsiders ? "code-insiders" : "code");
+  const codeCommand = Deno.env.get("CODE_COMMAND_PATH") ??
+    (useInsiders ? "code-insiders" : "code");
 
   const { stdout: extensions } = await runtimeEnvironment.runCommand([
     codeCommand,
