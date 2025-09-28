@@ -2,15 +2,23 @@
 
 > The dotfiles for fuckin' awesome development environment
 
-## Requirement
+## Supported environments
 
-- Apple Silicon
-- macOS 14 or later
+- macOS 14 or later (Apple Silicon only)
+- GitHub Codespaces (requires VSCode with the GitHub Codespaces extension)
 
 ## Install
 
+### macOS
+
 ```sh
 bash -c "$(curl -fsSL https://raw.githubusercontent.com/p-chan/dotfiles/main/scripts/install.sh)"
+```
+
+### GitHub Codespaces
+
+```sh
+deno run -A "$DOTFILES_DIR/scripts/code-extensions.ts" import
 ```
 
 ## Setup
