@@ -2,7 +2,7 @@ export EDITOR="vim"
 export VISUAL="vim"
 
 DOTFILES_DIR_CONFIG_FILE="${XDG_CONFIG_HOME:-$HOME/.config}/dotfiles/dotfiles-dir"
-CONFIGURED_DOTFILES_DIR="$(cat "$DOTFILES_DIR_CONFIG_FILE" 2>/dev/null)"
+read -r CONFIGURED_DOTFILES_DIR < "$DOTFILES_DIR_CONFIG_FILE" 2>/dev/null || CONFIGURED_DOTFILES_DIR=""
 export DOTFILES_DIR="${CONFIGURED_DOTFILES_DIR:-$HOME/src/github.com/p-chan/dotfiles}"
 export PATH="$DOTFILES_DIR/bin:$PATH"
 
