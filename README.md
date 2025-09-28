@@ -17,7 +17,11 @@ bash -c "$(curl -fsSL https://raw.githubusercontent.com/p-chan/dotfiles/main/scr
 
 ### GitHub Codespaces
 
+Requires Automatically install dotfiles to be enabled and Settings Sync to be
+disabled in GitHub Codespaces settings.
+
 ```sh
+# Install VSCode extensions to GitHub Codespaces
 deno run -A "$DOTFILES_DIR/scripts/code-extensions.ts" import
 ```
 
