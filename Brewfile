@@ -1,3 +1,4 @@
+brew "1password-cli"
 brew "defaultbrowser"
 brew "eza"
 brew "git"
