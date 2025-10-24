@@ -1,12 +1,22 @@
 autoload -Uz compinit
 compinit
 
+# Enable VSCode Shell Integration manually
+# https://code.visualstudio.com/docs/terminal/shell-integration
+if [[ "$TERM_PROGRAM" == "vscode" ]]; then
+  source "$(code --locate-shell-integration-path zsh)"
+fi
+
 bindkey -v
 
 # Backward word (Shift + Arrow Left)
 bindkey '^[[1;2D' backward-word
 # Forward word (Shift + Arrow Right)
 bindkey '^[[1;2C' forward-word
+
+if type mise &>/dev/null; then
+  eval "$(mise activate zsh)"
+fi
 
 if type sheldon &>/dev/null; then
   eval "$(sheldon source)"

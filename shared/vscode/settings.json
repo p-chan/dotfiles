@@ -1,0 +1,30 @@
+{
+  "editor.fontFamily": "\"Source Han Code JP\", monospace",
+  "editor.fontSize": 13,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "editor.scrollBeyondLastLine": false,
+  "editor.stickyScroll.enabled": false,
+  "editor.minimap.enabled": false,
+  "files.insertFinalNewline": true,
+  "workbench.colorCustomizations": {
+    // Referred to GitLens
+    "git.blame.editorDecorationForeground": "#99999959"
+  },
+  "workbench.colorTheme": "One Dark Pro",
+  "workbench.iconTheme": "file-icons",
+  "terminal.integrated.fontSize": 13,
+  "terminal.integrated.defaultProfile.osx": "zsh",
+  "terminal.integrated.defaultProfile.linux": "zsh",
+  // Disable VSCode automatic Shell Integration
+  // In GitHub Codespaces, `.zshenv` is not loaded when this is `true`, so I load it in `.zshrc`.
+  // https://code.visualstudio.com/docs/terminal/shell-integration
+  "terminal.integrated.shellIntegration.enabled": false,
+  "git.autofetch": true,
+  "git.blame.editorDecoration.enabled": true,
+  // Referred to GitLens
+  "git.blame.editorDecoration.template": "${authorName}, ${authorDateAgo} • ${subject}",
+  "git.blame.statusBarItem.enabled": false,
+  "github.copilot.nextEditSuggestions.enabled": true,
+  "typescript.referencesCodeLens.enabled": true
+}
