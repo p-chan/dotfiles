@@ -32,7 +32,8 @@ deno run -A "$DOTFILES_DIR/scripts/code-extensions.ts" import
 #### Settings
 
 - General
-  - ☐ Keep 1Password in the menu bar
+  - ✅ Keep 1Password in the menu bar
+  - Click the icon to: **Show a menu**
   - ✅ Start at login
   - ✅ Format secure notes using Markdown
   - ✅ Prefill username when creating new login
