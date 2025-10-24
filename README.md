@@ -37,6 +37,13 @@ deno run -A "$DOTFILES_DIR/scripts/code-extensions.ts" import
 - [Keepa](https://chromewebstore.google.com/detail/neebplgakaahbhdphmkckjjcegoiijjo)
 - [Wappalyzer](https://chromewebstore.google.com/detail/gppongmhjkpfnbhagpmjfkannfbllamg)
 
+### Logi Options+
+
+- LOG IN
+- Click MX Master 3S
+- Click SETTINGS from sidebar
+- Click RESTORE SETTINGS FROM BACKUP under Restore backup
+
 ## Maintenance
 
 ### Homebrew
