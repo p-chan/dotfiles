@@ -100,6 +100,7 @@ deno run -A "$DOTFILES_DIR/scripts/code-extensions.ts" import
 - [Just Tweet Button](https://chromewebstore.google.com/detail/feikojefkpembojkeegfajbbfecocddd)
 - [Keepa](https://chromewebstore.google.com/detail/neebplgakaahbhdphmkckjjcegoiijjo)
 - [Wappalyzer](https://chromewebstore.google.com/detail/gppongmhjkpfnbhagpmjfkannfbllamg)
+  (📌)
 
 ### Logi Options+
 
