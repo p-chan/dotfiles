@@ -1,4 +1,5 @@
 brew "defaultbrowser"
+brew "dockutil"
 brew "eza"
 brew "git"
 brew "mise"
