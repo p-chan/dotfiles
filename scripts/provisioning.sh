@@ -86,6 +86,9 @@ dockutil --remove all
 [ -d "/Applications/Visual Studio Code.app" ] && dockutil --add "/Applications/Visual Studio Code.app"
 [ -d "/Applications/Ghostty.app" ] && dockutil --add "/Applications/Ghostty.app"
 
+# Reduce Dock animation delay
+defaults write com.apple.dock autohide-delay -int 0
+
 # Unhide Library directory
 chflags nohidden ~/Library
 
