@@ -127,7 +127,7 @@ deno run -A "$DOTFILES_DIR/scripts/code-extensions.ts" import
 - Max
   - Disable all
 - Links
-  - ✅ Open Little ARc when I press ⌥⌘N in any app
+  - ✅ Open Little Arc when I press ⌥⌘N in any app
   - ✅ Open Little Arc when clicking on links with ⌥⌘ held
   - ✅ Links from other apps open in Little Arc
   - Archive Little Arcs after: **12 hours**
