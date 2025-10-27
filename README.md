@@ -105,7 +105,7 @@ deno run -A "$DOTFILES_DIR/scripts/code-extensions.ts" import
 
 - General
   - ☐ Automatically update my Arc
-  - ✅ Warn before quiting
+  - ✅ Warn before quitting
   - Previews
     - Show Arc Previews:
       - ☐ Arc Folders
