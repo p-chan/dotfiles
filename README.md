@@ -131,8 +131,8 @@ deno run -A "$DOTFILES_DIR/scripts/code-extensions.ts" import
   - ✅ Open Little Arc when clicking on links with ⌥⌘ held
   - ✅ Links from other apps open in Little Arc
   - Archive Little Arcs after: **12 hours**
-  - ✅ Open a Peek window then clicking on links with Shift held
-  - ✅ Open a Peek window then clicking on links to other sites
+  - ✅ Open a Peek window when clicking on links with Shift held
+  - ✅ Open a Peek window when clicking on links to other sites
   - Choose where links open inside Arc.
     - Air Traffic Control
       - URL **Contains** **meet.google.com** Open in **Most Recent Space**
