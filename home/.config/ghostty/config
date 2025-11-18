@@ -6,7 +6,7 @@ font-size = 13
 font-thicken = true
 theme = one-dark-pro
 cursor-style = block
-background-opacity = 0.9
+background-opacity = 0.75
 fullscreen = true
 keybind = global:alt+space=toggle_visibility
 keybind = cmd+r=clear_screen
