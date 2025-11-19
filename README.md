@@ -131,7 +131,7 @@ deno run -A "$DOTFILES_DIR/scripts/code-extensions.ts" import
 ### Slack
 
 - Sign in to some workspaces
-- Enter Cmd + Shift + S to Enable the workspace switcher
+- Press Cmd + Shift + S to Enable the workspace switcher
 
 ## Maintenance
 
