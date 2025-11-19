@@ -128,6 +128,11 @@ deno run -A "$DOTFILES_DIR/scripts/code-extensions.ts" import
 - Arrange menu bar icons in the following order: **CPU & GPU**, **Memory**,
   **SSD**, and **Sensor**
 
+### Slack
+
+- Sign in to some workspaces
+- Press Cmd + Shift + S to enable the workspace switcher
+
 ## Maintenance
 
 ### Homebrew
