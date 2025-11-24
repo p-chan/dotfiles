@@ -9,6 +9,7 @@ github.copilot
 github.copilot-chat
 ms-vscode-remote.remote-ssh-edit
 openai.chatgpt
+redhat.vscode-yaml
 stylelint.vscode-stylelint
 tamasfe.even-better-toml
 unifiedjs.vscode-mdx
