@@ -78,7 +78,8 @@ deno run -A "$DOTFILES_DIR/scripts/code-extensions.ts" import
   - ✅ Connect with 1Password in the browser
 - Developer
   - 1Password Developer
-    - ☐ Show 1Password Developer experience
+    - ✅ Show 1Password Developer experience
+      - ✅ Record and display activity
   - SSH Agent
     - ✅ Use the SSH Agent
     - Advanced
