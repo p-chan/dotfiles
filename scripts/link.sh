@@ -16,6 +16,7 @@ dotfiles=(
   ".claude/CLAUDE.md"
   ".claude/settings.json"
   ".codex/AGENTS.md"
+  ".codex/config.toml"
   ".config/fixpack"
   ".config/ghostty"
   ".config/git"
