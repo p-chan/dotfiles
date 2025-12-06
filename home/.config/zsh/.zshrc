@@ -95,3 +95,16 @@ bindkey "^G" _ghq_fuzzy_cd
 if [[ -f "${ZDOTDIR:-$HOME}/.zshrc.local" ]]; then
   source "${ZDOTDIR:-$HOME}/.zshrc.local"
 fi
+
+# Git wrapper
+git() {
+  case "${1-}" in
+    switch)
+      shift
+      command git-fallback-switch "$@"
+      ;;
+    *)
+      command git "$@"
+      ;;
+  esac
+}
