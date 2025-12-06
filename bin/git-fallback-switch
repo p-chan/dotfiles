@@ -1,0 +1,31 @@
+#!/usr/bin/env zsh
+
+# git switch with main/master fallback, without noisy errors.
+# Usage (direct): git-fallback-switch <branch> [extra git switch args...]
+# Intended to be wired to `git switch` by the shell wrapper; otherwise behaves the same.
+# Defaults to "main", falls back to the opposite ("master" or "main") if the first is missing.
+
+set -euo pipefail
+
+# If the first arg is an option (e.g. --help, -c), respect it and delegate to git.
+if [[ "${1-}" == -* ]]; then
+  exec git switch "$@"
+fi
+
+target_branch="${1:-main}"
+shift || true
+
+fallback_branch=$([ "$target_branch" = "main" ] && echo master || echo main)
+
+# prefer target if it exists
+if git rev-parse --verify --quiet "$target_branch" >/dev/null; then
+  exec git switch "$target_branch" "$@"
+fi
+
+# fallback if it exists
+if git rev-parse --verify --quiet "$fallback_branch" >/dev/null; then
+  exec git switch "$fallback_branch" "$@"
+fi
+
+# neither exists: let git show the usual error
+exec git switch "$target_branch" "$@"
