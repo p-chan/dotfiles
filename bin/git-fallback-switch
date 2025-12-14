@@ -15,6 +15,11 @@ fi
 target_branch="${1:-main}"
 shift || true
 
+# For any branch other than main/master, just try to switch normally
+if [[ "$target_branch" != "main" && "$target_branch" != "master" ]]; then
+  exec git switch "$target_branch" "$@"
+fi
+
 fallback_branch=$([ "$target_branch" = "main" ] && echo master || echo main)
 
 # prefer target if it exists
