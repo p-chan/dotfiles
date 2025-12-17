@@ -39,6 +39,7 @@ jobs:
           DOTFILES_DIR=$GITHUB_WORKSPACE \
           NONINTERACTIVE=1 \
           HOMEBREW_BUNDLE_CASK_SKIP="${{ needs.get-cask-packages.outputs.packages }}" \
+          MISE_GPG_VERIFY=false \
           bash scripts/install.sh
       - name: Add DOTFILES_DIR
         run: |
