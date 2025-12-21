@@ -31,5 +31,6 @@
   "git.blame.statusBarItem.enabled": false,
   "github.copilot.nextEditSuggestions.enabled": true,
   "typescript.referencesCodeLens.enabled": true,
-  "claudeCode.useTerminal": true
+  "claudeCode.useTerminal": true,
+  "claudeCode.allowDangerouslySkipPermissions": true
 }
