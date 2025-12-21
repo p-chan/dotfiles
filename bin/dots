@@ -1,0 +1,30 @@
+#!/usr/bin/env zsh
+
+set -euo pipefail
+
+dots_up() {
+  echo "Updating Homebrew..."
+  brew update
+  brew upgrade
+
+  echo "\nUpdating mise..."
+  mise up
+
+  echo "\nUpdating VS Code extensions..."
+  code --update-extensions
+
+  echo "\nDone!"
+}
+
+case "${1:-}" in
+  up)
+    dots_up
+    ;;
+  *)
+    echo "Usage: dots <command>
+
+Commands:
+  up    Update Homebrew, mise, and VS Code extensions"
+    exit 1
+    ;;
+esac
