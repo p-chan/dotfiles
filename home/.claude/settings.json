@@ -8,5 +8,6 @@
       "Write(.env*)",
       "Write(!.env*.example)"
     ]
-  }
+  },
+  "alwaysThinkingEnabled": true
 }
