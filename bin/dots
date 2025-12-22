@@ -16,15 +16,29 @@ dots_up() {
   echo "\nDone!"
 }
 
+dots_edit() {
+  local repo_dir
+  repo_dir="${DOTFILES_DIR:-}"
+  if [[ -z "${repo_dir}" ]]; then
+    echo "DOTFILES_DIR is not defined"
+    return 1
+  fi
+  code "${repo_dir}"
+}
+
 case "${1:-}" in
   up)
     dots_up
+    ;;
+  edit)
+    dots_edit
     ;;
   *)
     echo "Usage: dots <command>
 
 Commands:
-  up    Update Homebrew, mise, and VS Code extensions"
+  up    Update Homebrew, mise, and VS Code extensions
+  edit  Open dotfiles in VS Code"
     exit 1
     ;;
 esac
