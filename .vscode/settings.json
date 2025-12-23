@@ -1,6 +1,7 @@
 {
   "editor.defaultFormatter": "denoland.vscode-deno",
   "files.associations": {
+    "**/bin/**": "shellscript",
     "**/home/.config/ghostty/**": "properties"
   },
   "deno.enable": true
