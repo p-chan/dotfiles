@@ -1,5 +1,1 @@
-# AGENTS.md
-
-- 日本語で会話する
-- 文字コードは UTF-8 を使用する
-- GitHub にアクセスする場合は、必ず `gh` コマンドを使う
+../../shared/agents/AGENTS.md
