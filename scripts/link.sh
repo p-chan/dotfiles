@@ -15,8 +15,10 @@ is_codespaces() {
 dotfiles=(
   ".claude/CLAUDE.md"
   ".claude/settings.json"
+  ".claude/skills"
   ".codex/AGENTS.md"
   ".codex/config.toml"
+  ".codex/skills"
   ".config/fixpack"
   ".config/ghostty"
   ".config/git"
