@@ -53,7 +53,7 @@ gitmoji の場合、絵文字の形式（Unicode / Shortcode）も判定して�
 含まれている場合、以下のコマンドでスコープ一覧を取得します：
 
 ```bash
-git log --oneline -100 | sed -n 's/^[a-f0-9]* [a-z]*(\([^)]*\)):.*/\1/p' | tr ',' '\n' | sed 's/^ *//' | sort -u | awk '{printf "%s%s", sep, $0; sep=", "} END {print ""}'
+git log --oneline -100 | sed -n 's/^[a-f0-9]* [^(:]*(\([^)]*\)):.*/\1/p' | tr ',' '\n' | sed 's/^ *//' | sort -u | awk '{printf "%s%s", sep, $0; sep=", "} END {print ""}'
 ```
 
 ### 3. メッセージ生成
