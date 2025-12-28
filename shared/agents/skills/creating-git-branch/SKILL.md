@@ -19,7 +19,7 @@ description: Git リポジトリの慣習に則って新しいブランチを作
 既存のブランチ名を取得：
 
 ```bash
-git branch --sort=-committerdate | grep -v -E '^\*?\s+(main|master)$' | head -10
+git branch --sort=-committerdate | grep -v -E '^\*?\s*(main|master)\s*$' | head -10
 ```
 
 ### 2. 判定
@@ -41,7 +41,7 @@ git branch --sort=-committerdate | grep -v -E '^\*?\s+(main|master)$' | head -10
 プレフィックス付きスタイルの場合、以下のコマンドでプレフィックス一覧を取得します：
 
 ```bash
-git branch --all | head -100 | grep -v -E 'HEAD|main$|master$' | sed 's|^\*\?\s*||; s|remotes/origin/||' | grep '/' | cut -d'/' -f1 | sort -u | awk '{printf "%s%s", sep, $0; sep=", "} END {print ""}'
+git branch --all | head -100 | grep -v -E 'HEAD|main\s*$|master\s*$' | sed -E 's/^\*?\s*//; s|remotes/origin/||' | grep '/' | cut -d'/' -f1 | sort -u | awk '{printf "%s%s", sep, $0; sep=", "} END {print ""}'
 ```
 
 ### 3. ブランチ名生成
