@@ -8,15 +8,9 @@ description: `gh` コマンドを用いて GitHub の PR レビューコメン�
 ## 返信（Reply）
 
 ```bash
-gh api repos/OWNER/REPO/pulls/comments -X POST \
-  -f body="BODY" \
-  -f commit_id="COMMIT_SHA" \
-  -f path="FILE_PATH" \
-  -F in_reply_to=COMMENT_ID
+gh api repos/OWNER/REPO/pulls/PR_NUMBER/comments/COMMENT_ID/replies -X POST \
+  -f body="BODY"
 ```
-
-> [!TIP]
-> `commit_id` は**完全な**コミットSHA（40文字）を使用します
 
 ## 解決（Resolve）
 
