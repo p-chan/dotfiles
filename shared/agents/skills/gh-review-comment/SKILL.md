@@ -8,7 +8,7 @@ description: `gh` コマンドを用いて GitHub の PR レビューコメン�
 ## 返信（Reply）
 
 ```bash
-gh api repos/OWNER/REPO/pulls/PR_NUMBER/comments -X POST \
+gh api repos/OWNER/REPO/pulls/comments -X POST \
   -f body="BODY" \
   -f commit_id="COMMIT_SHA" \
   -f path="FILE_PATH" \
