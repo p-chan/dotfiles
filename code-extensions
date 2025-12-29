@@ -7,6 +7,7 @@ file-icons.file-icons
 github.codespaces
 github.copilot
 github.copilot-chat
+mermaidchart.vscode-mermaid-chart
 ms-vscode-remote.remote-ssh-edit
 openai.chatgpt
 redhat.vscode-yaml
