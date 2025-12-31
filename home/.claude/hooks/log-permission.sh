@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 LOG_DIR="${HOME}/.claude/logs"
 LOG_FILE="${LOG_DIR}/permission-request.jsonl"
