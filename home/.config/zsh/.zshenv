@@ -8,7 +8,7 @@ if [[ -f $DOTFILES_DIR_CONFIG_FILE ]]; then
 fi
 
 export DOTFILES_DIR="${CONFIGURED_DOTFILES_DIR:-$HOME/src/github.com/p-chan/dotfiles}"
-export PATH="$DOTFILES_DIR/bin:$PATH"
+export PATH="$HOME/.local/bin:$DOTFILES_DIR/bin:$PATH"
 
 if type mise &>/dev/null; then
   eval "$(mise env -s zsh)"

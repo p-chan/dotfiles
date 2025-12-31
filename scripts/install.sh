@@ -179,6 +179,20 @@ else
   log_warn "mise command not found. Skipping mise tool installation."
 fi
 
+if type ghq &>/dev/null; then
+  log_info "Installing git-worktree-runner..."
+
+  ghq get coderabbitai/git-worktree-runner
+
+  GTR_DIR="$(ghq root)/github.com/coderabbitai/git-worktree-runner"
+  mkdir -p "$HOME/.local/bin"
+  ln -sf "$GTR_DIR/bin/git-gtr" "$HOME/.local/bin/git-gtr"
+
+  log_success "Successfully installed git-worktree-runner."
+else
+  log_warn "ghq command not found. Skipping git-worktree-runner installation."
+fi
+
 if [ "$CI" != "true" ] && ! is_codespaces; then
   if type deno &>/dev/null; then
     has_code=false
