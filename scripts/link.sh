@@ -14,6 +14,7 @@ is_codespaces() {
 
 dotfiles=(
   ".claude/CLAUDE.md"
+  ".claude/hooks"
   ".claude/settings.json"
   ".claude/skills"
   ".claude/statusline.sh"
