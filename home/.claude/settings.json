@@ -29,7 +29,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "~/.claude/hooks/notify-ask.sh"
+            "command": "~/.claude/hooks/notify.sh"
           }
         ]
       }
@@ -39,7 +39,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "~/.claude/hooks/notify-stop.sh"
+            "command": "~/.claude/hooks/notify.sh"
           }
         ]
       }
