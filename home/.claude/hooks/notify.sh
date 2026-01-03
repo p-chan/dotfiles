@@ -28,7 +28,7 @@ fi
 # Build subtitle: "repo on branch"
 if [ -n "$cwd" ]; then
   repo=$(basename "$cwd")
-  branch=$(cd "$cwd" && git branch --show-current 2>/dev/null)
+  branch=$(git -C "$cwd" branch --show-current 2>/dev/null)
 
   if [ -n "$branch" ]; then
     subtitle="$repo on $branch"
