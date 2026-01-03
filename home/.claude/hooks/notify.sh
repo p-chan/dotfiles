@@ -20,7 +20,7 @@ case "$hook_event" in
 esac
 
 if [ -n "$input_message" ]; then
-  message="$input_message"
+  message="💬 $input_message"
 else
   message="$default_message"
 fi
