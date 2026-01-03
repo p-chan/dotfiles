@@ -2,12 +2,15 @@
 
 ## Comment Prefixes
 
-When writing Pull Request review comments, always use one of the following prefixes.
+When writing Pull Request review comments, always use one of the following
+prefixes.
 
 ### Prefix Types
 
-- **MUST**: Critical issues that must be fixed (security, bugs, specification violations, etc.)
-- **SHOULD**: Recommended changes (performance, maintainability, best practices, etc.)
+- **MUST**: Critical issues that must be fixed (security, bugs, specification
+  violations, etc.)
+- **SHOULD**: Recommended changes (performance, maintainability, best practices,
+  etc.)
 - **IMO**: Personal opinions or suggestions (In My Opinion)
 - **NITS**: Minor issues (typos, formatting, small naming improvements, etc.)
 
