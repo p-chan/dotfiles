@@ -43,6 +43,9 @@ fi
 case "$TERM_PROGRAM" in
   "vscode")
     title="Claude Code on VSCode"
+    if [ -n "$cwd" ]; then
+      open_url="vscode://file/$cwd"
+    fi
     ;;
   "ghostty")
     title="Claude Code on Ghostty"
@@ -52,11 +55,14 @@ case "$TERM_PROGRAM" in
     ;;
 esac
 
-terminal-notifier \
-  -title "$title" \
-  -subtitle "$subtitle" \
-  -message "$message" \
-  -group "claude-code" \
-  2>/dev/null
+# Build terminal-notifier command
+notifier_cmd=(terminal-notifier -title "$title" -subtitle "$subtitle" -message "$message" -group "claude-code")
+
+# Add -open option if open_url is set
+if [ -n "$open_url" ]; then
+  notifier_cmd+=(-open "$open_url")
+fi
+
+"${notifier_cmd[@]}" 2>/dev/null
 
 exit 0
