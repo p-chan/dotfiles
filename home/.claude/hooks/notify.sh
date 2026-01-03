@@ -9,13 +9,13 @@ hook_event=$(echo "$input" | jq -r '.hook_event_name // empty')
 # Set default message based on hook event
 case "$hook_event" in
   "Notification")
-    default_message="入力が必要です"
+    default_message="⏸️ 入力が必要です"
     ;;
   "Stop")
-    default_message="タスクが完了しました"
+    default_message="✅ タスクが完了しました"
     ;;
   *)
-    default_message="通知"
+    default_message="📢 通知"
     ;;
 esac
 
