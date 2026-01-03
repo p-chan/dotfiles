@@ -43,7 +43,9 @@ fi
 case "$TERM_PROGRAM" in
   "vscode")
     title="Claude Code on VSCode"
-    open_url="vscode://file/$cwd"
+    if [ -n "$cwd" ]; then
+      open_url="vscode://file/$cwd"
+    fi
     ;;
   "ghostty")
     title="Claude Code on Ghostty"
