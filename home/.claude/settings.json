@@ -2,6 +2,9 @@
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "permissions": {
     "allow": [
+      "Bash(gh repo view:*)",
+      "Bash(gh issue view:*)",
+      "Bash(gh pr view:*)",
       "Skill"
     ],
     "deny": [
