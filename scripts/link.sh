@@ -24,6 +24,7 @@ dotfiles=(
   ".codex/prompts"
   ".codex/skills"
   ".config/fixpack"
+  ".config/gh/config.yml"
   ".config/ghostty"
   ".config/git"
   ".config/mise"
