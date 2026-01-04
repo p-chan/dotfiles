@@ -7,6 +7,10 @@
       "Bash(gh issue view:*)",
       "Bash(gh pr view:*)",
       "Bash(gh run view:*)",
+      "Bash(npm run:*)",
+      "Bash(yarn run:*)",
+      "Bash(pnpm run:*)",
+      "Bash(bun run:*)",
       "Skill"
     ],
     "deny": [
