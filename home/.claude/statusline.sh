@@ -31,7 +31,7 @@ if git rev-parse --git-dir >/dev/null 2>&1; then
   git_branch=$(git branch --show-current 2>/dev/null)
 fi
 
-# Get PR numbers with hyperlinks (requires gh CLI)
+# Get PR numbers with hyperlinks (if gh CLI is available)
 pr_numbers=""
 if command -v gh >/dev/null 2>&1; then
   repo_url=$(gh repo view --json url -q .url 2>/dev/null)
