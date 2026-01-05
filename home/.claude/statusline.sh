@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Claude Code statusline
-# Format: Model: <model> | Context: <pct>% | 5h: <pct>% (<time>) | 7d: <pct>% (<time>)
+# Format: currentDir on branchName #PR | Model: <model> | Context: <pct>% | 5h: <pct>% (<time>) | 7d: <pct>% (<time>)
 
 # Read JSON input from stdin (if available)
 input=$(cat 2>/dev/null || echo '{}')
@@ -9,6 +9,48 @@ input=$(cat 2>/dev/null || echo '{}')
 if ! command -v jq >/dev/null 2>&1; then
   printf 'Claude Code (jq not found)'
   exit 0
+fi
+
+# ANSI color codes
+GREEN=$'\033[32m'
+CYAN=$'\033[36m'
+YELLOW=$'\033[33m'
+RESET=$'\033[0m'
+
+# Extract current directory from JSON
+current_dir=$(echo "$input" | jq -r '.workspace.current_dir // empty' 2>/dev/null)
+if [[ -n "$current_dir" && "$current_dir" != "null" ]]; then
+  current_dir=$(basename "$current_dir")
+else
+  current_dir=$(basename "$PWD")
+fi
+
+# Get Git branch
+git_branch=""
+if git rev-parse --git-dir >/dev/null 2>&1; then
+  git_branch=$(git branch --show-current 2>/dev/null)
+fi
+
+# Get PR numbers with hyperlinks (requires gh CLI)
+pr_numbers=""
+if command -v gh >/dev/null 2>&1; then
+  repo_url=$(gh repo view --json url -q .url 2>/dev/null)
+  if [[ -n "$repo_url" ]]; then
+    # Get all PR numbers and format as clickable links
+    pr_list=$(gh pr list --head "$(git branch --show-current 2>/dev/null)" --json number -q '.[].number' 2>/dev/null)
+    pr_links=""
+    while IFS= read -r num; do
+      [[ -z "$num" ]] && continue
+      # OSC 8 hyperlink format: \033]8;;URL\007text\033]8;;\007
+      link=$'\033]8;;'"${repo_url}/pull/${num}"$'\007'"#${num}"$'\033]8;;\007'
+      if [[ -n "$pr_links" ]]; then
+        pr_links+=", ${link}"
+      else
+        pr_links="${link}"
+      fi
+    done <<< "$pr_list"
+    pr_numbers="$pr_links"
+  fi
 fi
 
 # Extract information from JSON
@@ -110,9 +152,18 @@ time_until() {
 # Build output parts
 output=""
 
+# Directory, branch, and PR (colors match starship.toml)
+output+="${YELLOW}${current_dir}${RESET}"
+if [[ -n "$git_branch" ]]; then
+  output+=" on ${GREEN}${git_branch}${RESET}"
+fi
+if [[ -n "$pr_numbers" ]]; then
+  output+=" ${CYAN}(${pr_numbers})${RESET}"
+fi
+
 # Model
 if [[ -n "$model" && "$model" != "null" ]]; then
-  output+="Model: $model"
+  output+=" | Model: $model"
 fi
 
 # Context usage
