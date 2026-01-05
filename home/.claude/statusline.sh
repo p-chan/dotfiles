@@ -37,7 +37,7 @@ if command -v gh >/dev/null 2>&1; then
   repo_url=$(gh repo view --json url -q .url 2>/dev/null)
   if [[ -n "$repo_url" ]]; then
     # Get all PR numbers and format as clickable links
-    pr_list=$(gh pr list --head "$(git branch --show-current 2>/dev/null)" --json number -q '.[].number' 2>/dev/null)
+    pr_list=$(gh pr list --head "$git_branch" --json number -q '.[].number' 2>/dev/null)
     pr_links=""
     while IFS= read -r num; do
       [[ -z "$num" ]] && continue
