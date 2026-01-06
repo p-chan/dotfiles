@@ -55,7 +55,7 @@ git branch --all | head -100 | grep -v -E 'HEAD|main\s*$|master\s*$' | sed -E 's
 
 ### 4. ブランチ作成
 
-ブランチ名を提示し、ユーザーに確認した上でブランチを作成してください。
+生成されたブランチ名を表示し、ブランチを作成します。
 
 ```bash
 git switch -c <branch-name>
