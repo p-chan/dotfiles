@@ -14,7 +14,11 @@ fi
 # ANSI color codes
 GREEN=$'\033[32m'
 YELLOW=$'\033[33m'
+GRAY=$'\033[90m'
 RESET=$'\033[0m'
+
+# Anthropic brand color (True Color)
+ORANGE=$'\033[38;2;217;119;87m'  # #d97757
 
 # PR state colors (GitHub style - True Color)
 PR_OPEN=$'\033[38;2;31;136;61m'      # #1f883d
@@ -180,14 +184,13 @@ fi
 
 # Model
 if [[ -n "$model" && "$model" != "null" ]]; then
-  output+=" | Model: $model"
+  output+=" ${GRAY}|${RESET} Model: ${ORANGE}${model}${RESET}"
 fi
 
 # Context usage
-if [[ -n "$context_size" && -n "$current_tokens" && "$context_size" != "null" && "$current_tokens" != "null" ]]; then
+if [[ -n "$context_size" && -n "$current_tokens" && "$context_size" != "null" && "$current_tokens" != "null" && "$context_size" -gt 0 ]]; then
   percent=$((current_tokens * 100 / context_size))
-  [[ -n "$output" ]] && output+=" | "
-  output+="Context: ${percent}%"
+  output+=" ${GRAY}|${RESET} Context: ${percent}%"
 fi
 
 # Usage section
@@ -208,7 +211,7 @@ fi
 # Seven day limit
 if [[ -n "$seven_day_pct" && "$seven_day_pct" != "null" ]]; then
   seven_day_int=$(printf "%.0f" "$seven_day_pct" 2>/dev/null || echo "$seven_day_pct")
-  [[ -n "$usage_parts" ]] && usage_parts+=" | "
+  [[ -n "$usage_parts" ]] && usage_parts+=" ${GRAY}|${RESET} "
   usage_parts+="7d: ${seven_day_int}%"
 
   # Add reset time
@@ -219,7 +222,7 @@ if [[ -n "$seven_day_pct" && "$seven_day_pct" != "null" ]]; then
 fi
 
 if [[ -n "$usage_parts" ]]; then
-  [[ -n "$output" ]] && output+=" | "
+  [[ -n "$output" ]] && output+=" ${GRAY}|${RESET} "
   output+="${usage_parts}"
 fi
 
