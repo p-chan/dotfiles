@@ -13,9 +13,13 @@ fi
 
 # ANSI color codes
 GREEN=$'\033[32m'
-BLUE=$'\033[34m'
 YELLOW=$'\033[33m'
 RESET=$'\033[0m'
+
+# PR state colors (GitHub style - True Color)
+PR_OPEN=$'\033[38;2;31;136;61m'      # #1f883d
+PR_CLOSED=$'\033[38;2;130;80;223m'   # #8250df
+PR_DRAFT=$'\033[38;2;89;99;110m'     # #59636e
 
 # Extract current directory from JSON
 current_dir=$(echo "$input" | jq -r '.workspace.current_dir // empty' 2>/dev/null)
@@ -36,19 +40,32 @@ pr_numbers=""
 if command -v gh >/dev/null 2>&1; then
   repo_url=$(gh repo view --json url -q .url 2>/dev/null)
   if [[ -n "$repo_url" ]]; then
-    # Get all PR numbers and format as clickable links
-    pr_list=$(gh pr list --head "$git_branch" --json number -q '.[].number' 2>/dev/null)
+    # Get all PRs with number, state, and draft status
+    pr_list=$(gh pr list --head "$git_branch" --json number,state,isDraft 2>/dev/null)
     pr_links=""
-    while IFS= read -r num; do
-      [[ -z "$num" ]] && continue
+    while IFS= read -r pr_json; do
+      [[ -z "$pr_json" ]] && continue
+      num=$(echo "$pr_json" | jq -r '.number')
+      state=$(echo "$pr_json" | jq -r '.state')
+      is_draft=$(echo "$pr_json" | jq -r '.isDraft')
+
+      # Determine color based on state
+      if [[ "$is_draft" == "true" ]]; then
+        color="$PR_DRAFT"
+      elif [[ "$state" == "MERGED" || "$state" == "CLOSED" ]]; then
+        color="$PR_CLOSED"
+      else
+        color="$PR_OPEN"
+      fi
+
       # OSC 8 hyperlink format: \033]8;;URL\007text\033]8;;\007
-      link=$'\033]8;;'"${repo_url}/pull/${num}"$'\007'"#${num}"$'\033]8;;\007'
+      link="${color}"$'\033]8;;'"${repo_url}/pull/${num}"$'\007'"#${num}"$'\033]8;;\007'"${RESET}"
       if [[ -n "$pr_links" ]]; then
         pr_links+=", ${link}"
       else
         pr_links="${link}"
       fi
-    done <<< "$pr_list"
+    done <<< "$(echo "$pr_list" | jq -c '.[]' 2>/dev/null)"
     pr_numbers="$pr_links"
   fi
 fi
@@ -158,7 +175,7 @@ if [[ -n "$git_branch" ]]; then
   output+=" on ${GREEN}${git_branch}${RESET}"
 fi
 if [[ -n "$pr_numbers" ]]; then
-  output+=" ${BLUE}(${pr_numbers})${RESET}"
+  output+=" (${pr_numbers})"
 fi
 
 # Model
