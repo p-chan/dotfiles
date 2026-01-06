@@ -18,6 +18,7 @@
   "workbench.colorTheme": "One Dark Pro",
   "workbench.iconTheme": "file-icons",
   "terminal.integrated.fontSize": 13,
+  "terminal.integrated.macOptionIsMeta": true,
   "terminal.integrated.defaultProfile.osx": "zsh",
   "terminal.integrated.defaultProfile.linux": "zsh",
   // Disable VSCode automatic Shell Integration
