@@ -1,6 +1,7 @@
 ---
 name: creating-git-branch
 description: Git リポジトリの慣習に則って新しいブランチを作成します。ユーザーがブランチの作成を求めたときや、エージェントがブランチを作成するときに必ず使用してください。
+allowed-tools: Bash(git branch:*), Bash(grep:*), Bash(head:*), Bash(sed:*), Bash(cut:*), Bash(sort:*), Bash(xargs:*)
 ---
 
 # Git ブランチ作成
@@ -41,7 +42,7 @@ git branch --sort=-committerdate | grep -v -E '^\*?\s*(main|master)\s*$' | head 
 プレフィックス付きスタイルの場合、以下のコマンドでプレフィックス一覧を取得します：
 
 ```bash
-git branch --all | head -100 | grep -v -E 'HEAD|main\s*$|master\s*$' | sed -E 's/^\*?\s*//; s|remotes/origin/||' | grep '/' | cut -d'/' -f1 | sort -u | awk '{printf "%s%s", sep, $0; sep=", "} END {print ""}'
+git branch --all | head -100 | grep -v -E 'HEAD|main\s*$|master\s*$' | sed -E 's/^\*?\s*//; s|remotes/origin/||' | grep '/' | cut -d'/' -f1 | sort -u | xargs | sed 's/ /, /g'
 ```
 
 ### 3. ブランチ名生成
