@@ -5,3 +5,5 @@ aliases:
   reply-review-comment: 'api -X POST "repos/{owner}/{repo}/pulls/$1/comments/$2/replies" -f body="$3"'
   # $1: thread ID (PRRT_...)
   resolve-review-thread: 'api graphql -f query=''mutation($threadId: ID!) { resolveReviewThread(input: {threadId: $threadId}) { thread { id isResolved } } }'' -f threadId="$1"'
+  # $1: owner, $2: repo, $3: PR number
+  get-review-comments: 'api graphql -f query=''query($owner: String!, $repo: String!, $pr: Int!) { repository(owner: $owner, name: $repo) { pullRequest(number: $pr) { reviewThreads(first: 100) { nodes { id isResolved comments(first: 10) { nodes { databaseId body author { login } createdAt } } } } } } }'' -f owner="$1" -f repo="$2" -F pr="$3"'
