@@ -77,7 +77,7 @@ fi
 # Extract information from JSON
 model=$(echo "$input" | jq -r '.model.display_name // empty' 2>/dev/null)
 context_size=$(echo "$input" | jq -r '.context_window.context_window_size // empty' 2>/dev/null)
-current_tokens=$(echo "$input" | jq -r '(.context_window.current_usage.input_tokens // 0) + (.context_window.current_usage.cache_creation_input_tokens // 0) + (.context_window.current_usage.cache_read_input_tokens // 0)' 2>/dev/null)
+current_tokens=$(echo "$input" | jq -r '(.context_window.current_usage.input_tokens // 0) + (.context_window.current_usage.output_tokens // 0) + (.context_window.current_usage.cache_creation_input_tokens // 0) + (.context_window.current_usage.cache_read_input_tokens // 0)' 2>/dev/null)
 
 # Get usage limits from API (with caching)
 CACHE_FILE="/tmp/claude-usage-cache.json"
