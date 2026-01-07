@@ -1,2 +1,5 @@
 version: 1
 git_protocol: ssh
+aliases:
+  # $1: PR number, $2: comment ID, $3: reply body
+  reply-review-comment: 'api -X POST "repos/{owner}/{repo}/pulls/$1/comments/$2/replies" -f body="$3"'
