@@ -32,6 +32,26 @@ ICON_CLOSED=$'\uf4dc'   # nf-oct-git_pull_request_closed
 ICON_DRAFT=$'\uf4dd'    # nf-oct-git_pull_request_draft
 ICON_MERGED=$'\uf419'   # nf-oct-git_merge
 
+# Review section colors and icons (GitHub style - True Color)
+REVIEW_ICON=$'\uf4af'           # nf-oct-code_review
+REVIEW_PENDING_FG=$'\033[38;2;210;153;34m'    # #d29922 (yellow/orange)
+REVIEW_APPROVED_FG=$'\033[38;2;63;185;80m'    # #3fb950 (green)
+REVIEW_COMMENT_FG=$'\033[38;2;145;152;161m'   # #9198a1 (gray)
+REVIEW_CHANGES_FG=$'\033[38;2;248;81;73m'     # #f85149 (red)
+ICON_PENDING=$'\uf444'          # nf-oct-dot_fill
+ICON_APPROVED=$'\uf42e'         # nf-oct-check_circle_fill
+ICON_COMMENT=$'\uf41f'          # nf-oct-comment
+ICON_CHANGES=$'\uf4d2'          # nf-oct-skip
+
+# CI section colors and icons
+CI_ICON=$'\uf500'               # nf-oct-workflow
+CI_PENDING_FG=$'\033[38;2;210;153;34m'    # #d29922 (yellow/orange)
+CI_SUCCESS_FG=$'\033[38;2;63;185;80m'     # #3fb950 (green)
+CI_FAILURE_FG=$'\033[38;2;248;81;73m'     # #f85149 (red)
+ICON_CI_PENDING=$'\uf444'       # nf-oct-dot_fill
+ICON_CI_SUCCESS=$'\uf42e'       # nf-oct-check_circle_fill
+ICON_CI_FAILURE=$'\uf467'       # nf-oct-x_circle_fill
+
 # Extract current directory from JSON
 current_dir=$(echo "$input" | jq -r '.workspace.current_dir // empty' 2>/dev/null)
 if [[ -n "$current_dir" && "$current_dir" != "null" ]]; then
@@ -94,6 +114,68 @@ if command -v gh >/dev/null 2>&1; then
       fi
     done <<< "$(echo "$pr_list" | jq -c '.[]' 2>/dev/null)"
     pr_numbers="$pr_links"
+
+    # Get review and CI status for current branch's PR
+    first_pr_num=$(echo "$pr_list" | jq -r '.[0].number // empty' 2>/dev/null)
+    review_status=""
+    ci_status=""
+
+    if [[ -n "$first_pr_num" && "$first_pr_num" != "null" ]]; then
+      # Get review information
+      review_data=$(gh pr view "$first_pr_num" --json reviewRequests,latestReviews 2>/dev/null)
+      if [[ -n "$review_data" ]]; then
+        review_icons=""
+        # Process review requests (pending reviewers)
+        pending_reviewers=$(echo "$review_data" | jq -r '.reviewRequests | length' 2>/dev/null)
+        if [[ -n "$pending_reviewers" && "$pending_reviewers" != "0" ]]; then
+          for ((i=0; i<pending_reviewers; i++)); do
+            review_icons+="${REVIEW_PENDING_FG}${ICON_PENDING}${RESET}"
+          done
+        fi
+        # Process latest reviews
+        while IFS= read -r review_json; do
+          [[ -z "$review_json" ]] && continue
+          review_state=$(echo "$review_json" | jq -r '.state')
+          case "$review_state" in
+            APPROVED)
+              review_icons+="${REVIEW_APPROVED_FG}${ICON_APPROVED}${RESET}"
+              ;;
+            CHANGES_REQUESTED)
+              review_icons+="${REVIEW_CHANGES_FG}${ICON_CHANGES}${RESET}"
+              ;;
+            COMMENTED)
+              review_icons+="${REVIEW_COMMENT_FG}${ICON_COMMENT}${RESET}"
+              ;;
+            PENDING)
+              review_icons+="${REVIEW_PENDING_FG}${ICON_PENDING}${RESET}"
+              ;;
+          esac
+        done <<< "$(echo "$review_data" | jq -c '.latestReviews[]' 2>/dev/null)"
+
+        if [[ -n "$review_icons" ]]; then
+          review_status="${REVIEW_ICON} ${review_icons}"
+        fi
+      fi
+
+      # Get CI status
+      ci_data=$(gh pr checks "$first_pr_num" --json state 2>/dev/null)
+      if [[ -n "$ci_data" ]]; then
+        total_checks=$(echo "$ci_data" | jq 'length' 2>/dev/null)
+        if [[ -n "$total_checks" && "$total_checks" != "0" ]]; then
+          failed_checks=$(echo "$ci_data" | jq '[.[] | select(.state == "FAILURE" or .state == "ERROR")] | length' 2>/dev/null)
+          pending_checks=$(echo "$ci_data" | jq '[.[] | select(.state == "PENDING" or .state == "QUEUED" or .state == "IN_PROGRESS")] | length' 2>/dev/null)
+          success_checks=$(echo "$ci_data" | jq '[.[] | select(.state == "SUCCESS")] | length' 2>/dev/null)
+
+          if [[ "$failed_checks" -gt 0 ]]; then
+            ci_status="${CI_ICON} ${CI_FAILURE_FG}${ICON_CI_FAILURE}${RESET}"
+          elif [[ "$pending_checks" -gt 0 ]]; then
+            ci_status="${CI_ICON} ${CI_PENDING_FG}${ICON_CI_PENDING}${RESET}"
+          elif [[ "$success_checks" -gt 0 ]]; then
+            ci_status="${CI_ICON} ${CI_SUCCESS_FG}${ICON_CI_SUCCESS}${RESET}"
+          fi
+        fi
+      fi
+    fi
   fi
 fi
 
@@ -203,6 +285,16 @@ if [[ -n "$git_branch" ]]; then
 fi
 if [[ -n "$pr_numbers" ]]; then
   output+=" (${pr_numbers})"
+fi
+
+# Review status
+if [[ -n "$review_status" ]]; then
+  output+=" ${review_status}"
+fi
+
+# CI status
+if [[ -n "$ci_status" ]]; then
+  output+=" ${ci_status}"
 fi
 
 # Model
