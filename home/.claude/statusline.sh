@@ -284,17 +284,16 @@ if [[ -n "$git_branch" ]]; then
   output+=" on ${GREEN}${git_branch}${RESET}"
 fi
 if [[ -n "$pr_numbers" ]]; then
-  output+=" (${pr_numbers})"
-fi
-
-# Review status
-if [[ -n "$review_status" ]]; then
-  output+=" ${review_status}"
-fi
-
-# CI status
-if [[ -n "$ci_status" ]]; then
-  output+=" ${ci_status}"
+  pr_info="${pr_numbers}"
+  # Add review status inside parentheses
+  if [[ -n "$review_status" ]]; then
+    pr_info+=" ${review_status}"
+  fi
+  # Add CI status inside parentheses
+  if [[ -n "$ci_status" ]]; then
+    pr_info+=" ${ci_status}"
+  fi
+  output+=" (${pr_info})"
 fi
 
 # Model
