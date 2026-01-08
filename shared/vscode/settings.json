@@ -1,5 +1,5 @@
 {
-  "editor.fontFamily": "\"Source Han Code JP\", monospace",
+  "editor.fontFamily": "\"Source Han Code JP\", \"Symbols Nerd Font\", monospace",
   "editor.fontSize": 13,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
