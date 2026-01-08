@@ -21,28 +21,16 @@ RESET=$'\033[0m'
 ORANGE=$'\033[38;2;217;119;87m'  # #d97757
 
 # PR state colors (GitHub style - True Color)
-PR_OPEN_FG=$'\033[38;2;63;185;80m'      # #3fb950 foreground
-PR_OPEN_BG=$'\033[48;2;63;185;80m'      # #3fb950 background
-PR_CLOSED_FG=$'\033[38;2;248;81;73m'    # #f85149 foreground
-PR_CLOSED_BG=$'\033[48;2;248;81;73m'    # #f85149 background
-PR_DRAFT_FG=$'\033[38;2;145;152;161m'   # #9198a1 foreground
-PR_DRAFT_BG=$'\033[48;2;145;152;161m'   # #9198a1 background
-PR_MERGED_FG=$'\033[38;2;171;125;248m'  # #ab7df8 foreground
-PR_MERGED_BG=$'\033[48;2;171;125;248m'  # #ab7df8 background
+PR_OPEN_FG=$'\033[38;2;63;185;80m'      # #3fb950
+PR_CLOSED_FG=$'\033[38;2;248;81;73m'    # #f85149
+PR_DRAFT_FG=$'\033[38;2;145;152;161m'   # #9198a1
+PR_MERGED_FG=$'\033[38;2;171;125;248m'  # #ab7df8
 
 # PR state icons (Nerd Font)
 ICON_OPEN=$'\uf407'     # nf-oct-git_pull_request
 ICON_CLOSED=$'\uf4dc'   # nf-oct-git_pull_request_closed
 ICON_DRAFT=$'\uf4dd'    # nf-oct-git_pull_request_draft
 ICON_MERGED=$'\uf419'   # nf-oct-git_merge
-
-# Powerline round separators
-PL_LEFT=$'\ue0b6'   # left half circle
-PL_RIGHT=$'\ue0b4'  # right half circle
-
-# Text colors
-WHITE=$'\033[97m'
-CYAN=$'\033[36m'
 
 # Extract current directory from JSON
 current_dir=$(echo "$input" | jq -r '.workspace.current_dir // empty' 2>/dev/null)
@@ -72,22 +60,18 @@ if command -v gh >/dev/null 2>&1; then
       state=$(echo "$pr_json" | jq -r '.state')
       is_draft=$(echo "$pr_json" | jq -r '.isDraft')
 
-      # Determine colors and icon based on state
+      # Determine color and icon based on state
       if [[ "$is_draft" == "true" ]]; then
         fg="$PR_DRAFT_FG"
-        bg="$PR_DRAFT_BG"
         icon="$ICON_DRAFT"
       elif [[ "$state" == "MERGED" ]]; then
         fg="$PR_MERGED_FG"
-        bg="$PR_MERGED_BG"
         icon="$ICON_MERGED"
       elif [[ "$state" == "CLOSED" ]]; then
         fg="$PR_CLOSED_FG"
-        bg="$PR_CLOSED_BG"
         icon="$ICON_CLOSED"
       else
         fg="$PR_OPEN_FG"
-        bg="$PR_OPEN_BG"
         icon="$ICON_OPEN"
       fi
 
