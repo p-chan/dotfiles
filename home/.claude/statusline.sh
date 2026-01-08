@@ -25,6 +25,14 @@ PR_OPEN=$'\033[38;2;31;136;61m'      # #1f883d
 PR_CLOSED=$'\033[38;2;130;80;223m'   # #8250df
 PR_DRAFT=$'\033[38;2;89;99;110m'     # #59636e
 
+# PR state icons (Nerd Font)
+ICON_OPEN=$'\uf407'     # nf-oct-git_pull_request
+ICON_CLOSED=$'\uf4dc'   # nf-oct-git_pull_request_closed
+ICON_DRAFT=$'\uf4dd'    # nf-oct-git_pull_request_draft
+
+# Link color
+CYAN=$'\033[36m'
+
 # Extract current directory from JSON
 current_dir=$(echo "$input" | jq -r '.workspace.current_dir // empty' 2>/dev/null)
 if [[ -n "$current_dir" && "$current_dir" != "null" ]]; then
@@ -53,17 +61,21 @@ if command -v gh >/dev/null 2>&1; then
       state=$(echo "$pr_json" | jq -r '.state')
       is_draft=$(echo "$pr_json" | jq -r '.isDraft')
 
-      # Determine color based on state
+      # Determine color and icon based on state
       if [[ "$is_draft" == "true" ]]; then
         color="$PR_DRAFT"
+        icon="$ICON_DRAFT"
       elif [[ "$state" == "MERGED" || "$state" == "CLOSED" ]]; then
         color="$PR_CLOSED"
+        icon="$ICON_CLOSED"
       else
         color="$PR_OPEN"
+        icon="$ICON_OPEN"
       fi
 
+      # Icon with state color, then cyan hyperlink for #NUM
       # OSC 8 hyperlink format: \033]8;;URL\007text\033]8;;\007
-      link="${color}"$'\033]8;;'"${repo_url}/pull/${num}"$'\007'"#${num}"$'\033]8;;\007'"${RESET}"
+      link="${color}${icon}${RESET} ${CYAN}"$'\033]8;;'"${repo_url}/pull/${num}"$'\007'"#${num}"$'\033]8;;\007'"${RESET}"
       if [[ -n "$pr_links" ]]; then
         pr_links+=", ${link}"
       else
