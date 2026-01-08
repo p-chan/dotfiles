@@ -21,9 +21,16 @@ RESET=$'\033[0m'
 ORANGE=$'\033[38;2;217;119;87m'  # #d97757
 
 # PR state colors (GitHub style - True Color)
-PR_OPEN=$'\033[38;2;31;136;61m'      # #1f883d
-PR_CLOSED=$'\033[38;2;130;80;223m'   # #8250df
-PR_DRAFT=$'\033[38;2;89;99;110m'     # #59636e
+PR_OPEN_FG=$'\033[38;2;63;185;80m'      # #3fb950
+PR_CLOSED_FG=$'\033[38;2;248;81;73m'    # #f85149
+PR_DRAFT_FG=$'\033[38;2;145;152;161m'   # #9198a1
+PR_MERGED_FG=$'\033[38;2;171;125;248m'  # #ab7df8
+
+# PR state icons (Nerd Font)
+ICON_OPEN=$'\uf407'     # nf-oct-git_pull_request
+ICON_CLOSED=$'\uf4dc'   # nf-oct-git_pull_request_closed
+ICON_DRAFT=$'\uf4dd'    # nf-oct-git_pull_request_draft
+ICON_MERGED=$'\uf419'   # nf-oct-git_merge
 
 # Extract current directory from JSON
 current_dir=$(echo "$input" | jq -r '.workspace.current_dir // empty' 2>/dev/null)
@@ -53,17 +60,33 @@ if command -v gh >/dev/null 2>&1; then
       state=$(echo "$pr_json" | jq -r '.state')
       is_draft=$(echo "$pr_json" | jq -r '.isDraft')
 
-      # Determine color based on state
+      # Determine color and icon based on state
       if [[ "$is_draft" == "true" ]]; then
-        color="$PR_DRAFT"
-      elif [[ "$state" == "MERGED" || "$state" == "CLOSED" ]]; then
-        color="$PR_CLOSED"
+        fg="$PR_DRAFT_FG"
+        icon="$ICON_DRAFT"
+      elif [[ "$state" == "MERGED" ]]; then
+        fg="$PR_MERGED_FG"
+        icon="$ICON_MERGED"
+      elif [[ "$state" == "CLOSED" ]]; then
+        fg="$PR_CLOSED_FG"
+        icon="$ICON_CLOSED"
       else
-        color="$PR_OPEN"
+        fg="$PR_OPEN_FG"
+        icon="$ICON_OPEN"
       fi
 
+      # Determine link style based on terminal
+      if [[ "$TERM_PROGRAM" == "vscode" ]]; then
+        link_style="$GRAY"
+      elif [[ "$TERM_PROGRAM" == "ghostty" ]]; then
+        link_style=$'\033[4m'  # underline
+      else
+        link_style=""
+      fi
+
+      # Icon with state color, then hyperlink for #NUM
       # OSC 8 hyperlink format: \033]8;;URL\007text\033]8;;\007
-      link="${color}"$'\033]8;;'"${repo_url}/pull/${num}"$'\007'"#${num}"$'\033]8;;\007'"${RESET}"
+      link="${fg}${icon}${RESET} ${link_style}"$'\033]8;;'"${repo_url}/pull/${num}"$'\007'"#${num}"$'\033]8;;\007'"${RESET}"
       if [[ -n "$pr_links" ]]; then
         pr_links+=", ${link}"
       else
