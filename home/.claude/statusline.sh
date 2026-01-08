@@ -91,9 +91,18 @@ if command -v gh >/dev/null 2>&1; then
         icon="$ICON_OPEN"
       fi
 
-      # Rounded badge: ◖ icon ◗ with background color + white text
+      # Determine link style based on terminal
+      if [[ "$TERM_PROGRAM" == "vscode" ]]; then
+        link_style="$GRAY"
+      elif [[ "$TERM_PROGRAM" == "ghostty" ]]; then
+        link_style=$'\033[4m'  # underline
+      else
+        link_style=""
+      fi
+
+      # Icon with state color, then hyperlink for #NUM
       # OSC 8 hyperlink format: \033]8;;URL\007text\033]8;;\007
-      link="${fg}${PL_LEFT}${RESET}${bg}${WHITE}${icon}${RESET}${fg}${PL_RIGHT}${RESET} ${CYAN}"$'\033]8;;'"${repo_url}/pull/${num}"$'\007'"#${num}"$'\033]8;;\007'"${RESET}"
+      link="${fg}${icon}${RESET} ${link_style}"$'\033]8;;'"${repo_url}/pull/${num}"$'\007'"#${num}"$'\033]8;;\007'"${RESET}"
       if [[ -n "$pr_links" ]]; then
         pr_links+=", ${link}"
       else
