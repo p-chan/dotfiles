@@ -21,17 +21,20 @@ RESET=$'\033[0m'
 ORANGE=$'\033[38;2;217;119;87m'  # #d97757
 
 # PR state colors (GitHub style - True Color)
-PR_OPEN_FG=$'\033[38;2;31;136;61m'      # #1f883d foreground
-PR_OPEN_BG=$'\033[48;2;31;136;61m'      # #1f883d background
-PR_CLOSED_FG=$'\033[38;2;130;80;223m'   # #8250df foreground
-PR_CLOSED_BG=$'\033[48;2;130;80;223m'   # #8250df background
-PR_DRAFT_FG=$'\033[38;2;89;99;110m'     # #59636e foreground
-PR_DRAFT_BG=$'\033[48;2;89;99;110m'     # #59636e background
+PR_OPEN_FG=$'\033[38;2;63;185;80m'      # #3fb950 foreground
+PR_OPEN_BG=$'\033[48;2;63;185;80m'      # #3fb950 background
+PR_CLOSED_FG=$'\033[38;2;248;81;73m'    # #f85149 foreground
+PR_CLOSED_BG=$'\033[48;2;248;81;73m'    # #f85149 background
+PR_DRAFT_FG=$'\033[38;2;145;152;161m'   # #9198a1 foreground
+PR_DRAFT_BG=$'\033[48;2;145;152;161m'   # #9198a1 background
+PR_MERGED_FG=$'\033[38;2;171;125;248m'  # #ab7df8 foreground
+PR_MERGED_BG=$'\033[48;2;171;125;248m'  # #ab7df8 background
 
 # PR state icons (Nerd Font)
 ICON_OPEN=$'\uf407'     # nf-oct-git_pull_request
 ICON_CLOSED=$'\uf4dc'   # nf-oct-git_pull_request_closed
 ICON_DRAFT=$'\uf4dd'    # nf-oct-git_pull_request_draft
+ICON_MERGED=$'\uf419'   # nf-oct-git_merge
 
 # Powerline round separators
 PL_LEFT=$'\ue0b6'   # left half circle
@@ -74,7 +77,11 @@ if command -v gh >/dev/null 2>&1; then
         fg="$PR_DRAFT_FG"
         bg="$PR_DRAFT_BG"
         icon="$ICON_DRAFT"
-      elif [[ "$state" == "MERGED" || "$state" == "CLOSED" ]]; then
+      elif [[ "$state" == "MERGED" ]]; then
+        fg="$PR_MERGED_FG"
+        bg="$PR_MERGED_BG"
+        icon="$ICON_MERGED"
+      elif [[ "$state" == "CLOSED" ]]; then
         fg="$PR_CLOSED_FG"
         bg="$PR_CLOSED_BG"
         icon="$ICON_CLOSED"
