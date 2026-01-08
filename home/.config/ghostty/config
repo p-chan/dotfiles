@@ -9,7 +9,7 @@ cursor-style = block
 background-opacity = 0.75
 unfocused-split-opacity = 0.75
 split-divider-color = #3e4452
-fullscreen = true
+maximize = true
 keybind = global:alt+space=toggle_visibility
 keybind = cmd+r=clear_screen
 # https://github.com/anthropics/claude-code/issues/1282
