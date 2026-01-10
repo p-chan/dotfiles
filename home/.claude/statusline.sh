@@ -27,10 +27,10 @@ PR_DRAFT_FG=$'\033[38;2;145;152;161m'   # #9198a1
 PR_MERGED_FG=$'\033[38;2;171;125;248m'  # #ab7df8
 
 # PR state icons (Nerd Font)
-ICON_OPEN=$'\uf407'     # nf-oct-git_pull_request
-ICON_CLOSED=$'\uf4dc'   # nf-oct-git_pull_request_closed
-ICON_DRAFT=$'\uf4dd'    # nf-oct-git_pull_request_draft
-ICON_MERGED=$'\uf419'   # nf-oct-git_merge
+ICON_OPEN=$(printf '\xEF\x90\x87')     # nf-oct-git_pull_request (U+F407)
+ICON_CLOSED=$(printf '\xEF\x93\x9C')   # nf-oct-git_pull_request_closed (U+F4DC)
+ICON_DRAFT=$(printf '\xEF\x93\x9D')    # nf-oct-git_pull_request_draft (U+F4DD)
+ICON_MERGED=$(printf '\xEF\x90\x99')   # nf-oct-git_merge (U+F419)
 
 # Extract current directory from JSON
 current_dir=$(echo "$input" | jq -r '.workspace.current_dir // empty' 2>/dev/null)
