@@ -1,0 +1,71 @@
+#!/usr/bin/env zsh
+
+# Notify when GitHub Copilot reviews PR using terminal-notifier
+# Usage: gh-notify-copilot-review
+
+set -euo pipefail
+
+# Check if gh command exists
+if ! command -v gh &>/dev/null; then
+  echo "Error: gh command is not installed"
+  exit 1
+fi
+
+# Check if terminal-notifier exists
+if ! command -v terminal-notifier &>/dev/null; then
+  echo "Error: terminal-notifier is not installed"
+  echo "Please install with: brew install terminal-notifier"
+  exit 1
+fi
+
+# Get PR information
+pr_data=$(gh pr view --json url,number,headRepositoryOwner,headRepository 2>/dev/null)
+pr_url=$(echo "$pr_data" | jq -r '.url // ""')
+pr_number=$(echo "$pr_data" | jq -r '.number // ""')
+repo_owner=$(echo "$pr_data" | jq -r '.headRepositoryOwner.login // ""')
+repo_name=$(echo "$pr_data" | jq -r '.headRepository.name // ""')
+
+pr_identifier="${repo_owner}/${repo_name}#${pr_number}"
+
+echo "Watching for Copilot review..."
+echo "$pr_identifier"
+echo "Press Ctrl+C to exit"
+echo ""
+
+# Use repo and PR number as group ID to avoid conflicts
+group_id="gh-copilot-${repo_owner}-${repo_name}-${pr_number}"
+
+# Track the last review count to detect new reviews
+last_review_count=0
+
+# Copilot bot name to watch for
+copilot_bot="copilot-pull-request-reviewer[bot]"
+
+while true; do
+  # Get review information
+  reviews=$(gh pr view --json reviews 2>/dev/null | jq -r '.reviews')
+
+  # Check for Copilot reviews (only COMMENTED state, ignore PENDING)
+  copilot_commented=$(echo "$reviews" | jq -r --arg bot "$copilot_bot" '[.[] | select(.author.login == $bot and .state == "COMMENTED")] | length')
+
+  if [[ $copilot_commented -gt $last_review_count ]]; then
+    # Copilot review completed
+    # Send notification
+    terminal-notifier \
+      -title "GitHub Copilot" \
+      -subtitle "$pr_identifier" \
+      -message "💬 Copilot left review comments" \
+      -group "$group_id" \
+      -open "$pr_url"
+
+    echo "💬 Copilot left review comments"
+
+    last_review_count=$copilot_commented
+
+    # Exit after first notification
+    exit 0
+  fi
+
+  # Wait before checking again (10 seconds)
+  sleep 10
+done
