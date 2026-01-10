@@ -1,3 +1,12 @@
+# git-worktree-runner completions
+if type ghq &>/dev/null; then
+  GTR_DIR="$(ghq root)/github.com/coderabbitai/git-worktree-runner"
+
+  if [[ -d "$GTR_DIR/completions" ]]; then
+    fpath=("$GTR_DIR/completions" $fpath)
+  fi
+fi
+
 autoload -Uz compinit
 compinit
 
