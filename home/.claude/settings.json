@@ -3,13 +3,11 @@
   "permissions": {
     "allow": [
       "Bash(git log:*)",
-      "Bash(gh repo view:*)",
-      "Bash(gh issue view:*)",
+      "Bash(gh * list:*)",
+      "Bash(gh * status:*)",
+      "Bash(gh * view:*)",
       "Bash(gh pr checks:*)",
       "Bash(gh pr diff:*)",
-      "Bash(gh pr list:*)",
-      "Bash(gh pr view:*)",
-      "Bash(gh run view:*)",
       "WebFetch(domain:github.com)",
       "WebFetch(domain:raw.githubusercontent.com)",
       "Skill"
