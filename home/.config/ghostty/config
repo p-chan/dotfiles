@@ -21,5 +21,6 @@ window-padding-x = 8
 window-padding-y = 8
 shell-integration-features = no-cursor
 macos-non-native-fullscreen = true
+macos-titlebar-style = tabs
 # https://github.com/ghostty-org/ghostty/issues/6086#issuecomment-2829417634
 macos-window-shadow = false
