@@ -193,21 +193,12 @@ deno run -A "$DOTFILES_DIR/scripts/code-extensions.ts" import
 
 ## Maintenance
 
-### Homebrew
+### Upgrade
 
-#### Upgrade packages
-
-```sh
-brew update
-brew upgrade
-```
-
-### mise
-
-#### Upgrade tools
+Upgrade Homebrew packages, mise tools and VSCode extensions.
 
 ```sh
-mise up
+dots up
 ```
 
 ## Author
