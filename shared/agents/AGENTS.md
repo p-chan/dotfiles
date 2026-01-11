@@ -18,7 +18,7 @@
 | `request-review-to-copilot`                    | Copilot にレビューをリクエストする。 |                                            |
 | `get-review-comments`                          | レビューコメントを取得する。         |                                            |
 | `reply-review-comment <commentId> <replyBody>` | レビューコメントに返信する。         |                                            |
-| `resolve-review-thread <threadId>`             | レビュースレッドを解決する。         | `threadId` は `PPRT_` から始まる ID です。 |
+| `resolve-review-thread <threadId>`             | レビュースレッドを解決する。         | `threadId` は `PRRT_` から始まる ID です。 |
 
 ### `gh-notify-*` コマンドリファレンス
 
