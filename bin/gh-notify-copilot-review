@@ -54,11 +54,8 @@ while true; do
     echo "Timeout: No Copilot review after 1 hour"
     exit 1
   fi
-  # Get review information
-  reviews=$(gh pr view --json reviews 2>/dev/null | jq -r '.reviews')
-
-  # Check for Copilot reviews (only COMMENTED state, ignore PENDING)
-  copilot_commented=$(echo "$reviews" | jq -r --arg bot "$copilot_bot" '[.[] | select(.author.login == $bot and .state == "COMMENTED")] | length')
+  # Get review information and check for Copilot reviews (only COMMENTED state, ignore PENDING)
+  copilot_commented=$(gh pr view --json reviews 2>/dev/null | jq -r --arg bot "$copilot_bot" '[.reviews[] | select(.author.login == $bot and .state == "COMMENTED")] | length')
 
   if [[ $copilot_commented -gt $last_review_count ]]; then
     # Copilot review completed
