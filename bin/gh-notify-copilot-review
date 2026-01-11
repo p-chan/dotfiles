@@ -39,7 +39,7 @@ group_id="gh-copilot-${repo_owner}-${repo_name}-${pr_number}"
 last_review_count=0
 
 # Copilot bot name to watch for
-copilot_bot="copilot-pull-request-reviewer[bot]"
+copilot_bot="copilot-pull-request-reviewer"
 
 # Timeout after 1 hour (3600 seconds)
 timeout=3600
