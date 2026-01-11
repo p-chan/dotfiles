@@ -1,11 +1,11 @@
 version: 1
 git_protocol: ssh
 aliases:
-  # $1: PR number
-  request-review-to-copilot: api --method POST /repos/{owner}/{repo}/pulls/$1/requested_reviewers -f "reviewers[]=copilot-pull-request-reviewer[bot]"
-  # $1: owner, $2: repo, $3: PR number
-  get-review-comments: 'api graphql -f query=''query($owner: String!, $repo: String!, $pr: Int!) { repository(owner: $owner, name: $repo) { pullRequest(number: $pr) { reviewThreads(first: 100) { nodes { id isResolved comments(first: 100) { nodes { databaseId body author { login } createdAt } } } } } } }'' -f owner="$1" -f repo="$2" -F pr="$3"'
-  # $1: PR number, $2: comment ID, $3: reply body
-  reply-review-comment: 'api -X POST "repos/{owner}/{repo}/pulls/$1/comments/$2/replies" -f body="$3"'
+  # No args
+  request-review-to-copilot: '!gh api --method POST /repos/{owner}/{repo}/pulls/$(gh pr view --json number -q .number)/requested_reviewers -f "reviewers[]=copilot-pull-request-reviewer[bot]"'
+  # No args
+  get-review-comments: '!gh api graphql -f query=''query($owner: String!, $repo: String!, $pr: Int!) { repository(owner: $owner, name: $repo) { pullRequest(number: $pr) { reviewThreads(first: 100) { nodes { id isResolved comments(first: 100) { nodes { databaseId body author { login } createdAt } } } } } } }'' -f owner="$(gh repo view --json owner -q .owner.login)" -f repo="$(gh repo view --json name -q .name)" -F pr="$(gh pr view --json number -q .number)"'
+  # $1: comment ID, $2: reply body
+  reply-review-comment: '!gh api -X POST "repos/{owner}/{repo}/pulls/$(gh pr view --json number -q .number)/comments/$1/replies" -f body="$2"'
   # $1: thread ID (PRRT_...)
   resolve-review-thread: 'api graphql -f query=''mutation($threadId: ID!) { resolveReviewThread(input: {threadId: $threadId}) { thread { id isResolved } } }'' -f threadId="$1"'
