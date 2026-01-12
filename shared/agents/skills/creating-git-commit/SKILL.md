@@ -48,8 +48,7 @@ gitmoji の場合、絵文字の形式（Unicode / Shortcode）も判定して�
 
 #### スコープ判定
 
-過去 10 件にスコープ（例: `feat(auth):` や
-`✨ (auth):`）が含まれているかを判定します。
+過去 10 件にスコープ（例: `feat(auth):` や `✨ (auth):`）が含まれているかを判定します。
 
 含まれている場合、以下のコマンドでスコープ一覧を取得します：
 
@@ -65,9 +64,7 @@ git log --oneline -100 | sed -n 's/^[a-f0-9]* [^(:]*(\([^)]*\)):.*/\1/p' | tr ',
 - **ボディ（本文）**: Why（なぜしたか）を必要に応じて補足
 - **コード参照**: コードやパスを表す場合はバッククォートで囲む
 - **言語**: 判定した言語に合わせる
-- **スタイル**:
-  判定したスタイルに従う（[Conventional Commits](references/conventional-commits.md)
-  / [gitmoji](references/gitmoji.md)）
+- **スタイル**: 判定したスタイルに従う（[Conventional Commits](references/conventional-commits.md) / [gitmoji](references/gitmoji.md)）
 - **スコープ**: スコープ一覧から適切なものを選択（該当する場合）
 
 ### 4. コミット作成
