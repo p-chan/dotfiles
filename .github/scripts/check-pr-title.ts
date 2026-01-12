@@ -13,8 +13,7 @@ export function checkTitle(title: string): ValidationResult {
   if (!ANGULAR_FLAVORED_CONVENTIONAL_COMMITS_PREFIX_REGEX.test(title)) {
     return {
       valid: false,
-      error:
-        "Error: PR title does not conform to Angular-flavored Conventional Commits-like format",
+      error: "Error: PR title does not conform to Angular-flavored Conventional Commits-like format",
     };
   }
 
@@ -31,9 +30,7 @@ if (import.meta.main) {
   });
 
   if (args.help) {
-    console.log(
-      "Check PR title with Angular-flavored Conventional Commits-like format",
-    );
+    console.log("Check PR title with Angular-flavored Conventional Commits-like format");
     console.log("");
     console.log("Usage:");
     console.log("  deno run -A check-pr-title.ts <title>");
@@ -66,7 +63,5 @@ if (import.meta.main) {
     Deno.exit(1);
   }
 
-  console.log(
-    "PR title conforms to Angular-flavored Conventional Commits-like format",
-  );
+  console.log("PR title conforms to Angular-flavored Conventional Commits-like format");
 }

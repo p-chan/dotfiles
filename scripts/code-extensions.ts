@@ -64,22 +64,13 @@ export async function importExtensions(
   const textEncoder = new TextEncoder();
 
   for (const extension of extensions) {
-    await runtimeEnvironment.writeStdout(
-      textEncoder.encode(`Installing ${extension}...`),
-    );
+    await runtimeEnvironment.writeStdout(textEncoder.encode(`Installing ${extension}...`));
 
-    const codeCommand = Deno.env.get("CODE_COMMAND_PATH") ??
-      (useInsiders ? "code-insiders" : "code");
+    const codeCommand = Deno.env.get("CODE_COMMAND_PATH") ?? (useInsiders ? "code-insiders" : "code");
 
-    await runtimeEnvironment.runCommand([
-      codeCommand,
-      "--install-extension",
-      extension,
-    ]);
+    await runtimeEnvironment.runCommand([codeCommand, "--install-extension", extension]);
 
-    await runtimeEnvironment.writeStdout(
-      textEncoder.encode(`\r\x1b[KInstalled ${extension}\n`),
-    );
+    await runtimeEnvironment.writeStdout(textEncoder.encode(`\r\x1b[KInstalled ${extension}\n`));
   }
 
   runtimeEnvironment.log("\nAll extensions have been installed.");
@@ -92,24 +83,16 @@ export async function exportExtensions(
 ): Promise<void> {
   const { fileOperations, runtimeEnvironment } = dependencies;
 
-  const codeCommand = Deno.env.get("CODE_COMMAND_PATH") ??
-    (useInsiders ? "code-insiders" : "code");
+  const codeCommand = Deno.env.get("CODE_COMMAND_PATH") ?? (useInsiders ? "code-insiders" : "code");
 
-  const { stdout: extensions } = await runtimeEnvironment.runCommand([
-    codeCommand,
-    "--list-extensions",
-  ]);
+  const { stdout: extensions } = await runtimeEnvironment.runCommand([codeCommand, "--list-extensions"]);
 
   await fileOperations.writeTextFile(extensionsFilePath, extensions);
 
-  runtimeEnvironment.log(
-    `Extensions have been exported to ${extensionsFilePath}`,
-  );
+  runtimeEnvironment.log(`Extensions have been exported to ${extensionsFilePath}`);
 }
 
-function getExtensionsFilePath(
-  dependencies: Dependencies = defaultDependencies,
-): string {
+function getExtensionsFilePath(dependencies: Dependencies = defaultDependencies): string {
   const { runtimeEnvironment } = dependencies;
   const dotfilesDirectoryPath = runtimeEnvironment.getEnv("DOTFILES_DIR");
 
@@ -118,9 +101,7 @@ function getExtensionsFilePath(
   return path.resolve(dotfilesDirectoryPath, "code-extensions");
 }
 
-export function showHelp(
-  dependencies: Dependencies = defaultDependencies,
-): void {
+export function showHelp(dependencies: Dependencies = defaultDependencies): void {
   const { runtimeEnvironment } = dependencies;
   runtimeEnvironment.log(`code-extensions v1.0.0
 
