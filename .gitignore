@@ -1,9 +1,6 @@
 # Dependencies
 node_modules
 
-# Lock files
-pnpm-lock.yaml
-
 # macOS
 .DS_Store
 
