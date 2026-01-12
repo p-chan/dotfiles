@@ -6,7 +6,6 @@
 ## GitHub
 
 - GitHub にアクセスするときは、必ず `gh` コマンドを使います
-- PR をマージするときは `--delete-branch` を付けてブランチを削除します
 
 ### `gh alias` リファレンス
 
@@ -18,6 +17,7 @@
 | `get-review-comments`                          | レビューコメントを取得する。         |                                            |
 | `reply-review-comment <commentId> <replyBody>` | レビューコメントに返信する。         |                                            |
 | `resolve-review-thread <threadId>`             | レビュースレッドを解決する。         | `threadId` は `PRRT_` から始まる ID です。 |
+| `get-allowed-merge-methods`                    | 許可されているマージ方法を取得する。 |                                            |
 
 ### `gh-notify-*` コマンドリファレンス
 
