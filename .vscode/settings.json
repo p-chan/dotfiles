@@ -1,8 +1,10 @@
 {
-  "editor.defaultFormatter": "denoland.vscode-deno",
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
   "files.associations": {
     "**/bin/**": "shellscript",
     "**/home/.config/ghostty/**": "properties"
   },
-  "deno.enable": true
+  "deno.enable": true,
+  "deno.config": "./deno.json",
+  "deno.enablePaths": [".github/scripts", "scripts"]
 }

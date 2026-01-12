@@ -1,0 +1,12 @@
+{
+  "name": "dotfiles",
+  "version": "0.0.0",
+  "scripts": {
+    "check": "prettier --check .",
+    "format": "prettier --write ."
+  },
+  "devDependencies": {
+    "prettier": "3.7.4"
+  },
+  "packageManager": "pnpm@10.27.0"
+}

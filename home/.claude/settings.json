@@ -16,13 +16,7 @@
       "WebFetch(domain:raw.githubusercontent.com)",
       "Skill"
     ],
-    "deny": [
-      "Bash(sudo:*)",
-      "Read(.env*)",
-      "Read(!.env*.example)",
-      "Write(.env*)",
-      "Write(!.env*.example)"
-    ]
+    "deny": ["Bash(sudo:*)", "Read(.env*)", "Read(!.env*.example)", "Write(.env*)", "Write(!.env*.example)"]
   },
   "hooks": {
     "PermissionRequest": [

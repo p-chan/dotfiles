@@ -70,6 +70,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: ".node-version"
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+      - name: Install dependencies
+        run: pnpm install
       - name: Setup editorconfig-checker
         uses: editorconfig-checker/action-editorconfig-checker@main
       - name: Setup Deno
@@ -78,7 +86,7 @@ jobs:
           deno-version: v2.x
       - run: editorconfig-checker
       - run: deno check
-      - run: deno fmt --check
+      - run: pnpm check
 
   lint:
     runs-on: ubuntu-latest
