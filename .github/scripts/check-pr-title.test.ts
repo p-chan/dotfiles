@@ -1,11 +1,9 @@
-import { assertEquals } from "jsr:@std/assert@1.0.13";
+import { assertEquals } from "@std/assert";
 import { checkTitle } from "./check-pr-title.ts";
 
-async function runCLI(
-  args: string[],
-): Promise<{ code: number; stdout: string; stderr: string }> {
+async function runCLI(args: string[]): Promise<{ code: number; stdout: string; stderr: string }> {
   const cmd = new Deno.Command("deno", {
-    args: ["run", "-A", "scripts/check-pr-title.ts", ...args],
+    args: ["run", "-A", ".github/scripts/check-pr-title.ts", ...args],
     stdout: "piped",
     stderr: "piped",
   });
@@ -19,83 +17,71 @@ async function runCLI(
   };
 }
 
-Deno.test(
-  "Valid Angular-flavored Conventional Commits titles",
-  async (t) => {
-    const validTitles = [
-      "feat: add new feature",
-      "fix: resolve bug",
-      "docs: update readme",
-      "style: format code",
-      "refactor: improve performance",
-      "test: add unit tests",
-      "build: update dependencies",
-      "ci: add workflow",
-      "perf: optimize algorithm",
-      "feat(router): add lazy loading",
-      "fix(auth): handle token expiry",
-      "docs(api): update endpoints",
-      "feat: add `console.log` for debugging",
-      "docs: update `README.md` file",
-    ];
+Deno.test("Valid Angular-flavored Conventional Commits titles", async (t) => {
+  const validTitles = [
+    "feat: add new feature",
+    "fix: resolve bug",
+    "docs: update readme",
+    "style: format code",
+    "refactor: improve performance",
+    "test: add unit tests",
+    "build: update dependencies",
+    "ci: add workflow",
+    "perf: optimize algorithm",
+    "feat(router): add lazy loading",
+    "fix(auth): handle token expiry",
+    "docs(api): update endpoints",
+    "feat: add `console.log` for debugging",
+    "docs: update `README.md` file",
+  ];
 
-    for (const title of validTitles) {
-      await t.step(`"${title}" should be valid`, () => {
-        const result = checkTitle(title);
+  for (const title of validTitles) {
+    await t.step(`"${title}" should be valid`, () => {
+      const result = checkTitle(title);
 
-        assertEquals(result.valid, true, `Expected "${title}" to be valid`);
-      });
-    }
-  },
-);
+      assertEquals(result.valid, true, `Expected "${title}" to be valid`);
+    });
+  }
+});
 
 Deno.test("Invalid PR titles", async (t) => {
   const invalidTitles = [
     { title: "", expectedError: "Error: PR title is empty" },
     {
       title: "invalid: bad type",
-      expectedError:
-        "Error: PR title does not conform to Angular-flavored Conventional Commits-like format",
+      expectedError: "Error: PR title does not conform to Angular-flavored Conventional Commits-like format",
     },
     {
       title: "Add new feature",
-      expectedError:
-        "Error: PR title does not conform to Angular-flavored Conventional Commits-like format",
+      expectedError: "Error: PR title does not conform to Angular-flavored Conventional Commits-like format",
     },
     {
       title: "feat:",
-      expectedError:
-        "Error: PR title does not conform to Angular-flavored Conventional Commits-like format",
+      expectedError: "Error: PR title does not conform to Angular-flavored Conventional Commits-like format",
     },
     {
       title: "feat: ",
-      expectedError:
-        "Error: PR title does not conform to Angular-flavored Conventional Commits-like format",
+      expectedError: "Error: PR title does not conform to Angular-flavored Conventional Commits-like format",
     },
     {
       title: "feat:  ",
-      expectedError:
-        "Error: PR title does not conform to Angular-flavored Conventional Commits-like format",
+      expectedError: "Error: PR title does not conform to Angular-flavored Conventional Commits-like format",
     },
     {
       title: "unknown: some change",
-      expectedError:
-        "Error: PR title does not conform to Angular-flavored Conventional Commits-like format",
+      expectedError: "Error: PR title does not conform to Angular-flavored Conventional Commits-like format",
     },
     {
       title: "feat add new feature",
-      expectedError:
-        "Error: PR title does not conform to Angular-flavored Conventional Commits-like format",
+      expectedError: "Error: PR title does not conform to Angular-flavored Conventional Commits-like format",
     },
     {
       title: "feat()",
-      expectedError:
-        "Error: PR title does not conform to Angular-flavored Conventional Commits-like format",
+      expectedError: "Error: PR title does not conform to Angular-flavored Conventional Commits-like format",
     },
     {
       title: "FEAT: uppercase type",
-      expectedError:
-        "Error: PR title does not conform to Angular-flavored Conventional Commits-like format",
+      expectedError: "Error: PR title does not conform to Angular-flavored Conventional Commits-like format",
     },
   ];
 
@@ -105,29 +91,14 @@ Deno.test("Invalid PR titles", async (t) => {
 
       assertEquals(result.valid, false, `Expected "${title}" to be invalid`);
       if (!result.valid) {
-        assertEquals(
-          result.error,
-          expectedError,
-          `Expected specific error for "${title}"`,
-        );
+        assertEquals(result.error, expectedError, `Expected specific error for "${title}"`);
       }
     });
   }
 });
 
 Deno.test("Angular types are supported", async (t) => {
-  const angularTypes = [
-    "build",
-    "chore",
-    "ci",
-    "docs",
-    "feat",
-    "fix",
-    "perf",
-    "refactor",
-    "style",
-    "test",
-  ];
+  const angularTypes = ["build", "chore", "ci", "docs", "feat", "fix", "perf", "refactor", "style", "test"];
 
   for (const type of angularTypes) {
     await t.step(`Type "${type}" should be supported`, () => {
@@ -175,12 +146,7 @@ Deno.test("CLI Integration Tests", async (t) => {
     const { code, stdout, stderr } = await runCLI(["feat: add new feature"]);
 
     assertEquals(code, 0);
-    assertEquals(
-      stdout.includes(
-        "PR title conforms to Angular-flavored Conventional Commits-like format",
-      ),
-      true,
-    );
+    assertEquals(stdout.includes("PR title conforms to Angular-flavored Conventional Commits-like format"), true);
     assertEquals(stderr.trim(), "");
   });
 

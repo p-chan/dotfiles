@@ -1,4 +1,4 @@
-import { assertEquals, assertRejects } from "jsr:@std/assert@1.0.13";
+import { assertEquals, assertRejects } from "@std/assert";
 import {
   Dependencies,
   exportExtensions,
@@ -10,9 +10,7 @@ import {
   showHelp,
 } from "./code-extensions.ts";
 
-function createMockFileOperations(
-  overrides: Partial<FileOperations> = {},
-): FileOperations {
+function createMockFileOperations(overrides: Partial<FileOperations> = {}): FileOperations {
   const mockFileOperations: FileOperations = {
     readTextFile: () => Promise.resolve(""),
     writeTextFile: () => Promise.resolve(),
@@ -21,9 +19,7 @@ function createMockFileOperations(
   return mockFileOperations;
 }
 
-function createMockRuntimeEnvironment(
-  overrides: Partial<RuntimeEnvironment> = {},
-): RuntimeEnvironment {
+function createMockRuntimeEnvironment(overrides: Partial<RuntimeEnvironment> = {}): RuntimeEnvironment {
   const mockRuntimeEnvironment: RuntimeEnvironment = {
     runCommand: () => Promise.resolve({ stdout: "" }),
     writeStdout: () => Promise.resolve(0),
@@ -38,9 +34,7 @@ function createMockRuntimeEnvironment(
   return mockRuntimeEnvironment;
 }
 
-function createMockDependencies(
-  overrides: Partial<Dependencies> = {},
-): Dependencies {
+function createMockDependencies(overrides: Partial<Dependencies> = {}): Dependencies {
   const mockDependencies: Dependencies = {
     fileOperations: createMockFileOperations(),
     runtimeEnvironment: createMockRuntimeEnvironment(),
@@ -49,9 +43,7 @@ function createMockDependencies(
   return mockDependencies;
 }
 
-async function runCLI(
-  args: string[],
-): Promise<{ code: number; stdout: string; stderr: string }> {
+async function runCLI(args: string[]): Promise<{ code: number; stdout: string; stderr: string }> {
   const cmd = new Deno.Command("deno", {
     args: ["run", "-A", "scripts/code-extensions.ts", ...args],
     stdout: "piped",
@@ -156,6 +148,37 @@ Deno.test("importExtensions", async (t) => {
     assertEquals(commands[1], ["code", "--install-extension", "ext2"]);
   });
 
+  await t.step("should use code-insiders when useInsiders is true", async () => {
+    const logs: string[] = [];
+    const stdout: Uint8Array[] = [];
+    const commands: string[][] = [];
+
+    const mockDependencies = createMockDependencies({
+      fileOperations: createMockFileOperations({
+        readTextFile: () => Promise.resolve("ext1\next2"),
+      }),
+      runtimeEnvironment: createMockRuntimeEnvironment({
+        log: (msg) => logs.push(msg),
+        writeStdout: (data) => {
+          stdout.push(data);
+          return Promise.resolve(data.length);
+        },
+        runCommand: (args) => {
+          commands.push(args);
+          return Promise.resolve({ stdout: "" });
+        },
+      }),
+    });
+
+    await importExtensions("/test/path", mockDependencies, true);
+
+    assertEquals(logs[0], "2 extensions found to install.\n");
+    assertEquals(logs[1], "\nAll extensions have been installed.");
+    assertEquals(commands.length, 2);
+    assertEquals(commands[0], ["code-insiders", "--install-extension", "ext1"]);
+    assertEquals(commands[1], ["code-insiders", "--install-extension", "ext2"]);
+  });
+
   await t.step("should handle file read error", async () => {
     const mockDependencies = createMockDependencies({
       fileOperations: createMockFileOperations({
@@ -163,11 +186,7 @@ Deno.test("importExtensions", async (t) => {
       }),
     });
 
-    await assertRejects(
-      () => importExtensions("/test/path", mockDependencies),
-      Error,
-      "File not found",
-    );
+    await assertRejects(() => importExtensions("/test/path", mockDependencies), Error, "File not found");
   });
 
   await t.step("should handle empty extension list", async () => {
@@ -200,11 +219,7 @@ Deno.test("importExtensions", async (t) => {
       }),
     });
 
-    await assertRejects(
-      () => importExtensions("/test/path", mockDependencies),
-      Error,
-      "Write failed",
-    );
+    await assertRejects(() => importExtensions("/test/path", mockDependencies), Error, "Write failed");
   });
 });
 
@@ -231,10 +246,38 @@ Deno.test("exportExtensions", async (t) => {
     assertEquals(writeOperations.length, 1);
     assertEquals(writeOperations[0].path, "/test/path");
     assertEquals(writeOperations[0].content, "ext1\next2\n");
-    assertEquals(
-      logs[0],
-      "Extensions have been exported to /test/path",
-    );
+    assertEquals(logs[0], "Extensions have been exported to /test/path");
+  });
+
+  await t.step("should use code-insiders when useInsiders is true", async () => {
+    const logs: string[] = [];
+    const writeOperations: Array<{ path: string; content: string }> = [];
+    const commands: string[][] = [];
+
+    const mockDependencies = createMockDependencies({
+      fileOperations: createMockFileOperations({
+        writeTextFile: (path, content) => {
+          writeOperations.push({ path, content });
+          return Promise.resolve();
+        },
+      }),
+      runtimeEnvironment: createMockRuntimeEnvironment({
+        runCommand: (args) => {
+          commands.push(args);
+          return Promise.resolve({ stdout: "ext1\next2\n" });
+        },
+        log: (msg) => logs.push(msg),
+      }),
+    });
+
+    await exportExtensions("/test/path", mockDependencies, true);
+
+    assertEquals(commands.length, 1);
+    assertEquals(commands[0], ["code-insiders", "--list-extensions"]);
+    assertEquals(writeOperations.length, 1);
+    assertEquals(writeOperations[0].path, "/test/path");
+    assertEquals(writeOperations[0].content, "ext1\next2\n");
+    assertEquals(logs[0], "Extensions have been exported to /test/path");
   });
 
   await t.step("should handle command execution error", async () => {
@@ -244,18 +287,13 @@ Deno.test("exportExtensions", async (t) => {
       }),
     });
 
-    await assertRejects(
-      () => exportExtensions("/test/path", mockDependencies),
-      Error,
-      "Command failed",
-    );
+    await assertRejects(() => exportExtensions("/test/path", mockDependencies), Error, "Command failed");
   });
 
   await t.step("should handle file write error", async () => {
     const mockDependencies = createMockDependencies({
       fileOperations: createMockFileOperations({
-        writeTextFile: () =>
-          Promise.reject(new Error("Write permission denied")),
+        writeTextFile: () => Promise.reject(new Error("Write permission denied")),
       }),
       runtimeEnvironment: createMockRuntimeEnvironment({
         runCommand: () => Promise.resolve({ stdout: "ext1\next2" }),
@@ -263,11 +301,7 @@ Deno.test("exportExtensions", async (t) => {
       }),
     });
 
-    await assertRejects(
-      () => exportExtensions("/test/path", mockDependencies),
-      Error,
-      "Write permission denied",
-    );
+    await assertRejects(() => exportExtensions("/test/path", mockDependencies), Error, "Write permission denied");
   });
 });
 
@@ -287,6 +321,7 @@ Deno.test("showHelp", async (t) => {
     assertEquals(logs[0].includes("code-extensions v1.0.0"), true);
     assertEquals(logs[0].includes("Usage:"), true);
     assertEquals(logs[0].includes("Commands:"), true);
+    assertEquals(logs[0].includes("--insiders"), true);
   });
 });
 
@@ -300,7 +335,7 @@ Deno.test("main function", async (t) => {
         readTextFile: () => Promise.resolve("ext1"),
       }),
       runtimeEnvironment: createMockRuntimeEnvironment({
-        getEnv: (name) => name === "DOTFILES_DIR" ? "/test" : undefined,
+        getEnv: (name) => (name === "DOTFILES_DIR" ? "/test" : undefined),
         log: (msg) => logs.push(msg),
         writeStdout: () => Promise.resolve(0),
         runCommand: () => Promise.resolve({ stdout: "" }),
@@ -314,7 +349,47 @@ Deno.test("main function", async (t) => {
     await main(["import"], mockDependencies);
 
     assertEquals(exitCalled, false);
-    assertEquals(logs.some((log) => log.includes("extensions found")), true);
+    assertEquals(
+      logs.some((log) => log.includes("extensions found")),
+      true,
+    );
+  });
+
+  await t.step("should handle import command with --insiders", async () => {
+    const logs: string[] = [];
+    const commands: string[][] = [];
+    let exitCalled = false;
+
+    const mockDependencies = createMockDependencies({
+      fileOperations: createMockFileOperations({
+        readTextFile: () => Promise.resolve("ext1"),
+      }),
+      runtimeEnvironment: createMockRuntimeEnvironment({
+        getEnv: (name) => (name === "DOTFILES_DIR" ? "/test" : undefined),
+        log: (msg) => logs.push(msg),
+        writeStdout: () => Promise.resolve(0),
+        runCommand: (args) => {
+          commands.push(args);
+          return Promise.resolve({ stdout: "" });
+        },
+        exit: () => {
+          exitCalled = true;
+          throw new Error("Exit called");
+        },
+      }),
+    });
+
+    await main(["import", "--insiders"], mockDependencies);
+
+    assertEquals(exitCalled, false);
+    assertEquals(
+      logs.some((log) => log.includes("extensions found")),
+      true,
+    );
+    assertEquals(
+      commands.some((cmd) => cmd[0] === "code-insiders"),
+      true,
+    );
   });
 
   await t.step("should handle export command", async () => {
@@ -325,7 +400,7 @@ Deno.test("main function", async (t) => {
         writeTextFile: () => Promise.resolve(),
       }),
       runtimeEnvironment: createMockRuntimeEnvironment({
-        getEnv: (name) => name === "DOTFILES_DIR" ? "/test" : undefined,
+        getEnv: (name) => (name === "DOTFILES_DIR" ? "/test" : undefined),
         runCommand: () => Promise.resolve({ stdout: "ext1\n" }),
         log: (msg) => logs.push(msg),
       }),
@@ -339,12 +414,42 @@ Deno.test("main function", async (t) => {
     );
   });
 
+  await t.step("should handle export command with --insiders", async () => {
+    const logs: string[] = [];
+    const commands: string[][] = [];
+
+    const mockDependencies = createMockDependencies({
+      fileOperations: createMockFileOperations({
+        writeTextFile: () => Promise.resolve(),
+      }),
+      runtimeEnvironment: createMockRuntimeEnvironment({
+        getEnv: (name) => (name === "DOTFILES_DIR" ? "/test" : undefined),
+        runCommand: (args) => {
+          commands.push(args);
+          return Promise.resolve({ stdout: "ext1\n" });
+        },
+        log: (msg) => logs.push(msg),
+      }),
+    });
+
+    await main(["export", "--insiders"], mockDependencies);
+
+    assertEquals(
+      logs.some((log) => log.includes("Extensions have been exported")),
+      true,
+    );
+    assertEquals(
+      commands.some((cmd) => cmd[0] === "code-insiders"),
+      true,
+    );
+  });
+
   await t.step("should handle help command", async () => {
     const logs: string[] = [];
 
     const mockDependencies = createMockDependencies({
       runtimeEnvironment: createMockRuntimeEnvironment({
-        getEnv: (name) => name === "DOTFILES_DIR" ? "/test" : undefined,
+        getEnv: (name) => (name === "DOTFILES_DIR" ? "/test" : undefined),
         log: (msg) => logs.push(msg),
       }),
     });
@@ -363,7 +468,7 @@ Deno.test("main function", async (t) => {
 
     const mockDependencies = createMockDependencies({
       runtimeEnvironment: createMockRuntimeEnvironment({
-        getEnv: (name) => name === "DOTFILES_DIR" ? "/test" : undefined,
+        getEnv: (name) => (name === "DOTFILES_DIR" ? "/test" : undefined),
         log: (msg) => logs.push(msg),
         exit: () => {
           exitCalled = true;
@@ -379,35 +484,20 @@ Deno.test("main function", async (t) => {
     }
 
     assertEquals(exitCalled, true);
-    assertEquals(logs.some((log) => log.includes("Unknown command")), true);
+    assertEquals(
+      logs.some((log) => log.includes("Unknown command")),
+      true,
+    );
   });
 
-  await t.step("should handle missing DOTFILES_DIR", async () => {
-    const errors: string[] = [];
-    let exitCalled = false;
-
+  await t.step("should throw error when DOTFILES_DIR is missing", async () => {
     const mockDependencies = createMockDependencies({
       runtimeEnvironment: createMockRuntimeEnvironment({
         getEnv: () => undefined,
-        error: (msg) => errors.push(msg),
-        exit: () => {
-          exitCalled = true;
-          throw new Error("Exit called");
-        },
       }),
     });
 
-    try {
-      await main(["import"], mockDependencies);
-    } catch (error) {
-      assertEquals((error as Error).message, "Exit called");
-    }
-
-    assertEquals(exitCalled, true);
-    assertEquals(
-      errors[0],
-      "DOTFILES_DIR environment variable is not set.",
-    );
+    await assertRejects(() => main(["import"], mockDependencies), Error, "DOTFILES_DIR is not defined");
   });
 
   await t.step("should handle no arguments (default to help)", async () => {
@@ -415,7 +505,7 @@ Deno.test("main function", async (t) => {
 
     const mockDependencies = createMockDependencies({
       runtimeEnvironment: createMockRuntimeEnvironment({
-        getEnv: (name) => name === "DOTFILES_DIR" ? "/test" : undefined,
+        getEnv: (name) => (name === "DOTFILES_DIR" ? "/test" : undefined),
         log: (msg) => logs.push(msg),
       }),
     });
@@ -436,6 +526,7 @@ Deno.test("CLI Integration Tests", async (t) => {
     assertEquals(code, 0);
     assertEquals(stdout.includes("code-extensions v1.0.0"), true);
     assertEquals(stdout.includes("Usage:"), true);
+    assertEquals(stdout.includes("--insiders"), true);
   });
 
   await t.step("unknown command should exit with code 1", async () => {
@@ -445,24 +536,27 @@ Deno.test("CLI Integration Tests", async (t) => {
     assertEquals(stdout.includes("Unknown command"), true);
   });
 
-  await t.step("no DOTFILES_DIR should exit with code 1", async () => {
+  await t.step("should show help when no DOTFILES_DIR but help command", async () => {
     const cmd = new Deno.Command("deno", {
-      args: ["run", "-A", "scripts/code-extensions.ts", "import"],
+      args: ["run", "-A", "scripts/code-extensions.ts", "help"],
       stdout: "piped",
       stderr: "piped",
       env: { PATH: Deno.env.get("PATH") || "" },
       clearEnv: true,
     });
 
-    const { code, stdout, stderr } = await cmd.output();
+    const { code, stdout } = await cmd.output();
     const stdoutText = new TextDecoder().decode(stdout);
-    const stderrText = new TextDecoder().decode(stderr);
 
-    assertEquals(code, 1);
-    assertEquals(
-      stdoutText.includes("DOTFILES_DIR environment variable is not set") ||
-        stderrText.includes("DOTFILES_DIR environment variable is not set"),
-      true,
-    );
+    assertEquals(code, 0);
+    assertEquals(stdoutText.includes("code-extensions v1.0.0"), true);
+  });
+
+  await t.step("help command with --insiders should work", async () => {
+    const { code, stdout } = await runCLI(["help", "--insiders"]);
+
+    assertEquals(code, 0);
+    assertEquals(stdout.includes("code-extensions v1.0.0"), true);
+    assertEquals(stdout.includes("--insiders"), true);
   });
 });

@@ -2,7 +2,7 @@ name: Check PR Title
 
 on:
   pull_request:
-    types: [opened, edited]
+    types: [opened, edited, reopened, synchronize]
 
 jobs:
   check-title:
@@ -14,4 +14,4 @@ jobs:
           deno-version: v2.x
       - name: Check PR Title
         run: |
-          deno run -A scripts/check-pr-title.ts "${{ github.event.pull_request.title }}"
+          deno run -A .github/scripts/check-pr-title.ts "${{ github.event.pull_request.title }}"

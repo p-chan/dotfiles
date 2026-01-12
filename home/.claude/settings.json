@@ -1,12 +1,62 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "permissions": {
-    "deny": [
-      "Bash(sudo:*)",
-      "Read(.env*)",
-      "Read(!.env*.example)",
-      "Write(.env*)",
-      "Write(!.env*.example)"
+    "allow": [
+      "Bash(git log:*)",
+      "Bash(gh repo view:*)",
+      "Bash(gh issue view:*)",
+      "Bash(gh pr checks:*)",
+      "Bash(gh pr diff:*)",
+      "Bash(gh pr list:*)",
+      "Bash(gh pr view:*)",
+      "Bash(gh run view:*)",
+      "Bash(gh get-review-comments:*)",
+      "Bash(tail:*)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Skill"
+    ],
+    "deny": ["Bash(sudo:*)", "Read(.env*)", "Read(!.env*.example)", "Write(.env*)", "Write(!.env*.example)"]
+  },
+  "hooks": {
+    "PermissionRequest": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/log-permission.sh"
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/notify.sh"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/notify.sh"
+          }
+        ]
+      }
     ]
-  }
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "bash ~/.claude/statusline.sh"
+  },
+  "enabledPlugins": {
+    "example-skills@anthropic-agent-skills": true
+  },
+  "alwaysThinkingEnabled": true
 }

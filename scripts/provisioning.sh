@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env zsh
 
 ################################################################################
 # Variables
@@ -74,6 +74,20 @@ defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode -bool true
 ################################################################################
 # Others
 ################################################################################
+
+# Arrange Dock
+dockutil --remove all
+[ -d "/Applications/Fantastical.app" ] && dockutil --add "/Applications/Fantastical.app"
+[ -d "/Applications/Mimestream.app" ] && dockutil --add "/Applications/Mimestream.app"
+[ -d "/Applications/Arc.app" ] && dockutil --add "/Applications/Arc.app"
+[ -d "/Applications/Slack.app" ] && dockutil --add "/Applications/Slack.app"
+[ -d "/Applications/Figma.app" ] && dockutil --add "/Applications/Figma.app"
+[ -d "/Applications/1Password.app" ] && dockutil --add "/Applications/1Password.app"
+[ -d "/Applications/Visual Studio Code.app" ] && dockutil --add "/Applications/Visual Studio Code.app"
+[ -d "/Applications/Ghostty.app" ] && dockutil --add "/Applications/Ghostty.app"
+
+# Reduce Dock animation delay
+defaults write com.apple.dock autohide-delay -int 0
 
 # Unhide Library directory
 chflags nohidden ~/Library

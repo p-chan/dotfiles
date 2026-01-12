@@ -1,12 +1,22 @@
 autoload -Uz compinit
 compinit
 
+# Enable VSCode Shell Integration manually
+# https://code.visualstudio.com/docs/terminal/shell-integration
+if [[ "$TERM_PROGRAM" == "vscode" ]]; then
+  source "$(code --locate-shell-integration-path zsh)"
+fi
+
 bindkey -v
 
 # Backward word (Shift + Arrow Left)
 bindkey '^[[1;2D' backward-word
 # Forward word (Shift + Arrow Right)
 bindkey '^[[1;2C' forward-word
+
+if type mise &>/dev/null; then
+  eval "$(mise activate zsh)"
+fi
 
 if type sheldon &>/dev/null; then
   eval "$(sheldon source)"
@@ -18,6 +28,10 @@ fi
 
 if type fzf &>/dev/null; then
   source <(fzf --zsh)
+fi
+
+if type zoxide &>/dev/null; then
+  eval "$(zoxide init zsh)"
 fi
 
 export FZF_DEFAULT_OPTS="--layout=reverse"
@@ -85,3 +99,16 @@ bindkey "^G" _ghq_fuzzy_cd
 if [[ -f "${ZDOTDIR:-$HOME}/.zshrc.local" ]]; then
   source "${ZDOTDIR:-$HOME}/.zshrc.local"
 fi
+
+# Git wrapper
+git() {
+  case "${1-}" in
+    switch)
+      shift
+      command git-fallback-switch "$@"
+      ;;
+    *)
+      command git "$@"
+      ;;
+  esac
+}

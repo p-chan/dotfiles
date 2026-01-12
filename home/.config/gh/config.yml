@@ -1,0 +1,13 @@
+version: 1
+git_protocol: ssh
+aliases:
+  # No args
+  request-review-to-copilot: '!gh api --method POST /repos/{owner}/{repo}/pulls/$(gh pr view --json number -q .number)/requested_reviewers -f "reviewers[]=copilot-pull-request-reviewer[bot]"'
+  # No args
+  get-review-comments: '!gh api graphql -f query=''query($owner: String!, $repo: String!, $pr: Int!) { repository(owner: $owner, name: $repo) { pullRequest(number: $pr) { reviewThreads(first: 100) { nodes { id isResolved comments(first: 100) { nodes { databaseId body author { login } createdAt } } } } } } }'' -f owner="$(gh repo view --json owner -q .owner.login)" -f repo="$(gh repo view --json name -q .name)" -F pr="$(gh pr view --json number -q .number)"'
+  # $1: comment ID, $2: reply body
+  reply-review-comment: '!gh api -X POST "repos/{owner}/{repo}/pulls/$(gh pr view --json number -q .number)/comments/$1/replies" -f body="$2"'
+  # $1: thread ID (PRRT_...)
+  resolve-review-thread: 'api graphql -f query=''mutation($threadId: ID!) { resolveReviewThread(input: {threadId: $threadId}) { thread { id isResolved } } }'' -f threadId="$1"'
+  # No args
+  get-allowed-merge-methods: '!gh api repos/{owner}/{repo} --jq "{allow_merge_commit, allow_squash_merge, allow_rebase_merge}"'

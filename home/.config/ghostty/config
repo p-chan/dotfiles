@@ -6,15 +6,21 @@ font-size = 13
 font-thicken = true
 theme = one-dark-pro
 cursor-style = block
-background-opacity = 0.9
-fullscreen = true
+background-opacity = 0.75
+unfocused-split-opacity = 0.75
+split-divider-color = #3e4452
+maximize = true
 keybind = global:alt+space=toggle_visibility
 keybind = cmd+r=clear_screen
 # https://github.com/anthropics/claude-code/issues/1282
 keybind = shift+enter=text:\n
+keybind = cmd+shift+e=equalize_splits
+keybind = cmd+shift+left=move_tab:-1
+keybind = cmd+shift+right=move_tab:1
 window-padding-x = 8
 window-padding-y = 8
 shell-integration-features = no-cursor
 macos-non-native-fullscreen = true
+macos-titlebar-style = tabs
 # https://github.com/ghostty-org/ghostty/issues/6086#issuecomment-2829417634
 macos-window-shadow = false

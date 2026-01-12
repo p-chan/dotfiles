@@ -1,11 +1,32 @@
 #!/bin/bash
 
+is_darwin() {
+  [[ "$(uname)" == "Darwin" ]]
+}
+
+is_linux() {
+  [[ "$(uname)" == "Linux" ]]
+}
+
+is_codespaces() {
+  [[ "$CODESPACES" == "true" ]]
+}
+
 dotfiles=(
+  ".claude/CLAUDE.md"
+  ".claude/commands"
+  ".claude/hooks"
   ".claude/settings.json"
+  ".claude/skills"
+  ".claude/statusline.sh"
+  ".codex/AGENTS.md"
+  ".codex/config.toml"
+  ".codex/prompts"
+  ".codex/skills"
   ".config/fixpack"
+  ".config/gh/config.yml"
   ".config/ghostty"
   ".config/git"
-  ".config/karabiner"
   ".config/mise"
   ".config/sheldon"
   ".config/vim"
@@ -13,11 +34,32 @@ dotfiles=(
   ".config/zsh-abbr"
   ".config/starship.toml"
   ".ssh"
-  "Library/Application Support/Code/User/keybindings.json"
-  "Library/Application Support/Code/User/settings.json"
   ".editorconfig"
   ".zshenv"
 )
+
+darwin_only_dotfiles=(
+  ".config/karabiner"
+  "Library/Application Support/Code/User/keybindings.json"
+  "Library/Application Support/Code/User/settings.json"
+  "Library/Application Support/Code - Insiders/User/keybindings.json"
+  "Library/Application Support/Code - Insiders/User/settings.json"
+)
+
+linux_only_dotfiles=(
+  ".config/Code/User/keybindings.json"
+  ".config/Code/User/settings.json"
+  ".config/Code - Insiders/User/keybindings.json"
+  ".config/Code - Insiders/User/settings.json"
+)
+
+if is_darwin; then
+  dotfiles+=("${darwin_only_dotfiles[@]}")
+fi
+
+if is_linux; then
+  dotfiles+=("${linux_only_dotfiles[@]}")
+fi
 
 if [ -z "$DOTFILES_DIR" ]; then
   echo "DOTFILES_DIR is not defined"

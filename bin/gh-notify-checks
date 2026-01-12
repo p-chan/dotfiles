@@ -1,0 +1,59 @@
+#!/usr/bin/env zsh
+
+# Notify PR CI check results using terminal-notifier
+# Usage: gh-notify-checks
+
+set -euo pipefail
+
+# Check if gh command exists
+if ! command -v gh &>/dev/null; then
+  echo "Error: gh command is not installed"
+  exit 1
+fi
+
+# Check if terminal-notifier exists
+if ! command -v terminal-notifier &>/dev/null; then
+  echo "Error: terminal-notifier is not installed"
+  echo "Please install with: brew install terminal-notifier"
+  exit 1
+fi
+
+# Get PR information
+pr_data=$(gh pr view --json url,number,headRepositoryOwner,headRepository 2>/dev/null)
+pr_url=$(echo "$pr_data" | jq -r '.url // ""')
+pr_number=$(echo "$pr_data" | jq -r '.number // ""')
+repo_owner=$(echo "$pr_data" | jq -r '.headRepositoryOwner.login // ""')
+repo_name=$(echo "$pr_data" | jq -r '.headRepository.name // ""')
+
+pr_identifier="${repo_owner}/${repo_name}#${pr_number}"
+
+echo "Watching for checks to complete..."
+echo "PR: $pr_identifier"
+echo "Press Ctrl+C to exit"
+echo ""
+
+# Use repo and PR number as group ID to avoid conflicts
+group_id="gh-checks-${repo_owner}-${repo_name}-${pr_number}"
+
+# Watch with gh pr checks --watch
+# Exit codes: 0 = success, 1 = failure, 8 = pending
+if gh pr checks --watch; then
+  # All checks passed
+  terminal-notifier \
+    -title "GitHub" \
+    -subtitle "$pr_identifier" \
+    -message "✅ All checks have passed" \
+    -group "$group_id" \
+    -open "$pr_url"
+else
+  exit_code=$?
+  if [[ $exit_code -ne 8 ]]; then
+    # Checks failed (don't notify for 8 which means pending)
+    terminal-notifier \
+      -title "GitHub" \
+      -subtitle "$pr_identifier" \
+      -message "❌ Some checks were not successful" \
+      -group "$group_id" \
+      -open "$pr_url"
+  fi
+fi

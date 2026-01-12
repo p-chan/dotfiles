@@ -6,85 +6,106 @@ on:
       - main
   pull_request:
 
-defaults:
-  run:
-    shell: zsh -l {0}
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
   get-cask-packages:
-    runs-on: macos-15
+    runs-on: ubuntu-latest
     outputs:
       packages: ${{ steps.get.outputs.packages }}
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v5
       - id: get
+        name: Get cask packages
         run: |
           echo "packages=$(
             grep '^cask ' Brewfile | \
             sed 's/^cask //g' | \
             xargs
           )" >> $GITHUB_OUTPUT
-  install:
+
+  install-darwin:
     needs: [get-cask-packages]
     runs-on: macos-15
+    defaults:
+      run:
+        shell: zsh -l {0}
     steps:
-      - uses: actions/checkout@v4
-      # stabilize gpg for temporary workaround
-      # https://github.com/actions/runner-images/issues/9777#issuecomment-2102603197
-      - run: |
-          mkdir -p ~/.gnupg/
-          touch ~/.gnupg/dirmngr.conf
-          echo "standard-resolver" >  ~/.gnupg/dirmngr.conf
-      # Temporary workaround
-      # https://github.com/Dokploy/dokploy/issues/2291
-      - run: gpg --keyserver hkps://keyserver.ubuntu.com --recv-keys 5BE8A3F6C8A5C01D106C0AD820B1A390B168D356
-      - run: |
+      - uses: actions/checkout@v5
+      - name: Install
+        run: |
           DOTFILES_DIR=$GITHUB_WORKSPACE \
           NONINTERACTIVE=1 \
           HOMEBREW_BUNDLE_CASK_SKIP="${{ needs.get-cask-packages.outputs.packages }}" \
-          sh scripts/install.sh
+          MISE_GPG_VERIFY=false \
+          bash scripts/install.sh
+      - name: Add DOTFILES_DIR
+        run: |
+          mkdir -p "$HOME/.config/dotfiles"
+          echo "$GITHUB_WORKSPACE" >> "$HOME/.config/dotfiles/dotfiles-dir"
+      - name: Doctor
+        run: zsh scripts/doctor.sh
+
+  install-ubuntu:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v5
+      - name: Install
+        run: |
+          DOTFILES_DIR=$GITHUB_WORKSPACE bash scripts/install.sh
+      - name: Add DOTFILES_DIR
+        run: |
+          mkdir -p "$HOME/.config/dotfiles"
+          echo "$GITHUB_WORKSPACE" >> "$HOME/.config/dotfiles/dotfiles-dir"
+      - name: Doctor (login shell)
+        shell: zsh -l {0}
+        run: zsh scripts/doctor.sh
+      - name: Doctor (non-login shell)
+        shell: zsh {0}
+        run: zsh scripts/doctor.sh
+
   check:
-    needs: [get-cask-packages]
-    runs-on: macos-15
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      # stabilize gpg for temporary workaround
-      # https://github.com/actions/runner-images/issues/9777#issuecomment-2102603197
-      - run: |
-          mkdir -p ~/.gnupg/
-          touch ~/.gnupg/dirmngr.conf
-          echo "standard-resolver" >  ~/.gnupg/dirmngr.conf
-      # Temporary workaround
-      # https://github.com/Dokploy/dokploy/issues/2291
-      - run: gpg --keyserver hkps://keyserver.ubuntu.com --recv-keys 5BE8A3F6C8A5C01D106C0AD820B1A390B168D356
-      - run: |
-          DOTFILES_DIR=$GITHUB_WORKSPACE \
-          NONINTERACTIVE=1 \
-          HOMEBREW_BUNDLE_CASK_SKIP="${{ needs.get-cask-packages.outputs.packages }}" \
-          sh scripts/install.sh
+      - uses: actions/checkout@v5
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: ".node-version"
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+      - name: Install dependencies
+        run: pnpm install
+      - name: Setup editorconfig-checker
+        uses: editorconfig-checker/action-editorconfig-checker@main
+      - name: Setup Deno
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
       - run: editorconfig-checker
       - run: deno check
-      - run: deno fmt --check
-      - run: deno lint
-      - run: shellcheck scripts/*.sh
-  test:
-    needs: [get-cask-packages]
-    runs-on: macos-15
+      - run: pnpm check
+
+  lint:
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      # stabilize gpg for temporary workaround
-      # https://github.com/actions/runner-images/issues/9777#issuecomment-2102603197
-      - run: |
-          mkdir -p ~/.gnupg/
-          touch ~/.gnupg/dirmngr.conf
-          echo "standard-resolver" >  ~/.gnupg/dirmngr.conf
-      # Temporary workaround
-      # https://github.com/Dokploy/dokploy/issues/2291
-      - run: gpg --keyserver hkps://keyserver.ubuntu.com --recv-keys 5BE8A3F6C8A5C01D106C0AD820B1A390B168D356
-      - run: |
-          DOTFILES_DIR=$GITHUB_WORKSPACE \
-          NONINTERACTIVE=1 \
-          HOMEBREW_BUNDLE_CASK_SKIP="${{ needs.get-cask-packages.outputs.packages }}" \
-          sh scripts/install.sh
-      - run: sh scripts/install.test.sh
-      - run: deno test -A scripts/
+      - name: Checkout
+        uses: actions/checkout@v5
+      - name: Setup Deno
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+      - run: deno lint
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+      - name: Setup Deno
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+      - run: deno test -A

@@ -1,6 +1,6 @@
-import * as path from "jsr:@std/path@1.1.1";
-import { $ } from "jsr:@webpod/zx@8.7.1";
-import { parseArgs } from "jsr:@std/cli@1.0.21";
+import * as path from "@std/path";
+import { $ } from "@webpod/zx";
+import { parseArgs } from "@std/cli";
 
 export type FileOperations = {
   readTextFile: (path: string) => Promise<string>;
@@ -53,6 +53,7 @@ export function parseExtensionsList(content: string): string[] {
 export async function importExtensions(
   extensionsFilePath: string,
   dependencies: Dependencies = defaultDependencies,
+  useInsiders: boolean = false,
 ): Promise<void> {
   const { fileOperations, runtimeEnvironment } = dependencies;
   const content = await fileOperations.readTextFile(extensionsFilePath);
@@ -63,19 +64,13 @@ export async function importExtensions(
   const textEncoder = new TextEncoder();
 
   for (const extension of extensions) {
-    await runtimeEnvironment.writeStdout(
-      textEncoder.encode(`Installing ${extension}...`),
-    );
+    await runtimeEnvironment.writeStdout(textEncoder.encode(`Installing ${extension}...`));
 
-    await runtimeEnvironment.runCommand([
-      "code",
-      "--install-extension",
-      extension,
-    ]);
+    const codeCommand = Deno.env.get("CODE_COMMAND_PATH") ?? (useInsiders ? "code-insiders" : "code");
 
-    await runtimeEnvironment.writeStdout(
-      textEncoder.encode(`\r\x1b[KInstalled ${extension}\n`),
-    );
+    await runtimeEnvironment.runCommand([codeCommand, "--install-extension", extension]);
+
+    await runtimeEnvironment.writeStdout(textEncoder.encode(`\r\x1b[KInstalled ${extension}\n`));
   }
 
   runtimeEnvironment.log("\nAll extensions have been installed.");
@@ -84,65 +79,65 @@ export async function importExtensions(
 export async function exportExtensions(
   extensionsFilePath: string,
   dependencies: Dependencies = defaultDependencies,
+  useInsiders: boolean = false,
 ): Promise<void> {
   const { fileOperations, runtimeEnvironment } = dependencies;
-  const { stdout: extensions } = await runtimeEnvironment.runCommand([
-    "code",
-    "--list-extensions",
-  ]);
+
+  const codeCommand = Deno.env.get("CODE_COMMAND_PATH") ?? (useInsiders ? "code-insiders" : "code");
+
+  const { stdout: extensions } = await runtimeEnvironment.runCommand([codeCommand, "--list-extensions"]);
 
   await fileOperations.writeTextFile(extensionsFilePath, extensions);
 
-  runtimeEnvironment.log(
-    `Extensions have been exported to ${extensionsFilePath}`,
-  );
+  runtimeEnvironment.log(`Extensions have been exported to ${extensionsFilePath}`);
 }
 
-function getExtensionsFilePath(
-  dependencies: Dependencies = defaultDependencies,
-): string {
+function getExtensionsFilePath(dependencies: Dependencies = defaultDependencies): string {
   const { runtimeEnvironment } = dependencies;
   const dotfilesDirectoryPath = runtimeEnvironment.getEnv("DOTFILES_DIR");
 
-  if (!dotfilesDirectoryPath) {
-    runtimeEnvironment.error("DOTFILES_DIR environment variable is not set.");
-    runtimeEnvironment.exit(1);
-    throw new Error("Process should have exited"); // TypeScript control flow hint
-  }
+  if (!dotfilesDirectoryPath) throw new Error("DOTFILES_DIR is not defined");
 
   return path.resolve(dotfilesDirectoryPath, "code-extensions");
 }
 
-export function showHelp(
-  dependencies: Dependencies = defaultDependencies,
-): void {
+export function showHelp(dependencies: Dependencies = defaultDependencies): void {
   const { runtimeEnvironment } = dependencies;
   runtimeEnvironment.log(`code-extensions v1.0.0
 
 Usage:
-  code-extensions <command>
+  code-extensions <command> [options]
 
 Commands:
   import    Install extensions from code-extensions file
   export    Export installed extensions to code-extensions file
-  help      Show this help message`);
+  help      Show this help message
+
+Options:
+  --insiders    Use code-insiders command instead of code`);
 }
 
 export async function main(
   args: string[] = Deno.args,
   dependencies: Dependencies = defaultDependencies,
 ): Promise<void> {
-  const parsedArgs = parseArgs(args);
+  const parsedArgs = parseArgs(args, {
+    boolean: ["insiders"],
+  });
   const command = parsedArgs._[0];
-  const extensionsFilePath = getExtensionsFilePath(dependencies);
+  const useInsiders = parsedArgs.insiders || false;
 
   switch (command) {
-    case "import":
-      await importExtensions(extensionsFilePath, dependencies);
+    case "import": {
+      const extensionsFilePath = getExtensionsFilePath(dependencies);
+      await importExtensions(extensionsFilePath, dependencies, useInsiders);
       break;
-    case "export":
-      await exportExtensions(extensionsFilePath, dependencies);
+    }
+    case "export": {
+      const extensionsFilePath = getExtensionsFilePath(dependencies);
+      await exportExtensions(extensionsFilePath, dependencies, useInsiders);
       break;
+    }
     case "help":
     case undefined:
       showHelp(dependencies);
