@@ -30,6 +30,10 @@ if type fzf &>/dev/null; then
   source <(fzf --zsh)
 fi
 
+if type zoxide &>/dev/null; then
+  eval "$(zoxide init zsh)"
+fi
+
 export FZF_DEFAULT_OPTS="--layout=reverse"
 
 HISTSIZE=100000
