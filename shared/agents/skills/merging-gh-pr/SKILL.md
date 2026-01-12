@@ -24,7 +24,8 @@ allowed-tools: Bash(gh get-review-comments), Bash(gh pr checks), Bash(gh get-all
 
 `gh get-allowed-merge-methods` で許可されているマージ方法を取得します。
 
-許可されているマージ方法が 1 つだけの場合、それを使用します。 許可されているマージ方法が複数の場合、ユーザーにどれを使うか質問します。
+許可されているマージ方法が 1 つだけの場合、それを使用します。
+許可されているマージ方法が複数の場合、ユーザーにどれを使うか質問します。
 
 ### マージする
 
