@@ -1,6 +1,7 @@
 ---
 name: creating-gh-pr
 description: ユーザーが PR の作成を求めたときや、エージェントが PR を作成するときに必ず使用してください。
+allowed-tools: Bash(gh-notify-checks), Bash(gh request-review-to-copilot), Bash(gh-notify-copilot-review)
 ---
 
 # GitHub PR 作成
