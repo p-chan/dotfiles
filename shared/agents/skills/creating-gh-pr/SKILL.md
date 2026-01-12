@@ -13,9 +13,6 @@ allowed-tools: Bash(gh-notify-checks), Bash(gh request-review-to-copilot), Bash(
 
 ## 作成したあと
 
-- チェックが終了したときに通知するか？を質問して、ユーザーが肯定した場合
-  `gh-notify-checks` をバックグラウンドで実行します。
-- Copilot にレビューをリクエストするか？を質問して、ユーザーが肯定した場合
-  `gh request-review-to-copilot` を実行します。
-- Copilot がレビューしたときに通知するか？を質問して、ユーザーが肯定した場合
-  `gh-notify-copilot-review` をバックグラウンドで実行します。
+- チェックが終了したときに通知するか？を質問して、ユーザーが肯定した場合 `gh-notify-checks` をバックグラウンドで実行します。
+- Copilot にレビューをリクエストするか？を質問して、ユーザーが肯定した場合 `gh request-review-to-copilot` を実行します。
+- Copilot がレビューしたときに通知するか？を質問して、ユーザーが肯定した場合 `gh-notify-copilot-review` をバックグラウンドで実行します。

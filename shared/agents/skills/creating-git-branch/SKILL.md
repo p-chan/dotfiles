@@ -8,8 +8,7 @@ allowed-tools: Bash(git branch:*), Bash(grep:*), Bash(head:*), Bash(sed:*), Bash
 
 ## 前提
 
-`README.md` やメモリファイル（`AGENTS.md` や `CLAUDE.md`
-など）にブランチ名の規約がある場合、それに従う。
+`README.md` やメモリファイル（`AGENTS.md` や `CLAUDE.md` など）にブランチ名の規約がある場合、それに従う。
 
 以下のワークフローは、明確な規約がない場合に実行します。
 
