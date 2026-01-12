@@ -1,4 +1,4 @@
-import { assertEquals } from "jsr:@std/assert@1.0.13";
+import { assertEquals } from "@std/assert";
 import { checkTitle } from "./check-pr-title.ts";
 
 async function runCLI(args: string[]): Promise<{ code: number; stdout: string; stderr: string }> {

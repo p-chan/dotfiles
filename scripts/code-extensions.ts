@@ -1,6 +1,6 @@
-import * as path from "jsr:@std/path@1.1.1";
-import { $ } from "jsr:@webpod/zx@8.7.1";
-import { parseArgs } from "jsr:@std/cli@1.0.21";
+import * as path from "@std/path";
+import { $ } from "@webpod/zx";
+import { parseArgs } from "@std/cli";
 
 export type FileOperations = {
   readTextFile: (path: string) => Promise<string>;

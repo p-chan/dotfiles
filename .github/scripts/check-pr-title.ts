@@ -1,4 +1,4 @@
-import { parseArgs } from "jsr:@std/cli@1.0.21";
+import { parseArgs } from "@std/cli";
 
 const ANGULAR_FLAVORED_CONVENTIONAL_COMMITS_PREFIX_REGEX =
   /^(build|chore|ci|docs|feat|fix|perf|refactor|style|test)(\(.+\))?: \S.*/;
