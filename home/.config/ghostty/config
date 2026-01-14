@@ -7,20 +7,42 @@ font-thicken = true
 theme = one-dark-pro
 cursor-style = block
 background-opacity = 0.75
-unfocused-split-opacity = 0.75
-split-divider-color = #3e4452
+background-opacity-cells = true
 maximize = true
 keybind = global:alt+space=toggle_visibility
-keybind = cmd+r=clear_screen
+keybind = cmd+r=text:\x0c
 # https://github.com/anthropics/claude-code/issues/1282
 keybind = shift+enter=text:\n
-keybind = cmd+shift+e=equalize_splits
-keybind = cmd+shift+left=move_tab:-1
-keybind = cmd+shift+right=move_tab:1
+# tmux keybindings (prefix: Ctrl+b)
+# New window
+keybind = cmd+t=text:\x02c
+# Close pane or window
+keybind = cmd+w=text:\x02w
+# Split pane (vertical/horizontal)
+keybind = cmd+d=text:\x02%
+keybind = cmd+shift+d=text:\x02\x22
+# Focus pane (left/right/up/down)
+keybind = cmd+alt+left=text:\x02\x1b[D
+keybind = cmd+alt+right=text:\x02\x1b[C
+keybind = cmd+alt+up=text:\x02\x1b[A
+keybind = cmd+alt+down=text:\x02\x1b[B
+# Move window (left/right)
+keybind = cmd+shift+left=text:\x02H
+keybind = cmd+shift+right=text:\x02L
+# Select window (1-9)
+keybind = cmd+digit_1=text:\x021
+keybind = cmd+digit_2=text:\x022
+keybind = cmd+digit_3=text:\x023
+keybind = cmd+digit_4=text:\x024
+keybind = cmd+digit_5=text:\x025
+keybind = cmd+digit_6=text:\x026
+keybind = cmd+digit_7=text:\x027
+keybind = cmd+digit_8=text:\x028
+keybind = cmd+digit_9=text:\x029
 window-padding-x = 8
 window-padding-y = 8
 shell-integration-features = no-cursor
 macos-non-native-fullscreen = true
-macos-titlebar-style = tabs
+macos-titlebar-style = hidden
 # https://github.com/ghostty-org/ghostty/issues/6086#issuecomment-2829417634
 macos-window-shadow = false
