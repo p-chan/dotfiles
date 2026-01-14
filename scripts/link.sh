@@ -29,6 +29,7 @@ dotfiles=(
   ".config/git"
   ".config/mise"
   ".config/sheldon"
+  ".config/tmux"
   ".config/vim"
   ".config/zsh"
   ".config/zsh-abbr"
