@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Claude Code status indicator for tmux window
-# Usage: claude-status.sh <window_id>
+# Usage: claude-code-status.sh <window_id>
 
 window_id="${1:-}"
 
