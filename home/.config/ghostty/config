@@ -45,5 +45,6 @@ window-padding-y = 8
 shell-integration-features = no-cursor
 macos-non-native-fullscreen = true
 macos-titlebar-style = hidden
+macos-option-as-alt = true
 # https://github.com/ghostty-org/ghostty/issues/6086#issuecomment-2829417634
 macos-window-shadow = false
