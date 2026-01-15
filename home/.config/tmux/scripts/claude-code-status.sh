@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -euo pipefail
 # Claude Code status indicator for tmux window
 # Usage: claude-code-status.sh <window_id>
 
