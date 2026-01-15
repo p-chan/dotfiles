@@ -8,6 +8,7 @@ theme = one-dark-pro
 cursor-style = block
 background-opacity = 0.75
 background-opacity-cells = true
+command = zsh -l -i -c "tmux new-session -A -s main"
 maximize = true
 keybind = global:alt+space=toggle_visibility
 keybind = cmd+r=text:\x0c
