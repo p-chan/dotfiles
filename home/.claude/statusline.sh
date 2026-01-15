@@ -210,10 +210,13 @@ if [[ -n "$model" && "$model" != "null" ]]; then
   output+=" ${GRAY}|${RESET} Model: ${ORANGE}${model}${RESET}"
 fi
 
-# Context usage
+# Context usage (use 80% of context_size as 100% since auto-compact triggers at 80%)
 if [[ -n "$context_size" && -n "$current_tokens" && "$context_size" != "null" && "$current_tokens" != "null" && "$context_size" -gt 0 ]]; then
-  percent=$((current_tokens * 100 / context_size))
-  output+=" ${GRAY}|${RESET} Context: ${percent}%"
+  effective_size=$((context_size * 80 / 100))
+  if [[ "$effective_size" -gt 0 ]]; then
+    percent=$((current_tokens * 100 / effective_size))
+    output+=" ${GRAY}|${RESET} Context: ${percent}%"
+  fi
 fi
 
 # Usage section
