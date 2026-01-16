@@ -40,8 +40,8 @@ gh pr list --state all --limit 10 --json title --jq '.[].title'
 ```sh
 gh pr create \
   --assignee @me \
-  --body <body> \
-  --title <title>
+  --body "$body" \
+  --title "$title"
 
 # 状況に応じて他のオプションも追加できます
 ```
