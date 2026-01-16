@@ -1,7 +1,7 @@
 ---
 name: creating-gh-pr
 description: GitHub の PR を作成します。ユーザーが PR の作成を求めたときや、エージェントが PR を作成するときに使用してください。
-allowed-tools: Bash(gh-notify-checks), Bash(gh request-review-to-copilot), Bash(gh-notify-copilot-review)
+allowed-tools: Bash(gh-notify-checks), Bash(gh request-review-to-copilot), Bash(gh-notify-copilot-review), Bash(gh pr checks), Bash(gh run view:*), Bash(gh run rerun:*), Bash(gh get-review-comments)
 ---
 
 # GitHub PR 作成
@@ -53,3 +53,23 @@ gh pr create \
 1. チェックが終了したときに通知するか？ → `gh-notify-checks` をバックグラウンドで実行
 2. Copilot にレビューをリクエストするか？ → `gh request-review-to-copilot` を実行
 3. Copilot がレビューしたときに通知するか？ → `gh-notify-copilot-review` をバックグラウンドで実行
+
+### 4. バックグラウンド処理完了後
+
+#### チェック終了通知を受け取ったら
+
+`gh pr checks` で結果を確認します。
+
+**成功した場合**
+
+チェックが成功したことを伝えます。
+
+**失敗した場合**
+
+- `gh run view <run-id> --log-failed` でログを確認します
+- PR の内容に問題がある場合は、修正を提案します
+- PR の内容に問題がない場合は `gh run rerun <run-id> --failed` でジョブを再実行します
+
+#### Copilot レビュー通知を受け取ったら
+
+`gh get-review-comments` でレビューコメントを取得します。
