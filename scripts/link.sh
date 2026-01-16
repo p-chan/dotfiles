@@ -16,6 +16,7 @@ dotfiles=(
   ".claude/CLAUDE.md"
   ".claude/commands"
   ".claude/hooks"
+  ".claude/rules"
   ".claude/settings.json"
   ".claude/skills"
   ".claude/statusline.sh"
