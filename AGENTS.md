@@ -29,7 +29,7 @@ P-Chan's portable dev environment as code.
   - `.editorconfig`
 - `shared/`: Shared configurations across multiple applications
   - `agents/`: Shared by Claude Code and Codex
-  - `vscode/`: Shared by VSCode and VSCode Insiders
+  - `vscode/`: Shared by VS Code and VS Code Insiders
 - `scripts/`: Scripts for dotfiles operations
 - `bin/`: Custom commands for system-wide use
 - `Brewfile`: Homebrew package definitions
