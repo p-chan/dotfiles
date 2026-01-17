@@ -32,6 +32,7 @@ dotfiles=(
   ".config/sheldon"
   ".config/tmux"
   ".config/vim"
+  ".config/yazi"
   ".config/zsh"
   ".config/zsh-abbr"
   ".config/starship.toml"
