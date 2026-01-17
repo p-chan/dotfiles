@@ -15,6 +15,7 @@
       "Bash(tail:*)",
       "WebFetch(domain:github.com)",
       "WebFetch(domain:raw.githubusercontent.com)",
+      "WebSearch",
       "Skill"
     ],
     "deny": ["Bash(sudo:*)", "Read(.env*)", "Read(!.env*.example)", "Write(.env*)", "Write(!.env*.example)"]
