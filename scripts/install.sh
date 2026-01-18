@@ -187,7 +187,7 @@ if ! type claude &>/dev/null; then
   log_success "Successfully installed Claude Code."
 else
   log_info "Claude Code already installed."
-fi;
+fi
 
 if [ "$CI" != "true" ] && ! is_codespaces; then
   if type deno &>/dev/null; then
