@@ -20,4 +20,4 @@ set wrapscan
 set backspace=2
 
 " Use system clipboard
-set clipboard=unnamed
+set clipboard=unnamed,unnamedplus
