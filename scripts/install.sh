@@ -179,6 +179,16 @@ else
   log_warn "mise command not found. Skipping mise tool installation."
 fi
 
+if ! type claude &>/dev/null; then
+  log_info "Installing Claude Code..."
+
+  curl -fsSL https://claude.ai/install.sh | bash
+
+  log_success "Successfully installed Claude Code."
+else
+  log_info "Claude Code already installed."
+fi
+
 if [ "$CI" != "true" ] && ! is_codespaces; then
   if type deno &>/dev/null; then
     has_code=false
