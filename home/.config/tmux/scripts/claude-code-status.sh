@@ -31,6 +31,8 @@ while IFS='|' read -r command title; do
   fi
   pane_titles+="$title"$'\n'
 done <<< "$pane_info"
+# Remove trailing newline
+pane_titles="${pane_titles%$'\n'}"
 
 # Only show status if Claude Code is actually running
 if [[ "$has_claude" == false ]]; then
