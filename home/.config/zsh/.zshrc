@@ -89,8 +89,20 @@ zle -N _gh_pr_fuzzy_checkout
 bindkey "^P" _gh_pr_fuzzy_checkout
 
 function _ghq_fuzzy_cd() {
-  BUFFER="cd $(ghq root)/$(ghq list | fzf)"
-  zle accept-line
+  local root=$(ghq root)
+  local selected=$(ghq list | fzf --preview "
+    dir=$root/{}
+    readme=\$(find \"\$dir\" -maxdepth 1 -iname 'readme*' -type f 2>/dev/null | head -1)
+    if [[ -n \"\$readme\" ]]; then
+      bat --style=plain --color=always \"\$readme\"
+    else
+      echo 'No README'
+    fi
+  ")
+  if [[ -n "$selected" ]]; then
+    BUFFER="cd $root/$selected"
+    zle accept-line
+  fi
 }
 
 zle -N _ghq_fuzzy_cd
