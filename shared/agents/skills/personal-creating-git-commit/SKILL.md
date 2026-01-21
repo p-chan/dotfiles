@@ -1,5 +1,5 @@
 ---
-name: creating-git-commit
+name: personal-creating-git-commit
 description: Git リポジトリのスタイルに合わせてコミットを作成します。ユーザーがコミットを求めたときや、エージェントがコミットするときに必ず使用してください。
 allowed-tools: Bash(git diff:*), Bash(git log:*), Bash(sed:*), Bash(tr:*), Bash(sort:*), Bash(xargs:*)
 ---

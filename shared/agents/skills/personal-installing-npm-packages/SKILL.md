@@ -1,5 +1,5 @@
 ---
-name: installing-npm-packages
+name: personal-installing-npm-packages
 description: npm、yarn、pnpm、bun で適切なバージョンのパッケージをインストールします。npm、yarn、pnpm、bun を使ってパッケージをインストールするときに必ず使用してください。
 ---
 
