@@ -21,17 +21,6 @@
     "deny": ["Bash(sudo:*)", "Read(.env*)", "Read(!.env*.example)", "Write(.env*)", "Write(!.env*.example)"]
   },
   "hooks": {
-    "PermissionRequest": [
-      {
-        "matcher": "*",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.claude/hooks/log-permission.sh"
-          }
-        ]
-      }
-    ],
     "Notification": [
       {
         "matcher": "permission_prompt",
