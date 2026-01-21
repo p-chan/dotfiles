@@ -34,7 +34,13 @@ if type zoxide &>/dev/null; then
   eval "$(zoxide init zsh)"
 fi
 
-export FZF_DEFAULT_OPTS="--layout=reverse"
+export FZF_DEFAULT_OPTS="
+  --layout=reverse
+  --color=fg:#abb2bf,fg+:#ffffff,bg:#282c34,bg+:#3e4452
+  --color=hl:#61afef,hl+:#61afef,info:#abb2bf,marker:#61afef
+  --color=prompt:#61afef,spinner:#61afef,pointer:#528bff,header:#abb2bf
+  --color=border:#5c6370,label:#abb2bf,query:#ffffff
+"
 
 HISTSIZE=100000
 SAVEHIST=100000
