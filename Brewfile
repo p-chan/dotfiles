@@ -1,10 +1,16 @@
 tap "steipete/tap"
 brew "defaultbrowser"
 brew "dockutil"
+# Required by qmk doctor but not declared as dependency in QMK formula
+# TODO: Can be removed when https://github.com/qmk/homebrew-qmk/issues/97 is resolved
+brew "dos2unix"
 brew "eza"
 brew "git"
 brew "mise"
-brew "python"
+# qmk bottle expects python@3.13, but Homebrew installs python@3.14
+# TODO: Can be removed when https://github.com/qmk/homebrew-qmk/issues/93 is resolved
+brew "python@3.13"
+brew "qmk/qmk/qmk"
 brew "terminal-notifier"
 brew "vim"
 brew "zsh"
