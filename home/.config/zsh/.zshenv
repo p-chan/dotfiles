@@ -15,9 +15,10 @@ export PATH="$DOTFILES_DIR/bin:$PATH"
 # arm-none-eabi-gcc@8, arm-none-eabi-binutils, and avr-gcc@8 are not symlinked to PATH by default
 # TODO: Can be removed when QMK formula handles PATH configuration automatically
 if type brew &>/dev/null; then
-  export PATH="$(brew --prefix arm-none-eabi-gcc@8)/bin:$PATH"
-  export PATH="$(brew --prefix arm-none-eabi-binutils)/bin:$PATH"
-  export PATH="$(brew --prefix avr-gcc@8)/bin:$PATH"
+  BREW_PREFIX="$(brew --prefix)"
+  export PATH="$BREW_PREFIX/opt/arm-none-eabi-gcc@8/bin:$PATH"
+  export PATH="$BREW_PREFIX/opt/arm-none-eabi-binutils/bin:$PATH"
+  export PATH="$BREW_PREFIX/opt/avr-gcc@8/bin:$PATH"
 fi
 
 if type mise &>/dev/null; then
