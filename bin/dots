@@ -10,6 +10,9 @@ dots_up() {
   echo "\nUpdating mise..."
   mise up
 
+  echo "\nUpdating yazi plugins and flavors..."
+  ya pkg upgrade
+
   echo "\nUpdating VS Code extensions..."
   code --update-extensions
 
