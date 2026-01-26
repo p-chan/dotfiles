@@ -179,6 +179,16 @@ else
   log_warn "mise command not found. Skipping mise tool installation."
 fi
 
+if type ya &>/dev/null; then
+  log_info "Installing yazi plugins and flavors..."
+
+  ya pkg install
+
+  log_success "Successfully installed yazi plugins and flavors."
+else
+  log_warn "ya command not found. Skipping yazi plugins and flavors installation."
+fi
+
 if ! type claude &>/dev/null; then
   log_info "Installing Claude Code..."
 
