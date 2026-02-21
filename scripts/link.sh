@@ -1,13 +1,5 @@
 #!/bin/bash
 
-is_darwin() {
-  [[ "$(uname)" == "Darwin" ]]
-}
-
-is_linux() {
-  [[ "$(uname)" == "Linux" ]]
-}
-
 dotfiles=(
   ".claude/CLAUDE.md"
   ".claude/hooks"
@@ -22,6 +14,7 @@ dotfiles=(
   ".config/gh/config.yml"
   ".config/ghostty"
   ".config/git"
+  ".config/karabiner"
   ".config/mise"
   ".config/sheldon"
   ".config/tmux"
@@ -33,24 +26,9 @@ dotfiles=(
   ".ssh"
   ".editorconfig"
   ".zshenv"
-)
-
-darwin_only_dotfiles=(
-  ".config/karabiner"
   "Library/Application Support/Code/User/keybindings.json"
   "Library/Application Support/Code/User/settings.json"
 )
-
-linux_only_dotfiles=(
-)
-
-if is_darwin; then
-  dotfiles+=("${darwin_only_dotfiles[@]}")
-fi
-
-if is_linux; then
-  dotfiles+=("${linux_only_dotfiles[@]}")
-fi
 
 if [ -z "$DOTFILES_DIR" ]; then
   echo "DOTFILES_DIR is not defined"

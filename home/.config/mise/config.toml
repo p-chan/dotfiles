@@ -5,7 +5,7 @@ deno = "latest"
 "github:ajeetdsouza/zoxide" = "latest"
 "github:sharkdp/bat" = "latest"
 "github:cli/cli" = "latest"
-"github:eza-community/eza" = { version = "latest", os = ["linux"] }
+"github:eza-community/eza" = "latest"
 "github:jkfran/killport" = "latest"
 "github:junegunn/fzf" = "latest"
 "github:rossmacarthur/sheldon" = "latest"
@@ -28,14 +28,6 @@ version = "latest"
 [tools."github:jqlang/jq".platforms]
 macos-x64 = { asset_pattern = "jq-macos-amd64" }
 macos-arm64 = { asset_pattern = "jq-macos-arm64" }
-linux-x64 = { asset_pattern = "jq-linux-amd64" }
-linux-x64-musl = { asset_pattern = "jq-linux-amd64" }
-linux-arm64 = { asset_pattern = "jq-linux-arm64" }
-linux-arm64-musl = { asset_pattern = "jq-linux-arm64" }
-linux-armv6 = { asset_pattern = "jq-linux-armel" }
-linux-armv6-musl = { asset_pattern = "jq-linux-armel" }
-linux-armv7 = { asset_pattern = "jq-linux-armhf" }
-linux-armv7-musl = { asset_pattern = "jq-linux-armhf" }
 
 [settings]
 experimental = true

@@ -2,14 +2,6 @@
 
 set -e
 
-is_darwin() {
-  [[ "$(uname)" == "Darwin" ]]
-}
-
-is_linux() {
-  [[ "$(uname)" == "Linux" ]]
-}
-
 log_info () {
   echo "ℹ️ $1"
 }
@@ -22,42 +14,30 @@ log_success () {
   echo "✅ $1"
 }
 
-if is_darwin; then
-  echo "🍎 Setting up dotfiles on macOS"
-fi
-
-if is_linux; then
-  echo "🐧 Setting up dotfiles on Linux"
-fi
-
 DOTFILES_DIR="${DOTFILES_DIR:-$HOME/src/github.com/p-chan/dotfiles}"
 
-if is_darwin; then
-  if ! pgrep oahd >&/dev/null; then
-    log_info "Installing Rosetta 2..."
+if ! pgrep oahd >&/dev/null; then
+  log_info "Installing Rosetta 2..."
 
-    sudo softwareupdate --install-rosetta --agree-to-license
+  sudo softwareupdate --install-rosetta --agree-to-license
 
-    log_success "Successfully installed Rosetta 2."
-  else
-    log_info "Rosetta 2 already installed."
-  fi
+  log_success "Successfully installed Rosetta 2."
+else
+  log_info "Rosetta 2 already installed."
 fi
 
-if is_darwin; then
-  if ! xcode-select -p &>/dev/null; then
-    log_info "Installing Command Line Tools..."
+if ! xcode-select -p &>/dev/null; then
+  log_info "Installing Command Line Tools..."
 
-    xcode-select --install
+  xcode-select --install
 
-    until xcode-select -p &>/dev/null; do
-      sleep 10
-    done
+  until xcode-select -p &>/dev/null; do
+    sleep 10
+  done
 
-    log_success "Successfully installed Command Line Tools."
-  else
-    log_info "Command Line Tools already installed."
-  fi;
+  log_success "Successfully installed Command Line Tools."
+else
+  log_info "Command Line Tools already installed."
 fi
 
 if [ ! -d "$DOTFILES_DIR" ]; then
@@ -94,74 +74,35 @@ else
   log_warn "$DOTFILES_DIR not found. Skipping dotfiles linking."
 fi
 
-if is_darwin; then
-  if ! type brew &>/dev/null; then
-    log_info "Installing Homebrew..."
+if ! type brew &>/dev/null; then
+  log_info "Installing Homebrew..."
 
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
-    log_success "Successfully installed Homebrew."
-  else
-    log_info "Homebrew already installed."
-  fi;
+  log_success "Successfully installed Homebrew."
+else
+  log_info "Homebrew already installed."
 fi;
 
-if is_darwin; then
-  if [ -f /opt/homebrew/bin/brew ]; then
-    log_info "Setting up Homebrew."
+if [ -f /opt/homebrew/bin/brew ]; then
+  log_info "Setting up Homebrew."
 
-    eval "$(/opt/homebrew/bin/brew shellenv)"
+  eval "$(/opt/homebrew/bin/brew shellenv)"
 
-    log_success "Successfully set up Homebrew."
-  else
-    log_warn "/opt/homebrew/bin/brew not found. Skipping Homebrew setup."
-  fi
+  log_success "Successfully set up Homebrew."
+else
+  log_warn "/opt/homebrew/bin/brew not found. Skipping Homebrew setup."
 fi
 
-if is_darwin; then
-  if type brew &>/dev/null; then
-    log_info "Installing Homebrew packages..."
+if type brew &>/dev/null; then
+  log_info "Installing Homebrew packages..."
 
-    brew bundle --file="$DOTFILES_DIR/Brewfile"
+  brew bundle --file="$DOTFILES_DIR/Brewfile"
 
-    log_success "Successfully installed Homebrew packages."
-  else
-    log_warn "brew command not found. Skipping Homebrew package installation."
-  fi
+  log_success "Successfully installed Homebrew packages."
+else
+  log_warn "brew command not found. Skipping Homebrew package installation."
 fi
-
-if is_linux; then
-  if ! type zsh &>/dev/null; then
-    log_info "Installing zsh..."
-
-    sudo apt update
-    sudo apt install -y zsh
-
-    log_success "Successfully installed zsh."
-  else
-    log_info "zsh already installed."
-  fi;
-
-  if [ "$CI" != "true" ]; then
-    log_info "Changing default shell to zsh..."
-
-    chsh -s "$(command -v zsh)" "$(whoami)"
-
-    log_success "Successfully changed default shell to zsh (will take effect on next login)."
-  fi;
-fi;
-
-if is_linux; then
-  if ! type mise &>/dev/null; then
-    log_info "Installing mise..."
-
-    curl https://mise.run | sh
-
-    log_success "Successfully installed mise."
-  else
-    log_info "mise already installed."
-  fi;
-fi;
 
 if type mise &>/dev/null; then
   log_info "Installing mise tools..."
@@ -216,16 +157,12 @@ else
   log_info "CI environment detected. Skipping VSCode extensions import."
 fi
 
+if [ "$CI" != "true" ]; then
+  log_info "Provisioning macOS..."
 
-if is_darwin; then
-  if [ "$CI" != "true" ]; then
-    log_info "Provisioning macOS..."
+  bash "$DOTFILES_DIR/scripts/provisioning.sh"
 
-    bash "$DOTFILES_DIR/scripts/provisioning.sh"
-
-    log_success "Successfully provisioned macOS."
-  else
-    log_info "CI environment detected. Skipping macOS provisioning."
-  fi
+  log_success "Successfully provisioned macOS."
+else
+  log_info "CI environment detected. Skipping macOS provisioning."
 fi
-
