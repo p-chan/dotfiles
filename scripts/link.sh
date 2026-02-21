@@ -8,10 +8,6 @@ is_linux() {
   [[ "$(uname)" == "Linux" ]]
 }
 
-is_codespaces() {
-  [[ "$CODESPACES" == "true" ]]
-}
-
 dotfiles=(
   ".claude/CLAUDE.md"
   ".claude/hooks"

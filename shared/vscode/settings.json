@@ -21,10 +21,6 @@
   "terminal.integrated.macOptionIsMeta": true,
   "terminal.integrated.defaultProfile.osx": "zsh",
   "terminal.integrated.defaultProfile.linux": "zsh",
-  // Disable VSCode automatic Shell Integration
-  // In GitHub Codespaces, `.zshenv` is not loaded when this is `true`, so I load it in `.zshrc`.
-  // https://code.visualstudio.com/docs/terminal/shell-integration
-  "terminal.integrated.shellIntegration.enabled": false,
   // Prevent confirmation prompts when handling vscode:// URLs (e.g. links in notifications).
   "security.promptForLocalFileProtocolHandling": false,
   "git.autofetch": true,
