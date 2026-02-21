@@ -200,40 +200,14 @@ fi
 
 if [ "$CI" != "true" ]; then
   if type deno &>/dev/null; then
-    has_code=false
-    has_code_insiders=false
-
     if type code &>/dev/null; then
-      has_code=true
-    fi
+      log_info "Installing VSCode extensions for VSCode..."
 
-    if type code-insiders &>/dev/null; then
-      has_code_insiders=true
-    fi
+      DOTFILES_DIR=$DOTFILES_DIR deno run -A "$DOTFILES_DIR/scripts/code-extensions.ts" import
 
-    if [ "$has_code" = true ] || [ "$has_code_insiders" = true ]; then
-      if [ "$has_code" = true ] && [ "$has_code_insiders" = true ]; then
-        log_info "Installing VSCode extensions for VSCode and VSCode Insiders..."
-
-        DOTFILES_DIR=$DOTFILES_DIR deno run -A "$DOTFILES_DIR/scripts/code-extensions.ts" import
-        DOTFILES_DIR=$DOTFILES_DIR deno run -A "$DOTFILES_DIR/scripts/code-extensions.ts" import --insiders
-
-        log_success "Successfully installed VSCode extensions for VSCode and VSCode Insiders."
-      elif [ "$has_code" = true ]; then
-        log_info "Installing VSCode extensions for VSCode..."
-
-        DOTFILES_DIR=$DOTFILES_DIR deno run -A "$DOTFILES_DIR/scripts/code-extensions.ts" import
-
-        log_success "Successfully installed VSCode extensions for VSCode."
-      elif [ "$has_code_insiders" = true ]; then
-        log_info "Installing VSCode extensions for VSCode Insiders..."
-
-        DOTFILES_DIR=$DOTFILES_DIR deno run -A "$DOTFILES_DIR/scripts/code-extensions.ts" import --insiders
-
-        log_success "Successfully installed VSCode extensions for VSCode Insiders."
-      fi
+      log_success "Successfully installed VSCode extensions for VSCode."
     else
-      log_warn "Neither code nor code-insiders command found. Skipping VSCode extensions import."
+      log_warn "code command not found. Skipping VSCode extensions import."
     fi
   else
     log_warn "deno command not found. Skipping VSCode extensions import."

@@ -39,15 +39,9 @@ darwin_only_dotfiles=(
   ".config/karabiner"
   "Library/Application Support/Code/User/keybindings.json"
   "Library/Application Support/Code/User/settings.json"
-  "Library/Application Support/Code - Insiders/User/keybindings.json"
-  "Library/Application Support/Code - Insiders/User/settings.json"
 )
 
 linux_only_dotfiles=(
-  ".config/Code/User/keybindings.json"
-  ".config/Code/User/settings.json"
-  ".config/Code - Insiders/User/keybindings.json"
-  ".config/Code - Insiders/User/settings.json"
 )
 
 if is_darwin; then

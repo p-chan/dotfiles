@@ -16,8 +16,6 @@ P-Chan's portable dev environment as code.
     - `mise/`
     - `gh/`
     - `karabiner/`
-    - `Code/`
-    - `Code - Insiders/`
     - `sheldon/`
     - `zsh-abbr/`
     - `fixpack/`
@@ -28,8 +26,6 @@ P-Chan's portable dev environment as code.
   - `.ssh/`
   - `.zshenv`
   - `.editorconfig`
-- `shared/`: Shared configurations across multiple applications
-  - `vscode/`: Shared by VS Code and VS Code Insiders
 - `scripts/`: Scripts for dotfiles operations
 - `bin/`: Custom commands for system-wide use
 - `Brewfile`: Homebrew package definitions

@@ -53,7 +53,6 @@ export function parseExtensionsList(content: string): string[] {
 export async function importExtensions(
   extensionsFilePath: string,
   dependencies: Dependencies = defaultDependencies,
-  useInsiders: boolean = false,
 ): Promise<void> {
   const { fileOperations, runtimeEnvironment } = dependencies;
   const content = await fileOperations.readTextFile(extensionsFilePath);
@@ -66,7 +65,7 @@ export async function importExtensions(
   for (const extension of extensions) {
     await runtimeEnvironment.writeStdout(textEncoder.encode(`Installing ${extension}...`));
 
-    const codeCommand = Deno.env.get("CODE_COMMAND_PATH") ?? (useInsiders ? "code-insiders" : "code");
+    const codeCommand = Deno.env.get("CODE_COMMAND_PATH") ?? "code";
 
     await runtimeEnvironment.runCommand([codeCommand, "--install-extension", extension]);
 
@@ -79,11 +78,10 @@ export async function importExtensions(
 export async function exportExtensions(
   extensionsFilePath: string,
   dependencies: Dependencies = defaultDependencies,
-  useInsiders: boolean = false,
 ): Promise<void> {
   const { fileOperations, runtimeEnvironment } = dependencies;
 
-  const codeCommand = Deno.env.get("CODE_COMMAND_PATH") ?? (useInsiders ? "code-insiders" : "code");
+  const codeCommand = Deno.env.get("CODE_COMMAND_PATH") ?? "code";
 
   const { stdout: extensions } = await runtimeEnvironment.runCommand([codeCommand, "--list-extensions"]);
 
@@ -113,29 +111,25 @@ Commands:
   export    Export installed extensions to code-extensions file
   help      Show this help message
 
-Options:
-  --insiders    Use code-insiders command instead of code`);
+`);
 }
 
 export async function main(
   args: string[] = Deno.args,
   dependencies: Dependencies = defaultDependencies,
 ): Promise<void> {
-  const parsedArgs = parseArgs(args, {
-    boolean: ["insiders"],
-  });
+  const parsedArgs = parseArgs(args);
   const command = parsedArgs._[0];
-  const useInsiders = parsedArgs.insiders || false;
 
   switch (command) {
     case "import": {
       const extensionsFilePath = getExtensionsFilePath(dependencies);
-      await importExtensions(extensionsFilePath, dependencies, useInsiders);
+      await importExtensions(extensionsFilePath, dependencies);
       break;
     }
     case "export": {
       const extensionsFilePath = getExtensionsFilePath(dependencies);
-      await exportExtensions(extensionsFilePath, dependencies, useInsiders);
+      await exportExtensions(extensionsFilePath, dependencies);
       break;
     }
     case "help":
