@@ -182,7 +182,10 @@ fi
 if type ya &>/dev/null; then
   log_info "Installing yazi plugins and flavors..."
 
-  ya pkg install
+  while IFS= read -r package; do
+    [[ -z "$package" || "$package" == \#* ]] && continue
+    ya pkg add "$package"
+  done < "$DOTFILES_DIR/home/.config/yazi/packages.txt"
 
   log_success "Successfully installed yazi plugins and flavors."
 else
