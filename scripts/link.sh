@@ -14,7 +14,6 @@ is_codespaces() {
 
 dotfiles=(
   ".claude/CLAUDE.md"
-  ".claude/commands"
   ".claude/hooks"
   ".claude/rules"
   ".claude/settings.json"
@@ -22,7 +21,6 @@ dotfiles=(
   ".claude/statusline.sh"
   ".codex/AGENTS.md"
   ".codex/config.toml"
-  ".codex/prompts"
   ".codex/skills"
   ".config/fixpack"
   ".config/gh/config.yml"
