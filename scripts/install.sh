@@ -185,7 +185,7 @@ if type ya &>/dev/null; then
   while IFS= read -r package; do
     [[ -z "$package" || "$package" == \#* ]] && continue
     ya pkg add "$package"
-  done < "$HOME/.config/yazi/packages.txt"
+  done < "$DOTFILES_DIR/home/.config/yazi/packages.txt"
 
   log_success "Successfully installed yazi plugins and flavors."
 else
