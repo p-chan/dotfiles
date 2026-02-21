@@ -4,7 +4,6 @@ denoland.vscode-deno
 editorconfig.editorconfig
 esbenp.prettier-vscode
 file-icons.file-icons
-github.codespaces
 github.copilot
 github.copilot-chat
 mermaidchart.vscode-mermaid-chart

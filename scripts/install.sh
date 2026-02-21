@@ -10,10 +10,6 @@ is_linux() {
   [[ "$(uname)" == "Linux" ]]
 }
 
-is_codespaces() {
-  [[ "$CODESPACES" == "true" ]]
-}
-
 log_info () {
   echo "ℹ️ $1"
 }
@@ -146,7 +142,7 @@ if is_linux; then
     log_info "zsh already installed."
   fi;
 
-  if [ "$CI" != "true" ] && ! is_codespaces; then
+  if [ "$CI" != "true" ]; then
     log_info "Changing default shell to zsh..."
 
     chsh -s "$(command -v zsh)" "$(whoami)"
@@ -202,7 +198,7 @@ else
   log_info "Claude Code already installed."
 fi
 
-if [ "$CI" != "true" ] && ! is_codespaces; then
+if [ "$CI" != "true" ]; then
   if type deno &>/dev/null; then
     has_code=false
     has_code_insiders=false
