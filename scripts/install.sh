@@ -14,8 +14,6 @@ log_success () {
   echo "✅ $1"
 }
 
-echo "🍎 Setting up dotfiles on macOS"
-
 DOTFILES_DIR="${DOTFILES_DIR:-$HOME/src/github.com/p-chan/dotfiles}"
 
 if ! pgrep oahd >&/dev/null; then
