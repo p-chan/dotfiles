@@ -1,7 +1,7 @@
 ---
 name: personal-merging-gh-pr
 description: ユーザーが PR のマージを求めたときや、エージェントが PR をマージするときに必ず使用してください。
-allowed-tools: Bash(gh get-review-comments), Bash(gh pr checks), Bash(gh get-allowed-merge-methods)
+allowed-tools: Bash(gh get-review-comments), Bash(gh pr checks), Bash(gh repo view)
 ---
 
 # GitHub PR マージ
@@ -22,7 +22,11 @@ allowed-tools: Bash(gh get-review-comments), Bash(gh pr checks), Bash(gh get-all
 
 ### マージ方法を確認する
 
-`gh get-allowed-merge-methods` で許可されているマージ方法を取得します。
+以下を実行して許可されているマージ方法を取得します。
+
+```bash
+gh repo view --json mergeCommitAllowed,squashMergeAllowed,rebaseMergeAllowed
+```
 
 許可されているマージ方法が 1 つだけの場合、それを使用します。
 許可されているマージ方法が複数の場合、ユーザーにどれを使うか質問します。

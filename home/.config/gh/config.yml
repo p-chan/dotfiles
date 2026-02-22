@@ -9,5 +9,3 @@ aliases:
   reply-review-comment: '!gh api -X POST "repos/{owner}/{repo}/pulls/$(gh pr view --json number -q .number)/comments/$1/replies" -f body="$2"'
   # $1: thread ID (PRRT_...)
   resolve-review-thread: 'api graphql -f query=''mutation($threadId: ID!) { resolveReviewThread(input: {threadId: $threadId}) { thread { id isResolved } } }'' -f threadId="$1"'
-  # No args
-  get-allowed-merge-methods: '!gh api repos/{owner}/{repo} --jq "{allow_merge_commit, allow_squash_merge, allow_rebase_merge}"'
