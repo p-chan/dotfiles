@@ -25,6 +25,7 @@
       "Bash(gh run view *)",
       "Bash(gh get-review-comments)",
       "Bash(tail *)",
+      "WebFetch(domain:docs.github.com)",
       "WebFetch(domain:github.com)",
       "WebFetch(domain:raw.githubusercontent.com)",
       "WebSearch",
