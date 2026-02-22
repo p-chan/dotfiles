@@ -1,6 +1,7 @@
 #!/bin/bash
 
 dotfiles=(
+  ".agents"
   ".claude/CLAUDE.md"
   ".claude/hooks"
   ".claude/rules"
