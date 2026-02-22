@@ -19,7 +19,14 @@
       "WebSearch",
       "Skill"
     ],
-    "deny": ["Bash(sudo *)", "Read(.env*)", "Read(!.env*.example)", "Write(.env*)", "Write(!.env*.example)"]
+    "deny": [
+      "Bash(git -C *)",
+      "Bash(sudo *)",
+      "Read(.env*)",
+      "Read(!.env*.example)",
+      "Write(.env*)",
+      "Write(!.env*.example)"
+    ]
   },
   "hooks": {
     "Notification": [
