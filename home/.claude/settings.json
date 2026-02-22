@@ -5,6 +5,7 @@
       "Bash(git log *)",
       "Bash(gh release view *)",
       "Bash(gh repo view *)",
+      "Bash(gh issue list *)",
       "Bash(gh issue view *)",
       "Bash(gh pr checks *)",
       "Bash(gh pr diff *)",
