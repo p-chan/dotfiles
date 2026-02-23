@@ -23,6 +23,7 @@
       "Bash(gh run list *)",
       "Bash(gh run view)",
       "Bash(gh run view *)",
+      "Bash(gh review-comment list)",
       "Bash(gh review-comment list *)",
       "Bash(tail *)",
       "WebFetch(domain:docs.github.com)",
