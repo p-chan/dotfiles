@@ -2,7 +2,7 @@
 name: personal-creating-gh-pr
 description: GitHub の PR を作成します。ユーザーが PR の作成を求めたときや、エージェントが PR を作成するときに使用してください。
 compatibility: Claude Code
-allowed-tools: Bash(gh-notify-checks), Bash(gh add-reviewer-copilot), Bash(gh-notify-copilot-review), Bash(gh pr checks), Bash(gh run view:*), Bash(gh run rerun:*), Bash(gh get-review-comments)
+allowed-tools: Bash(gh-notify-checks), Bash(gh add-reviewer-copilot), Bash(gh-notify-copilot-review), Bash(gh pr checks), Bash(gh run view:*), Bash(gh run rerun:*), Bash(gh review-comment list)
 ---
 
 # GitHub PR 作成
@@ -73,4 +73,8 @@ gh pr create \
 
 #### Copilot レビュー通知を受け取ったら
 
-`gh get-review-comments` でレビューコメントを取得します。
+以下のコマンドでレビューコメントを取得します。
+
+```sh
+gh review-comment list
+```

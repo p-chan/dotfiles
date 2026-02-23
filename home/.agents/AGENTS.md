@@ -5,18 +5,25 @@
 
 ## GitHub
 
-- GitHub にアクセスするときは、必ず `gh` コマンドを使います
+GitHub にアクセスするときは、必ず `gh` コマンドを使います。
 
-### `gh alias` リファレンス
+### エイリアス
 
-`gh api` が必要な操作のうち、よく実行する操作をエイリアスとして定義しています。
+| エイリアス                | 概要                             |
+| :------------------------ | :------------------------------- |
+| `gh add-reviewer-copilot` | Copilot をレビュアーに追加する。 |
 
-| エイリアス                                     | 概要                             | 補足                                       |
-| :--------------------------------------------- | :------------------------------- | :----------------------------------------- |
-| `add-reviewer-copilot`                         | Copilot をレビュアーに追加する。 |                                            |
-| `get-review-comments`                          | レビューコメントを取得する。     |                                            |
-| `reply-review-comment <commentId> <replyBody>` | レビューコメントに返信する。     |                                            |
-| `resolve-review-thread <threadId>`             | レビュースレッドを解決する。     | `threadId` は `PRRT_` から始まる ID です。 |
+### 拡張機能
+
+#### [gh-review-comment](https://github.com/p-chan/gh-review-comment)
+
+レビューコメントを操作するための gh 拡張機能です。
+
+| コマンド                                        | 概要                             | 補足                                       |
+| :---------------------------------------------- | :------------------------------- | :----------------------------------------- |
+| `gh review-comment list`                        | レビュースレッド一覧を表示する。 |                                            |
+| `gh review-comment reply <commentId> -b <body>` | レビューコメントに返信する。     |                                            |
+| `gh review-comment resolve <threadId>`          | レビュースレッドを解決する。     | `threadId` は `PRRT_` から始まる ID です。 |
 
 ### `gh-notify-*` コマンドリファレンス
 
