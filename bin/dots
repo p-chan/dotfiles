@@ -13,6 +13,9 @@ dots_up() {
   echo "\nUpdating yazi plugins and flavors..."
   ya pkg upgrade
 
+  echo "\nUpdating gh extensions..."
+  gh extension upgrade --all
+
   echo "\nUpdating Claude Code..."
   claude update
 
