@@ -139,6 +139,19 @@ else
   log_info "Claude Code already installed."
 fi
 
+if type gh &>/dev/null; then
+  log_info "Installing gh extensions..."
+
+  while IFS= read -r extension; do
+    [[ -z "$extension" || "$extension" == \#* ]] && continue
+    gh extension install "$extension"
+  done < "$DOTFILES_DIR/gh-extensions"
+
+  log_success "Successfully installed gh extensions."
+else
+  log_warn "gh command not found. Skipping gh extensions installation."
+fi
+
 if [ "$CI" != "true" ]; then
   if type deno &>/dev/null; then
     if type code &>/dev/null; then
