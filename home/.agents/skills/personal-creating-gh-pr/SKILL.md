@@ -36,7 +36,21 @@ gh pr list --state all --limit 10 --json title --jq '.[].title'
 - `.github/pull_request_template.md`
 - `.github/PULL_REQUEST_TEMPLATE/*.md`
 
-### 2. 作成
+### 2. プッシュ
+
+現在のブランチがリモートにプッシュ済みか確認します。
+
+```sh
+git ls-remote --heads origin <branch-name>
+```
+
+出力が空の場合はプッシュします。
+
+```sh
+git push -u origin <branch-name>
+```
+
+### 3. 作成
 
 ```sh
 gh pr create \
@@ -52,7 +66,7 @@ gh pr create \
   - タイトルが英語なら、本文も英語
   - タイトルが日本語なら、本文も日本語
 
-### 3. 作成後
+### 4. 作成後
 
 以下を質問し、ユーザーが肯定した場合に実行します。
 
