@@ -1,11 +1,13 @@
 #!/usr/bin/env bash
 set -euo pipefail
 # Claude Code status indicator for tmux window
-# Usage: claude-code-status.sh <window_id>
+# Usage: claude-code-status.sh <window_id> <window_name>
 
 window_id="${1:-}"
+window_name="${2:-}"
 
 if [[ -z "$window_id" ]]; then
+  printf '%s' "$window_name"
   exit 0
 fi
 
@@ -13,6 +15,7 @@ fi
 pane_info=$(tmux list-panes -t "$window_id" -F '#{pane_current_command}|#{pane_title}' 2>/dev/null)
 
 if [[ -z "$pane_info" ]]; then
+  printf '%s' "$window_name"
   exit 0
 fi
 
@@ -36,7 +39,14 @@ pane_titles="${pane_titles%$'\n'}"
 
 # Only show status if Claude Code is actually running
 if [[ "$has_claude" == false ]]; then
+  printf '%s' "$window_name"
   exit 0
+fi
+
+# Replace version number with "claude" in window name
+display_name="$window_name"
+if [[ "$window_name" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+  display_name="claude"
 fi
 
 # Check for Claude Code status
@@ -45,10 +55,12 @@ fi
 if [[ "$pane_titles" =~ [⠐⠂] ]]; then
   # Alternate between ⠐ and ⠂ based on current second
   if (( $(date +%s) % 2 == 0 )); then
-    printf ' ⠐'
+    printf '%s ⠐' "$display_name"
   else
-    printf ' ⠂'
+    printf '%s ⠂' "$display_name"
   fi
 elif [[ "$pane_titles" == *✳* ]]; then
-  printf ' ✳'  # Idle
+  printf '%s ✳' "$display_name"
+else
+  printf '%s' "$display_name"
 fi
