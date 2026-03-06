@@ -19,6 +19,7 @@ deno = "latest"
 "npm:editorconfig-checker" = "latest"
 "npm:fixpack" = "latest"
 "npm:npmrc" = "latest"
+"npm:opensrc" = "latest"
 "npm:pnpm" = "latest"
 "npm:yarn" = "latest"
 
