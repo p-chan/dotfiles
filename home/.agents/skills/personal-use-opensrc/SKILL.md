@@ -22,6 +22,11 @@ opensrc <owner>/<repo>
 > [!WARNING]
 > 初回実行時はファイルの変更の許可を求めるプロンプトが表示されます。
 > その場合は、一度コマンドの実行を中止して、`--modify=false` オプションを付けて、再度コマンドを実行します。
+>
+> ```sh
+> opensrc --modify=false <package>
+> opensrc --modify=false <owner>/<repo>
+> ```
 
 ## 取得した npm パッケージや GitHub リポジトリの一覧を確認する
 
