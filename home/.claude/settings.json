@@ -25,6 +25,7 @@
       "Bash(gh run view *)",
       "Bash(gh review-comment list)",
       "Bash(gh review-comment list *)",
+      "Bash(opensrc *)",
       "Bash(tail *)",
       "WebFetch(domain:docs.github.com)",
       "WebFetch(domain:github.com)",
