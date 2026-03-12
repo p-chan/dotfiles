@@ -4,6 +4,8 @@
     "allow": [
       "Bash(git log)",
       "Bash(git log *)",
+      "Bash(gh release list)",
+      "Bash(gh release list *)",
       "Bash(gh release view)",
       "Bash(gh release view *)",
       "Bash(gh repo view)",
