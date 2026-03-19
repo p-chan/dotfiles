@@ -31,7 +31,9 @@
       "Bash(tail *)",
       "WebFetch(domain:docs.github.com)",
       "WebFetch(domain:github.com)",
+      "WebFetch(domain:qiita.com)",
       "WebFetch(domain:raw.githubusercontent.com)",
+      "WebFetch(domain:zenn.dev)",
       "WebSearch",
       "Skill"
     ],
