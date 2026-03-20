@@ -3,3 +3,6 @@ git_protocol: ssh
 aliases:
   # No args
   add-reviewer-copilot: "pr edit --add-reviewer @copilot"
+  only-merge-commit: "repo edit --enable-merge-commit=true --enable-squash-merge=false --enable-rebase-merge=false"
+  only-squash-merge: "repo edit --enable-merge-commit=false --enable-squash-merge=true --enable-rebase-merge=false"
+  only-rebase-merge: "repo edit --enable-merge-commit=false --enable-squash-merge=false --enable-rebase-merge=true"
