@@ -101,69 +101,16 @@ fi
 model=$(echo "$input" | jq -r '.model.display_name // empty' 2>/dev/null)
 context_pct=$(echo "$input" | jq -r '.context_window.used_percentage // empty' 2>/dev/null)
 
-# Get usage limits from API (with caching)
-CACHE_FILE="/tmp/claude-usage-cache.json"
-CACHE_DURATION=60  # Cache for 60 seconds
-
-fetch_usage() {
-  # Get credentials from macOS keychain
-  credentials=$(security find-generic-password -s "Claude Code-credentials" -w 2>/dev/null)
-  if [[ -z "$credentials" ]]; then
-    return 1
-  fi
-
-  # Extract access token
-  access_token=$(echo "$credentials" | jq -r '.claudeAiOauth.accessToken // empty' 2>/dev/null)
-  if [[ -z "$access_token" || "$access_token" == "null" ]]; then
-    return 1
-  fi
-
-  # Fetch usage from API
-  curl -s -H "Authorization: Bearer $access_token" \
-    -H "anthropic-beta: oauth-2025-04-20" \
-    -H "Accept: application/json" \
-    "https://api.anthropic.com/api/oauth/usage" 2>/dev/null
-}
-
-# Check cache validity
-if [[ -f "$CACHE_FILE" ]]; then
-  cache_age=$(($(date +%s) - $(stat -f %m "$CACHE_FILE" 2>/dev/null || echo 0)))
-  if [[ $cache_age -lt $CACHE_DURATION ]]; then
-    usage_data=$(cat "$CACHE_FILE")
-  fi
-fi
-
-# Fetch new data if cache is invalid
-if [[ -z "$usage_data" ]]; then
-  usage_data=$(fetch_usage)
-  if [[ -n "$usage_data" ]]; then
-    echo "$usage_data" > "$CACHE_FILE"
-  fi
-fi
-
-# Extract usage percentages and reset times
-five_hour_pct=""
-seven_day_pct=""
-five_hour_reset=""
-seven_day_reset=""
-if [[ -n "$usage_data" ]]; then
-  five_hour_pct=$(echo "$usage_data" | jq -r '.five_hour.utilization // empty' 2>/dev/null)
-  seven_day_pct=$(echo "$usage_data" | jq -r '.seven_day.utilization // empty' 2>/dev/null)
-  five_hour_reset=$(echo "$usage_data" | jq -r '.five_hour.resets_at // empty' 2>/dev/null)
-  seven_day_reset=$(echo "$usage_data" | jq -r '.seven_day.resets_at // empty' 2>/dev/null)
-fi
+# Extract usage percentages and reset times from stdin JSON
+five_hour_pct=$(echo "$input" | jq -r '.rate_limits.five_hour.used_percentage // empty' 2>/dev/null)
+seven_day_pct=$(echo "$input" | jq -r '.rate_limits.seven_day.used_percentage // empty' 2>/dev/null)
+five_hour_reset=$(echo "$input" | jq -r '.rate_limits.five_hour.resets_at // empty' 2>/dev/null)
+seven_day_reset=$(echo "$input" | jq -r '.rate_limits.seven_day.resets_at // empty' 2>/dev/null)
 
 # Function to calculate human-readable time until reset
 time_until() {
-  local reset_time=$1
-  if [[ -z "$reset_time" || "$reset_time" == "null" ]]; then
-    echo ""
-    return
-  fi
-
-  # Parse ISO 8601 timestamp and get seconds until reset (UTC)
-  local reset_epoch=$(TZ=UTC date -jf "%Y-%m-%dT%H:%M:%S" "${reset_time:0:19}" "+%s" 2>/dev/null)
-  if [[ -z "$reset_epoch" ]]; then
+  local reset_epoch=$1
+  if [[ -z "$reset_epoch" || "$reset_epoch" == "null" ]]; then
     echo ""
     return
   fi
