@@ -17,6 +17,9 @@
   },
   "workbench.colorTheme": "One Dark Pro",
   "workbench.iconTheme": "file-icons",
+  "search.exclude": {
+    "**/opensrc": true
+  },
   "terminal.integrated.fontSize": 13,
   "terminal.integrated.macOptionIsMeta": true,
   "terminal.integrated.defaultProfile.osx": "zsh",
