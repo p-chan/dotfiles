@@ -39,6 +39,7 @@
     ],
     "deny": [
       "Bash(git -C *)",
+      "Bash(git add -A)",
       "Bash(sudo *)",
       "Read(.env*)",
       "Read(!.env*.example)",
