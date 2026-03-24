@@ -9,7 +9,6 @@ dots_up() {
 
   echo "\nUpdating mise..."
   mise up
-  hash -r
 
   echo "\nUpdating yazi plugins and flavors..."
   ya pkg upgrade

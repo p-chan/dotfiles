@@ -23,6 +23,7 @@ fi
 
 if type mise &>/dev/null; then
   eval "$(mise env -s zsh)"
+  eval "$(mise activate zsh --shims)"
 fi
 
 if [[ -f "${ZDOTDIR:-$HOME}/.zshenv.local" ]]; then
