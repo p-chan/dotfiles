@@ -6,6 +6,14 @@ allowed-tools: Bash(git diff:*), Bash(git log:*), Bash(sed:*), Bash(tr:*), Bash(
 
 # Git コミット作成
 
+## 前提
+
+### アトミックコミット
+
+1つのコミットは1つの独立した論理的変更のみを含めます。
+
+複数の論理的変更が混在している場合は、変更ごとに分割してコミットします。
+
 ## ワークフロー
 
 ### 1. 情報収集
@@ -64,7 +72,9 @@ git log --oneline -100 | sed -n 's/^[a-f0-9]* [^(:]*(\([^)]*\)):.*/\1/p' | tr ',
 - **ボディ（本文）**: Why（なぜしたか）を必要に応じて補足
 - **コード参照**: コードやパスを表す場合はバッククォートで囲む
 - **言語**: 判定した言語に合わせる
-- **スタイル**: 判定したスタイルに従う（[Conventional Commits](references/conventional-commits.md) / [gitmoji](references/gitmoji.md)）
+- **スタイル**: 判定したスタイルに従う（必ず判定したスタイルのリファレンスを参照する）
+  - [Conventional Commits](references/conventional-commits.md)
+  - [gitmoji](references/gitmoji.md)
 - **スコープ**: スコープ一覧から適切なものを選択（該当する場合）
 
 ### 4. コミット作成
