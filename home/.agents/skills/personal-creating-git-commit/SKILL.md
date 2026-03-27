@@ -1,7 +1,7 @@
 ---
 name: personal-creating-git-commit
 description: Git リポジトリのスタイルに合わせてコミットを作成します。ユーザーがコミットを求めたときや、エージェントがコミットするときに必ず使用してください。
-allowed-tools: Bash(git diff:*), Bash(git log:*), Bash(sed:*), Bash(tr:*), Bash(sort:*), Bash(xargs:*)
+allowed-tools: Bash(git diff:*), Bash(git log:*), Bash(git config:*), Bash(sed:*), Bash(tr:*), Bash(sort:*), Bash(xargs:*)
 ---
 
 # Git コミット作成
@@ -22,47 +22,64 @@ allowed-tools: Bash(git diff:*), Bash(git log:*), Bash(sed:*), Bash(tr:*), Bash(
 
 ```bash
 git diff --staged
-git log --oneline -10
 ```
 
 ステージングされた変更がない場合：
 
 ```bash
 git diff
-git log --oneline -10
 ```
 
 ### 2. 判定
 
-過去のコミット履歴から以下を判定します。判定不可の場合はユーザーに確認してください。
+#### キャッシュ確認
+
+まず以下のコマンドでキャッシュを確認します：
+
+```bash
+git config --local commit-message.language
+git config --local commit-message.format
+```
+
+両方設定済みの場合はその値を使い、言語判定とスタイル判定をスキップします。
+
+未設定の項目がある場合は `git log --oneline -100` を実行し、言語判定とスタイル判定を行います。
 
 #### 言語判定
 
-| 言語   | パターン           |
-| ------ | ------------------ |
-| 日本語 | 日本語が含まれる   |
-| 英語   | 英語のみが含まれる |
-| その他 | 上記以外           |
+| 言語   | パターン           | `commit-message.language` の値 |
+| ------ | ------------------ | ------------------------------ |
+| 日本語 | 日本語が含まれる   | `ja`                           |
+| 英語   | 英語のみが含まれる | `en`                           |
+| その他 | 上記以外           | `others`                       |
 
 #### スタイル判定
 
-| スタイル             | パターン           |
-| -------------------- | ------------------ |
-| Conventional Commits | `feat:`, `fix:` 等 |
-| gitmoji              | 絵文字で始まる     |
-| シンプル形式         | 上記以外           |
+| スタイル                  | パターン                | `commit-message.format` の値 |
+| ------------------------- | ----------------------- | ---------------------------- |
+| Conventional Commits      | `feat:`, `fix:` 等      | `conventional-commits`       |
+| gitmoji（Unicode 絵文字） | Unicode 絵文字で始まる  | `gitmoji-unicode`            |
+| gitmoji（Shortcode）      | `:sparkles:` 等で始まる | `gitmoji-shortcode`          |
+| その他                    | 上記以外                | `others`                     |
 
-gitmoji の場合、絵文字の形式（Unicode / Shortcode）も判定してください。
+#### キャッシュ保存
+
+判定結果をキャッシュに保存します。
+
+```bash
+git config --local commit-message.language <判定結果>
+git config --local commit-message.format <判定結果>
+```
 
 #### スコープ判定
 
-過去 10 件にスコープ（例: `feat(auth):` や `✨ (auth):`）が含まれているかを判定します。
-
-含まれている場合、以下のコマンドでスコープ一覧を取得します：
+以下のコマンドでスコープ一覧を取得します。
 
 ```bash
-git log --oneline -100 | sed -n 's/^[a-f0-9]* [^(:]*(\([^)]*\)):.*/\1/p' | tr ',' '\n' | sed 's/^ *//' | sort -u | xargs | sed 's/ /, /g'
+git log --oneline | sed -n 's/^[a-f0-9]* [^(:]*(\([^)]*\)):.*/\1/p' | tr ',' '\n' | sed 's/^ *//' | sort -u | xargs | sed 's/ /, /g'
 ```
+
+出力が空の場合はスコープなしとして扱います。
 
 ### 3. コミットメッセージ生成
 
