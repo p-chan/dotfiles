@@ -37,8 +37,8 @@ git diff
 まず以下のコマンドでキャッシュを確認します：
 
 ```bash
-git config --local commit-message.language
-git config --local commit-message.format
+git config --local --get commit-message.language 2>/dev/null || true
+git config --local --get commit-message.format 2>/dev/null || true
 ```
 
 両方設定済みの場合はその値を使い、言語判定とスタイル判定をスキップします。
