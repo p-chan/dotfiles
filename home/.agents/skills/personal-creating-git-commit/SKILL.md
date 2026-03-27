@@ -76,7 +76,7 @@ git config --local commit-message.format <判定結果>
 以下のコマンドでスコープ一覧を取得します。
 
 ```bash
-git log --oneline | sed -n 's/^[a-f0-9]* [^(:]*(\([^)]*\)):.*/\1/p' | tr ',' '\n' | sed 's/^ *//' | sort -u | xargs | sed 's/ /, /g'
+git log --oneline -n 999 | sed -n 's/^[a-f0-9]* [^(:]*(\([^)]*\)):.*/\1/p' | tr ',' '\n' | sed 's/^ *//' | sort -u | xargs | sed 's/ /, /g'
 ```
 
 出力が空の場合はスコープなしとして扱います。
