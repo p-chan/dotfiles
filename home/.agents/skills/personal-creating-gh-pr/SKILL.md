@@ -2,41 +2,64 @@
 name: personal-creating-gh-pr
 description: GitHub の PR を作成します。ユーザーが PR の作成を求めたときや、エージェントが PR を作成するときに使用してください。
 compatibility: Claude Code
-allowed-tools: Bash(gh-notify-checks), Bash(gh add-reviewer-copilot), Bash(gh-notify-copilot-review), Bash(gh pr checks), Bash(gh run view:*), Bash(gh run rerun:*), Bash(gh review-comment list)
+allowed-tools: Bash(git config *), Bash(gh pr list *), Bash(git ls-remote *)
 ---
 
 # GitHub PR 作成
 
-## 要件
-
-- 言語は過去の PR に合わせる
-- タイトル
-  - What を簡潔に書く
-  - フォーマット（プレフィックスの有無や種類など）は過去の PR に合わせる
-- 本文
-  - テンプレートがある場合はそれに沿う
-  - テンプレートが複数ある場合
-    - 適切なものが判断できる場合はそれを選ぶ
-    - 適切なものが判断できない場合はユーザーに聞く
-  - テンプレートがない場合は Why と What の詳細を書く
-- `@me` にアサインする
-
 ## ワークフロー
 
-### 1. 事前調査
+### 1. 判定
 
-過去の PR のタイトルを確認して、言語やフォーマットを判定します。
+#### キャッシュ確認
 
-```sh
-gh pr list --state all --limit 10 --json title --jq '.[].title'
+まず以下のコマンドでキャッシュを確認します：
+
+```bash
+git config --local --get language 2>/dev/null || true
+git config --local --get pull-request-title.format 2>/dev/null || true
 ```
 
-テンプレートの有無を確認します。
+両方設定済みの場合はその値を使い、言語判定とスタイル判定をスキップします。
+
+未設定の項目がある場合は、以下のコマンドを実行し、言語判定とスタイル判定を行います。
+
+```sh
+gh pr list --state all --limit 10 --json title,author --jq '[.[] | select(.author.login | test("\\[bot\\]$") | not) | .title]'
+```
+
+#### 言語判定
+
+| 言語   | パターン           | `language` の値 |
+| ------ | ------------------ | --------------- |
+| 日本語 | 日本語が含まれる   | `ja`            |
+| 英語   | 英語のみが含まれる | `en`            |
+| その他 | 上記以外           | `others`        |
+
+#### スタイル判定
+
+| スタイル             | パターン           | `pull-request-title.format` の値 |
+| -------------------- | ------------------ | -------------------------------- |
+| Conventional Commits | `feat:`, `fix:` 等 | `conventional-commits`           |
+| その他               | 上記以外           | `others`                         |
+
+#### キャッシュ保存
+
+判定結果をキャッシュに保存します。
+
+```bash
+git config --local language <判定結果>
+git config --local pull-request-title.format <判定結果>
+```
+
+### 2. テンプレート確認
+
+以下のファイルが存在する場合は、内容を確認します。
 
 - `.github/pull_request_template.md`
 - `.github/PULL_REQUEST_TEMPLATE/*.md`
 
-### 2. プッシュ
+### 3. プッシュ
 
 現在のブランチがリモートにプッシュ済みか確認します。
 
@@ -50,7 +73,21 @@ git ls-remote --heads origin <branch-name>
 git push -u origin <branch-name>
 ```
 
-### 3. 作成
+### 4. タイトルと本文の生成
+
+最初に判定した言語とスタイル、その次に確認したテンプレートに基づいて、タイトルと本文を生成します。
+
+テンプレートが存在しない場合は、以下のテンプレートを利用してください。
+
+```md
+## Why
+
+## What
+
+## Notes
+```
+
+### 5. 作成
 
 ```sh
 gh pr create \
@@ -59,41 +96,4 @@ gh pr create \
   --title "$title"
 ```
 
-**補足**
-
-- 状況に応じて他のオプションも追加できます
-- タイトルの言語と本文の言語は合わせます
-  - タイトルが英語なら、本文も英語
-  - タイトルが日本語なら、本文も日本語
-
-### 4. 作成後
-
-以下を質問し、ユーザーが肯定した場合に実行します。
-
-1. チェックが終了したときに通知するか？ → Bash ツールで `run_in_background: true` を指定して `gh-notify-checks` を実行
-2. Copilot にレビューをリクエストするか？ → `gh add-reviewer-copilot` を実行
-3. Copilot がレビューしたときに通知するか？ → Bash ツールで `run_in_background: true` を指定して `gh-notify-copilot-review` を実行
-
-### 4. バックグラウンド処理完了後
-
-#### チェック終了通知を受け取ったら
-
-`gh pr checks` で結果を確認します。
-
-**成功した場合**
-
-チェックが成功したことを伝えます。
-
-**失敗した場合**
-
-- `gh run view <run-id> --log-failed` でログを確認します
-- PR の内容に問題がある場合は、修正を提案します
-- PR の内容に問題がない場合は `gh run rerun <run-id> --failed` でジョブを再実行します
-
-#### Copilot レビュー通知を受け取ったら
-
-以下のコマンドでレビューコメントを取得します。
-
-```sh
-gh review-comment list
-```
+コンテキストに応じて、他のオプションも追加できます。
