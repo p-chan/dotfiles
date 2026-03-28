@@ -90,5 +90,6 @@
   "alwaysThinkingEnabled": true,
   "language": "japanese",
   "voiceEnabled": true,
+  "feedbackSurveyRate": 0,
   "autoMemoryEnabled": false
 }
