@@ -48,4 +48,4 @@ gh repo view --json mergeCommitAllowed,squashMergeAllowed,rebaseMergeAllowed
 また `--delete-branch` オプションを付けてマージと同時にブランチを削除します（このオプションを使うと、自動でベースブランチに切り替わります）。
 
 > [!WARNING]
-> `--repo` オプションは `--delete-branch` オプションを無効化するため、他リポジトリの PR をマージするとき以外は使用しません。
+> `--repo` オプションは `--delete-branch` オプションを無効化するため、他リポジトリの PR をマージするときに限り、使用します。
