@@ -37,8 +37,8 @@ git diff
 まず以下のコマンドでキャッシュを確認します：
 
 ```bash
-git config --local --get commit-message.language 2>/dev/null || true
-git config --local --get commit-message.format 2>/dev/null || true
+git config --local --get convention.language 2>/dev/null || true
+git config --local --get convention.commit-message 2>/dev/null || true
 ```
 
 両方設定済みの場合はその値を使い、言語判定とスタイル判定をスキップします。
@@ -47,15 +47,15 @@ git config --local --get commit-message.format 2>/dev/null || true
 
 #### 言語判定
 
-| 言語   | パターン           | `commit-message.language` の値 |
-| ------ | ------------------ | ------------------------------ |
-| 日本語 | 日本語が含まれる   | `ja`                           |
-| 英語   | 英語のみが含まれる | `en`                           |
-| その他 | 上記以外           | `others`                       |
+| 言語   | パターン           | `convention.language` の値 |
+| ------ | ------------------ | --------------- |
+| 日本語 | 日本語が含まれる   | `ja`            |
+| 英語   | 英語のみが含まれる | `en`            |
+| その他 | 上記以外           | `others`        |
 
 #### スタイル判定
 
-| スタイル                  | パターン                | `commit-message.format` の値 |
+| スタイル                  | パターン                | `convention.commit-message` の値 |
 | ------------------------- | ----------------------- | ---------------------------- |
 | Conventional Commits      | `feat:`, `fix:` 等      | `conventional-commits`       |
 | gitmoji（Unicode 絵文字） | Unicode 絵文字で始まる  | `gitmoji-unicode`            |
@@ -67,8 +67,8 @@ git config --local --get commit-message.format 2>/dev/null || true
 判定結果をキャッシュに保存します。
 
 ```bash
-git config --local commit-message.language <判定結果>
-git config --local commit-message.format <判定結果>
+git config --local convention.language <判定結果>
+git config --local convention.commit-message <判定結果>
 ```
 
 #### スコープ判定
