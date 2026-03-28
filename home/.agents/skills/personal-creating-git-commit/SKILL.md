@@ -48,19 +48,19 @@ git config --local --get convention.commit-message 2>/dev/null || true
 #### 言語判定
 
 | 言語   | パターン           | `convention.language` の値 |
-| ------ | ------------------ | --------------- |
-| 日本語 | 日本語が含まれる   | `ja`            |
-| 英語   | 英語のみが含まれる | `en`            |
-| その他 | 上記以外           | `others`        |
+| ------ | ------------------ | -------------------------- |
+| 日本語 | 日本語が含まれる   | `ja`                       |
+| 英語   | 英語のみが含まれる | `en`                       |
+| その他 | 上記以外           | `others`                   |
 
 #### スタイル判定
 
 | スタイル                  | パターン                | `convention.commit-message` の値 |
-| ------------------------- | ----------------------- | ---------------------------- |
-| Conventional Commits      | `feat:`, `fix:` 等      | `conventional-commits`       |
-| gitmoji（Unicode 絵文字） | Unicode 絵文字で始まる  | `gitmoji-unicode`            |
-| gitmoji（Shortcode）      | `:sparkles:` 等で始まる | `gitmoji-shortcode`          |
-| その他                    | 上記以外                | `others`                     |
+| ------------------------- | ----------------------- | -------------------------------- |
+| Conventional Commits      | `feat:`, `fix:` 等      | `conventional-commits`           |
+| gitmoji（Unicode 絵文字） | Unicode 絵文字で始まる  | `gitmoji-unicode`                |
+| gitmoji（Shortcode）      | `:sparkles:` 等で始まる | `gitmoji-shortcode`              |
+| その他                    | 上記以外                | `others`                         |
 
 #### キャッシュ保存
 

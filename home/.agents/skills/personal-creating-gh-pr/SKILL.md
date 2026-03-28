@@ -16,8 +16,8 @@ allowed-tools: Bash(git config *), Bash(gh pr list *), Bash(git ls-remote *)
 まず以下のコマンドでキャッシュを確認します：
 
 ```bash
-git config --local --get language 2>/dev/null || true
-git config --local --get pull-request-title.format 2>/dev/null || true
+git config --local --get convention.language 2>/dev/null || true
+git config --local --get convention.pull-request-title 2>/dev/null || true
 ```
 
 両方設定済みの場合はその値を使い、言語判定とスタイル判定をスキップします。
@@ -30,7 +30,7 @@ gh pr list --state all --limit 10 --json title,author --jq '[.[] | select(.autho
 
 #### 言語判定
 
-| 言語   | パターン           | `language` の値 |
+| 言語   | パターン           | `convention.language` の値 |
 | ------ | ------------------ | --------------- |
 | 日本語 | 日本語が含まれる   | `ja`            |
 | 英語   | 英語のみが含まれる | `en`            |
@@ -38,7 +38,7 @@ gh pr list --state all --limit 10 --json title,author --jq '[.[] | select(.autho
 
 #### スタイル判定
 
-| スタイル             | パターン           | `pull-request-title.format` の値 |
+| スタイル             | パターン           | `convention.pull-request-title` の値 |
 | -------------------- | ------------------ | -------------------------------- |
 | Conventional Commits | `feat:`, `fix:` 等 | `conventional-commits`           |
 | その他               | 上記以外           | `others`                         |
@@ -48,8 +48,8 @@ gh pr list --state all --limit 10 --json title,author --jq '[.[] | select(.autho
 判定結果をキャッシュに保存します。
 
 ```bash
-git config --local language <判定結果>
-git config --local pull-request-title.format <判定結果>
+git config --local convention.language <判定結果>
+git config --local convention.pull-request-title <判定結果>
 ```
 
 ### 2. テンプレート確認
