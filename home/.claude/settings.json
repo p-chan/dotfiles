@@ -88,5 +88,7 @@
     "example-skills@anthropic-agent-skills": true
   },
   "alwaysThinkingEnabled": true,
+  "language": "japanese",
+  "voiceEnabled": true,
   "autoMemoryEnabled": false
 }
