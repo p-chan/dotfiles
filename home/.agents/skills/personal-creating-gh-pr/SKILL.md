@@ -2,7 +2,7 @@
 name: personal-creating-gh-pr
 description: GitHub の PR を作成します。ユーザーが PR の作成を求めたときや、エージェントが PR を作成するときに使用してください。
 compatibility: Claude Code
-allowed-tools: Bash(git config *), Bash(gh pr list *), Bash(git ls-remote *)
+allowed-tools: Bash(git config --local --get *), Bash(gh pr list *), Bash(git ls-remote *)
 ---
 
 # GitHub PR 作成
@@ -16,8 +16,8 @@ allowed-tools: Bash(git config *), Bash(gh pr list *), Bash(git ls-remote *)
 まず以下のコマンドでキャッシュを確認します：
 
 ```bash
-git config --local --get convention.language 2>/dev/null || true
-git config --local --get convention.pull-request-title 2>/dev/null || true
+git config --local --get convention.language
+git config --local --get convention.pull-request-title
 ```
 
 両方設定済みの場合はその値を使い、言語判定とスタイル判定をスキップします。
