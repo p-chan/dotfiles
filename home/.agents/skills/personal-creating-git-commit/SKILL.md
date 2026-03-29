@@ -1,7 +1,7 @@
 ---
 name: personal-creating-git-commit
 description: Git リポジトリのスタイルに合わせてコミットを作成します。ユーザーがコミットを求めたときや、エージェントがコミットするときに必ず使用してください。
-allowed-tools: Bash(git diff:*), Bash(git log:*), Bash(git config:*), Bash(sed:*), Bash(tr:*), Bash(sort:*), Bash(xargs:*)
+allowed-tools: Bash(git diff:*), Bash(git log:*), Bash(git config --local --get *), Bash(sed:*), Bash(tr:*), Bash(sort:*), Bash(xargs:*)
 ---
 
 # Git コミット作成
@@ -37,8 +37,8 @@ git diff
 まず以下のコマンドでキャッシュを確認します：
 
 ```bash
-git config --local --get convention.language 2>/dev/null || true
-git config --local --get convention.commit-message 2>/dev/null || true
+git config --local --get convention.language
+git config --local --get convention.commit-message
 ```
 
 両方設定済みの場合はその値を使い、言語判定とスタイル判定をスキップします。
