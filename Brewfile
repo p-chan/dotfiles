@@ -1,3 +1,6 @@
+tap "osx-cross/arm"
+tap "osx-cross/avr"
+tap "qmk/qmk"
 tap "steipete/tap"
 brew "defaultbrowser"
 brew "dockutil"
