@@ -91,5 +91,8 @@
   "language": "japanese",
   "voiceEnabled": true,
   "feedbackSurveyRate": 0,
-  "autoMemoryEnabled": false
+  "autoMemoryEnabled": false,
+  "env": {
+    "CLAUDE_CODE_NO_FLICKER": "1"
+  }
 }
