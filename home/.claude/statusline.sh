@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Claude Code statusline
-# Format: currentDir on branchName (#PR1, #PR2) | Model: <model> | Context: <pct>% | 5h: <pct>% (<time>) | 7d: <pct>% (<time>)
+# Format: currentDir on branchName (#PR1, #PR2)
+#         Model: <model> | Context: <pct>% | 5h: <pct>% (<time>) | 7d: <pct>% (<time>)
 
 # Read JSON input from stdin (if available)
 input=$(cat 2>/dev/null || echo '{}')
@@ -153,7 +154,8 @@ fi
 
 # Model
 if [[ -n "$model" && "$model" != "null" ]]; then
-  output+=" ${GRAY}|${RESET} Model: ${ORANGE}${model}${RESET}"
+  output+=$'\n'
+  output+="Model: ${ORANGE}${model}${RESET}"
 fi
 
 # Context usage
