@@ -41,7 +41,7 @@ else
   current_dir=$(basename "$PWD")
 fi
 
-# Get Git branch and diff stats
+# Get Git branch and dirty state
 git_branch=""
 git_diff=""
 if git rev-parse --git-dir >/dev/null 2>&1; then
