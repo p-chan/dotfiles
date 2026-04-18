@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Claude Code statusline
-# Format: currentDir on branchName (#PR1, #PR2)
+# Format: currentDir on branchName* (#PR1, #PR2)
 #         Model: <model> | Context: <pct>% | 5h: <pct>% (<time>) | 7d: <pct>% (<time>)
 
 # Read JSON input from stdin (if available)
@@ -41,10 +41,14 @@ else
   current_dir=$(basename "$PWD")
 fi
 
-# Get Git branch
+# Get Git branch and diff stats
 git_branch=""
+git_diff=""
 if git rev-parse --git-dir >/dev/null 2>&1; then
   git_branch=$(git branch --show-current 2>/dev/null)
+  if [[ -n "$(git status --short 2>/dev/null)" ]]; then
+    git_diff="*"
+  fi
 fi
 
 # Get PR numbers with hyperlinks (if gh CLI is available)
@@ -146,7 +150,7 @@ output=""
 # Directory, branch, and PR (colors match starship.toml)
 output+="${YELLOW}${current_dir}${RESET}"
 if [[ -n "$git_branch" ]]; then
-  output+=" on ${GREEN}${git_branch}${RESET}"
+  output+=" on ${GREEN}${git_branch}${git_diff}${RESET}"
 fi
 if [[ -n "$pr_numbers" ]]; then
   output+=" (${pr_numbers})"
