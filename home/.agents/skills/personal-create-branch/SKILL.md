@@ -1,5 +1,5 @@
 ---
-name: personal-creating-git-branch
+name: personal-create-branch
 description: Git リポジトリの慣習に則って新しいブランチを作成します。ユーザーがブランチの作成を求めたときや、エージェントがブランチを作成するときに必ず使用してください。
 allowed-tools: Bash(git status), Bash(git status *), Bash(git diff), Bash(git diff *)
 ---

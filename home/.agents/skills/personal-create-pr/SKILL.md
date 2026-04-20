@@ -1,5 +1,5 @@
 ---
-name: personal-creating-gh-pr
+name: personal-create-pr
 description: GitHub の PR を作成します。ユーザーが PR の作成を求めたときや、エージェントが PR を作成するときに使用してください。
 compatibility: Claude Code
 allowed-tools: Bash(git config --local --get *), Bash(gh pr list *), Bash(git ls-remote *)
