@@ -152,6 +152,18 @@ else
   log_warn "gh command not found. Skipping gh extensions installation."
 fi
 
+if type gh &>/dev/null; then
+  log_info "Installing gh skills..."
+
+  while IFS=' ' read -r skill repo; do
+    gh skill install "$repo" "$skill" --dir "$DOTFILES_DIR/home/.agents/skills" --force
+  done < <(jq -r '.skills | to_entries[] | "\(.key) \(.value.source)"' "$DOTFILES_DIR/home/.agents/.skill-lock.json")
+
+  log_success "Successfully installed gh skills."
+else
+  log_warn "gh command not found. Skipping gh skills installation."
+fi
+
 if [ "$CI" != "true" ]; then
   if type deno &>/dev/null; then
     if type code &>/dev/null; then

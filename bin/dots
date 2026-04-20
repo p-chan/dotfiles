@@ -16,6 +16,11 @@ dots_up() {
   echo "\nUpdating gh extensions..."
   gh extension upgrade --all
 
+  echo "\nUpdating gh skills..."
+  while IFS= read -r skill; do
+    gh skill update "$skill" --dir "$HOME/.agents/skills"
+  done < <(jq -r '.skills | keys[]' "$HOME/.agents/.skill-lock.json")
+
   echo "\nUpdating Claude Code..."
   claude update
 
