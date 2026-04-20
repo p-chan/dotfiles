@@ -1,0 +1,14 @@
+{
+  "version": 3,
+  "skills": {
+    "opensrc": {
+      "source": "vercel-labs/opensrc",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/vercel-labs/opensrc.git",
+      "skillPath": "skills/opensrc/SKILL.md",
+      "skillFolderHash": "0584838f454836cf26b7170348df5e266a7c2a79",
+      "installedAt": "2026-04-20T16:55:14Z",
+      "updatedAt": "2026-04-20T16:55:14Z"
+    }
+  }
+}
