@@ -36,6 +36,7 @@
       "WebFetch(domain:github.com)",
       "WebFetch(domain:qiita.com)",
       "WebFetch(domain:raw.githubusercontent.com)",
+      "WebFetch(domain:vitest.dev)",
       "WebFetch(domain:zenn.dev)",
       "WebSearch",
       "Skill",
