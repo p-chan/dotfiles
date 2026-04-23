@@ -29,6 +29,7 @@
       "Bash(gh review-comment list)",
       "Bash(gh review-comment list *)",
       "Bash(head *)",
+      "Bash(npm view *)",
       "Bash(opensrc *)",
       "Bash(rg -uuu *)",
       "Bash(tail *)",
