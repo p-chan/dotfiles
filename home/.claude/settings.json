@@ -51,7 +51,6 @@
       "mcp__figma-desktop__get_variable_defs"
     ],
     "deny": [
-      "Bash(git -C *)",
       "Bash(git add -A)",
       "Bash(sudo *)",
       "Read(.env*)",
@@ -67,13 +66,15 @@
         "hooks": [
           {
             "type": "command",
-            "if": "Bash(grep *)",
             "command": "~/.claude/hooks/block-grep.sh"
           },
           {
             "type": "command",
-            "if": "Bash(find *)",
             "command": "~/.claude/hooks/block-find.sh"
+          },
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/block-git-c.sh"
           }
         ]
       }
