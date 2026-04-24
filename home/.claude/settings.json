@@ -3,6 +3,8 @@
   "permissions": {
     "allow": [
       "Bash(fd -u *)",
+      "Bash(git fetch)",
+      "Bash(git fetch *)",
       "Bash(git log)",
       "Bash(git log *)",
       "Bash(gh release list)",
