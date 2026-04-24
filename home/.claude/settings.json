@@ -3,6 +3,8 @@
   "permissions": {
     "allow": [
       "Bash(fd -u *)",
+      "Bash(git diff)",
+      "Bash(git diff *)",
       "Bash(git fetch)",
       "Bash(git fetch *)",
       "Bash(git log)",
