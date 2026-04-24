@@ -61,6 +61,23 @@
     ]
   },
   "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "if": "Bash(grep *)",
+            "command": "~/.claude/hooks/block-grep.sh"
+          },
+          {
+            "type": "command",
+            "if": "Bash(find *)",
+            "command": "~/.claude/hooks/block-find.sh"
+          }
+        ]
+      }
+    ],
     "Notification": [
       {
         "matcher": "permission_prompt",
