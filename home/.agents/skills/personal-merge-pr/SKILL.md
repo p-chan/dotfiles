@@ -1,12 +1,23 @@
 ---
 name: personal-merge-pr
 description: ユーザーが PR のマージを求めたときや、エージェントが PR をマージするときに必ず使用してください。
-allowed-tools: Bash(gh review-comment list *), Bash(gh pr checks), Bash(gh repo view *)
+allowed-tools: Bash(gh review-comment list *), Bash(gh pr checks), Bash(gh repo view *), Bash(git fetch), Bash(git log *)
 ---
 
 # GitHub PR マージ
 
 ## ワークフロー
+
+### 未 push のコミットを確認する
+
+以下のコマンドで、ローカルにあってリモートにないコミットを確認します。
+
+```sh
+git fetch
+git log origin/$(git branch --show-current)..HEAD --oneline
+```
+
+未 push のコミットがある場合は、PR に反映されていない変更が存在する可能性があるため、ユーザーに確認します。
 
 ### レビューコメントを確認する
 
