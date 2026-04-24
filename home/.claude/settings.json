@@ -66,17 +66,14 @@
         "hooks": [
           {
             "type": "command",
-            "if": "Bash(grep *)",
             "command": "~/.claude/hooks/block-grep.sh"
           },
           {
             "type": "command",
-            "if": "Bash(find *)",
             "command": "~/.claude/hooks/block-find.sh"
           },
           {
             "type": "command",
-            "if": "Bash(git -C *)",
             "command": "~/.claude/hooks/block-git-c.sh"
           }
         ]
