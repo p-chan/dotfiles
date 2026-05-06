@@ -64,6 +64,17 @@
     ]
   },
   "hooks": {
+    "PermissionRequest": [
+      {
+        "matcher": "WebFetch",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/log-web-fetch.sh"
+          }
+        ]
+      }
+    ],
     "PreToolUse": [
       {
         "matcher": "Bash",
