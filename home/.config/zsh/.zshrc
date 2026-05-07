@@ -8,16 +8,16 @@ bindkey '^[[1;2D' backward-word
 # Forward word (Shift + Arrow Right)
 bindkey '^[[1;2C' forward-word
 
+if type starship &>/dev/null; then
+  eval "$(starship init zsh)"
+fi
+
 if type mise &>/dev/null; then
   eval "$(mise activate zsh)"
 fi
 
 if type sheldon &>/dev/null; then
   eval "$(sheldon source)"
-fi
-
-if type starship &>/dev/null; then
-  eval "$(starship init zsh)"
 fi
 
 if type fzf &>/dev/null; then
