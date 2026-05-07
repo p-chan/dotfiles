@@ -16,9 +16,9 @@ dots_up() {
   echo "\nUpdating gh extensions..."
   gh extension upgrade --all
 
-  if [ -f "$HOME/apm.yml" ]; then
+  if [ -f "$HOME/.apm/apm.yml" ]; then
     echo "\nUpdating apm skills..."
-    (cd "$HOME" && apm install --update --target agent-skills)
+    apm install -g --update --target agent-skills
   fi
 
   echo "\nUpdating Claude Code..."
