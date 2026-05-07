@@ -2,6 +2,15 @@ lockfile_version: '1'
 generated_at: '2026-05-07T09:45:44.565156+00:00'
 apm_version: 0.12.3
 dependencies:
+- repo_url: mattpocock/skills
+  host: github.com
+  resolved_commit: 733d312884b3878a9a9cff693c5886943753a741
+  virtual_path: skills/productivity/grill-me
+  is_virtual: true
+  package_type: claude_skill
+  deployed_files:
+  - .agents/skills/grill-me
+  content_hash: sha256:784f0dbb7403b0f00324bce9a112f715342777a0daee7bbb7385f9c6f0a170ea
 - repo_url: vercel-labs/opensrc
   host: github.com
   resolved_commit: 2efd74e8f1755f15ed8f5a3445e1f5c80b6362c4
