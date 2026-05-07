@@ -6,6 +6,7 @@ dependencies:
   apm:
   - vercel-labs/opensrc
   - mattpocock/skills/skills/productivity/grill-me
+  - microsoft/playwright-cli/skills/playwright-cli
   mcp: []
 includes: auto
 scripts: {}
