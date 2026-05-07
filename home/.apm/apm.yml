@@ -5,6 +5,7 @@ author: P-Chan
 dependencies:
   apm:
   - vercel-labs/opensrc
+  - mattpocock/skills/skills/productivity/grill-me
   mcp: []
 includes: auto
 scripts: {}
