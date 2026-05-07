@@ -2,6 +2,8 @@
 
 dotfiles=(
   ".agents"
+  "apm.lock.yaml"
+  "apm.yml"
   ".claude/CLAUDE.md"
   ".claude/hooks"
   ".claude/rules"

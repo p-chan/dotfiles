@@ -1,0 +1,10 @@
+name: .agents
+version: 1.0.0
+description: APM project for .agents
+author: P-Chan
+dependencies:
+  apm:
+  - vercel-labs/opensrc
+  mcp: []
+includes: auto
+scripts: {}

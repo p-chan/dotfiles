@@ -152,20 +152,18 @@ else
   log_warn "gh command not found. Skipping gh extensions installation."
 fi
 
-if type gh &>/dev/null; then
-  if [ -f "$DOTFILES_DIR/home/.agents/.skill-lock.json" ]; then
-    log_info "Installing gh skills..."
+if type apm &>/dev/null; then
+  if [ -f "$DOTFILES_DIR/home/apm.yml" ]; then
+    log_info "Installing apm skills..."
 
-    while IFS=' ' read -r skill repo; do
-      gh skill install "$repo" "$skill" --dir "$DOTFILES_DIR/home/.agents/skills" --force
-    done < <(jq -r '.skills | to_entries[] | "\(.key) \(.value.source)"' "$DOTFILES_DIR/home/.agents/.skill-lock.json")
+    (cd "$DOTFILES_DIR/home" && apm install --target agent-skills)
 
-    log_success "Successfully installed gh skills."
+    log_success "Successfully installed apm skills."
   else
-    log_info "No .skill-lock.json found. Skipping gh skills installation."
+    log_info "No apm.yml found. Skipping apm skills installation."
   fi
 else
-  log_warn "gh command not found. Skipping gh skills installation."
+  log_warn "apm command not found. Skipping apm skills installation."
 fi
 
 if [ "$CI" != "true" ]; then
