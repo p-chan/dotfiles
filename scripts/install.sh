@@ -156,7 +156,7 @@ if type apm &>/dev/null; then
   if [ -f "$DOTFILES_DIR/home/apm.yml" ]; then
     log_info "Installing apm skills..."
 
-    (cd "$DOTFILES_DIR/home" && apm install --target agent-skills)
+    (cd "$HOME" && apm install --target agent-skills)
 
     log_success "Successfully installed apm skills."
   else
