@@ -1,5 +1,8 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "env": {
+    "CLAUDE_CODE_NO_FLICKER": "1"
+  },
   "permissions": {
     "allow": [
       "Bash(fd -u *)",
@@ -116,7 +119,6 @@
       }
     ]
   },
-  "model": "sonnet",
   "statusLine": {
     "type": "command",
     "command": "bash ~/.claude/statusline.sh"
@@ -124,12 +126,9 @@
   "enabledPlugins": {
     "example-skills@anthropic-agent-skills": true
   },
-  "alwaysThinkingEnabled": true,
   "language": "japanese",
-  "voiceEnabled": true,
   "feedbackSurveyRate": 0,
+  "alwaysThinkingEnabled": true,
   "autoMemoryEnabled": false,
-  "env": {
-    "CLAUDE_CODE_NO_FLICKER": "1"
-  }
+  "voiceEnabled": true
 }
