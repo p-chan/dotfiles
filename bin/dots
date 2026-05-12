@@ -3,7 +3,16 @@
 set -euo pipefail
 
 dots_up() {
-  echo "Updating Homebrew..."
+  echo "Updating Command Line Tools..."
+  local clt_label
+  clt_label=$(softwareupdate -l 2>&1 | grep "Label: Command Line Tools" | sed 's/.*Label: //' | head -1)
+  if [[ -n "${clt_label}" ]]; then
+    sudo softwareupdate -i "${clt_label}"
+  else
+    echo "Command Line Tools is up to date."
+  fi
+
+  echo "\nUpdating Homebrew..."
   brew update
   brew upgrade
 
