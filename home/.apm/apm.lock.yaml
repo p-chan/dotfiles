@@ -1,10 +1,10 @@
 lockfile_version: '1'
-generated_at: '2026-05-07T09:45:44.565156+00:00'
-apm_version: 0.12.3
+generated_at: '2026-06-08T14:56:43.031844+00:00'
+apm_version: 0.18.0
 dependencies:
 - repo_url: mattpocock/skills
   host: github.com
-  resolved_commit: 733d312884b3878a9a9cff693c5886943753a741
+  resolved_commit: 2bf70051928429983de3b5718d277150926f8c89
   virtual_path: skills/productivity/grill-me
   is_virtual: true
   package_type: claude_skill
@@ -13,7 +13,7 @@ dependencies:
   content_hash: sha256:784f0dbb7403b0f00324bce9a112f715342777a0daee7bbb7385f9c6f0a170ea
 - repo_url: microsoft/playwright-cli
   host: github.com
-  resolved_commit: 695107b8cd9369151838bf31168b9339afe47f2f
+  resolved_commit: 3a1bafc8b4e973c72d0364eb5b427d1ce0aa8317
   virtual_path: skills/playwright-cli
   is_virtual: true
   package_type: claude_skill
