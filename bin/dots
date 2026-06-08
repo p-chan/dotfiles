@@ -5,7 +5,7 @@ set -euo pipefail
 dots_up() {
   echo "Updating Command Line Tools..."
   local clt_label
-  clt_label=$(softwareupdate -l 2>&1 | grep "Label: Command Line Tools" | sed 's/.*Label: //' | head -1)
+  clt_label=$(softwareupdate -l 2>&1 | grep "Label: Command Line Tools" | sed 's/.*Label: //' | head -1 || true)
   if [[ -n "${clt_label}" ]]; then
     sudo softwareupdate -i "${clt_label}"
   else
