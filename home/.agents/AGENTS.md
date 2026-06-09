@@ -22,6 +22,15 @@
 
 GitHub にアクセスするときは、必ず `gh` コマンドを使います。
 
+### Issue・PR の参照
+
+Issue や PR を参照するときは、`#123` のような短縮形ではなく、フル URL の Markdown リンク形式で記述します。これにより OSC 8 対応ターミナルでクリック可能なリンクになります。
+
+- Issue: `[#123](https://github.com/OWNER/REPO/issues/123)`
+- PR: `[#123](https://github.com/OWNER/REPO/pull/123)`
+
+リポジトリの URL は `gh repo view --json url -q .url` で取得できます。
+
 ### エイリアス
 
 | エイリアス                | 概要                             |
