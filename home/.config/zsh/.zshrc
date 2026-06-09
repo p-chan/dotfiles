@@ -28,6 +28,10 @@ if type zoxide &>/dev/null; then
   eval "$(zoxide init zsh)"
 fi
 
+if type git-wt &>/dev/null; then
+  eval "$(git wt --init zsh)"
+fi
+
 export FZF_DEFAULT_OPTS="
   --layout=reverse
   --color=fg:#abb2bf,fg+:#ffffff,bg:#282c34,bg+:#3e4452
