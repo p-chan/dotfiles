@@ -7,11 +7,11 @@
 
 set -euo pipefail
 
-_switch() { exec git -c "alias.switch=" switch "$@"; }
+raw_switch() { exec git -c "alias.switch=" switch "$@"; }
 
 # If the first arg is an option (e.g. --help, -c), respect it and delegate to git.
 if [[ "${1-}" == -* ]]; then
-  _switch "$@"
+  raw_switch "$@"
 fi
 
 target_branch="${1:-main}"
@@ -19,20 +19,20 @@ shift || true
 
 # For any branch other than main/master, just try to switch normally
 if [[ "$target_branch" != "main" && "$target_branch" != "master" ]]; then
-  _switch "$target_branch" "$@"
+  raw_switch "$target_branch" "$@"
 fi
 
 fallback_branch=$([ "$target_branch" = "main" ] && echo master || echo main)
 
 # prefer target if it exists
 if git rev-parse --verify --quiet "$target_branch" >/dev/null; then
-  _switch "$target_branch" "$@"
+  raw_switch "$target_branch" "$@"
 fi
 
 # fallback if it exists
 if git rev-parse --verify --quiet "$fallback_branch" >/dev/null; then
-  _switch "$fallback_branch" "$@"
+  raw_switch "$fallback_branch" "$@"
 fi
 
 # neither exists: let git show the usual error
-_switch "$target_branch" "$@"
+raw_switch "$target_branch" "$@"
