@@ -73,9 +73,18 @@ git ls-remote --heads origin <branch-name>
 git push -u origin <branch-name>
 ```
 
-### 4. タイトルと本文の生成
+### 4. 差分確認
 
-最初に判定した言語とスタイル、その次に確認したテンプレートを遵守して、タイトルと本文を生成します。
+以下のコマンドでベースブランチとヘッドブランチの差分を確認します。
+
+```sh
+git log <base-branch>..HEAD --oneline
+git diff <base-branch>...HEAD --stat
+```
+
+### 5. タイトルと本文の生成
+
+言語とスタイル、テンプレート、差分をもとに、タイトルと本文を生成します。
 
 テンプレートが存在しない場合は、以下のテンプレートを利用してください。
 
@@ -87,7 +96,7 @@ git push -u origin <branch-name>
 ## Notes
 ```
 
-### 5. 作成
+### 6. 作成
 
 ```sh
 gh pr create \
