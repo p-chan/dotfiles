@@ -38,3 +38,6 @@ macos-arm64 = { asset_pattern = "jq-macos-arm64" }
 [settings]
 experimental = true
 idiomatic_version_file_enable_tools = ['node']
+
+[settings.github]
+credential_command = "gh auth token"
