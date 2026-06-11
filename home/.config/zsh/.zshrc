@@ -32,6 +32,25 @@ if type git-wt &>/dev/null; then
   eval "$(git wt --init zsh)"
 fi
 
+# git switch/sw → git-fallback-switch; composes with git-wt wrapper if present
+if typeset -f git > /dev/null 2>&1; then
+  functions[_git_before_switch]=${functions[git]}
+  unfunction git
+  git() {
+    case "${1-}" in
+      switch|sw) shift; command git-fallback-switch "$@" ;;
+      *) _git_before_switch "$@" ;;
+    esac
+  }
+else
+  git() {
+    case "${1-}" in
+      switch|sw) shift; command git-fallback-switch "$@" ;;
+      *) command git "$@" ;;
+    esac
+  }
+fi
+
 export FZF_DEFAULT_OPTS="
   --layout=reverse
   --color=fg:#abb2bf,fg+:#ffffff,bg:#282c34,bg+:#3e4452
