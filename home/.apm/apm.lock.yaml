@@ -1,7 +1,14 @@
 lockfile_version: '1'
-generated_at: '2026-06-10T13:31:51.340502+00:00'
-apm_version: 0.19.0
+generated_at: '2026-06-18T07:56:52.673646+00:00'
+apm_version: 0.12.4
 dependencies:
+- repo_url: k16shikano/fd287c3133457c4fd8f5601d34aa817d
+  host: gist.github.com
+  resolved_commit: 5ed08e4475365fd233aa0d3ab71c19b87e1a5732
+  package_type: claude_skill
+  deployed_files:
+  - .agents/skills/japanese-tech-writing
+  content_hash: sha256:bc7c0b812df34be051a7887ee008f941f336c91fab5876ff0d11f8373c9366ad
 - repo_url: mattpocock/skills
   host: github.com
   resolved_commit: 26ba8ae34bb3657e7dd85939fce8a5a166439f8b
@@ -10,9 +17,6 @@ dependencies:
   package_type: claude_skill
   deployed_files:
   - .agents/skills/grill-me
-  - .agents/skills/grill-me/SKILL.md
-  deployed_file_hashes:
-    .agents/skills/grill-me/SKILL.md: sha256:74147eb6010a65957efef2b9e0f0b3ff935c1def7fc117697151b1d0f3610556
   content_hash: sha256:784f0dbb7403b0f00324bce9a112f715342777a0daee7bbb7385f9c6f0a170ea
 - repo_url: microsoft/playwright-cli
   host: github.com
@@ -22,29 +26,6 @@ dependencies:
   package_type: claude_skill
   deployed_files:
   - .agents/skills/playwright-cli
-  - .agents/skills/playwright-cli/SKILL.md
-  - .agents/skills/playwright-cli/references/element-attributes.md
-  - .agents/skills/playwright-cli/references/playwright-tests.md
-  - .agents/skills/playwright-cli/references/request-mocking.md
-  - .agents/skills/playwright-cli/references/running-code.md
-  - .agents/skills/playwright-cli/references/session-management.md
-  - .agents/skills/playwright-cli/references/spec-driven-testing.md
-  - .agents/skills/playwright-cli/references/storage-state.md
-  - .agents/skills/playwright-cli/references/test-generation.md
-  - .agents/skills/playwright-cli/references/tracing.md
-  - .agents/skills/playwright-cli/references/video-recording.md
-  deployed_file_hashes:
-    .agents/skills/playwright-cli/SKILL.md: sha256:b4c81c39e39f30e4790607e57b12283878f3751daca9c0e44f301899f2108b13
-    .agents/skills/playwright-cli/references/element-attributes.md: sha256:bf19aa4671e0a50a0fefa9c790f39124e803060eefe395042b723c29fcb7faa2
-    .agents/skills/playwright-cli/references/playwright-tests.md: sha256:c5b0719fef2cfdff50bd744051b2f9afc119775db4b48e9b2882c1cf3886797c
-    .agents/skills/playwright-cli/references/request-mocking.md: sha256:54e801c9663fc2b6d68ceb058cb1c360724c2499f42acc7852a68e83e5b5f37c
-    .agents/skills/playwright-cli/references/running-code.md: sha256:d95c539a5990b71d02d8bdf1d9414df16191eb6cff95b0063820518b7a13dcb2
-    .agents/skills/playwright-cli/references/session-management.md: sha256:cd3e261b8763bf952f1e371b876cb78d054379afec85482f9250633e1b7e6c44
-    .agents/skills/playwright-cli/references/spec-driven-testing.md: sha256:3326b3af65ed6e05180aa394a7fd578f29822e67bde9f22f7c7f94e6c8e3a594
-    .agents/skills/playwright-cli/references/storage-state.md: sha256:9ac47f9ae4a1aedcd2077f8ac9ab1ba6bee1962cb83ff51adcd36fb6d83b5ec6
-    .agents/skills/playwright-cli/references/test-generation.md: sha256:2a9c4d94effa31b05cf367dfa8bbace8874a3bc9799987ad2b03269af224d299
-    .agents/skills/playwright-cli/references/tracing.md: sha256:792e0ac7705e56ac48df84c0f5400221ce86107897c671590a64a4ea6a82508e
-    .agents/skills/playwright-cli/references/video-recording.md: sha256:8555ab5400df0d90e66318aacc0a8a4418fbf872e7463824d55d5c41615abd83
   content_hash: sha256:c75e106cec48dd02c8e87504a88e90d2b84f4472bfadf395e6fd4a86763c4a64
 - repo_url: vercel-labs/opensrc
   host: github.com
@@ -52,7 +33,4 @@ dependencies:
   package_type: skill_bundle
   deployed_files:
   - .agents/skills/opensrc
-  - .agents/skills/opensrc/SKILL.md
-  deployed_file_hashes:
-    .agents/skills/opensrc/SKILL.md: sha256:2c4d873a423e30dbdbabc30b104bef8f09eae00d9a186a952dfc88c53e2e34fb
   content_hash: sha256:b44b3394cc2ab58c4d34dbe479e70f9335ce8aad6ab221986d67da9a57b9672e

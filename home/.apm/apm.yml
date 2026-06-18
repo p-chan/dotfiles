@@ -7,6 +7,8 @@ dependencies:
   - vercel-labs/opensrc
   - mattpocock/skills/skills/productivity/grill-me
   - microsoft/playwright-cli/skills/playwright-cli
+  - git: https://gist.github.com/k16shikano/fd287c3133457c4fd8f5601d34aa817d.git
+    alias: japanese-tech-writing
   mcp: []
 includes: auto
 scripts: {}
