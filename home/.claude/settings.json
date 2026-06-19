@@ -139,6 +139,7 @@
   "feedbackSurveyRate": 0,
   "alwaysThinkingEnabled": true,
   "autoMemoryEnabled": false,
+  "theme": "dark",
   "voiceEnabled": true,
   "skipAutoPermissionPrompt": true
 }
