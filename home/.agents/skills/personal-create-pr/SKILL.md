@@ -79,7 +79,7 @@ git push -u origin <branch-name>
 
 ```sh
 git log <base-branch>..HEAD --oneline
-git diff <base-branch>...HEAD --stat
+git diff <base-branch>...HEAD
 ```
 
 ### 5. タイトルと本文の生成
