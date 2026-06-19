@@ -64,7 +64,8 @@
       "Read(!.env*.example)",
       "Write(.env*)",
       "Write(!.env*.example)"
-    ]
+    ],
+    "defaultMode": "auto"
   },
   "hooks": {
     "PermissionRequest": [
@@ -138,5 +139,6 @@
   "feedbackSurveyRate": 0,
   "alwaysThinkingEnabled": true,
   "autoMemoryEnabled": false,
-  "voiceEnabled": true
+  "voiceEnabled": true,
+  "skipAutoPermissionPrompt": true
 }
