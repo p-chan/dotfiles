@@ -102,6 +102,14 @@ git diff <base-branch>...HEAD
 ## Notes
 ```
 
+この PR のマージによってクローズできる Issue がある場合は、本文に GitHub のクローズキーワードを含めます。
+
+```md
+Closes #123
+```
+
+クローズキーワード: `close`, `closes`, `closed`, `fix`, `fixes`, `fixed`, `resolve`, `resolves`, `resolved`
+
 ### 6. 作成
 
 ```sh
