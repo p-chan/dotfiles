@@ -23,6 +23,8 @@ dotfiles=(
   ".config/tmux"
   ".config/vim"
   ".config/yazi"
+  ".config/zed/keymap.json"
+  ".config/zed/settings.json"
   ".config/zsh"
   ".config/zsh-abbr"
   ".config/starship.toml"
