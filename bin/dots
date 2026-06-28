@@ -76,6 +76,9 @@ dots_cleanup() {
   echo "\nCleaning pnpm..."
   command -v pnpm &>/dev/null && pnpm store prune || true
 
+  echo "\nCleaning Docker..."
+  command -v docker &>/dev/null && docker system prune -f || true
+
   local after
   after=($(_storage_snapshot))
   local freed=$(awk "BEGIN {printf \"%.2f\", ${before[1]} - ${after[1]}}")
