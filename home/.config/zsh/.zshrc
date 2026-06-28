@@ -60,6 +60,7 @@ _fzf_colors=(
 
 export FZF_DEFAULT_OPTS="--layout=reverse ${_fzf_colors[*]}"
 
+# fzf-tab ignores FZF_DEFAULT_OPTS by default; pass colors explicitly
 zstyle ':fzf-tab:*' fzf-flags $_fzf_colors
 
 HISTSIZE=100000
