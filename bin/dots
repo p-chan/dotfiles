@@ -62,7 +62,7 @@ dots_cleanup() {
   before=($(_storage_snapshot))
 
   echo "\nCleaning Homebrew..."
-  brew bundle cleanup --force --file="${DOTFILES_DIR}/Brewfile" || true
+  brew cleanup || true
 
   echo "\nCleaning mise..."
   mise prune --yes || true
