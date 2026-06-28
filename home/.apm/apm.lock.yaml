@@ -1,10 +1,24 @@
 lockfile_version: '1'
-generated_at: '2026-06-10T13:31:51.340502+00:00'
-apm_version: 0.19.0
+generated_at: '2026-06-28T06:11:15.793804+00:00'
+apm_version: 0.22.0
 dependencies:
+- repo_url: k16shikano/fd287c3133457c4fd8f5601d34aa817d
+  name: japanese-tech-writing
+  host: gist.github.com
+  resolved_commit: 5ed08e4475365fd233aa0d3ab71c19b87e1a5732
+  version: 1.0.0
+  package_type: claude_skill
+  deployed_files:
+  - .agents/skills/japanese-tech-writing
+  - .agents/skills/japanese-tech-writing/SKILL.md
+  deployed_file_hashes:
+    .agents/skills/japanese-tech-writing/SKILL.md: sha256:e05525f4b78eedbe41a62b3078c408d7a2fbc96386be8af893b6b7d58e6941c0
+  content_hash: sha256:bc7c0b812df34be051a7887ee008f941f336c91fab5876ff0d11f8373c9366ad
 - repo_url: mattpocock/skills
+  name: grill-me
   host: github.com
-  resolved_commit: 26ba8ae34bb3657e7dd85939fce8a5a166439f8b
+  resolved_commit: 5d78bd0903420f97c791f834201e550c765699f8
+  version: 1.0.0
   virtual_path: skills/productivity/grill-me
   is_virtual: true
   package_type: claude_skill
@@ -12,11 +26,13 @@ dependencies:
   - .agents/skills/grill-me
   - .agents/skills/grill-me/SKILL.md
   deployed_file_hashes:
-    .agents/skills/grill-me/SKILL.md: sha256:74147eb6010a65957efef2b9e0f0b3ff935c1def7fc117697151b1d0f3610556
-  content_hash: sha256:784f0dbb7403b0f00324bce9a112f715342777a0daee7bbb7385f9c6f0a170ea
+    .agents/skills/grill-me/SKILL.md: sha256:6189dfceb7304a6e5558f75d87e68fa3bc7fcf7ba120e44f21f8a61fe01eba54
+  content_hash: sha256:f321507f77702a54af1db66549ec1685fc625390d06c57d7949cdcda8eb1b5c7
 - repo_url: microsoft/playwright-cli
+  name: playwright-cli
   host: github.com
-  resolved_commit: 9b118a1a737662fa118d591b5687340b86005d5c
+  resolved_commit: 9805da3991435ce6c853fa1dd78c33276eaf5de9
+  version: 1.0.0
   virtual_path: skills/playwright-cli
   is_virtual: true
   package_type: claude_skill
@@ -47,12 +63,14 @@ dependencies:
     .agents/skills/playwright-cli/references/video-recording.md: sha256:8555ab5400df0d90e66318aacc0a8a4418fbf872e7463824d55d5c41615abd83
   content_hash: sha256:c75e106cec48dd02c8e87504a88e90d2b84f4472bfadf395e6fd4a86763c4a64
 - repo_url: vercel-labs/opensrc
+  name: opensrc
   host: github.com
-  resolved_commit: 2efd74e8f1755f15ed8f5a3445e1f5c80b6362c4
+  resolved_commit: f96078ac0a7ce3fb7d058d73ce65ff4b6606d765
+  version: 0.0.0
   package_type: skill_bundle
   deployed_files:
   - .agents/skills/opensrc
   - .agents/skills/opensrc/SKILL.md
   deployed_file_hashes:
     .agents/skills/opensrc/SKILL.md: sha256:2c4d873a423e30dbdbabc30b104bef8f09eae00d9a186a952dfc88c53e2e34fb
-  content_hash: sha256:b44b3394cc2ab58c4d34dbe479e70f9335ce8aad6ab221986d67da9a57b9672e
+  content_hash: sha256:b5ab5dda0f00ba5324500636b0ea86377b2f7d9c48ccbc269d62a0cebf87f541
