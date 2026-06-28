@@ -51,13 +51,16 @@ else
   }
 fi
 
-export FZF_DEFAULT_OPTS="
-  --layout=reverse
+_fzf_colors=(
   --color=fg:#abb2bf,fg+:#ffffff,bg:#282c34,bg+:#3e4452
   --color=hl:#61afef,hl+:#61afef,info:#abb2bf,marker:#61afef
   --color=prompt:#61afef,spinner:#61afef,pointer:#528bff,header:#abb2bf
   --color=border:#5c6370,label:#abb2bf,query:#ffffff
-"
+)
+
+export FZF_DEFAULT_OPTS="--layout=reverse ${_fzf_colors[*]}"
+
+zstyle ':fzf-tab:*' fzf-flags $_fzf_colors
 
 HISTSIZE=100000
 SAVEHIST=100000
