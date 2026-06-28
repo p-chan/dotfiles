@@ -79,6 +79,9 @@ dots_cleanup() {
   echo "\nCleaning Docker..."
   command -v docker &>/dev/null && docker system prune -f || true
 
+  echo "\nCleaning opensrc..."
+  command -v opensrc &>/dev/null && opensrc clean || true
+
   local after
   after=($(_storage_snapshot))
   local freed=$(awk "BEGIN {printf \"%.2f\", ${before[1]} - ${after[1]}}")
