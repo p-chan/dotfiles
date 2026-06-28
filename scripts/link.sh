@@ -16,6 +16,7 @@ dotfiles=(
   ".config/fixpack"
   ".config/gh/config.yml"
   ".config/ghostty"
+  ".config/hunk/config.toml"
   ".config/git"
   ".config/karabiner"
   ".config/mise"
