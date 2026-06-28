@@ -39,6 +39,49 @@ dots_up() {
   echo "\nDone!"
 }
 
+dots_cleanup() {
+  if [[ "${PWD}" != "${HOME}" ]]; then
+    echo "Error: dots cleanup must be run from the home directory"
+    exit 1
+  fi
+
+  _storage_snapshot() {
+    swift -e '
+      import Foundation
+      let url = URL(fileURLWithPath: "/")
+      let keys: Set<URLResourceKey> = [.volumeTotalCapacityKey, .volumeAvailableCapacityForImportantUsageKey]
+      let v = try! url.resourceValues(forKeys: keys)
+      let total = Int64(v.volumeTotalCapacity!)
+      let avail = v.volumeAvailableCapacityForImportantUsage!
+      let used = total - avail
+      print(String(format: "%.2f %.2f", Double(used)/1e9, Double(avail)/1e9))
+    '
+  }
+
+  local before
+  before=($(_storage_snapshot))
+
+  echo "\nCleaning Homebrew..."
+  brew bundle cleanup --force --file="${DOTFILES_DIR}/Brewfile" || true
+
+  echo "\nCleaning mise..."
+  mise prune --yes || true
+
+  echo "\nCleaning npm..."
+  command -v npm &>/dev/null && npm cache clean --force || true
+
+  echo "\nCleaning yarn..."
+  command -v yarn &>/dev/null && yarn cache clean || true
+
+  echo "\nCleaning pnpm..."
+  command -v pnpm &>/dev/null && pnpm store prune || true
+
+  local after
+  after=($(_storage_snapshot))
+  local freed=$(awk "BEGIN {printf \"%.2f\", ${before[1]} - ${after[1]}}")
+  echo "\nCleaned up ${freed} GB (${after[1]} GB used, ${after[2]} GB available)"
+}
+
 dots_edit() {
   local repo_dir
   repo_dir="${DOTFILES_DIR:-}"
@@ -53,6 +96,9 @@ case "${1:-}" in
   up)
     dots_up
     ;;
+  cleanup)
+    dots_cleanup
+    ;;
   edit)
     dots_edit
     ;;
@@ -60,8 +106,9 @@ case "${1:-}" in
     echo "Usage: dots <command>
 
 Commands:
-  up    Update Homebrew, mise, and VS Code extensions
-  edit  Open dotfiles in VS Code"
+  up       Update Homebrew, mise, and VS Code extensions
+  cleanup  Clean up unused packages and free disk space
+  edit     Open dotfiles in VS Code"
     exit 1
     ;;
 esac
