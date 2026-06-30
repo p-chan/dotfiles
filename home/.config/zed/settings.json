@@ -1,0 +1,66 @@
+{
+  // Zed settings
+  ////zed.dev/docs/configuring-zed
+  //
+  // To see all of Zed's default settings without changing your
+  // custom settings, run `zed: open default settings` from the
+  // command palette (cmd-shift-p / ctrl-shift-p)
+  // General
+  "session": {
+    "trust_all_worktrees": true,
+  },
+  // Appearance
+  "theme": "One Dark Pro",
+  "icon_theme": "File Icons",
+  "buffer_font_family": "Source Han Code JP",
+  "buffer_font_size": 13.0,
+  "ui_font_family": ".SystemUIFont",
+  "ui_font_size": 15.0,
+  // Keymap
+  "base_keymap": "Atom",
+  // Editor
+  "scroll_beyond_last_line": "off",
+  // Window & Layout
+  "title_bar": {
+    "show_sign_in": false,
+    "show_user_menu": false,
+  },
+  // Panels
+  "project_panel": {
+    "dock": "left",
+    "default_width": 320,
+    "git_status_indicator": true,
+    "hide_root": true,
+  },
+  "outline_panel": {
+    "button": false,
+  },
+  "collaboration_panel": {
+    "button": false,
+  },
+  "debugger": {
+    "button": false,
+  },
+  "git_panel": {
+    "dock": "left",
+    "default_width": 320,
+    "status_style": "label_color",
+    "tree_view": true,
+    "file_icons": true,
+    "show_count_badge": true,
+  },
+  "agent": {
+    "dock": "right",
+    "sidebar_side": "right",
+    "terminal_init_command": "claude",
+  },
+  // Terminal
+  "terminal": {
+    "font_family": "Source Code Pro",
+    "font_fallbacks": ["Source Han Code JP", "Symbols Nerd Font"],
+  },
+  // AI
+  "edit_predictions": {
+    "provider": "copilot",
+  },
+}
