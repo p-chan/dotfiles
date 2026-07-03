@@ -23,12 +23,12 @@
 `turbo.json` や `nx.json` など既存のタスクランナー設定があり、他のスクリプト（`lint`、`test` など）がそれ経由で実行されている場合は、そのタスクランナーの流儀に合わせる。
 存在しない場合は、検出したパッケージマネージャーのワークスペース横断実行機能を使う。
 
-| パッケージマネージャー | ルートの `typecheck` スクリプト |
-| :--- | :--- |
-| npm | `npm run typecheck --workspaces --if-present` |
-| yarn (Berry) | `yarn workspaces foreach -A run typecheck` |
-| pnpm | `pnpm run -r typecheck` |
-| bun | `bun run --filter '*' typecheck` |
+| パッケージマネージャー | ルートの `typecheck` スクリプト               |
+| :--------------------- | :-------------------------------------------- |
+| npm                    | `npm run typecheck --workspaces --if-present` |
+| yarn (Berry)           | `yarn workspaces foreach -A run typecheck`    |
+| pnpm                   | `pnpm run -r typecheck`                       |
+| bun                    | `bun run --filter '*' typecheck`              |
 
 ## CI
 

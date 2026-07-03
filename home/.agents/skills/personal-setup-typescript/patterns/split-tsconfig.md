@@ -11,10 +11,7 @@
 // tsconfig.json
 {
   "files": [],
-  "references": [
-    { "path": "./tsconfig.app.json" },
-    { "path": "./tsconfig.node.json" }
-  ]
+  "references": [{ "path": "./tsconfig.app.json" }, { "path": "./tsconfig.node.json" }]
 }
 ```
 
@@ -46,10 +43,7 @@
   "compilerOptions": {
     "noEmit": true
   },
-  "extends": [
-    "@tsconfig/<選定したベース>/tsconfig.json",
-    "@tsconfig/<strictest 系ベース>/tsconfig.json"
-  ],
+  "extends": ["@tsconfig/<選定したベース>/tsconfig.json", "@tsconfig/<strictest 系ベース>/tsconfig.json"],
   "include": ["src"]
 }
 ```
@@ -65,10 +59,7 @@
     "noEmit": true,
     "types": ["node"]
   },
-  "extends": [
-    "@tsconfig/<選定したベース>/tsconfig.json",
-    "@tsconfig/<strictest 系ベース>/tsconfig.json"
-  ],
+  "extends": ["@tsconfig/<選定したベース>/tsconfig.json", "@tsconfig/<strictest 系ベース>/tsconfig.json"],
   "include": ["vite.config.ts"]
 }
 ```

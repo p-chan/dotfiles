@@ -20,10 +20,7 @@ tsconfig を分割しない場合の手順。
 
 ```json
 {
-  "extends": [
-    "@tsconfig/<選定したベース>/tsconfig.json",
-    "@tsconfig/<strictest 系ベース>/tsconfig.json"
-  ],
+  "extends": ["@tsconfig/<選定したベース>/tsconfig.json", "@tsconfig/<strictest 系ベース>/tsconfig.json"],
   "include": ["src"]
 }
 ```
