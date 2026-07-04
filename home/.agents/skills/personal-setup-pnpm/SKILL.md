@@ -24,6 +24,7 @@ description: プロジェクトに pnpm 環境をセットアップします。p
 - `bun.lockb` / `bun.lock` が検出された場合は bun からの移行はこのスキルの対象外であることをユーザーに伝え、作業を中断する
 - `package.json` の `workspaces` フィールドや `pnpm-workspace.yaml` からモノレポかどうかを判断する
 - CI ワークフロー（`.github/workflows/`）が存在するか確認する
+- アプリケーション用途か公開ライブラリ用途かを判断する。`package.json` の `private` フィールドや `main`/`exports` フィールドの有無、README の記述、それまでの会話の文脈などから判断できる場合はそれに従う。新規プロジェクトでこれらの材料がなく、判断に自信が持てない場合のみユーザーに確認する
 
 ## 2. `packageManager` フィールドの設定
 
