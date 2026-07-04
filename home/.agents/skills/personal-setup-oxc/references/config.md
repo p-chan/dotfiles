@@ -12,15 +12,11 @@
 両ツールとも `.gitignore` を自動的に尊重するため、Git 管理外のファイルを個別に除外設定する必要はない。
 Git 管理下だが対象から除外したいファイル（自動生成されたが差分を追うためコミットしているファイルなど）がある場合のみ、各設定ファイルの `ignorePatterns`（`.gitignore` 構文）に追記する。レガシーな `.oxlintignore` / `.prettierignore` 形式は新規には作らない。
 
-## oxlint の主な設定項目
+## 設定項目の詳細
 
-- `rules`: ルール個別の有効化と無効化、重大度
-- `categories`: `correctness`、`suspicious`、`pedantic` などのカテゴリ単位の一括制御
-- `plugins`: 有効化するネイティブプラグイン一覧。指定するとデフォルトセットを上書きするため、デフォルトのプラグインに追加したいだけの場合はデフォルトのプラグインも含めて明記する
-- `overrides`: ファイルパターン別の設定上書き
-- `env` / `globals`: 環境変数とグローバル変数の宣言
+個々の設定項目は頻繁に追加・変更されるため、このファイルには列挙しない。設定を書く際は都度、公式のリファレンスを確認する。
 
-## oxfmt の主な設定項目
+- oxlint: https://oxc.rs/docs/guide/usage/linter/config-file-reference.html
+- oxfmt: https://oxc.rs/docs/guide/usage/formatter/config-file-reference.html
 
-Prettier とほぼ互換（`printWidth`、`semi`、`singleQuote`、`trailingComma` など）。
-oxfmt 独自の項目として `sortImports`（import 順序の自動整列）と `sortTailwindcss`（Tailwind CSS クラスの並び替え）があるが、移行元の Prettier 設定にはない項目のため、有効化するかどうかはユーザーに確認する。
+oxfmt には `sortImports`（import 順序の自動整列）や `sortTailwindcss`（Tailwind CSS クラスの並び替え）など、Prettier にはない項目がある。移行元の Prettier 設定には存在しない項目のため、有効化するかどうかはユーザーに確認する。
