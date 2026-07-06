@@ -3,6 +3,7 @@
 format = "$character$directory${custom.git_branch}"
 right_format = "$time"
 add_newline = false
+command_timeout = 1000
 
 [character]
 format = "[⋊>](blue) "
@@ -13,7 +14,7 @@ format = "[$path](yellow) "
 fish_style_pwd_dir_length = 1
 
 [custom.git_branch]
-command = 'branch=$(git branch --show-current 2>/dev/null); dirty=$(git status --short 2>/dev/null | grep -q . && echo "*" || echo ""); echo "${branch}${dirty}"'
+command = 'out=$(git status --porcelain --branch 2>/dev/null); branch=$(printf "%s" "$out" | head -1 | sed -E "s/^## //; s/\.\.\..*//; s/ .*//"); [ "$(printf "%s\n" "$out" | wc -l)" -gt 1 ] && dirty="*" || dirty=""; printf "%s%s" "$branch" "$dirty"'
 when = 'git rev-parse --git-dir > /dev/null 2>&1'
 format = "on [$output](green) "
 
