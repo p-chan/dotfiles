@@ -25,6 +25,8 @@ tsconfig を分割しない場合の手順。
 }
 ```
 
+手順3で `@types/node` などをインストールした場合は、`compilerOptions.types` にそのパッケージ名（例: `"node"`）を追加する（詳細は [references/types-node.md](../references/types-node.md)）。
+
 ## 5. package.json への typecheck スクリプト追加
 
 `scripts` に以下を追加する。
@@ -33,7 +35,7 @@ tsconfig を分割しない場合の手順。
 ```json
 {
   "scripts": {
-    "typecheck": "tsgo --noEmit"
+    "typecheck": "tsc --noEmit"
   }
 }
 ```
