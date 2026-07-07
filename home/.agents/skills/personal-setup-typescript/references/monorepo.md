@@ -7,7 +7,7 @@
 
 ## インストール先
 
-- `typescript` と `tsgo` はルートに1回だけインストールし、全パッケージで共有する。
+- `typescript` はルートに1回だけインストールし、全パッケージで共有する。
 - `@tsconfig/<base>` と `@types/node` は該当パッケージの `package.json` にインストールする（パッケージごとにベースが異なりうるため）。
 
 ## パッケージ間の Project References は組まない

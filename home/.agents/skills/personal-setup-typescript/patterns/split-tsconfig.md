@@ -33,7 +33,7 @@
 ### 2-4. サブ設定ファイルの作成と更新
 
 [references/existing-project.md](../references/existing-project.md) の内容を踏まえて作成または更新する。
-`noEmit: true` は必ず設定する（この後の手順3でビルドモード `tsgo -b` を使うために必須）。
+`noEmit: true` は必ず設定する（この後の手順3でビルドモード `tsc -b` を使うために必須）。
 
 以下は、Vite の react-ts テンプレートに倣い src とビルドツール設定の2環境に分割する例である。
 
@@ -48,9 +48,9 @@
 }
 ```
 
-`types` を明示しない場合、TypeScript は `node_modules/@types` 配下の全パッケージを自動で読み込む。
-選定したベースが `types` を自前で制限していない場合（`@tsconfig/vite-react` の `"types": ["vite/client"]` のように制限しているベースもある）、他のサブ設定ファイルのために `@types/node` をインストールすると、ブラウザ向けのこの設定にも Node.js のグローバル型が意図せず混入する。
-その場合はこの設定側にも `types` を明示し、必要なもの（ブラウザ向けのアンビエント型など）だけに絞る。
+TypeScript 7 では `types` の既定値が `[]` であり、`@types` パッケージは明示的に列挙しない限り読み込まれない（TypeScript 6 以前は `node_modules/@types` 配下の全パッケージを自動で読み込んでいた）。
+そのため、他のサブ設定ファイルのために `@types/node` をインストールしても、この設定（ブラウザ向け）に意図せず混入することはない。
+ただし、この設定でブラウザ向けのアンビエント型（例: `vite/client`）が必要な場合は、選定したベースが `types` を含んでいなければ（`@tsconfig/vite-react` の `"types": ["vite/client"]` のように含むベースもある）、この設定側にも `types` を明示する必要がある。
 
 ```json
 // tsconfig.node.json
@@ -66,13 +66,13 @@
 
 ## 3. package.json への typecheck スクリプト追加
 
-ルートの `tsconfig.json` を対象にビルドモード（`-b`）で実行する。`tsgo` は Project References によるビルドモードに対応している。
+ルートの `tsconfig.json` を対象にビルドモード（`-b`）で実行する。`tsc` は Project References によるビルドモードに対応している。
 既に `tsc -b` などの同等スクリプトがある場合は置き換える。
 
 ```json
 {
   "scripts": {
-    "typecheck": "tsgo -b"
+    "typecheck": "tsc -b"
   }
 }
 ```
