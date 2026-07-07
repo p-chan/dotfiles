@@ -2,7 +2,7 @@
 name: personal-create-pr
 description: GitHub の PR を作成します。ユーザーが PR の作成を求めたときや、エージェントが PR を作成するときに使用してください。
 compatibility: Claude Code
-allowed-tools: Bash(git config --local --get *), Bash(gh pr list *), Bash(git ls-remote *)
+allowed-tools: Bash(git config --local --get *), Bash(gh pr list *), Bash(git ls-remote *), Bash(git log:*), Bash(gh issue list *), Bash(fd *), Read(*)
 ---
 
 # GitHub PR 作成
@@ -11,46 +11,10 @@ allowed-tools: Bash(git config --local --get *), Bash(gh pr list *), Bash(git ls
 
 ### 1. 判定
 
-#### キャッシュ確認
+[personal-detect-git-convention スキル](../personal-detect-git-convention/SKILL.md)の手順に従い、以下を判定します。
 
-まず以下のコマンドでキャッシュを確認します：
-
-```bash
-git config --local --get convention.language
-git config --local --get convention.pull-request-title
-```
-
-両方設定済みの場合はその値を使い、言語判定とスタイル判定をスキップします。
-
-未設定の項目がある場合は、以下のコマンドを実行し、言語判定とスタイル判定を行います。
-
-```sh
-gh pr list --state all --limit 10 --json title,author --jq '[.[] | select(.author.login | test("\\[bot\\]$") | not) | .title]'
-```
-
-#### 言語判定
-
-| 言語   | パターン           | `convention.language` の値 |
-| ------ | ------------------ | -------------------------- |
-| 日本語 | 日本語が含まれる   | `ja`                       |
-| 英語   | 英語のみが含まれる | `en`                       |
-| その他 | 上記以外           | `others`                   |
-
-#### スタイル判定
-
-| スタイル             | パターン           | `convention.pull-request-title` の値 |
-| -------------------- | ------------------ | ------------------------------------ |
-| Conventional Commits | `feat:`, `fix:` 等 | `conventional-commits`               |
-| その他               | 上記以外           | `others`                             |
-
-#### キャッシュ保存
-
-判定結果をキャッシュに保存します。
-
-```bash
-git config --local convention.language <判定結果>
-git config --local convention.pull-request-title <判定結果>
-```
+- 言語（`convention.language`）
+- PR タイトルスタイル（`convention.pull-request-title-style`）
 
 ### 2. テンプレート確認
 
@@ -87,7 +51,7 @@ git diff <base-branch>...HEAD
 タイトルと本文を生成する前に、生成に使う設定値を出力します。
 
 - 言語: `<convention.language の値>`
-- スタイル: `<convention.pull-request-title の値>`
+- スタイル: `<convention.pull-request-title-style の値>`
 - テンプレート: `<テンプレートのパス or なし>`
 
 その後、言語とスタイル、テンプレート、差分をもとに、タイトルと本文を生成します。
