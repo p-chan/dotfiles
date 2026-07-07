@@ -1,7 +1,7 @@
 ---
 name: personal-detect-git-convention
 description: 各リポジトリの既存の慣習からコミットメッセージ・PR タイトルの言語/スタイルを検出し、それに従うための手順をまとめたリファレンスです。ユーザーが Git の規約について尋ねたときや、他のスキルがコミット・PR 作成時に規約判定を必要とするときに使用してください。
-allowed-tools: Bash(git config --local --get *), Bash(git config --local convention.language *), Bash(git config --local convention.commit-message-style *), Bash(git config --local convention.pull-request-title-style *), Bash(git log:*), Bash(gh pr list *), Bash(gh issue list *), Bash(fd *), Read(*)
+allowed-tools: Bash(git config --local --get *), Bash(git config --local convention.language *), Bash(git config --local convention.commit-message-style *), Bash(git config --local convention.pull-request-title-style *), Bash(git config --local convention.branch-strategy *), Bash(git log:*), Bash(gh pr list *), Bash(gh issue list *), Bash(gh repo view *), Bash(gh api repos/*/branches/*/protection*), Bash(fd *), Read(*)
 ---
 
 # Git 規約の検出
@@ -15,6 +15,7 @@ allowed-tools: Bash(git config --local --get *), Bash(git config --local convent
 | `convention.language`                 | コミットメッセージ・PR タイトルなどの言語 | `ja` / `en` / `others:<説明>` / `others:?`                                                      |
 | `convention.commit-message-style`     | コミットメッセージのスタイル              | `conventional-commits` / `gitmoji-unicode` / `gitmoji-shortcode` / `others:<説明>` / `others:?` |
 | `convention.pull-request-title-style` | PR タイトルのスタイル                     | `conventional-commits` / `others:<説明>` / `others:?`                                           |
+| `convention.branch-strategy`          | デフォルトブランチへの直接コミットの可否  | `direct-commit` / `pull-request` / `others:?`                                                   |
 
 ## 判定の共通手順
 
@@ -104,3 +105,27 @@ git config --local convention.commit-message-style others:?
 | -------------------- | ------------------ | ---------------------------------------------- |
 | Conventional Commits | `feat:`, `fix:` 等 | `conventional-commits`                         |
 | その他               | 上記以外           | `others:<検出したスタイルの説明>` / `others:?` |
+
+## ブランチ戦略判定（`convention.branch-strategy`）
+
+デフォルトブランチのブランチ保護ルールの有無を情報源とします。
+
+### 1. デフォルトブランチ名の取得
+
+```bash
+gh repo view --json defaultBranchRef --jq .defaultBranchRef.name
+```
+
+### 2. ブランチ保護ルールの確認
+
+```bash
+gh api repos/{owner}/{repo}/branches/<デフォルトブランチ名>/protection
+```
+
+判定基準:
+
+| レスポンス                                                     | 意味                                                 | 値                         |
+| ---------------------------------------------------------------- | ------------------------------------------------------ | ---------------------------- |
+| 200（保護ルールあり）                                          | デフォルトブランチへの直接コミットが制限されている | `pull-request`               |
+| 404（保護ルールなし）                                          | デフォルトブランチへの直接コミットが許容されている | `direct-commit`               |
+| 上記以外（GitHub 以外のホスティング、権限不足、通信エラー等） | 自動判定不可                                          | ユーザーに直接質問して決定 |
