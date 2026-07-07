@@ -1,7 +1,7 @@
 ---
 name: personal-commit
 description: Git リポジトリのスタイルに合わせてコミットを作成します。ユーザーがコミットを求めたときや、エージェントがコミットするときに必ず使用してください。
-allowed-tools: Bash(git diff:*), Bash(git log:*), Bash(git config --local --get *), Bash(sed:*), Bash(tr:*), Bash(sort:*), Bash(xargs:*)
+allowed-tools: Bash(git diff:*), Bash(git log:*), Bash(git config --local --get *), Bash(sed:*), Bash(tr:*), Bash(sort:*), Bash(xargs:*), Bash(gh issue list *), Bash(gh pr list *), Bash(fd *), Read(*)
 ---
 
 # Git コミット作成
@@ -42,51 +42,17 @@ git diff
 
 ### 3. 判定
 
-#### キャッシュ確認
+[personal-detect-git-convention スキル](../personal-detect-git-convention/SKILL.md)の手順に従い、以下を判定します。
 
-まず以下のコマンドでキャッシュを確認します：
-
-```bash
-git config --local --get convention.language
-git config --local --get convention.commit-message
-```
-
-両方設定済みの場合はその値を使い、言語判定とスタイル判定をスキップします。
-
-未設定の項目がある場合は `git log --oneline -100` を実行し、言語判定とスタイル判定を行います。
-
-#### 言語判定
-
-| 言語   | パターン           | `convention.language` の値 |
-| ------ | ------------------ | -------------------------- |
-| 日本語 | 日本語が含まれる   | `ja`                       |
-| 英語   | 英語のみが含まれる | `en`                       |
-| その他 | 上記以外           | `others`                   |
-
-#### スタイル判定
-
-| スタイル                  | パターン                | `convention.commit-message` の値 |
-| ------------------------- | ----------------------- | -------------------------------- |
-| Conventional Commits      | `feat:`, `fix:` 等      | `conventional-commits`           |
-| gitmoji（Unicode 絵文字） | Unicode 絵文字で始まる  | `gitmoji-unicode`                |
-| gitmoji（Shortcode）      | `:sparkles:` 等で始まる | `gitmoji-shortcode`              |
-| その他                    | 上記以外                | `others`                         |
-
-#### キャッシュ保存
-
-判定結果をキャッシュに保存します。
-
-```bash
-git config --local convention.language <判定結果>
-git config --local convention.commit-message <判定結果>
-```
+- 言語（`convention.language`）
+- コミットメッセージスタイル（`convention.commit-message-style`）
 
 #### スコープ判定
 
 以下のコマンドでスコープ一覧を取得します。
 
 ```bash
-git log --oneline -n 999 | sed -n 's/^[a-f0-9]* [^(:]*(\([^)]*\)):.*/\1/p' | tr ',' '\n' | sed 's/^ *//' | sort -u | xargs | sed 's/ /, /g'
+git log --oneline -n 999 --perl-regexp --author='^((?!\[bot\]).)*$' | sed -n 's/^[a-f0-9]* [^(:]*(\([^)]*\)):.*/\1/p' | tr ',' '\n' | sed 's/^ *//' | sort -u | xargs | sed 's/ /, /g'
 ```
 
 出力が空の場合はスコープなしとして扱います。
