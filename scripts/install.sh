@@ -14,7 +14,20 @@ log_success () {
   echo "✅ $1"
 }
 
+# ~/.config/dotfiles/dotfiles-dir is the single source of truth for where
+# this repo lives, also read by .zshenv on every shell startup. An explicit
+# $DOTFILES_DIR (e.g. from CI) wins and gets persisted there so later reads
+# (including mid-bootstrap, once .zshenv is symlinked) see the same value.
+DOTFILES_DIR_CONFIG_FILE="${XDG_CONFIG_HOME:-$HOME/.config}/dotfiles/dotfiles-dir"
+
+if [ -z "$DOTFILES_DIR" ] && [ -f "$DOTFILES_DIR_CONFIG_FILE" ]; then
+  read -r DOTFILES_DIR < "$DOTFILES_DIR_CONFIG_FILE"
+fi
+
 DOTFILES_DIR="${DOTFILES_DIR:-$HOME/src/github.com/p-chan/dotfiles}"
+
+mkdir -p "$(dirname "$DOTFILES_DIR_CONFIG_FILE")"
+echo "$DOTFILES_DIR" > "$DOTFILES_DIR_CONFIG_FILE"
 
 if ! pgrep oahd >&/dev/null; then
   log_info "Installing Rosetta 2..."
