@@ -137,7 +137,6 @@ if type mise &>/dev/null; then
 
   DOTFILES_DIR="$DOTFILES_DIR" \
   MISE_GLOBAL_CONFIG_FILE="$DOTFILES_DIR/home/.config/mise/config.toml" \
-  MISE_DOTFILES_ROOT="$DOTFILES_DIR/home" \
   mise bootstrap --yes $extra_args
 
   log_success "Successfully ran mise bootstrap."

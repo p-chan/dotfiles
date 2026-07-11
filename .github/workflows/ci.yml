@@ -34,9 +34,16 @@ jobs:
         shell: zsh -l {0}
     steps:
       - uses: actions/checkout@v5
+      # dotfiles.root in home/.config/mise/config.toml is a fixed path (mise
+      # settings can't be templated), so the checkout needs to actually live
+      # there instead of $GITHUB_WORKSPACE for `mise bootstrap`'s dotfiles
+      # phase to find its sources.
+      - name: Copy checkout to the default dotfiles location
+        run: |
+          mkdir -p "$HOME/src/github.com/p-chan"
+          cp -R "$GITHUB_WORKSPACE" "$HOME/src/github.com/p-chan/dotfiles"
       - name: Install
         run: |
-          DOTFILES_DIR=$GITHUB_WORKSPACE \
           NONINTERACTIVE=1 \
           HOMEBREW_BUNDLE_CASK_SKIP="${{ needs.get-cask-packages.outputs.packages }}" \
           MISE_GPG_VERIFY=false \

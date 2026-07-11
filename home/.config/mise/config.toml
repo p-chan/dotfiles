@@ -39,9 +39,9 @@ macos-arm64 = { asset_pattern = "jq-macos-arm64" }
 [settings]
 experimental = true
 idiomatic_version_file_enable_tools = ['node']
-# dotfiles.root is intentionally not set here: it varies with $DOTFILES_DIR
-# (default ~/src/github.com/p-chan/dotfiles, but overridable, and different in
-# CI), so it's exported as MISE_DOTFILES_ROOT from .zshenv/install.sh instead.
+# Not a template, so this must match the real checkout location; CI copies
+# its checkout here first (see .github/workflows/ci.yml) to keep it true.
+dotfiles.root = "~/src/github.com/p-chan/dotfiles/home"
 dotfiles.default_mode = "symlink"
 
 [settings.github]
