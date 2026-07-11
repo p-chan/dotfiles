@@ -8,6 +8,7 @@ if [[ -f $DOTFILES_DIR_CONFIG_FILE ]]; then
 fi
 
 export DOTFILES_DIR="${CONFIGURED_DOTFILES_DIR:-$HOME/src/github.com/p-chan/dotfiles}"
+export MISE_DOTFILES_ROOT="$DOTFILES_DIR/home"
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.local/share/mise/shims:$PATH"
 export PATH="$DOTFILES_DIR/bin:$PATH"
