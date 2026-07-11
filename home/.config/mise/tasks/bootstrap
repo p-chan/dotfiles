@@ -1,6 +1,10 @@
-#!/bin/zsh
+#!/bin/bash
 
 #MISE description="Bootstrap this machine"
+# bash, not zsh: zsh always sources ~/.zshenv, even for non-interactive
+# scripts, and by the time this task runs the dotfiles phase has already
+# symlinked it — re-sourcing it here would reset $DOTFILES_DIR to its
+# default instead of whatever value the caller (e.g. CI) passed in.
 
 set -e
 
