@@ -115,15 +115,17 @@ if type mise &>/dev/null; then
 
   # macOS GUI provisioning (Dock, Finder, hostname, etc.) doesn't make sense on
   # an ephemeral CI runner, so skip it there like the old provisioning.sh did.
-  skip_parts=""
+  # The runner also ships its own ~/.ssh, which conflicts with the dotfiles
+  # entry; forcing it is safe on a throwaway runner.
+  extra_args=""
   if [ "$CI" = "true" ]; then
-    skip_parts="--skip macos-defaults"
+    extra_args="--skip macos-defaults --force-dotfiles"
   fi
 
   DOTFILES_DIR="$DOTFILES_DIR" \
   MISE_GLOBAL_CONFIG_FILE="$DOTFILES_DIR/home/.config/mise/config.toml" \
   MISE_DOTFILES_ROOT="$DOTFILES_DIR/home" \
-  mise bootstrap --yes $skip_parts
+  mise bootstrap --yes $extra_args
 
   log_success "Successfully ran mise bootstrap."
 else
