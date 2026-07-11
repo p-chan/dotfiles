@@ -64,15 +64,19 @@ else
   log_warn "$DOTFILES_DIR not found. Skipping dotfiles remote URL changing."
 fi
 
-if [ -d "$DOTFILES_DIR" ]; then
-  log_info "Linking dotfiles..."
+if ! type mise &>/dev/null; then
+  log_info "Installing mise..."
 
-  DOTFILES_DIR=$DOTFILES_DIR bash "$DOTFILES_DIR/scripts/link.sh"
+  curl https://mise.run | sh
 
-  log_success "Successfully linked dotfiles."
+  log_success "Successfully installed mise."
 else
-  log_warn "$DOTFILES_DIR not found. Skipping dotfiles linking."
+  log_info "mise already installed."
 fi
+
+# mise.run installs to ~/.local/bin by default; make it available for the
+# rest of this script without requiring a new shell.
+export PATH="$HOME/.local/bin:$PATH"
 
 if ! type brew &>/dev/null; then
   log_info "Installing Homebrew..."
@@ -105,91 +109,22 @@ else
 fi
 
 if type mise &>/dev/null; then
-  log_info "Installing mise tools..."
+  log_info "Running mise bootstrap..."
 
-  mise install
+  mise trust "$DOTFILES_DIR/home/.config/mise/config.toml"
 
-  eval "$(mise env -s bash)"
-
-  log_success "Successfully installed mise tools."
-else
-  log_warn "mise command not found. Skipping mise tool installation."
-fi
-
-if type ya &>/dev/null; then
-  log_info "Installing yazi plugins and flavors..."
-
-  while IFS= read -r package; do
-    [[ -z "$package" || "$package" == \#* ]] && continue
-    ya pkg add "$package"
-  done < "$DOTFILES_DIR/home/.config/yazi/packages.txt"
-
-  log_success "Successfully installed yazi plugins and flavors."
-else
-  log_warn "ya command not found. Skipping yazi plugins and flavors installation."
-fi
-
-if ! type claude &>/dev/null; then
-  log_info "Installing Claude Code..."
-
-  curl -fsSL https://claude.ai/install.sh | bash
-
-  log_success "Successfully installed Claude Code."
-else
-  log_info "Claude Code already installed."
-fi
-
-if type gh &>/dev/null; then
-  log_info "Installing gh extensions..."
-
-  while IFS= read -r extension; do
-    [[ -z "$extension" || "$extension" == \#* ]] && continue
-    gh extension install "$extension"
-  done < "$DOTFILES_DIR/gh-extensions"
-
-  log_success "Successfully installed gh extensions."
-else
-  log_warn "gh command not found. Skipping gh extensions installation."
-fi
-
-if type apm &>/dev/null; then
-  if [ -f "$DOTFILES_DIR/home/.apm/apm.yml" ]; then
-    log_info "Installing apm skills..."
-
-    apm install -g --target agent-skills
-
-    log_success "Successfully installed apm skills."
-  else
-    log_info "No apm.yml found. Skipping apm skills installation."
+  # macOS GUI provisioning (Dock, Finder, hostname, etc.) doesn't make sense on
+  # an ephemeral CI runner, so skip it there like the old provisioning.sh did.
+  skip_parts=""
+  if [ "$CI" = "true" ]; then
+    skip_parts="--skip macos-defaults"
   fi
+
+  DOTFILES_DIR="$DOTFILES_DIR" \
+  MISE_GLOBAL_CONFIG_FILE="$DOTFILES_DIR/home/.config/mise/config.toml" \
+  mise bootstrap --yes $skip_parts
+
+  log_success "Successfully ran mise bootstrap."
 else
-  log_warn "apm command not found. Skipping apm skills installation."
-fi
-
-if [ "$CI" != "true" ]; then
-  if type deno &>/dev/null; then
-    if type code &>/dev/null; then
-      log_info "Installing VSCode extensions for VSCode..."
-
-      DOTFILES_DIR=$DOTFILES_DIR deno run -A "$DOTFILES_DIR/scripts/code-extensions.ts" import
-
-      log_success "Successfully installed VSCode extensions for VSCode."
-    else
-      log_warn "code command not found. Skipping VSCode extensions import."
-    fi
-  else
-    log_warn "deno command not found. Skipping VSCode extensions import."
-  fi
-else
-  log_info "CI environment detected. Skipping VSCode extensions import."
-fi
-
-if [ "$CI" != "true" ]; then
-  log_info "Provisioning macOS..."
-
-  bash "$DOTFILES_DIR/scripts/provisioning.sh"
-
-  log_success "Successfully provisioned macOS."
-else
-  log_info "CI environment detected. Skipping macOS provisioning."
+  log_warn "mise command not found. Skipping mise bootstrap."
 fi

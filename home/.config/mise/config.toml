@@ -39,6 +39,57 @@ macos-arm64 = { asset_pattern = "jq-macos-arm64" }
 [settings]
 experimental = true
 idiomatic_version_file_enable_tools = ['node']
+dotfiles.root = "~/src/github.com/p-chan/dotfiles/home"
+dotfiles.default_mode = "symlink"
 
 [settings.github]
 credential_command = "gh auth token"
+
+[bootstrap.packages]
+"brew:defaultbrowser" = "latest"
+"brew:dockutil" = "latest"
+"brew:git" = "latest"
+"brew:tailscale" = "latest"
+"brew:terminal-notifier" = "latest"
+"brew:vim" = "latest"
+"brew:zsh" = "latest"
+
+[bootstrap.macos.dock]
+autohide = true
+
+[bootstrap.macos.defaults]
+"NSGlobalDomain" = { AppleInterfaceStyle = "Dark", AppleShowAllExtensions = true, NSNavPanelExpandedStateForSaveMode = true }
+"com.apple.dock" = { wvous-tr-corner = 2, wvous-tr-modifier = 0, wvous-bl-corner = 4, wvous-bl-modifier = 0, autohide-delay = 0 }
+"com.apple.finder" = { _FXSortFoldersFirst = true, FXPreferredViewStyle = "clmv", CreateDesktop = false, NewWindowTarget = "PfHm", AppleShowAllFiles = true }
+
+[dotfiles]
+"~/.agents" = {}
+"~/.apm/apm.lock.yaml" = {}
+"~/.apm/apm.yml" = {}
+"~/.claude/CLAUDE.md" = {}
+"~/.claude/hooks" = {}
+"~/.claude/rules" = {}
+"~/.claude/settings.json" = {}
+"~/.claude/skills" = {}
+"~/.claude/statusline.sh" = {}
+"~/.codex/AGENTS.md" = {}
+"~/.codex/skills" = {}
+"~/.config/fixpack" = {}
+"~/.config/gh/config.yml" = {}
+"~/.config/ghostty" = {}
+"~/.config/hunk/config.toml" = {}
+"~/.config/git" = {}
+"~/.config/karabiner" = {}
+"~/.config/mise" = {}
+"~/.config/sheldon" = {}
+"~/.config/tmux" = {}
+"~/.config/vim" = {}
+"~/.config/yazi" = {}
+"~/.config/zsh" = {}
+"~/.config/zsh-abbr" = {}
+"~/.config/starship.toml" = {}
+"~/.ssh" = {}
+"~/.editorconfig" = {}
+"~/.zshenv" = {}
+"~/Library/Application Support/Code/User/keybindings.json" = {}
+"~/Library/Application Support/Code/User/settings.json" = {}

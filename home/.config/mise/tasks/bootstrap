@@ -1,0 +1,55 @@
+#!/bin/zsh
+
+#MISE description="Bootstrap this machine"
+
+set -e
+
+if [ "${CI:-}" != "true" ]; then
+  MODEL_NAME=$(system_profiler SPHardwareDataType | awk -F': ' '/Model Name/ {print $2}')
+
+  sudo scutil --set ComputerName "P-Chan's $MODEL_NAME"
+  sudo scutil --set LocalHostName "p-chan-$(echo "$MODEL_NAME" | tr '[:upper:]' '[:lower:]' | sed 's/ /-/g')"
+
+  defaults write NSGlobalDomain AppleLanguages -array "en" "ja"
+  defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 60 "<dict><key>enabled</key><false/></dict>"
+  defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 64 "<dict><key>enabled</key><false/></dict>"
+
+  defaultbrowser browser
+
+  dockutil --remove all
+  for app in Fantastical Mimestream Arc Slack Figma 1Password "Visual Studio Code" Ghostty; do
+    [ -d "/Applications/$app.app" ] && dockutil --add "/Applications/$app.app"
+  done
+
+  chflags nohidden ~/Library
+fi
+
+if type ya >/dev/null 2>&1; then
+  while IFS= read -r package; do
+    case "$package" in
+      ''|'#'*) continue ;;
+    esac
+    ya pkg add "$package"
+  done < "$DOTFILES_DIR/home/.config/yazi/packages.txt"
+fi
+
+if ! type claude >/dev/null 2>&1; then
+  curl -fsSL https://claude.ai/install.sh | bash
+fi
+
+if type gh >/dev/null 2>&1; then
+  while IFS= read -r extension; do
+    case "$extension" in
+      ''|'#'*) continue ;;
+    esac
+    gh extension install "$extension"
+  done < "$DOTFILES_DIR/gh-extensions"
+fi
+
+if type apm >/dev/null 2>&1 && [ -f "$DOTFILES_DIR/home/.apm/apm.yml" ]; then
+  apm install -g --target agent-skills
+fi
+
+if [ "${CI:-}" != "true" ] && type deno >/dev/null 2>&1 && type code >/dev/null 2>&1; then
+  deno run -A "$DOTFILES_DIR/scripts/code-extensions.ts" import
+fi
