@@ -17,7 +17,11 @@ dots_up() {
   brew upgrade
 
   echo "\nUpdating mise..."
+  mise self-update --yes
   mise up
+
+  echo "\nUpdating mise-managed system packages..."
+  mise bootstrap packages upgrade
 
   echo "\nUpdating yazi plugins and flavors..."
   ya pkg upgrade
