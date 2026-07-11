@@ -34,10 +34,9 @@ jobs:
         shell: zsh -l {0}
     steps:
       - uses: actions/checkout@v5
-      # dotfiles.root in home/.config/mise/config.toml is a fixed path (mise
-      # settings can't be templated), so the checkout needs to actually live
-      # there instead of $GITHUB_WORKSPACE for `mise bootstrap`'s dotfiles
-      # phase to find its sources.
+      # dotfiles.root in home/.config/mise/config.toml is a hardcoded path,
+      # so the checkout must actually live there for the dotfiles phase to
+      # find its sources.
       - name: Copy checkout to the default dotfiles location
         run: |
           mkdir -p "$HOME/src/github.com/p-chan"

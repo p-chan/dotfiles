@@ -16,8 +16,8 @@ log_success () {
 
 # ~/.config/dotfiles/dotfiles-dir is the single source of truth for where
 # this repo lives, also read by .zshenv on every shell startup. An explicit
-# $DOTFILES_DIR (e.g. from CI) wins and gets persisted there so later reads
-# (including mid-bootstrap, once .zshenv is symlinked) see the same value.
+# $DOTFILES_DIR wins and gets persisted there, so later reads (including
+# mid-bootstrap, once .zshenv is symlinked) always see the same value.
 DOTFILES_DIR_CONFIG_FILE="${XDG_CONFIG_HOME:-$HOME/.config}/dotfiles/dotfiles-dir"
 
 if [ -z "$DOTFILES_DIR" ] && [ -f "$DOTFILES_DIR_CONFIG_FILE" ]; then

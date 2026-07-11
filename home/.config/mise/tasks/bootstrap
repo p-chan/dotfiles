@@ -1,10 +1,10 @@
 #!/bin/bash
 
 #MISE description="Bootstrap this machine"
-# bash, not zsh: zsh always sources ~/.zshenv, even for non-interactive
-# scripts, and by the time this task runs the dotfiles phase has already
-# symlinked it — re-sourcing it here would reset $DOTFILES_DIR to its
-# default instead of whatever value the caller (e.g. CI) passed in.
+# bash, not zsh: zsh sources ~/.zshenv on every invocation, including
+# scripts. By the time this task runs, the dotfiles phase has already
+# symlinked it, so a zsh task would needlessly redo its PATH/mise-activate
+# setup. bash doesn't source any rc file for a script invocation.
 
 set -e
 
