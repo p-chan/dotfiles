@@ -1,6 +1,6 @@
 ---
 name: personal-setup-typescript
-description: プロジェクトに TypeScript 環境をセットアップします。typescript（TypeScript 7 RC のネイティブコンパイラ）のインストール、適切な @tsconfig/bases の選定と tsconfig.json への反映、package.json への typecheck スクリプト追加、CI への typecheck ジョブ追加を行います。TypeScript のセットアップを求められたときに使用してください。
+description: プロジェクトに TypeScript 環境をセットアップします。typescript（TypeScript 7 のネイティブコンパイラ）のインストール、適切な @tsconfig/bases の選定と tsconfig.json への反映、package.json への typecheck スクリプト追加、CI への typecheck ジョブ追加を行います。TypeScript のセットアップを求められたときに使用してください。
 ---
 
 # TypeScript セットアップ
@@ -27,13 +27,9 @@ Deno は独自の TypeScript ツールチェイン（`deno check`）を持ち、
 
 ## 2. typescript のインストール
 
-`typescript` を `rc` タグ（TypeScript 7 RC）で devDependencies としてインストールする。
+`typescript` の最新バージョンを devDependencies としてインストールする。
 
-```
-typescript@rc
-```
-
-TypeScript 7 RC 以降、[typescript-go](https://github.com/microsoft/typescript-go) 由来のネイティブコンパイラが標準の `typescript` パッケージに統合されており、CLI コマンド名は `tsc` である（`tsgo`/`@typescript/native-preview` は nightly 版向けのパッケージ名であり、RC 以降の通常導線では使わない）。
+`typescript` パッケージの `tsc` コマンドの実体は [typescript-go](https://github.com/microsoft/typescript-go) 由来のネイティブコンパイラであり、コマンド名自体は従来と変わらず `tsc` のままである（`tsgo`/`@typescript/native-preview` は nightly 版向けのパッケージ名であり、通常導線では使わない）。
 
 モノレポの場合はルートに1回だけインストールし、全パッケージで共有する（詳細は [references/monorepo.md](references/monorepo.md)）。
 
