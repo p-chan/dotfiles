@@ -1,6 +1,6 @@
 ---
 name: personal-setup-typescript
-description: プロジェクトに TypeScript 環境をセットアップします。typescript（TypeScript 7 のネイティブコンパイラ）のインストール、適切な @tsconfig/bases の選定と tsconfig.json への反映、package.json への typecheck スクリプト追加、CI への typecheck ジョブ追加を行います。TypeScript のセットアップを求められたときに使用してください。
+description: プロジェクトに TypeScript 環境をセットアップします。typescript（ネイティブコンパイラ）のインストール、適切な @tsconfig/bases の選定と tsconfig.json への反映、package.json への typecheck スクリプト追加、CI への typecheck ジョブ追加を行います。TypeScript のセットアップを求められたときに使用してください。
 ---
 
 # TypeScript セットアップ
