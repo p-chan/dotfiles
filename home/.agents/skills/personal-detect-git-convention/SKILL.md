@@ -1,7 +1,7 @@
 ---
 name: personal-detect-git-convention
 description: 各リポジトリの既存の慣習からコミットメッセージ・PR タイトルの言語/スタイルを検出し、それに従うための手順をまとめたリファレンスです。ユーザーが Git の規約について尋ねたときや、他のスキルがコミット・PR 作成時に規約判定を必要とするときに使用してください。
-allowed-tools: Bash(git config --local --get *), Bash(git config --local convention.language *), Bash(git config --local convention.commit-message-style *), Bash(git config --local convention.pull-request-title-style *), Bash(git config --local convention.branch-strategy *), Bash(git log:*), Bash(gh pr list *), Bash(gh issue list *), Bash(gh repo view *), Bash(gh api repos/*/branches/*/protection*), Bash(fd *), Read(*)
+allowed-tools: Bash(git config --local --get *), Bash(git config --local convention.language *), Bash(git config --local convention.commit-message-style *), Bash(git config --local convention.pull-request-title-style *), Bash(git config --local convention.branch-strategy *), Bash(git config --local convention.use-worktree *), Bash(git log:*), Bash(gh pr list *), Bash(gh issue list *), Bash(gh repo view *), Bash(gh api repos/*/branches/*/protection*), Bash(fd *), Read(*)
 ---
 
 # Git 規約の検出
@@ -16,6 +16,7 @@ allowed-tools: Bash(git config --local --get *), Bash(git config --local convent
 | `convention.commit-message-style`     | コミットメッセージのスタイル              | `conventional-commits` / `gitmoji-unicode` / `gitmoji-shortcode` / `others:<説明>` / `others:?` |
 | `convention.pull-request-title-style` | PR タイトルのスタイル                     | `conventional-commits` / `others:<説明>` / `others:?`                                           |
 | `convention.branch-strategy`          | デフォルトブランチへの直接コミットの可否  | `direct-commit` / `pull-request` / `others:?`                                                   |
+| `convention.use-worktree`             | worktree 運用の可否                       | `true` / `false`                                                                                |
 
 ## 判定の共通手順
 
@@ -129,3 +130,10 @@ gh api repos/{owner}/{repo}/branches/<デフォルトブランチ名>/protection
 | 200（保護ルールあり）                                         | デフォルトブランチへの直接コミットが制限されている | `pull-request`             |
 | 404（保護ルールなし）                                         | デフォルトブランチへの直接コミットが許容されている | `direct-commit`            |
 | 上記以外（GitHub 以外のホスティング、権限不足、通信エラー等） | 自動判定不可                                       | ユーザーに直接質問して決定 |
+
+## worktree 運用判定（`convention.use-worktree`）
+
+通常の開発作業を worktree で行うかどうかの判定です。他のキーと異なり履歴から自動判定できないため、以下の順で決定します。
+
+1. メモリファイル（`AGENTS.md` や `CLAUDE.md` など）に worktree 運用についての記載があれば、それに従います
+2. 記載がなければ、ユーザーに質問して決定します
