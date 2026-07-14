@@ -1,10 +1,12 @@
 lockfile_version: '1'
-generated_at: '2026-06-18T09:40:02.855522+00:00'
-apm_version: 0.20.0
+generated_at: '2026-07-14T05:27:48.646903+00:00'
+apm_version: 0.22.0
 dependencies:
 - repo_url: k16shikano/fd287c3133457c4fd8f5601d34aa817d
+  name: fd287c3133457c4fd8f5601d34aa817d
   host: gist.github.com
   resolved_commit: 5ed08e4475365fd233aa0d3ab71c19b87e1a5732
+  version: unknown
   package_type: claude_skill
   deployed_files:
   - .agents/skills/japanese-tech-writing
@@ -12,9 +14,27 @@ dependencies:
   deployed_file_hashes:
     .agents/skills/japanese-tech-writing/SKILL.md: sha256:e05525f4b78eedbe41a62b3078c408d7a2fbc96386be8af893b6b7d58e6941c0
   content_hash: sha256:bc7c0b812df34be051a7887ee008f941f336c91fab5876ff0d11f8373c9366ad
+- repo_url: makenotion/skills
+  name: notion-cli
+  host: github.com
+  resolved_commit: 423af2bf546cd0354e5cc871017251945d9ad14f
+  version: 1.0.0
+  virtual_path: skills/notion-cli
+  is_virtual: true
+  package_type: claude_skill
+  deployed_files:
+  - .agents/skills/notion-cli
+  - .agents/skills/notion-cli/LICENSE.md
+  - .agents/skills/notion-cli/SKILL.md
+  deployed_file_hashes:
+    .agents/skills/notion-cli/LICENSE.md: sha256:db00f7d67d9ecb8eb740d4045953aba945d55acaf4f69bf04efec747c769f36f
+    .agents/skills/notion-cli/SKILL.md: sha256:3b261091e8e2d32c38ca933901b3aeabe811e0a13a8f73e9617d323123f6e39b
+  content_hash: sha256:9624b2f0f37d738d3be67e7c7cc8b8359063defea92b32e96b01692aee60adb4
 - repo_url: mattpocock/skills
+  name: skills
   host: github.com
   resolved_commit: 26ba8ae34bb3657e7dd85939fce8a5a166439f8b
+  version: unknown
   virtual_path: skills/productivity/grill-me
   is_virtual: true
   package_type: claude_skill
@@ -25,8 +45,10 @@ dependencies:
     .agents/skills/grill-me/SKILL.md: sha256:74147eb6010a65957efef2b9e0f0b3ff935c1def7fc117697151b1d0f3610556
   content_hash: sha256:784f0dbb7403b0f00324bce9a112f715342777a0daee7bbb7385f9c6f0a170ea
 - repo_url: microsoft/playwright-cli
+  name: playwright-cli
   host: github.com
   resolved_commit: 9b118a1a737662fa118d591b5687340b86005d5c
+  version: unknown
   virtual_path: skills/playwright-cli
   is_virtual: true
   package_type: claude_skill
@@ -57,8 +79,10 @@ dependencies:
     .agents/skills/playwright-cli/references/video-recording.md: sha256:8555ab5400df0d90e66318aacc0a8a4418fbf872e7463824d55d5c41615abd83
   content_hash: sha256:c75e106cec48dd02c8e87504a88e90d2b84f4472bfadf395e6fd4a86763c4a64
 - repo_url: vercel-labs/opensrc
+  name: opensrc
   host: github.com
   resolved_commit: 2efd74e8f1755f15ed8f5a3445e1f5c80b6362c4
+  version: unknown
   package_type: skill_bundle
   deployed_files:
   - .agents/skills/opensrc
