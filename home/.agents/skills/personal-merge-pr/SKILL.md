@@ -1,7 +1,7 @@
 ---
 name: personal-merge-pr
 description: ユーザーが PR のマージを求めたときや、エージェントが PR をマージするときに必ず使用してください。
-allowed-tools: Bash(gh review-comment list *), Bash(gh pr checks), Bash(gh repo view *), Bash(git fetch), Bash(git log *)
+allowed-tools: Bash(gh review-comment list *), Bash(gh pr checks), Bash(gh repo view *), Bash(git fetch), Bash(git log *), Bash(git rev-parse *)
 ---
 
 # GitHub PR マージ
@@ -89,7 +89,39 @@ gh pr view --json title -q .title
 - Rebase: `--rebase` オプション
 - Squash: `--squash` オプション
 
-また `--delete-branch` オプションを付けてマージと同時にブランチを削除します（このオプションを使うと、自動でベースブランチに切り替わります）。
+マージ時・マージ後の後片付けは、現在のディレクトリが linked worktree かどうかで手順が変わります。以下のコマンドで判定します。
+
+```sh
+test "$(git rev-parse --git-dir)" != "$(git rev-parse --git-common-dir)" && echo "linked worktree" || echo "main working tree"
+```
+
+#### main working tree の場合
+
+`--delete-branch` オプションを付けてマージと同時にブランチを削除します（このオプションを使うと、自動でベースブランチに切り替わります）。
 
 > [!WARNING]
 > `--repo` オプションは `--delete-branch` オプションを無効化するため、他リポジトリの PR をマージするときに限り、使用します。
+
+#### linked worktree の場合
+
+`--delete-branch` オプションは付けません。ベースブランチが別の worktree でチェックアウトされているため、マージ後のブランチ切り替えに失敗します。
+
+マージ後、マージしたブランチ名（`git branch --show-current`）を控えたうえで、以下の手順で worktree とローカルブランチを削除します。
+
+```sh
+# main working tree に移動する
+cd "$(dirname "$(git rev-parse --path-format=absolute --git-common-dir)")"
+
+# worktree とローカルブランチを削除する
+git wt -d <branch-name>
+```
+
+リモートブランチは、リポジトリの Automatically delete head branches 設定が有効なら自動で削除されます。以下のコマンドで確認し、`false` の場合のみ手動で削除します。
+
+```sh
+gh repo view --json deleteBranchOnMerge -q .deleteBranchOnMerge
+```
+
+```sh
+git push origin --delete <branch-name>
+```

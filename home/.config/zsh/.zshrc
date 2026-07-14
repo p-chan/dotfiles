@@ -95,25 +95,32 @@ function reload() {
   source "${ZDOTDIR:-$HOME}/.zshrc"
 }
 
-function _gh_pr_fuzzy_checkout() {
-  number=$(
+# PR ごとに worktree を作成して移動する（fork からの PR は非対応）
+# convention.use-worktree=false のリポジトリでは gh pr checkout にフォールバックする
+function _gh_pr_fuzzy_worktree() {
+  selected=$(
     GH_FORCE_TTY=100% \
     gh pr list --limit 100 \
     --json number,title,headRefName,isDraft \
     --template '{{range .}}{{ $color := "green" }}{{if .isDraft}}{{ $color = "black+h" }}{{end}}{{tablerow (color $color (printf "#%.0f" .number)) .title (color "cyan" .headRefName)}}{{end}}{{tablerender}}' \
-    | fzf --ansi \
-    | awk '{print $1}' \
-    | sed 's/^#//'
+    | fzf --ansi
   )
 
-  if [[ -n "$number" ]]; then
-    BUFFER="gh pr checkout $number"
+  if [[ -n "$selected" ]]; then
+    number=$(echo "$selected" | awk '{print $1}' | sed 's/^#//')
+    if [[ "$(git config --local --get convention.use-worktree 2>/dev/null)" == "false" ]]; then
+      BUFFER="gh pr checkout $number"
+    else
+      # 表示上の headRefName は truncate されうるので、API から正確な値を取得する
+      branch=$(gh pr view "$number" --json headRefName -q .headRefName)
+      BUFFER="git fetch origin && git wt ${(q)branch}"
+    fi
     zle accept-line
   fi
 }
 
-zle -N _gh_pr_fuzzy_checkout
-bindkey "^P" _gh_pr_fuzzy_checkout
+zle -N _gh_pr_fuzzy_worktree
+bindkey "^P" _gh_pr_fuzzy_worktree
 
 function _ghq_fuzzy_cd() {
   local root=$(ghq root)

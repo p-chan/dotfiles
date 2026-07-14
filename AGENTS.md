@@ -36,6 +36,10 @@ P-Chan's portable dev environment as code.
 - Shell scripts
 - Deno
 
+## Git
+
+- Do not use worktrees in this repository (`convention.use-worktree: false`). Files under `home/` are live configuration referenced via symlinks from the home directory, so changes made in a worktree take no effect. Switch branches in the current working tree instead.
+
 ## Verification
 
 - `scripts/doctor.sh`: Check existence of required commands
