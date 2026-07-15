@@ -60,10 +60,10 @@
     "deny": [
       "Bash(git add -A)",
       "Bash(sudo *)",
+      "Edit(.env*)",
+      "Edit(!.env*.example)",
       "Read(.env*)",
-      "Read(!.env*.example)",
-      "Write(.env*)",
-      "Write(!.env*.example)"
+      "Read(!.env*.example)"
     ],
     "defaultMode": "auto"
   },
