@@ -8,6 +8,20 @@
 
 set -e
 
+# The steps below read files from the dotfiles checkout. Its location is
+# mise's dotfiles.root setting (recorded by scripts/install.sh as
+# <checkout>/home), so a bare `mise bootstrap` works with no env setup.
+# code-extensions.ts also expects $DOTFILES_DIR in its environment.
+DOTFILES_ROOT="$(mise settings get dotfiles.root 2>/dev/null || true)"
+DOTFILES_DIR="${DOTFILES_ROOT%/home}"
+
+if [ -z "$DOTFILES_DIR" ] || [ ! -d "$DOTFILES_DIR" ]; then
+  echo "dotfiles.root ('$DOTFILES_ROOT') does not point at a dotfiles checkout. Run scripts/install.sh first." >&2
+  exit 1
+fi
+
+export DOTFILES_DIR
+
 if [ "${CI:-}" != "true" ]; then
   MODEL_NAME=$(system_profiler SPHardwareDataType | awk -F': ' '/Model Name/ {print $2}')
 
