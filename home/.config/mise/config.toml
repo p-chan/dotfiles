@@ -6,7 +6,6 @@ deno = "latest"
 "github:BurntSushi/ripgrep" = "latest"
 "github:sharkdp/bat" = "latest"
 "github:cli/cli" = "latest"
-"github:eza-community/eza" = "latest"
 "github:github/copilot-cli" = "latest"
 "github:jkfran/killport" = "latest"
 "github:junegunn/fzf" = "latest"
@@ -53,6 +52,9 @@ credential_command = "gh auth token"
 [bootstrap.packages]
 "brew:defaultbrowser" = "latest"
 "brew:dockutil" = "latest"
+# eza publishes no macOS binaries on GitHub Releases (Windows/Linux only),
+# so it can't live in [tools] as a github: backend tool.
+"brew:eza" = "latest"
 "brew:git" = "latest"
 "brew:tailscale" = "latest"
 "brew:terminal-notifier" = "latest"
