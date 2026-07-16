@@ -1,4 +1,8 @@
 tap "steipete/tap"
+# eza can't be mise-managed: it ships no macOS binaries on GitHub Releases
+# (so github: fails), and mise's brew backend can't link its ca-certificates
+# dependency on machines where Homebrew already provides that file.
+brew "eza"
 cask "1password-cli"
 cask "1password"
 cask "arc"
