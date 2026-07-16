@@ -52,9 +52,6 @@ credential_command = "gh auth token"
 [bootstrap.packages]
 "brew:defaultbrowser" = "latest"
 "brew:dockutil" = "latest"
-# eza publishes no macOS binaries on GitHub Releases (Windows/Linux only),
-# so it can't live in [tools] as a github: backend tool.
-"brew:eza" = "latest"
 "brew:git" = "latest"
 "brew:tailscale" = "latest"
 "brew:terminal-notifier" = "latest"
