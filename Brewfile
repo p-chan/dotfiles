@@ -1,4 +1,6 @@
-tap "steipete/tap"
+# Homebrew requires non-official taps to be explicitly trusted (tap trust);
+# trust only the cask we actually use instead of the whole tap.
+tap "steipete/tap", trusted: { cask: "codexbar" }
 # eza can't be mise-managed: it ships no macOS binaries on GitHub Releases
 # (so github: fails), and mise's brew backend can't link its ca-certificates
 # dependency on machines where Homebrew already provides that file.
