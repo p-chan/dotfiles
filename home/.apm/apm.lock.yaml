@@ -1,5 +1,5 @@
 lockfile_version: '1'
-generated_at: '2026-07-14T05:27:48.646903+00:00'
+generated_at: '2026-07-16T13:37:48.960849+00:00'
 apm_version: 0.22.0
 dependencies:
 - repo_url: k16shikano/fd287c3133457c4fd8f5601d34aa817d
@@ -15,10 +15,10 @@ dependencies:
     .agents/skills/japanese-tech-writing/SKILL.md: sha256:e05525f4b78eedbe41a62b3078c408d7a2fbc96386be8af893b6b7d58e6941c0
   content_hash: sha256:bc7c0b812df34be051a7887ee008f941f336c91fab5876ff0d11f8373c9366ad
 - repo_url: makenotion/skills
-  name: notion-cli
+  name: skills
   host: github.com
   resolved_commit: 423af2bf546cd0354e5cc871017251945d9ad14f
-  version: 1.0.0
+  version: unknown
   virtual_path: skills/notion-cli
   is_virtual: true
   package_type: claude_skill
