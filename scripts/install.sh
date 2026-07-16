@@ -79,6 +79,15 @@ else
   log_info "dotfiles already cloned."
 fi;
 
+# Normalize $DOTFILES_DIR to an absolute, symlink-free path now that the
+# checkout exists. Every resolution path (explicit env, persisted setting,
+# legacy file, default) funnels through this: a relative path would change
+# meaning with the caller's cwd — the steps below cd around, and the
+# persisted dotfiles.root must stay valid from any directory. `pwd -P`
+# resolves symlinks so the recorded path doesn't depend on how the checkout
+# was reached; set -e aborts here if the directory is missing.
+DOTFILES_DIR="$(cd "$DOTFILES_DIR" && pwd -P)"
+
 if [ -d "$DOTFILES_DIR" ]; then
   log_info "Change remote URL of dotfiles to SSH from HTTPS..."
 
