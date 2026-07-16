@@ -1,13 +1,15 @@
 export EDITOR="vim"
 export VISUAL="vim"
 
-DOTFILES_DIR_CONFIG_FILE="${XDG_CONFIG_HOME:-$HOME/.config}/dotfiles/dotfiles-dir"
-
-if [[ -f $DOTFILES_DIR_CONFIG_FILE ]]; then
-  read -r CONFIGURED_DOTFILES_DIR < "$DOTFILES_DIR_CONFIG_FILE"
+# ~/.zshenv is a symlink into <repo>/home, managed by mise's dotfiles
+# feature from the dotfiles.root setting. Resolving it locates the repo
+# without forking a process on every shell startup (:A resolves symlinks in
+# pure zsh). The fallback covers shells before the first install completes.
+if [[ -L "$HOME/.zshenv" ]]; then
+  export DOTFILES_DIR="${${:-$HOME/.zshenv}:A:h:h}"
+else
+  export DOTFILES_DIR="$HOME/src/github.com/p-chan/dotfiles"
 fi
-
-export DOTFILES_DIR="${CONFIGURED_DOTFILES_DIR:-$HOME/src/github.com/p-chan/dotfiles}"
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.local/share/mise/shims:$PATH"
 export PATH="$DOTFILES_DIR/bin:$PATH"

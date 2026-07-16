@@ -6,7 +6,7 @@ P-Chan's portable dev environment as code.
 
 ## Directory Structure
 
-- `home/`: Core configuration files to be symlinked to home directory with `scripts/link.sh`
+- `home/`: Core configuration files, symlinked into the home directory by `mise bootstrap` (see `[dotfiles]` in `home/.config/mise/config.toml`)
   - `.config/`:
     - `zsh/`
     - `tmux/`

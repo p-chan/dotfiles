@@ -12,6 +12,20 @@
 bash -c "$(curl -fsSL https://raw.githubusercontent.com/p-chan/dotfiles/main/scripts/install.sh)"
 ```
 
+By default the repo is cloned to `~/src/github.com/p-chan/dotfiles`. To use
+another location (CI, a temporary macOS environment, or an existing
+checkout), set `DOTFILES_DIR`:
+
+```sh
+DOTFILES_DIR="$PWD" bash scripts/install.sh
+```
+
+`install.sh` records the location as mise's `dotfiles.root` setting in
+`home/.config/mise/conf.d/dotfiles-root.toml` (machine-local, gitignored),
+so plain `mise bootstrap` invocations need no environment setup afterwards.
+To move the checkout later, move the directory and re-run `install.sh` with
+`DOTFILES_DIR` pointing at the new path.
+
 ## Setup
 
 ### 1Password
