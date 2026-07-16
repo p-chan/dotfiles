@@ -43,9 +43,15 @@ if [ "${CI:-}" != "true" ]; then
 fi
 
 if type ya >/dev/null 2>&1; then
+  # `ya pkg add` exits non-zero for an already-registered package, so skip
+  # entries `ya pkg list` already reports to keep this task idempotent.
+  registered_packages="$(ya pkg list 2>/dev/null || true)"
   while IFS= read -r package; do
     case "$package" in
       ''|'#'*) continue ;;
+    esac
+    case "$registered_packages" in
+      *"$package"*) continue ;;
     esac
     ya pkg add "$package"
   done < "$DOTFILES_DIR/home/.config/yazi/packages.txt"
