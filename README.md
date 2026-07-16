@@ -13,8 +13,8 @@ bash -c "$(curl -fsSL https://raw.githubusercontent.com/p-chan/dotfiles/main/scr
 ```
 
 By default the repo is cloned to `~/src/github.com/p-chan/dotfiles`. To use
-another location (CI, Codespaces, or an existing checkout), set
-`DOTFILES_DIR`:
+another location (CI, a temporary macOS environment, or an existing
+checkout), set `DOTFILES_DIR`:
 
 ```sh
 DOTFILES_DIR="$PWD" bash scripts/install.sh
