@@ -1,7 +1,7 @@
 ---
 name: personal-merge-pr
 description: ユーザーが PR のマージを求めたときや、エージェントが PR をマージするときに必ず使用してください。
-allowed-tools: Bash(gh review-comment list *), Bash(gh pr checks), Bash(gh repo view *), Bash(git fetch), Bash(git log *), Bash(git rev-parse *)
+allowed-tools: Bash(gh review-comment list *), Bash(gh pr checks), Bash(gh pr list *), Bash(gh pr edit *), Bash(gh repo view *), Bash(git fetch), Bash(git log *), Bash(git rev-parse *)
 ---
 
 # GitHub PR マージ
@@ -78,6 +78,26 @@ gh pr view --json title -q .title
 
 - PR タイトルに合わせる場合は `git commit --amend` でコミットメッセージを修正してから force push します
 - コミットメッセージに合わせる場合は `gh pr edit --title` で PR タイトルを修正します
+
+### 依存する PR がないか確認する
+
+マージ対象のブランチを base にしている、他のオープンな PR がないか確認します。
+
+```sh
+gh pr list --base "$(git branch --show-current)" --state open
+```
+
+> [!WARNING]
+> GitHub の Web UI でマージ・ブランチ削除を行った場合、依存する PR の base ブランチはマージ先へ自動的に付け替わります（[Pull Request Retargeting](https://github.blog/changelog/2020-05-19-pull-request-retargeting/)）。しかし `gh pr merge --delete-branch`（や `git push origin --delete` によるブランチ削除）はこの自動付け替えを発火させない既知の問題があり（[cli/cli#1168](https://github.com/cli/cli/issues/1168)）、依存する PR は base ブランチが失われて自動的にクローズされます。base が失われた PR は reopen も base の付け替えもできず、実質的に復旧できません。
+
+依存する PR が見つかった場合、ブランチを削除する**前に**、それぞれの base をマージ先ブランチへ付け替えます。
+
+```sh
+gh pr edit <PR番号> --base <マージ先ブランチ名>
+```
+
+付け替えが完了してから、後続のマージ・削除の手順に進みます。
+依存する PR がない場合は、そのまま次に進んで構いません。
 
 ### マージする
 
