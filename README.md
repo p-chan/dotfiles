@@ -33,6 +33,17 @@ so plain `mise bootstrap` invocations need no environment setup afterwards.
 To move the checkout later, move the directory and re-run `install.sh` with
 `DOTFILES_DIR` pointing at the new path.
 
+## Troubleshooting
+
+### `brew bundle` fails with "Cask reports different checksum"
+
+Some casks (e.g. `codexbar`) are auto-updating apps whose upstream release
+can be swapped in place under the same version tag. If `mise bootstrap` (or
+`brew bundle`) hits this error, the tap's recorded checksum is momentarily
+behind the file actually being served. Re-run `brew update` to pull the
+tap's latest commit, then retry — the checksum is usually corrected within a
+short time of the upstream release going out.
+
 ## Setup
 
 ### 1Password
