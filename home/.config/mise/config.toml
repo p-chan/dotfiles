@@ -47,7 +47,12 @@ idiomatic_version_file_enable_tools = ['node']
 dotfiles.default_mode = "symlink"
 
 [settings.github]
-credential_command = "gh auth token"
+# credential_command runs with mise's own shims stripped from PATH (to avoid
+# recursive mise invocations), so a bare `gh` wouldn't resolve — gh is only
+# ever installed as a mise shim here. `mise which gh` finds the real
+# executable; wrapping it in `$(...)` re-resolves it on every call so this
+# keeps working across `gh`'s "latest" upgrades without a hardcoded path.
+credential_command = "$(mise which gh) auth token"
 
 [bootstrap.packages]
 "brew:defaultbrowser" = "latest"

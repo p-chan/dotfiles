@@ -188,6 +188,20 @@ fi
 if type mise &>/dev/null; then
   log_info "Running mise bootstrap..."
 
+  # mise bootstrap installs several github: tools, each resolved through the
+  # unauthenticated GitHub API (60 requests/hour) unless gh is available and
+  # logged in. On a fresh machine gh itself is one of those tools, so install
+  # and authenticate it here first, ahead of the rest of the batch.
+  log_info "Installing and authenticating gh..."
+
+  mise install "github:cli/cli@latest"
+
+  if ! mise exec "github:cli/cli@latest" -- gh auth status &>/dev/null; then
+    mise exec "github:cli/cli@latest" -- gh auth login
+  fi
+
+  log_success "Successfully authenticated gh."
+
   # If a previous install symlinked ~/.config/mise to another checkout,
   # repoint it now: mise would otherwise keep reading (and converging to)
   # the old location's config. A real directory or file is left for the
