@@ -8,6 +8,13 @@
 
 ## Install
 
+Before anything else, open **System Settings > General > Software Update**
+and update macOS to the latest version. On a brand-new Mac (or one that was
+just reinstalled), the update catalog can be stale and block jumping straight
+to the latest version — if that happens, install the
+[full installer](https://support.apple.com/en-us/HT201475) or step through
+the intermediate versions it offers first.
+
 ```sh
 bash -c "$(curl -fsSL https://raw.githubusercontent.com/p-chan/dotfiles/main/scripts/install.sh)"
 ```
