@@ -11,7 +11,6 @@ deno = "latest"
 "github:junegunn/fzf" = "latest"
 "github:microsoft/apm" = "latest"
 "github:k1LoW/git-wt" = "latest"
-"github:openai/codex" = "latest"
 "github:rossmacarthur/sheldon" = "latest"
 "github:sharkdp/fd" = "latest"
 "github:starship/starship" = "latest"
@@ -35,6 +34,17 @@ version = "latest"
 [tools."github:jqlang/jq".platforms]
 macos-x64 = { asset_pattern = "jq-macos-amd64" }
 macos-arm64 = { asset_pattern = "jq-macos-arm64" }
+
+# openai/codex ships dozens of codex-prefixed release assets (codex-app-server,
+# codex-command-runner, codex-symbols, ...), so mise's default asset-matching
+# picks the right one but keeps its OS/arch-suffixed filename as the shim name
+# (codex-aarch64-apple-darwin instead of codex). Pin the asset explicitly and
+# rename it so `codex` resolves.
+[tools."github:openai/codex"]
+version = "latest"
+
+[tools."github:openai/codex".platforms]
+macos-arm64 = { asset_pattern = "codex-aarch64-apple-darwin.zst", rename_exe = "codex" }
 
 [settings]
 experimental = true
