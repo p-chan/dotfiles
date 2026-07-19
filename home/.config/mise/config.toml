@@ -47,7 +47,16 @@ idiomatic_version_file_enable_tools = ['node']
 dotfiles.default_mode = "symlink"
 
 [settings.github]
-credential_command = "gh auth token"
+# credential_command runs with mise's own shims stripped from PATH (to avoid
+# recursive mise invocations), so a bare `gh` wouldn't resolve — gh is only
+# ever installed as a mise shim here. Calling `mise which gh` from inside
+# credential_command would work around that, but mise's own docs warn
+# against it: gh is itself github:cli/cli, so resolving it could need a
+# GitHub token too, recursing back into this same credential_command. mise's
+# github backend keeps a `latest` symlink next to the resolved version
+# (e.g. installs/github-cli-cli/latest -> ./2.96.0) that it repoints on every
+# upgrade, so this path stays valid without invoking mise at all.
+credential_command = "$HOME/.local/share/mise/installs/github-cli-cli/latest/bin/gh auth token"
 
 [bootstrap.packages]
 "brew:defaultbrowser" = "latest"

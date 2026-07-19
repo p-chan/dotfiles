@@ -188,6 +188,41 @@ fi
 if type mise &>/dev/null; then
   log_info "Running mise bootstrap..."
 
+  # mise bootstrap installs several github: tools, each resolved through the
+  # unauthenticated GitHub API (60 requests/hour) unless gh is available and
+  # logged in. On a fresh machine gh itself is one of those tools, so install
+  # and authenticate it here first, ahead of the rest of the batch.
+  log_info "Installing and authenticating gh..."
+
+  mise install "github:cli/cli@latest"
+
+  if ! mise exec "github:cli/cli@latest" -- gh auth status &>/dev/null; then
+    # This login only needs to mint an API token for mise's credential_command;
+    # it runs before the dotfiles phase symlinks the real
+    # home/.config/gh/config.yml (git_protocol = ssh), so force https here to
+    # skip the SSH key detection/upload prompt, which would otherwise depend
+    # on 1Password's SSH agent already being set up.
+    #
+    # Log in through a scratch GH_CONFIG_DIR rather than the real
+    # ~/.config/gh: --git-protocol makes gh write a full config.yml, but that
+    # path is a dotfiles-managed symlink created later in the dotfiles phase
+    # below. Writing there first would conflict with that symlink on a first
+    # install, or silently overwrite the checked-in file through it on a
+    # re-run. Only hosts.yml (gh's auth reference; the token itself lives in
+    # the system keychain) needs to land in the real location, and it isn't
+    # dotfiles-managed, so copying it there directly is safe.
+    GH_AUTH_TMP_CONFIG_DIR="$(mktemp -d)"
+
+    GH_CONFIG_DIR="$GH_AUTH_TMP_CONFIG_DIR" \
+    mise exec "github:cli/cli@latest" -- gh auth login --git-protocol https --skip-ssh-key
+
+    mkdir -p "$XDG_CONFIG_DIR/gh"
+    cp "$GH_AUTH_TMP_CONFIG_DIR/hosts.yml" "$XDG_CONFIG_DIR/gh/hosts.yml"
+    rm -rf "$GH_AUTH_TMP_CONFIG_DIR"
+  fi
+
+  log_success "Successfully authenticated gh."
+
   # If a previous install symlinked ~/.config/mise to another checkout,
   # repoint it now: mise would otherwise keep reading (and converging to)
   # the old location's config. A real directory or file is left for the
