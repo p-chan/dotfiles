@@ -197,7 +197,12 @@ if type mise &>/dev/null; then
   mise install "github:cli/cli@latest"
 
   if ! mise exec "github:cli/cli@latest" -- gh auth status &>/dev/null; then
-    mise exec "github:cli/cli@latest" -- gh auth login
+    # This login only needs to mint an API token for mise's credential_command;
+    # it runs before the dotfiles phase symlinks the real
+    # home/.config/gh/config.yml (git_protocol = ssh), so force https here to
+    # skip the SSH key detection/upload prompt, which would otherwise depend
+    # on 1Password's SSH agent already being set up.
+    mise exec "github:cli/cli@latest" -- gh auth login --git-protocol https --skip-ssh-key
   fi
 
   log_success "Successfully authenticated gh."
