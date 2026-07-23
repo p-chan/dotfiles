@@ -178,7 +178,7 @@ fi
 if type brew &>/dev/null; then
   log_info "Installing Homebrew packages..."
 
-  brew bundle --file="$DOTFILES_DIR/Brewfile"
+  brew bundle --file="$DOTFILES_DIR/Brewfile" --jobs=auto
 
   log_success "Successfully installed Homebrew packages."
 else
