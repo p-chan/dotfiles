@@ -64,8 +64,7 @@
       "Edit(!.env*.example)",
       "Read(.env*)",
       "Read(!.env*.example)",
-      "Edit(~/.npmrc)",
-      "Write(~/.npmrc)"
+      "Edit(~/.npmrc)"
     ],
     "defaultMode": "auto"
   },
