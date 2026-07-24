@@ -37,8 +37,5 @@
 [ghq]
   root = ~/src
 
-[wt]
-  basedir = .git/wt
-
 [include]
   path = config.local
