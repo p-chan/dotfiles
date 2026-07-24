@@ -7,3 +7,4 @@ Thumbs.db
 # Others
 opensrc/
 .playwright-cli/
+.wt/
