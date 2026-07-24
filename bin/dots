@@ -14,7 +14,7 @@ dots_up() {
 
   echo "\nUpdating Homebrew..."
   brew update
-  brew upgrade
+  brew bundle install --upgrade --file="$DOTFILES_DIR/Brewfile"
 
   echo "\nUpdating mise..."
   mise self-update --yes
