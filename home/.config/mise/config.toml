@@ -81,9 +81,11 @@ credential_command = "$HOME/.local/share/mise/installs/github-cli-cli/latest/bin
 autohide = true
 
 [bootstrap.macos.defaults]
-"NSGlobalDomain" = { AppleInterfaceStyle = "Dark", AppleShowAllExtensions = true, NSNavPanelExpandedStateForSaveMode = true }
+"NSGlobalDomain" = { AppleInterfaceStyle = "Dark", AppleShowAllExtensions = true, NSNavPanelExpandedStateForSaveMode = true, "com.apple.trackpad.scaling" = 1.5 }
 "com.apple.dock" = { wvous-tr-corner = 2, wvous-tr-modifier = 0, wvous-bl-corner = 4, wvous-bl-modifier = 0, autohide-delay = 0 }
 "com.apple.finder" = { _FXSortFoldersFirst = true, FXPreferredViewStyle = "clmv", CreateDesktop = false, NewWindowTarget = "PfHm", AppleShowAllFiles = true }
+"com.apple.AppleMultitouchTrackpad" = { Clicking = true, TrackpadThreeFingerTapGesture = 0 }
+"com.apple.driver.AppleBluetoothMultitouch.trackpad" = { Clicking = true, TrackpadThreeFingerTapGesture = 0 }
 
 [dotfiles]
 "~/.agents" = {}
