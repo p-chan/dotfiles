@@ -21,7 +21,7 @@ jobs:
         name: Get cask packages
         run: |
           echo "packages=$(
-            grep '^cask ' Brewfile | \
+            grep '^cask ' home/.config/homebrew/Brewfile | \
             sed 's/^cask //g' | \
             xargs
           )" >> $GITHUB_OUTPUT
