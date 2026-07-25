@@ -34,12 +34,11 @@ ICON_DRAFT=$(printf '\xEF\x93\x9D')    # nf-oct-git_pull_request_draft (U+F4DD)
 ICON_MERGED=$(printf '\xEF\x90\x99')   # nf-oct-git_merge (U+F419)
 
 # Extract current directory from JSON
-current_dir=$(echo "$input" | jq -r '.workspace.current_dir // empty' 2>/dev/null)
-if [[ -n "$current_dir" && "$current_dir" != "null" ]]; then
-  current_dir=$(basename "$current_dir")
-else
-  current_dir=$(basename "$PWD")
+raw_dir=$(echo "$input" | jq -r '.workspace.current_dir // empty' 2>/dev/null)
+if [[ -z "$raw_dir" || "$raw_dir" == "null" ]]; then
+  raw_dir="$PWD"
 fi
+current_dir=$(basename "$raw_dir")
 
 # Get Git branch and dirty state
 git_branch=""
@@ -48,6 +47,17 @@ if git rev-parse --git-dir >/dev/null 2>&1; then
   git_branch=$(git branch --show-current 2>/dev/null)
   if [[ -n "$(git status --short 2>/dev/null)" ]]; then
     git_diff="*"
+  fi
+
+  # If inside a worktree (e.g. one created by git-wt), show the main repo's
+  # name instead of the worktree directory name. Worktree directories are
+  # often named after the branch, which would otherwise duplicate the
+  # branch shown after "on" (e.g. "branch-name on branch-name").
+  git_common_dir=$(git rev-parse --git-common-dir 2>/dev/null)
+  if [[ -n "$git_common_dir" ]]; then
+    [[ "$git_common_dir" != /* ]] && git_common_dir="$raw_dir/$git_common_dir"
+    main_root=$(cd "$(dirname "$git_common_dir")" 2>/dev/null && pwd)
+    [[ -n "$main_root" ]] && current_dir=$(basename "$main_root")
   fi
 fi
 
