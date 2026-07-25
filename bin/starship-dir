@@ -1,13 +1,19 @@
 #!/usr/bin/env bash
-# Prints a shortened path for the starship prompt's [custom.dir] module.
+# Prints the directory segment for the starship prompt's [custom.dir] module.
 #
-# Mirrors starship's built-in directory module (fish-style prefix
-# shortening, truncated to the git repo root), but when inside a worktree
-# it keeps the path relative to the main repository instead of just the
-# repo root. This matters because tools like git-wt name worktree
-# directories after the branch, so truncating to the worktree root alone
-# would show only the branch name and duplicate the branch shown by
-# [custom.git_branch] (e.g. "branch-name on branch-name").
+# Inside a git repository: shows the path relative to the repo root,
+# anchored at the repo name (no home-relative ancestor prefix). Long
+# subpaths collapse the middle into "…", keeping only the last two path
+# components, so deeply nested files stay identifiable without growing
+# the prompt unbounded. Worktrees (e.g. from git-wt) are normalized to
+# their logical position in the main repository, hiding the physical
+# ".wt/branch-name" layout: "~/dotfiles/.wt/branch-name/home/.config"
+# reads as "dotfiles/home/.config" (the branch itself is shown by
+# [custom.git_branch], so the worktree's own root would be noise here).
+#
+# Outside a git repository: falls back to fish-shell-style shortening
+# (ancestors abbreviated to their first character, final dir in full)
+# relative to $HOME.
 
 pwd_path="$PWD"
 
@@ -15,35 +21,61 @@ if git_root=$(git rev-parse --show-toplevel 2>/dev/null); then
   common_dir=$(git rev-parse --git-common-dir 2>/dev/null)
   case "$common_dir" in
     /*) ;;
-    *) common_dir="$git_root/$common_dir" ;;
+    *) common_dir="$pwd_path/$common_dir" ;;
   esac
   main_root=$(cd "$(dirname "$common_dir")" 2>/dev/null && pwd)
   [ -z "$main_root" ] && main_root="$git_root"
 
-  tail="$(basename "$main_root")${git_root#"$main_root"}${pwd_path#"$git_root"}"
-  prefix="$(dirname "$main_root")"
+  repo_name="$(basename "$main_root")"
+  rel="${pwd_path#"$git_root"}"
+
+  segs=()
+  if [ -n "$rel" ]; then
+    parts=()
+    IFS='/' read -ra parts <<<"$rel"
+    for part in "${parts[@]}"; do
+      [ -n "$part" ] && segs+=("$part")
+    done
+  fi
+
+  if [ "${#segs[@]}" -le 2 ]; then
+    out="$repo_name"
+    for s in "${segs[@]}"; do
+      out+="/$s"
+    done
+  else
+    n=${#segs[@]}
+    out="$repo_name/…/${segs[$((n - 2))]}/${segs[$((n - 1))]}"
+  fi
+
+  printf '%s' "$out"
+elif [ "$pwd_path" = "$HOME" ]; then
+  printf '~'
 else
   tail="$(basename "$pwd_path")"
   prefix="$(dirname "$pwd_path")"
+
+  case "$prefix" in
+    "$HOME") short="~" ;;
+    "$HOME"/*) short="~${prefix#"$HOME"}" ;;
+    *) short="$prefix" ;;
+  esac
+
+  out=""
+  case "$short" in
+    /*) out="/" ;;
+  esac
+  IFS='/' read -ra parts <<<"$short"
+  for part in "${parts[@]}"; do
+    [ -z "$part" ] && continue
+    if [ "$part" = "~" ]; then
+      out+="~/"
+    elif [[ "$part" == .* ]]; then
+      out+="${part:0:2}/"
+    else
+      out+="${part:0:1}/"
+    fi
+  done
+
+  printf '%s%s' "$out" "$tail"
 fi
-
-case "$prefix" in
-  "$HOME") short="~" ;;
-  "$HOME"/*) short="~${prefix#"$HOME"}" ;;
-  *) short="$prefix" ;;
-esac
-
-out=""
-IFS='/' read -ra parts <<<"$short"
-for part in "${parts[@]}"; do
-  [ -z "$part" ] && continue
-  if [ "$part" = "~" ]; then
-    out+="~/"
-  elif [[ "$part" == .* ]]; then
-    out+="${part:0:2}/"
-  else
-    out+="${part:0:1}/"
-  fi
-done
-
-printf '%s%s' "$out" "$tail"
