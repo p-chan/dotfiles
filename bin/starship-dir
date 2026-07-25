@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+# Prints a shortened path for the starship prompt's [custom.dir] module.
+#
+# Mirrors starship's built-in directory module (fish-style prefix
+# shortening, truncated to the git repo root), but when inside a worktree
+# it keeps the path relative to the main repository instead of just the
+# repo root. This matters because tools like git-wt name worktree
+# directories after the branch, so truncating to the worktree root alone
+# would show only the branch name and duplicate the branch shown by
+# [custom.git_branch] (e.g. "branch-name on branch-name").
+
+pwd_path="$PWD"
+
+if git_root=$(git rev-parse --show-toplevel 2>/dev/null); then
+  common_dir=$(git rev-parse --git-common-dir 2>/dev/null)
+  case "$common_dir" in
+    /*) ;;
+    *) common_dir="$git_root/$common_dir" ;;
+  esac
+  main_root=$(cd "$(dirname "$common_dir")" 2>/dev/null && pwd)
+  [ -z "$main_root" ] && main_root="$git_root"
+
+  tail="$(basename "$main_root")${git_root#"$main_root"}${pwd_path#"$git_root"}"
+  prefix="$(dirname "$main_root")"
+else
+  tail="$(basename "$pwd_path")"
+  prefix="$(dirname "$pwd_path")"
+fi
+
+case "$prefix" in
+  "$HOME") short="~" ;;
+  "$HOME"/*) short="~${prefix#"$HOME"}" ;;
+  *) short="$prefix" ;;
+esac
+
+out=""
+IFS='/' read -ra parts <<<"$short"
+for part in "${parts[@]}"; do
+  [ -z "$part" ] && continue
+  if [ "$part" = "~" ]; then
+    out+="~/"
+  elif [[ "$part" == .* ]]; then
+    out+="${part:0:2}/"
+  else
+    out+="${part:0:1}/"
+  fi
+done
+
+printf '%s%s' "$out" "$tail"
