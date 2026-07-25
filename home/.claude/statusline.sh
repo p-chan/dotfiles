@@ -104,6 +104,7 @@ fi
 
 # Extract information from JSON
 model=$(echo "$input" | jq -r '.model.display_name // empty' 2>/dev/null)
+effort=$(echo "$input" | jq -r '.effort.level // empty' 2>/dev/null)
 context_pct=$(echo "$input" | jq -r '.context_window.used_percentage // empty' 2>/dev/null)
 
 # Extract usage percentages and reset times from stdin JSON
@@ -160,6 +161,9 @@ fi
 if [[ -n "$model" && "$model" != "null" ]]; then
   output+=$'\n'
   output+="Model: ${ORANGE}${model}${RESET}"
+  if [[ -n "$effort" && "$effort" != "null" ]]; then
+    output+=" (${effort})"
+  fi
 fi
 
 # Context usage
