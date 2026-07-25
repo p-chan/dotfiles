@@ -100,6 +100,7 @@ autohide = true
 "~/.config/fixpack" = {}
 "~/.config/gh/config.yml" = {}
 "~/.config/ghostty" = {}
+"~/.config/homebrew" = {}
 "~/.config/hunk/config.toml" = {}
 "~/.config/git" = {}
 "~/.config/karabiner" = {}

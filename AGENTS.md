@@ -15,6 +15,7 @@ P-Chan's portable dev environment as code.
     - `ghostty/`
     - `mise/`
     - `gh/`
+    - `homebrew/`: `Brewfile` (Homebrew package definitions)
     - `karabiner/`
     - `sheldon/`
     - `zsh-abbr/`
@@ -28,7 +29,6 @@ P-Chan's portable dev environment as code.
   - `.editorconfig`
 - `scripts/`: Scripts for dotfiles operations
 - `bin/`: Custom commands for system-wide use
-- `Brewfile`: Homebrew package definitions
 - `code-extensions`: VSCode extensions definitions
 
 ## Tech Stack
