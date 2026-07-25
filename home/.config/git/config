@@ -37,5 +37,10 @@
 [ghq]
   root = ~/src
 
+[wt]
+  copyignored = true
+  nocopy = node_modules/
+  hook = "[ -f package.json ] && ni"
+
 [include]
   path = config.local
