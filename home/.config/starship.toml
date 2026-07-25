@@ -1,6 +1,6 @@
 "$schema" = "https://starship.rs/config-schema.json"
 
-format = "$character$directory${custom.git_branch}"
+format = "$character${custom.dir}${custom.git_branch}"
 right_format = "$time"
 add_newline = false
 command_timeout = 1000
@@ -8,10 +8,10 @@ command_timeout = 1000
 [character]
 format = "[⋊>](blue) "
 
-[directory]
-truncation_length = 1
-format = "[$path](yellow) "
-fish_style_pwd_dir_length = 1
+[custom.dir]
+command = "starship-dir"
+when = "true"
+format = "[$output](yellow) "
 
 [custom.git_branch]
 command = 'out=$(git status --porcelain --branch 2>/dev/null); branch=$(printf "%s" "$out" | head -1 | sed -E "s/^## //; s/\.\.\..*//; s/ .*//"); [ "$(printf "%s\n" "$out" | wc -l)" -gt 1 ] && dirty="*" || dirty=""; printf "%s%s" "$branch" "$dirty"'
