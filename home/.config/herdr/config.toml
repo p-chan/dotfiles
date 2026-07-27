@@ -1,2 +1,32 @@
+# Colors sourced from the VS Code "One Dark Pro" theme (Binaryify/OneDark-Pro),
+# not ghostty's port, since that extension is the canonical source of this palette.
+[theme.custom]
+# editor.background
+panel_bg = "#282c34"
+accent = "#61afef"
+text = "#abb2bf"
+# statusBar.foreground
+subtext0 = "#9da5b4"
+mauve = "#c678dd"
+green = "#98c379"
+yellow = "#e5c07b"
+red = "#e06c75"
+blue = "#61afef"
+teal = "#56b6c2"
+peach = "#d19a66"
+# sideBar.background
+surface0 = "#21252b"
+# list.hoverBackground / list.activeSelectionBackground
+surface1 = "#2c313a"
+# editorGroup.background (darkest tone in the palette)
+surface_dim = "#181a1f"
+# herdr uses overlay0 for bold sidebar headers/buttons (Spaces, Agents, new,
+# menu, priority sort), not just borders, so it needs to stay legible.
+# comment
+overlay0 = "#7f848e"
+# statusBar.foreground, same as subtext0: herdr uses overlay1 for readable
+# hint/label text (settings, onboarding), not just decoration.
+overlay1 = "#9da5b4"
+
 [ui]
-agent_panel_sort = "spaces"
+agent_panel_sort = "priority"
