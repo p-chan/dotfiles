@@ -145,3 +145,15 @@ gh repo view --json deleteBranchOnMerge -q .deleteBranchOnMerge
 ```sh
 git push origin --delete <branch-name>
 ```
+
+### ベースブランチを最新化する
+
+ブランチの削除まで終わったら、main working tree でベースブランチを最新化します。
+
+```sh
+git switch <base-branch>
+git pull
+```
+
+- main working tree の場合: `--delete-branch` によってベースブランチへ切り替わっているため、`git pull` だけで構いません
+- linked worktree の場合: `git wt -d` の前に main working tree へ移動しているため、そのまま実行できます
