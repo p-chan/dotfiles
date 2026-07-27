@@ -8,29 +8,29 @@ theme = one-dark-pro
 cursor-style = block
 background-opacity = 0.75
 background-opacity-cells = true
-command = zsh -l -i -c "tmux new-session -A -s main"
+command = zsh -l -i -c "herdr --session main"
 maximize = true
 keybind = global:alt+space=toggle_visibility
 keybind = cmd+r=text:\x0c
 # https://github.com/anthropics/claude-code/issues/1282
 keybind = shift+enter=text:\n
-# tmux keybindings (prefix: Ctrl+b)
-# New window
+# herdr keybindings (prefix: Ctrl+b)
+# New tab
 keybind = cmd+t=text:\x02c
-# Close pane or window
-keybind = cmd+w=text:\x02w
-# Split pane (vertical/horizontal)
-keybind = cmd+d=text:\x02%
-keybind = cmd+shift+d=text:\x02\x22
+# Close pane (closing the last pane closes the tab)
+keybind = cmd+w=text:\x02x
+# Split pane (right/down)
+keybind = cmd+d=text:\x02v
+keybind = cmd+shift+d=text:\x02-
 # Focus pane (left/right/up/down)
-keybind = cmd+alt+left=text:\x02\x1b[D
-keybind = cmd+alt+right=text:\x02\x1b[C
-keybind = cmd+alt+up=text:\x02\x1b[A
-keybind = cmd+alt+down=text:\x02\x1b[B
-# Move window (left/right)
+keybind = cmd+alt+left=text:\x02h
+keybind = cmd+alt+right=text:\x02l
+keybind = cmd+alt+up=text:\x02k
+keybind = cmd+alt+down=text:\x02j
+# Swap pane (left/right)
 keybind = cmd+shift+left=text:\x02H
 keybind = cmd+shift+right=text:\x02L
-# Select window (1-9)
+# Select tab (1-9)
 keybind = cmd+digit_1=text:\x021
 keybind = cmd+digit_2=text:\x022
 keybind = cmd+digit_3=text:\x023
