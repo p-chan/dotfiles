@@ -29,4 +29,4 @@ overlay0 = "#7f848e"
 overlay1 = "#9da5b4"
 
 [ui]
-agent_panel_sort = "priority"
+show_agent_labels_on_pane_borders = true
