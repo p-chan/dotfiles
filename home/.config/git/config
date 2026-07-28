@@ -40,7 +40,8 @@
 [wt]
   copyignored = true
   nocopy = node_modules/
-  hook = "[ -f package.json ] && ni"
+  # Not &&: a hook that exits non-zero aborts git wt and blocks its cd.
+  hook = "! [ -f package.json ] || ni"
 
 [include]
   path = config.local
