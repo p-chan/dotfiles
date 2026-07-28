@@ -8,38 +8,95 @@ theme = one-dark-pro
 cursor-style = block
 background-opacity = 0.75
 background-opacity-cells = true
-command = zsh -l -i -c "tmux new-session -A -s main"
+command = zsh -l -i -c "herdr --session main"
 maximize = true
 keybind = global:alt+space=toggle_visibility
 keybind = cmd+r=text:\x0c
 # https://github.com/anthropics/claude-code/issues/1282
 keybind = shift+enter=text:\n
-# tmux keybindings (prefix: Ctrl+b)
-# New window
+# herdr keybindings: each action is sent as the prefix (\x02) plus its key, so
+# the prefix never has to be typed. Payloads follow herdr's default keymap.
+# Deliberately only the everyday operations get a chord — space/agent/tab
+# movement, tab handling, and pane splitting/handling. herdr has four nested
+# levels (space, tab, pane, plus the cross-space agent list) and binding all of
+# them globally needs more comfortable modifier families than macOS has left,
+# which is what the prefix exists to solve. The rest stays on the prefix.
+# One modifier family per level: cmd for pane/tab, cmd+alt for pane focus,
+# cmd+ctrl for pane swap, cmd+shift for space, alt for agent. Shift is reserved
+# for space, so nothing else uses it — except cmd+shift+d below, which keeps the
+# iTerm2 split-down convention.
+# Pane
+keybind = cmd+d=text:\x02v
+keybind = cmd+shift+d=text:\x02-
+keybind = cmd+w=text:\x02x
+keybind = cmd+z=text:\x02z
+keybind = cmd+alt+left=text:\x02h
+keybind = cmd+alt+right=text:\x02l
+keybind = cmd+alt+up=text:\x02k
+keybind = cmd+alt+down=text:\x02j
+# Ghostty's own resize_split default, which herdr makes meaningless.
+keybind = cmd+ctrl+left=text:\x02H
+keybind = cmd+ctrl+right=text:\x02L
+keybind = cmd+ctrl+up=text:\x02K
+keybind = cmd+ctrl+down=text:\x02J
+# Tab
 keybind = cmd+t=text:\x02c
-# Close pane or window
-keybind = cmd+w=text:\x02w
-# Split pane (vertical/horizontal)
-keybind = cmd+d=text:\x02%
-keybind = cmd+shift+d=text:\x02\x22
-# Focus pane (left/right/up/down)
-keybind = cmd+alt+left=text:\x02\x1b[D
-keybind = cmd+alt+right=text:\x02\x1b[C
-keybind = cmd+alt+up=text:\x02\x1b[A
-keybind = cmd+alt+down=text:\x02\x1b[B
-# Move window (left/right)
-keybind = cmd+shift+left=text:\x02H
-keybind = cmd+shift+right=text:\x02L
-# Select window (1-9)
+# Both spellings are needed: Ghostty matches physical keys (bracket_left) and
+# translated keys ([) as separate bindings, and its own goto_split default sits
+# on the translated form. Overriding only one leaves the other one live.
+keybind = cmd+bracket_left=text:\x02p
+keybind = cmd+[=text:\x02p
+keybind = cmd+bracket_right=text:\x02n
+keybind = cmd+]=text:\x02n
 keybind = cmd+digit_1=text:\x021
+keybind = cmd+1=text:\x021
 keybind = cmd+digit_2=text:\x022
+keybind = cmd+2=text:\x022
 keybind = cmd+digit_3=text:\x023
+keybind = cmd+3=text:\x023
 keybind = cmd+digit_4=text:\x024
+keybind = cmd+4=text:\x024
 keybind = cmd+digit_5=text:\x025
+keybind = cmd+5=text:\x025
 keybind = cmd+digit_6=text:\x026
+keybind = cmd+6=text:\x026
 keybind = cmd+digit_7=text:\x027
+keybind = cmd+7=text:\x027
 keybind = cmd+digit_8=text:\x028
+keybind = cmd+8=text:\x028
 keybind = cmd+digit_9=text:\x029
+keybind = cmd+9=text:\x029
+# Space
+# Takes over Ghostty's new_window; a herdr space is what a window would be for.
+keybind = cmd+n=text:\x02N
+keybind = cmd+shift+up=text:\x02\x1b[A
+keybind = cmd+shift+down=text:\x02\x1b[B
+# These are the wire, not the intended chord: macOS eats cmd+shift+3/4/5 for
+# screenshots before any app sees them, so Karabiner rewrites cmd+shift+1..9 to
+# ctrl+1..9 while Ghostty is frontmost. Pressing ctrl+1..9 directly also works,
+# which is the fallback if Karabiner is not running. Ghostty swallowing
+# ctrl+1..9 costs panes the legacy ctrl+3..8 control codes; nothing here uses them.
+keybind = ctrl+digit_1=text:\x02!
+keybind = ctrl+digit_2=text:\x02@
+keybind = ctrl+digit_3=text:\x02#
+keybind = ctrl+digit_4=text:\x02$
+keybind = ctrl+digit_5=text:\x02%
+keybind = ctrl+digit_6=text:\x02^
+keybind = ctrl+digit_7=text:\x02&
+keybind = ctrl+digit_8=text:\x02*
+keybind = ctrl+digit_9=text:\x02(
+# Agent
+keybind = alt+digit_1=text:\x02\x1b1
+keybind = alt+digit_2=text:\x02\x1b2
+keybind = alt+digit_3=text:\x02\x1b3
+keybind = alt+digit_4=text:\x02\x1b4
+keybind = alt+digit_5=text:\x02\x1b5
+keybind = alt+digit_6=text:\x02\x1b6
+keybind = alt+digit_7=text:\x02\x1b7
+keybind = alt+digit_8=text:\x02\x1b8
+keybind = alt+digit_9=text:\x02\x1b9
+# Cross-cutting navigation
+keybind = cmd+k=text:\x02g
 window-padding-x = 8
 window-padding-y = 8
 shell-integration-features = no-cursor
