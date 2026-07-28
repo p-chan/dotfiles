@@ -44,6 +44,65 @@
                 "type": "basic"
               }
             ]
+          },
+          {
+            "description": "Ghostty の前面時だけ Cmd+Shift+1〜9 を Control+1〜9 に置き換える。Cmd+Shift+3/4/5 は macOS がスクリーンショットとして先に消費してしまい、アプリまで届かないため。Ghostty 側は Control+1〜9 で herdr のスペース選択を受ける。 (rev 1)",
+            "manipulators": [
+              {
+                "conditions": [{ "bundle_identifiers": ["^com\\.mitchellh\\.ghostty$"], "type": "frontmost_application_if" }],
+                "from": { "key_code": "1", "modifiers": { "mandatory": ["command", "shift"] } },
+                "to": [{ "key_code": "1", "modifiers": ["control"] }],
+                "type": "basic"
+              },
+              {
+                "conditions": [{ "bundle_identifiers": ["^com\\.mitchellh\\.ghostty$"], "type": "frontmost_application_if" }],
+                "from": { "key_code": "2", "modifiers": { "mandatory": ["command", "shift"] } },
+                "to": [{ "key_code": "2", "modifiers": ["control"] }],
+                "type": "basic"
+              },
+              {
+                "conditions": [{ "bundle_identifiers": ["^com\\.mitchellh\\.ghostty$"], "type": "frontmost_application_if" }],
+                "from": { "key_code": "3", "modifiers": { "mandatory": ["command", "shift"] } },
+                "to": [{ "key_code": "3", "modifiers": ["control"] }],
+                "type": "basic"
+              },
+              {
+                "conditions": [{ "bundle_identifiers": ["^com\\.mitchellh\\.ghostty$"], "type": "frontmost_application_if" }],
+                "from": { "key_code": "4", "modifiers": { "mandatory": ["command", "shift"] } },
+                "to": [{ "key_code": "4", "modifiers": ["control"] }],
+                "type": "basic"
+              },
+              {
+                "conditions": [{ "bundle_identifiers": ["^com\\.mitchellh\\.ghostty$"], "type": "frontmost_application_if" }],
+                "from": { "key_code": "5", "modifiers": { "mandatory": ["command", "shift"] } },
+                "to": [{ "key_code": "5", "modifiers": ["control"] }],
+                "type": "basic"
+              },
+              {
+                "conditions": [{ "bundle_identifiers": ["^com\\.mitchellh\\.ghostty$"], "type": "frontmost_application_if" }],
+                "from": { "key_code": "6", "modifiers": { "mandatory": ["command", "shift"] } },
+                "to": [{ "key_code": "6", "modifiers": ["control"] }],
+                "type": "basic"
+              },
+              {
+                "conditions": [{ "bundle_identifiers": ["^com\\.mitchellh\\.ghostty$"], "type": "frontmost_application_if" }],
+                "from": { "key_code": "7", "modifiers": { "mandatory": ["command", "shift"] } },
+                "to": [{ "key_code": "7", "modifiers": ["control"] }],
+                "type": "basic"
+              },
+              {
+                "conditions": [{ "bundle_identifiers": ["^com\\.mitchellh\\.ghostty$"], "type": "frontmost_application_if" }],
+                "from": { "key_code": "8", "modifiers": { "mandatory": ["command", "shift"] } },
+                "to": [{ "key_code": "8", "modifiers": ["control"] }],
+                "type": "basic"
+              },
+              {
+                "conditions": [{ "bundle_identifiers": ["^com\\.mitchellh\\.ghostty$"], "type": "frontmost_application_if" }],
+                "from": { "key_code": "9", "modifiers": { "mandatory": ["command", "shift"] } },
+                "to": [{ "key_code": "9", "modifiers": ["control"] }],
+                "type": "basic"
+              }
+            ]
           }
         ]
       },

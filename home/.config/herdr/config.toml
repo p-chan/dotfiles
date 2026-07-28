@@ -28,6 +28,12 @@ overlay0 = "#7f848e"
 # hint/label text (settings, onboarding), not just decoration.
 overlay1 = "#9da5b4"
 
+[keys]
+previous_workspace = "prefix+up"
+next_workspace = "prefix+down"
+switch_workspace = "prefix+shift+1..9"
+focus_agent = "prefix+alt+1..9"
+
 [ui]
 show_agent_labels_on_pane_borders = true
 prompt_new_tab_name = false
