@@ -31,3 +31,8 @@ overlay1 = "#9da5b4"
 [ui]
 show_agent_labels_on_pane_borders = true
 prompt_new_tab_name = false
+
+[experimental]
+reveal_hidden_cursor_for_cjk_ime = true
+# Not an empty list, so vim panes keep hiding the cursor in normal mode.
+cjk_ime_agents = ["claude", "codex"]
