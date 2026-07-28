@@ -1,1 +1,2 @@
 mode = "split"
+wrap_lines = true
