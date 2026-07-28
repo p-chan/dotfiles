@@ -48,7 +48,10 @@ To move the checkout later, move the directory and re-run `install.sh` with
   - Default Vault
     - Save new items in: **Suggest a vault**
   - Kayboard Shortcuts
-    - Use default
+    - Show 1Password: **-**
+    - Show Quick Access: **-**
+    - Lock 1Password: **-**
+    - Autofill: **Cmd + \\**
   - Autofill
     - ✅ Submit automatically with Universal Autofill
 - Appearance
