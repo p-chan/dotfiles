@@ -50,9 +50,7 @@
     "show_count_badge": true,
   },
   "agent": {
-    "dock": "right",
-    "sidebar_side": "right",
-    "terminal_init_command": "claude",
+    "enabled": false,
   },
   // Terminal
   "terminal": {
