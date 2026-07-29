@@ -38,7 +38,7 @@ if [ "${CI:-}" != "true" ]; then
   # restarting per invocation races the relaunch and spams
   # "No matching processes belonging to you were found" from killall.
   dockutil --remove all --no-restart
-  for app in Fantastical Mimestream Arc Slack Figma 1Password "Visual Studio Code" Ghostty; do
+  for app in Fantastical Mimestream Arc Slack Figma 1Password "Visual Studio Code" Zed Ghostty; do
     [ -d "/Applications/$app.app" ] && dockutil --add "/Applications/$app.app" --no-restart
   done
   killall Dock
