@@ -114,6 +114,10 @@ autohide = true
 "~/.config/tmux" = {}
 "~/.config/vim" = {}
 "~/.config/yazi" = {}
+# Zed writes generated state (prompts/, themes/) into ~/.config/zed, so link
+# the individual config files instead of the whole directory.
+"~/.config/zed/keymap.json" = {}
+"~/.config/zed/settings.json" = {}
 "~/.config/zsh" = {}
 "~/.config/zsh-abbr" = {}
 "~/.config/starship.toml" = {}
