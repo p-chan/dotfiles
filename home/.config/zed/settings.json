@@ -17,7 +17,7 @@
   "ui_font_family": ".SystemUIFont",
   "ui_font_size": 15.0,
   // Keymap
-  "base_keymap": "Atom",
+  "base_keymap": "VSCode",
   // Editor
   "scroll_beyond_last_line": "off",
   // Window & Layout
