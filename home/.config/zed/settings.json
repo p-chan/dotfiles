@@ -9,6 +9,12 @@
   "session": {
     "trust_all_worktrees": true
   },
+  // Extensions
+  // Merged with Zed's own defaults rather than replacing them.
+  "auto_install_extensions": {
+    "one-dark-pro": true,
+    "file-icons": true
+  },
   // Appearance
   "theme": "One Dark Pro",
   "icon_theme": "File Icons",
