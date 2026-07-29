@@ -7,7 +7,7 @@
   // command palette (cmd-shift-p / ctrl-shift-p)
   // General
   "session": {
-    "trust_all_worktrees": true,
+    "trust_all_worktrees": true
   },
   // Appearance
   "theme": "One Dark Pro",
@@ -21,23 +21,23 @@
   // Window & Layout
   "title_bar": {
     "show_sign_in": false,
-    "show_user_menu": false,
+    "show_user_menu": false
   },
   // Panels
   "project_panel": {
     "dock": "left",
     "default_width": 320,
     "git_status_indicator": true,
-    "hide_root": true,
+    "hide_root": true
   },
   "outline_panel": {
-    "button": false,
+    "button": false
   },
   "collaboration_panel": {
-    "button": false,
+    "button": false
   },
   "debugger": {
-    "button": false,
+    "button": false
   },
   "git_panel": {
     "dock": "left",
@@ -45,17 +45,17 @@
     "status_style": "label_color",
     "tree_view": true,
     "file_icons": true,
-    "show_count_badge": true,
+    "show_count_badge": true
   },
   "agent": {
-    "enabled": false,
+    "enabled": false
   },
   // Terminal
   "terminal": {
-    "button": false,
+    "button": false
   },
   // AI
   "edit_predictions": {
-    "provider": "copilot",
-  },
+    "provider": "copilot"
+  }
 }
