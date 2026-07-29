@@ -54,6 +54,7 @@
   },
   // Terminal
   "terminal": {
+    "button": false,
     "font_family": "Source Code Pro",
     "font_fallbacks": ["Source Han Code JP", "Symbols Nerd Font"],
   },
