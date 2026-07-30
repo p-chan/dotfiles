@@ -1,2 +1,3 @@
 mode = "split"
 wrap_lines = true
+watch = true
