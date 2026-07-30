@@ -13,7 +13,8 @@
   // Merged with Zed's own defaults rather than replacing them.
   "auto_install_extensions": {
     "one-dark-pro": true,
-    "file-icons": true
+    "file-icons": true,
+    "toml": true
   },
   // Appearance
   "theme": "One Dark Pro",
