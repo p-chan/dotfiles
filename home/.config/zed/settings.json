@@ -6,6 +6,7 @@
   // custom settings, run `zed: open default settings` from the
   // command palette (cmd-shift-p / ctrl-shift-p)
   // General
+  "cli_default_open_behavior": "new_window",
   "session": {
     "trust_all_worktrees": true
   },
