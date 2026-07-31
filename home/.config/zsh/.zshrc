@@ -127,10 +127,13 @@ function _ghq_fuzzy_cd() {
   local selected=$(ghq list | fzf --preview "
     dir=$root/{}
     readme=\$(find \"\$dir\" -maxdepth 1 -iname 'readme*' -type f 2>/dev/null | head -1)
-    if [[ -n \"\$readme\" ]]; then
-      bat --style=plain --color=always \"\$readme\"
-    else
+    if [[ -z \"\$readme\" ]]; then
       echo 'No README'
+    elif [[ \"\$readme\" == *.[Mm][Dd] || \"\$readme\" == *.[Mm]arkdown ]]; then
+      mdroll --width \"\$FZF_PREVIEW_COLUMNS\" \"\$readme\"
+    else
+      # README.rst や拡張子なしの README は Markdown ではないので bat に任せる
+      bat --style=plain --color=always \"\$readme\"
     fi
   ")
   if [[ -n "$selected" ]]; then
