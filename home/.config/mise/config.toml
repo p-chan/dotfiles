@@ -102,6 +102,7 @@ autohide = true
 "~/.codex/AGENTS.md" = {}
 "~/.codex/skills" = {}
 "~/.config/fixpack" = {}
+"~/.config/gh-dash/config.yml" = {}
 "~/.config/gh/config.yml" = {}
 "~/.config/ghostty" = {}
 "~/.config/herdr/config.toml" = {}
