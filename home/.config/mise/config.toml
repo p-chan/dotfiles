@@ -49,6 +49,15 @@ version = "latest"
 [tools."github:openai/codex".platforms]
 macos-arm64 = { asset_pattern = "codex-aarch64-apple-darwin.zst", rename_exe = "codex" }
 
+# opencode's releases ship the desktop app's macOS archives alongside the CLI's
+# (opencode-desktop-mac-arm64.zip, .dmg, ...), which mise's default asset
+# matching can't tell apart. Pin the CLI archive explicitly.
+[tools."github:anomalyco/opencode"]
+version = "latest"
+
+[tools."github:anomalyco/opencode".platforms]
+macos-arm64 = { asset_pattern = "opencode-darwin-arm64.zip" }
+
 [settings]
 experimental = true
 idiomatic_version_file_enable_tools = ['node']
@@ -111,6 +120,8 @@ autohide = true
 "~/.config/git" = {}
 "~/.config/karabiner" = {}
 "~/.config/mise" = {}
+"~/.config/opencode/AGENTS.md" = {}
+"~/.config/opencode/opencode.jsonc" = {}
 "~/.config/sheldon" = {}
 "~/.config/tmux" = {}
 "~/.config/vim" = {}
