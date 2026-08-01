@@ -121,6 +121,7 @@ autohide = true
 "~/.config/karabiner" = {}
 "~/.config/mise" = {}
 "~/.config/opencode/AGENTS.md" = {}
+"~/.config/opencode/opencode.jsonc" = {}
 "~/.config/sheldon" = {}
 "~/.config/tmux" = {}
 "~/.config/vim" = {}
