@@ -122,6 +122,53 @@ function _gh_pr_fuzzy_worktree() {
 zle -N _gh_pr_fuzzy_worktree
 bindkey "^P" _gh_pr_fuzzy_worktree
 
+# 現在のリポジトリの worktree 一覧から選んで移動する
+function _git_worktree_fuzzy_cd() {
+  local worktrees=$(command git worktree list --porcelain 2>/dev/null)
+  if [[ -z "$worktrees" ]]; then
+    zle -M "Not a git repository"
+    return
+  fi
+
+  local cwd=$(command git rev-parse --show-toplevel)
+
+  local selected=$(
+    print -r -- "$worktrees" | awk -v cwd="$cwd" '
+      function flush() {
+        if (path == "") return
+        n++
+        paths[n] = path
+        # detached HEAD の worktree には branch 行がない
+        refs[n] = (ref == "" ? "(detached)" : ref)
+        marks[n] = (path == cwd ? "*" : " ")
+        if (length(refs[n]) > width) width = length(refs[n])
+        path = ""; ref = ""
+      }
+      /^worktree / { flush(); path = substr($0, 10) }
+      /^branch /   { ref = substr($0, 8); sub(/^refs\/heads\//, "", ref) }
+      END {
+        flush()
+        for (i = 1; i <= n; i++)
+          printf "%s \033[32m%-*s\033[0m\t%s\n", marks[i], width, refs[i], paths[i]
+      }
+    ' | fzf --ansi --delimiter=$'\t' --with-nth=1 --preview '
+      echo {2}
+      echo
+      git -C {2} -c color.ui=always status --short --branch
+      echo
+      git -C {2} log --oneline --decorate --color=always -20
+    '
+  )
+
+  if [[ -n "$selected" ]]; then
+    BUFFER="cd ${(q)${selected##*$'\t'}}"
+    zle accept-line
+  fi
+}
+
+zle -N _git_worktree_fuzzy_cd
+bindkey "^W" _git_worktree_fuzzy_cd
+
 function _ghq_fuzzy_cd() {
   local root=$(ghq root)
   local selected=$(ghq list | fzf --preview "
