@@ -6,4 +6,5 @@ Thumbs.db
 
 # Others
 .playwright-cli/
+.playwright-mcp/
 .wt/
