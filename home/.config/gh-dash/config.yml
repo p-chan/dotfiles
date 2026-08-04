@@ -1,0 +1,15 @@
+# gh-dash generates this file with its full default contents on first launch
+# when it's missing. Keeping only the settings we actually override means new
+# upstream defaults (sections, layout, theme) arrive on upgrade instead of
+# being frozen at whatever they were when this file was written.
+
+# Where to find a repo locally, so PRs can be checked out from the dashboard.
+# The `:owner/:repo` key is a catch-all template gh-dash substitutes into (see
+# GetRepoLocalPath in internal/tui/common/repopath.go) — undocumented, but the
+# only form that covers every owner at once. Wildcard keys (`owner/*`) would
+# need one entry per owner.
+#
+# The path mirrors ghq's layout under `ghq.root` (~/src, set in
+# home/.config/git/config).
+repoPaths:
+  ":owner/:repo": ~/src/github.com/:owner/:repo
