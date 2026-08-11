@@ -1,0 +1,27 @@
+[bootstrap.packages]
+"brew:defaultbrowser" = "latest"
+"brew:dockutil" = "latest"
+"brew:terminal-notifier" = "latest"
+
+[bootstrap.macos.dock]
+autohide = true
+
+[bootstrap.macos.defaults]
+"NSGlobalDomain" = { AppleInterfaceStyle = "Dark", AppleShowAllExtensions = true, NSNavPanelExpandedStateForSaveMode = true, "com.apple.trackpad.scaling" = 1.5 }
+"com.apple.dock" = { wvous-tr-corner = 2, wvous-tr-modifier = 0, wvous-bl-corner = 4, wvous-bl-modifier = 0, autohide-delay = 0 }
+"com.apple.finder" = { _FXSortFoldersFirst = true, FXPreferredViewStyle = "clmv", CreateDesktop = false, NewWindowTarget = "PfHm", AppleShowAllFiles = true }
+"com.apple.AppleMultitouchTrackpad" = { Clicking = true, TrackpadThreeFingerTapGesture = 0 }
+"com.apple.driver.AppleBluetoothMultitouch.trackpad" = { Clicking = true, TrackpadThreeFingerTapGesture = 0 }
+
+[bootstrap.hooks]
+pre-packages = 'if command -v brew >/dev/null 2>&1; then brew bundle --file="$(mise settings get dotfiles.root)/.config/homebrew/profiles/Brewfile.desktop"; fi'
+final = 'mise run -C "$HOME" bootstrap-desktop'
+
+[dotfiles]
+"~/.config/ghostty" = {}
+"~/.config/karabiner" = {}
+# Zed writes generated state (prompts/, themes/) into ~/.config/zed, so link
+# settings.json itself instead of the whole directory.
+"~/.config/zed/settings.json" = {}
+"~/Library/Application Support/Code/User/keybindings.json" = {}
+"~/Library/Application Support/Code/User/settings.json" = {}
