@@ -132,6 +132,12 @@ else
   log_info "dotfiles location already recorded ($DOTFILES_DIR)."
 fi
 
+log_info "Configuring dotfiles profiles..."
+
+bash "$DOTFILES_DIR/scripts/configure-profiles.sh" "$DOTFILES_DIR"
+
+log_success "Successfully configured dotfiles profiles."
+
 # Migration cleanup: the legacy file duplicates what dotfiles.root records
 # now. Remove together with the migration block above.
 if [ -f "$LEGACY_DOTFILES_DIR_FILE" ]; then
@@ -173,16 +179,6 @@ if [ -f /opt/homebrew/bin/brew ]; then
   log_success "Successfully set up Homebrew."
 else
   log_warn "/opt/homebrew/bin/brew not found. Skipping Homebrew setup."
-fi
-
-if type brew &>/dev/null; then
-  log_info "Installing Homebrew packages..."
-
-  brew bundle --file="$DOTFILES_DIR/home/.config/homebrew/Brewfile"
-
-  log_success "Successfully installed Homebrew packages."
-else
-  log_warn "brew command not found. Skipping Homebrew package installation."
 fi
 
 if type mise &>/dev/null; then

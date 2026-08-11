@@ -15,7 +15,7 @@ P-Chan's portable dev environment as code.
     - `ghostty/`
     - `mise/`
     - `gh/`
-    - `homebrew/`: `Brewfile` (Homebrew package definitions)
+    - `homebrew/`: Common and profile-specific `Brewfile` definitions
     - `karabiner/`
     - `sheldon/`
     - `zsh-abbr/`

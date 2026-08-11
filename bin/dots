@@ -20,7 +20,8 @@ dots_up() {
   mise self-update --yes
   mise up
 
-  echo "\nUpdating mise-managed system packages..."
+  echo "\nUpdating system packages for active profiles..."
+  mise bootstrap --only packages --update --yes
   mise bootstrap packages upgrade
 
   echo "\nUpdating yazi plugins and flavors..."
@@ -37,8 +38,10 @@ dots_up() {
   echo "\nUpdating Claude Code..."
   claude update
 
-  echo "\nUpdating VS Code extensions..."
-  code --update-extensions
+  if command -v code &>/dev/null; then
+    echo "\nUpdating VS Code extensions..."
+    code --update-extensions
+  fi
 
   echo "\nDone!"
 }
@@ -99,7 +102,11 @@ dots_edit() {
     echo "DOTFILES_DIR is not defined"
     return 1
   fi
-  code "${repo_dir}"
+  if command -v code &>/dev/null; then
+    code "${repo_dir}"
+  else
+    "${EDITOR:-vim}" "${repo_dir}"
+  fi
 }
 
 case "${1:-}" in

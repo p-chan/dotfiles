@@ -1,0 +1,35 @@
+#!/bin/bash
+
+#MISE description="Bootstrap the server profile"
+
+set -e
+
+if [ "${CI:-}" = "true" ] || [ "$(uname -s)" != "Darwin" ]; then
+  exit 0
+fi
+
+POWER_SETTINGS="$(pmset -g custom)"
+
+ac_setting() {
+  setting="$1"
+  printf '%s\n' "$POWER_SETTINGS" | awk -v setting="$setting" '
+    /^AC Power:/ { in_ac = 1; next }
+    /^[^[:space:]].*:$/ { in_ac = 0 }
+    in_ac && $1 == setting { print $2; exit }
+  '
+}
+
+current_sleep="$(ac_setting sleep)"
+current_autorestart="$(ac_setting autorestart)"
+
+if [ "$current_sleep" = "0" ] && [ "$current_autorestart" = "1" ]; then
+  exit 0
+fi
+
+sudo pmset -c sleep 0 autorestart 1
+
+POWER_SETTINGS="$(pmset -g custom)"
+if [ "$(ac_setting sleep)" != "0" ] || [ "$(ac_setting autorestart)" != "1" ]; then
+  echo "Failed to apply the server power settings." >&2
+  exit 1
+fi

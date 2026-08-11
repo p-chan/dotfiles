@@ -80,24 +80,14 @@ dotfiles.default_mode = "symlink"
 # upgrade, so this path stays valid without invoking mise at all.
 credential_command = "$HOME/.local/share/mise/installs/github-cli-cli/latest/bin/gh auth token"
 
+[bootstrap.hooks]
+pre-packages = 'if command -v brew >/dev/null 2>&1; then brew bundle --file="$(mise settings get dotfiles.root)/.config/homebrew/Brewfile"; fi'
+
 [bootstrap.packages]
-"brew:defaultbrowser" = "latest"
-"brew:dockutil" = "latest"
 "brew:git" = "latest"
 "brew:tailscale" = "latest"
-"brew:terminal-notifier" = "latest"
 "brew:vim" = "latest"
 "brew:zsh" = "latest"
-
-[bootstrap.macos.dock]
-autohide = true
-
-[bootstrap.macos.defaults]
-"NSGlobalDomain" = { AppleInterfaceStyle = "Dark", AppleShowAllExtensions = true, NSNavPanelExpandedStateForSaveMode = true, "com.apple.trackpad.scaling" = 1.5 }
-"com.apple.dock" = { wvous-tr-corner = 2, wvous-tr-modifier = 0, wvous-bl-corner = 4, wvous-bl-modifier = 0, autohide-delay = 0 }
-"com.apple.finder" = { _FXSortFoldersFirst = true, FXPreferredViewStyle = "clmv", CreateDesktop = false, NewWindowTarget = "PfHm", AppleShowAllFiles = true }
-"com.apple.AppleMultitouchTrackpad" = { Clicking = true, TrackpadThreeFingerTapGesture = 0 }
-"com.apple.driver.AppleBluetoothMultitouch.trackpad" = { Clicking = true, TrackpadThreeFingerTapGesture = 0 }
 
 [dotfiles]
 "~/.agents" = {}
@@ -113,12 +103,10 @@ autohide = true
 "~/.codex/skills" = {}
 "~/.config/fixpack" = {}
 "~/.config/gh/config.yml" = {}
-"~/.config/ghostty" = {}
 "~/.config/herdr/config.toml" = {}
 "~/.config/homebrew" = {}
 "~/.config/hunk/config.toml" = {}
 "~/.config/git" = {}
-"~/.config/karabiner" = {}
 "~/.config/mise" = {}
 "~/.config/opencode/AGENTS.md" = {}
 "~/.config/opencode/opencode.jsonc" = {}
@@ -126,14 +114,9 @@ autohide = true
 "~/.config/tmux" = {}
 "~/.config/vim" = {}
 "~/.config/yazi" = {}
-# Zed writes generated state (prompts/, themes/) into ~/.config/zed, so link
-# settings.json itself instead of the whole directory.
-"~/.config/zed/settings.json" = {}
 "~/.config/zsh" = {}
 "~/.config/zsh-abbr" = {}
 "~/.config/starship.toml" = {}
 "~/.ssh" = {}
 "~/.editorconfig" = {}
 "~/.zshenv" = {}
-"~/Library/Application Support/Code/User/keybindings.json" = {}
-"~/Library/Application Support/Code/User/settings.json" = {}

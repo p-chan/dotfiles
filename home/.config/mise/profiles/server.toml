@@ -1,0 +1,2 @@
+[bootstrap.hooks]
+final = 'mise run -C "$HOME" bootstrap-server'

@@ -11,7 +11,6 @@ set -e
 # The steps below read files from the dotfiles checkout. Its location is
 # mise's dotfiles.root setting (recorded by scripts/install.sh as
 # <checkout>/home), so a bare `mise bootstrap` works with no env setup.
-# code-extensions.ts also expects $DOTFILES_DIR in its environment.
 DOTFILES_ROOT="$(mise settings get dotfiles.root 2>/dev/null || true)"
 DOTFILES_DIR="${DOTFILES_ROOT%/home}"
 
@@ -24,26 +23,15 @@ export DOTFILES_DIR
 
 if [ "${CI:-}" != "true" ]; then
   MODEL_NAME=$(system_profiler SPHardwareDataType | awk -F': ' '/Model Name/ {print $2}')
+  COMPUTER_NAME="P-Chan's $MODEL_NAME"
+  LOCAL_HOST_NAME="p-chan-$(echo "$MODEL_NAME" | tr '[:upper:]' '[:lower:]' | sed 's/ /-/g')"
 
-  sudo scutil --set ComputerName "P-Chan's $MODEL_NAME"
-  sudo scutil --set LocalHostName "p-chan-$(echo "$MODEL_NAME" | tr '[:upper:]' '[:lower:]' | sed 's/ /-/g')"
-
-  defaults write NSGlobalDomain AppleLanguages -array "en" "ja"
-  defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 60 "<dict><key>enabled</key><false/></dict>"
-  defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 64 "<dict><key>enabled</key><false/></dict>"
-
-  defaultbrowser browser
-
-  # --no-restart defers the Dock restart to a single killall at the end;
-  # restarting per invocation races the relaunch and spams
-  # "No matching processes belonging to you were found" from killall.
-  dockutil --remove all --no-restart
-  for app in Fantastical Mimestream Arc Slack Figma 1Password "Visual Studio Code" Zed Ghostty; do
-    [ -d "/Applications/$app.app" ] && dockutil --add "/Applications/$app.app" --no-restart
-  done
-  killall Dock
-
-  chflags nohidden ~/Library
+  if [ "$(scutil --get ComputerName 2>/dev/null || true)" != "$COMPUTER_NAME" ]; then
+    sudo scutil --set ComputerName "$COMPUTER_NAME"
+  fi
+  if [ "$(scutil --get LocalHostName 2>/dev/null || true)" != "$LOCAL_HOST_NAME" ]; then
+    sudo scutil --set LocalHostName "$LOCAL_HOST_NAME"
+  fi
 fi
 
 if type ya >/dev/null 2>&1; then
@@ -76,8 +64,4 @@ fi
 
 if type apm >/dev/null 2>&1 && [ -f "$DOTFILES_DIR/home/.apm/apm.yml" ]; then
   apm install -g --target agent-skills
-fi
-
-if [ "${CI:-}" != "true" ] && type deno >/dev/null 2>&1 && type code >/dev/null 2>&1; then
-  deno run -A "$DOTFILES_DIR/scripts/code-extensions.ts" import
 fi
