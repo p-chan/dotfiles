@@ -143,6 +143,7 @@
   "autoMemoryEnabled": false,
   "theme": "dark",
   "remoteControlAtStartup": true,
+  "agentPushNotifEnabled": true,
   "skipAutoPermissionPrompt": true,
   "voiceEnabled": true
 }
