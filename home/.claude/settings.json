@@ -68,6 +68,7 @@
     ],
     "defaultMode": "auto"
   },
+  "model": "opus",
   "hooks": {
     "PermissionRequest": [
       {
