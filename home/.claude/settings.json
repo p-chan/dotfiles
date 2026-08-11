@@ -141,6 +141,6 @@
   "alwaysThinkingEnabled": true,
   "autoMemoryEnabled": false,
   "theme": "dark",
-  "voiceEnabled": true,
-  "skipAutoPermissionPrompt": true
+  "skipAutoPermissionPrompt": true,
+  "voiceEnabled": true
 }
