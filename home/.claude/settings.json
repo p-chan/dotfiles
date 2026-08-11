@@ -142,6 +142,7 @@
   "alwaysThinkingEnabled": true,
   "autoMemoryEnabled": false,
   "theme": "dark",
+  "remoteControlAtStartup": true,
   "skipAutoPermissionPrompt": true,
   "voiceEnabled": true
 }
