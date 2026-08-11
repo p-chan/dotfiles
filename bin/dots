@@ -22,6 +22,7 @@ dots_up() {
 
   echo "\nUpdating system packages for active profiles..."
   mise bootstrap --only packages --update --yes
+  mise bootstrap packages upgrade
 
   echo "\nUpdating yazi plugins and flavors..."
   ya pkg upgrade
