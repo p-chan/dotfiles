@@ -195,4 +195,3 @@ bindkey "^G" _ghq_fuzzy_cd
 if [[ -f "${ZDOTDIR:-$HOME}/.zshrc.local" ]]; then
   source "${ZDOTDIR:-$HOME}/.zshrc.local"
 fi
-
