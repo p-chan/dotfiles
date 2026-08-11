@@ -20,8 +20,8 @@ dots_up() {
   mise self-update --yes
   mise up
 
-  echo "\nUpdating mise-managed system packages..."
-  mise bootstrap packages upgrade
+  echo "\nUpdating system packages for active profiles..."
+  mise bootstrap --only packages --update --yes
 
   echo "\nUpdating yazi plugins and flavors..."
   ya pkg upgrade
