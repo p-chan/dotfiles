@@ -91,9 +91,7 @@ if command -v gh >/dev/null 2>&1; then
       fi
 
       # Determine link style based on terminal
-      if [[ "$TERM_PROGRAM" == "vscode" ]]; then
-        link_style="$GRAY"
-      elif [[ "$TERM_PROGRAM" == "ghostty" ]]; then
+      if [[ "$TERM_PROGRAM" == "ghostty" ]]; then
         link_style=$'\033[4m'  # underline
       else
         link_style=""

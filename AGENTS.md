@@ -29,7 +29,6 @@ P-Chan's portable dev environment as code.
   - `.editorconfig`
 - `scripts/`: Scripts for dotfiles operations
 - `bin/`: Custom commands for system-wide use
-- `code-extensions`: VSCode extensions definitions
 
 ## Tech Stack
 

@@ -24,14 +24,10 @@ if [ "${CI:-}" != "true" ]; then
   # Defer the Dock restart until every item is configured so repeated
   # relaunches cannot race subsequent dockutil invocations.
   dockutil --remove all --no-restart
-  for app in Fantastical Mimestream Arc Slack Figma 1Password "Visual Studio Code" Zed Ghostty; do
+  for app in Fantastical Mimestream Arc Slack Figma 1Password Zed Ghostty; do
     [ -d "/Applications/$app.app" ] && dockutil --add "/Applications/$app.app" --no-restart
   done
   killall Dock
 
   chflags nohidden ~/Library
-fi
-
-if [ "${CI:-}" != "true" ] && type deno >/dev/null 2>&1 && type code >/dev/null 2>&1; then
-  deno run -A "$DOTFILES_DIR/scripts/code-extensions.ts" import
 fi
