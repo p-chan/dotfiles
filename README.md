@@ -240,7 +240,7 @@ macOS settings automatically.
 
 ### Upgrade
 
-Upgrade Homebrew packages, mise tools and VSCode extensions.
+Upgrade Homebrew packages and mise tools.
 
 ```sh
 dots up
