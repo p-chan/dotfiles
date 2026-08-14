@@ -33,7 +33,7 @@ P-Chan's portable dev environment as code.
 ## Tech Stack
 
 - Shell scripts
-- Deno
+- Node.js
 
 ## Git
 

@@ -1,23 +1,22 @@
-import { assertEquals } from "@std/assert";
+import assert from "node:assert/strict";
+import { spawnSync } from "node:child_process";
+import { fileURLToPath } from "node:url";
+import test from "node:test";
 import { checkTitle } from "./check-pr-title.ts";
 
-async function runCLI(args: string[]): Promise<{ code: number; stdout: string; stderr: string }> {
-  const cmd = new Deno.Command("deno", {
-    args: ["run", "-A", ".github/scripts/check-pr-title.ts", ...args],
-    stdout: "piped",
-    stderr: "piped",
-  });
+const scriptPath = fileURLToPath(new URL("./check-pr-title.ts", import.meta.url));
 
-  const { code, stdout, stderr } = await cmd.output();
-
+function runCLI(args: string[]): { code: number; stdout: string; stderr: string } {
+  const result = spawnSync(process.execPath, [scriptPath, ...args], { encoding: "utf8" });
+  if (result.error) throw result.error;
   return {
-    code,
-    stdout: new TextDecoder().decode(stdout),
-    stderr: new TextDecoder().decode(stderr),
+    code: result.status ?? 1,
+    stdout: result.stdout,
+    stderr: result.stderr,
   };
 }
 
-Deno.test("Valid Angular-flavored Conventional Commits titles", async (t) => {
+test("Valid Angular-flavored Conventional Commits titles", async (t) => {
   const validTitles = [
     "feat: add new feature",
     "fix: resolve bug",
@@ -36,15 +35,15 @@ Deno.test("Valid Angular-flavored Conventional Commits titles", async (t) => {
   ];
 
   for (const title of validTitles) {
-    await t.step(`"${title}" should be valid`, () => {
+    await t.test(`"${title}" should be valid`, () => {
       const result = checkTitle(title);
 
-      assertEquals(result.valid, true, `Expected "${title}" to be valid`);
+      assert.equal(result.valid, true, `Expected "${title}" to be valid`);
     });
   }
 });
 
-Deno.test("Invalid PR titles", async (t) => {
+test("Invalid PR titles", async (t) => {
   const invalidTitles = [
     { title: "", expectedError: "Error: PR title is empty" },
     {
@@ -86,54 +85,54 @@ Deno.test("Invalid PR titles", async (t) => {
   ];
 
   for (const { title, expectedError } of invalidTitles) {
-    await t.step(`"${title}" should be invalid`, () => {
+    await t.test(`"${title}" should be invalid`, () => {
       const result = checkTitle(title);
 
-      assertEquals(result.valid, false, `Expected "${title}" to be invalid`);
+      assert.equal(result.valid, false, `Expected "${title}" to be invalid`);
       if (!result.valid) {
-        assertEquals(result.error, expectedError, `Expected specific error for "${title}"`);
+        assert.equal(result.error, expectedError, `Expected specific error for "${title}"`);
       }
     });
   }
 });
 
-Deno.test("Angular types are supported", async (t) => {
+test("Angular types are supported", async (t) => {
   const angularTypes = ["build", "chore", "ci", "docs", "feat", "fix", "perf", "refactor", "style", "test"];
 
   for (const type of angularTypes) {
-    await t.step(`Type "${type}" should be supported`, () => {
+    await t.test(`Type "${type}" should be supported`, () => {
       const result = checkTitle(`${type}: test change`);
 
-      assertEquals(result.valid, true, `Type "${type}" should be valid`);
+      assert.equal(result.valid, true, `Type "${type}" should be valid`);
     });
   }
 });
 
-Deno.test("Scope variations", async (t) => {
-  await t.step("No scope should be valid", () => {
+test("Scope variations", async (t) => {
+  await t.test("No scope should be valid", () => {
     const result = checkTitle("feat: add feature");
 
-    assertEquals(result.valid, true);
+    assert.equal(result.valid, true);
   });
 
-  await t.step("Single word scope should be valid", () => {
+  await t.test("Single word scope should be valid", () => {
     const result = checkTitle("feat(auth): add feature");
 
-    assertEquals(result.valid, true);
+    assert.equal(result.valid, true);
   });
 
-  await t.step("Multi-word scope should be valid", () => {
+  await t.test("Multi-word scope should be valid", () => {
     const result = checkTitle("feat(user-auth): add feature");
 
-    assertEquals(result.valid, true);
+    assert.equal(result.valid, true);
   });
 
-  await t.step("Empty scope should be invalid", () => {
+  await t.test("Empty scope should be invalid", () => {
     const result = checkTitle("feat(): add feature");
 
-    assertEquals(result.valid, false);
+    assert.equal(result.valid, false);
     if (!result.valid) {
-      assertEquals(
+      assert.equal(
         result.error,
         "Error: PR title does not conform to Angular-flavored Conventional Commits-like format",
       );
@@ -141,45 +140,45 @@ Deno.test("Scope variations", async (t) => {
   });
 });
 
-Deno.test("CLI Integration Tests", async (t) => {
-  await t.step("Valid title should exit with code 0", async () => {
-    const { code, stdout, stderr } = await runCLI(["feat: add new feature"]);
+test("CLI Integration Tests", async (t) => {
+  await t.test("Valid title should exit with code 0", () => {
+    const { code, stdout, stderr } = runCLI(["feat: add new feature"]);
 
-    assertEquals(code, 0);
-    assertEquals(stdout.includes("PR title conforms to Angular-flavored Conventional Commits-like format"), true);
-    assertEquals(stderr.trim(), "");
+    assert.equal(code, 0);
+    assert.equal(stdout.includes("PR title conforms to Angular-flavored Conventional Commits-like format"), true);
+    assert.equal(stderr.trim(), "");
   });
 
-  await t.step("Invalid title should exit with code 1", async () => {
-    const { code, stdout, stderr } = await runCLI(["invalid title"]);
+  await t.test("Invalid title should exit with code 1", () => {
+    const { code, stdout, stderr } = runCLI(["invalid title"]);
 
-    assertEquals(code, 1);
-    assertEquals(stderr.includes("Error:"), true);
-    assertEquals(stdout.trim(), "");
+    assert.equal(code, 1);
+    assert.equal(stderr.includes("Error:"), true);
+    assert.equal(stdout.trim(), "");
   });
 
-  await t.step("No arguments should exit with code 1", async () => {
-    const { code, stdout, stderr } = await runCLI([]);
+  await t.test("No arguments should exit with code 1", () => {
+    const { code, stdout, stderr } = runCLI([]);
 
-    assertEquals(code, 1);
-    assertEquals(stderr.includes("Error: PR title is not specified"), true);
-    assertEquals(stdout.trim(), "");
+    assert.equal(code, 1);
+    assert.equal(stderr.includes("Error: PR title is not specified"), true);
+    assert.equal(stdout.trim(), "");
   });
 
-  await t.step("--help should exit with code 0", async () => {
-    const { code, stdout, stderr } = await runCLI(["--help"]);
+  await t.test("--help should exit with code 0", () => {
+    const { code, stdout, stderr } = runCLI(["--help"]);
 
-    assertEquals(code, 0);
-    assertEquals(stdout.includes("Usage:"), true);
-    assertEquals(stdout.includes("Options:"), true);
-    assertEquals(stderr.trim(), "");
+    assert.equal(code, 0);
+    assert.equal(stdout.includes("Usage:"), true);
+    assert.equal(stdout.includes("Options:"), true);
+    assert.equal(stderr.trim(), "");
   });
 
-  await t.step("--version should exit with code 0", async () => {
-    const { code, stdout, stderr } = await runCLI(["--version"]);
+  await t.test("--version should exit with code 0", () => {
+    const { code, stdout, stderr } = runCLI(["--version"]);
 
-    assertEquals(code, 0);
-    assertEquals(stdout.includes("check-pr-title 1.0.0"), true);
-    assertEquals(stderr.trim(), "");
+    assert.equal(code, 0);
+    assert.equal(stdout.includes("check-pr-title 1.0.0"), true);
+    assert.equal(stderr.trim(), "");
   });
 });

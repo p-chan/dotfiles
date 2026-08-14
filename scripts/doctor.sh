@@ -14,7 +14,7 @@ log_success () {
   echo "✅ $1"
 }
 
-required_commands=("zsh" "vim" "git" "mise" "deno" "node" "claude" "xcode-select" "brew")
+required_commands=("zsh" "vim" "git" "mise" "node" "claude" "xcode-select" "brew")
 
 log_info "Checking required commands..."
 

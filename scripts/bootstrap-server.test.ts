@@ -1,7 +1,12 @@
-import { assertEquals, assertStringIncludes } from "@std/assert";
-import { dirname, fromFileUrl, join } from "@std/path";
+import assert from "node:assert/strict";
+import { spawnSync } from "node:child_process";
+import { chmod, mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { dirname, join } from "node:path";
+import test from "node:test";
+import { fileURLToPath } from "node:url";
 
-const taskPath = join(dirname(fromFileUrl(import.meta.url)), "../home/.config/mise/tasks/bootstrap-server");
+const taskPath = join(dirname(fileURLToPath(import.meta.url)), "../home/.config/mise/tasks/bootstrap-server");
 
 interface Fixture {
   root: string;
@@ -10,13 +15,13 @@ interface Fixture {
 }
 
 async function createFixture(sleep: number, autorestart: number): Promise<Fixture> {
-  const root = await Deno.makeTempDir();
+  const root = await mkdtemp(join(tmpdir(), "bootstrap-server-"));
   const binDir = join(root, "bin");
   const statePath = join(root, "pmset-state");
   const sudoLogPath = join(root, "sudo-log");
-  await Deno.mkdir(binDir);
-  await Deno.writeTextFile(statePath, powerSettings(sleep, autorestart));
-  await Deno.writeTextFile(sudoLogPath, "");
+  await mkdir(binDir);
+  await writeFile(statePath, powerSettings(sleep, autorestart));
+  await writeFile(sudoLogPath, "");
 
   await writeExecutable(
     join(binDir, "uname"),
@@ -53,14 +58,12 @@ function powerSettings(sleep: number, autorestart: number): string {
 }
 
 async function writeExecutable(path: string, content: string): Promise<void> {
-  await Deno.writeTextFile(path, content);
-  await Deno.chmod(path, 0o755);
+  await writeFile(path, content);
+  await chmod(path, 0o755);
 }
 
-async function runTask(fixture: Fixture, apply: boolean): Promise<Deno.CommandOutput> {
-  return await new Deno.Command("bash", {
-    args: [taskPath],
-    clearEnv: true,
+function runTask(fixture: Fixture, apply: boolean): { code: number; stderr: string } {
+  const result = spawnSync("bash", [taskPath], {
     env: {
       HOME: fixture.root,
       PATH: `${join(fixture.root, "bin")}:/usr/bin:/bin`,
@@ -68,41 +71,42 @@ async function runTask(fixture: Fixture, apply: boolean): Promise<Deno.CommandOu
       SUDO_APPLY: String(apply),
       SUDO_LOG: fixture.sudoLogPath,
     },
-    stdout: "piped",
-    stderr: "piped",
-  }).output();
+    encoding: "utf8",
+  });
+  if (result.error) throw result.error;
+  return { code: result.status ?? 1, stderr: result.stderr };
 }
 
-Deno.test("bootstrap-server", async (t) => {
-  await t.step("does not invoke sudo when settings already match", async () => {
+test("bootstrap-server", async (t) => {
+  await t.test("does not invoke sudo when settings already match", async () => {
     const fixture = await createFixture(0, 1);
     try {
-      assertEquals((await runTask(fixture, false)).code, 0);
-      assertEquals(await Deno.readTextFile(fixture.sudoLogPath), "");
+      assert.equal(runTask(fixture, false).code, 0);
+      assert.equal(await readFile(fixture.sudoLogPath, "utf8"), "");
     } finally {
-      await Deno.remove(fixture.root, { recursive: true });
+      await rm(fixture.root, { recursive: true });
     }
   });
 
-  await t.step("applies both settings when they drift", async () => {
+  await t.test("applies both settings when they drift", async () => {
     const fixture = await createFixture(1, 0);
     try {
-      assertEquals((await runTask(fixture, true)).code, 0);
-      assertEquals(await Deno.readTextFile(fixture.sudoLogPath), "pmset -c sleep 0 autorestart 1\n");
-      assertEquals(await Deno.readTextFile(fixture.statePath), powerSettings(0, 1));
+      assert.equal(runTask(fixture, true).code, 0);
+      assert.equal(await readFile(fixture.sudoLogPath, "utf8"), "pmset -c sleep 0 autorestart 1\n");
+      assert.equal(await readFile(fixture.statePath, "utf8"), powerSettings(0, 1));
     } finally {
-      await Deno.remove(fixture.root, { recursive: true });
+      await rm(fixture.root, { recursive: true });
     }
   });
 
-  await t.step("fails when pmset does not converge", async () => {
+  await t.test("fails when pmset does not converge", async () => {
     const fixture = await createFixture(1, 0);
     try {
-      const result = await runTask(fixture, false);
-      assertEquals(result.code, 1);
-      assertStringIncludes(new TextDecoder().decode(result.stderr), "Failed to apply the server power settings.");
+      const result = runTask(fixture, false);
+      assert.equal(result.code, 1);
+      assert.match(result.stderr, /Failed to apply the server power settings\./);
     } finally {
-      await Deno.remove(fixture.root, { recursive: true });
+      await rm(fixture.root, { recursive: true });
     }
   });
 });
