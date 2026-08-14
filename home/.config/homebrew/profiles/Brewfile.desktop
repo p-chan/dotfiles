@@ -3,9 +3,7 @@
 tap "steipete/tap", trusted: { cask: "codexbar" }
 cask "1password"
 cask "arc"
-cask "claude"
 cask "cleanshot"
-cask "chatgpt"
 cask "codexbar"
 cask "cyberduck"
 cask "docker-desktop"

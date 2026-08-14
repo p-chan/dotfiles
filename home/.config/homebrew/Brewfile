@@ -3,4 +3,6 @@
 # dependency on machines where Homebrew already provides that file.
 brew "eza"
 cask "1password-cli"
+cask "chatgpt"
+cask "claude"
 cask "gcloud-cli"
