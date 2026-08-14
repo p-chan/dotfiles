@@ -9,9 +9,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: denoland/setup-deno@v2
+      - uses: actions/setup-node@v4
         with:
-          deno-version: v2.x
+          node-version-file: ".node-version"
       - name: Check PR Title
         run: |
-          deno run -A .github/scripts/check-pr-title.ts "${{ github.event.pull_request.title }}"
+          node .github/scripts/check-pr-title.ts "${{ github.event.pull_request.title }}"

@@ -1,5 +1,3 @@
-import { parseArgs } from "@std/cli";
-
 const ANGULAR_FLAVORED_CONVENTIONAL_COMMITS_PREFIX_REGEX =
   /^(build|chore|ci|docs|feat|fix|perf|refactor|style|test)(\(.+\))?: \S.*/;
 
@@ -21,47 +19,30 @@ export function checkTitle(title: string): ValidationResult {
 }
 
 if (import.meta.main) {
-  const args = parseArgs(Deno.args, {
-    boolean: ["help", "version"],
-    alias: {
-      h: "help",
-      v: "version",
-    },
-  });
+  const args = process.argv.slice(2);
 
-  if (args.help) {
+  if (args.includes("-h") || args.includes("--help")) {
     console.log("Check PR title with Angular-flavored Conventional Commits-like format");
     console.log("");
     console.log("Usage:");
-    console.log("  deno run -A check-pr-title.ts <title>");
+    console.log("  node check-pr-title.ts <title>");
     console.log("");
     console.log("Options:");
     console.log("  -h, --help     Show help");
     console.log("  -v, --version  Show version");
-
-    Deno.exit(0);
-  }
-
-  if (args.version) {
+  } else if (args.includes("-v") || args.includes("--version")) {
     console.log("check-pr-title 1.0.0");
-
-    Deno.exit(0);
-  }
-
-  if (args._.length === 0) {
+  } else if (args.length === 0) {
     console.error("Error: PR title is not specified");
+    process.exitCode = 1;
+  } else {
+    const result = checkTitle(args.join(" "));
 
-    Deno.exit(1);
+    if (!result.valid) {
+      console.error(result.error);
+      process.exitCode = 1;
+    } else {
+      console.log("PR title conforms to Angular-flavored Conventional Commits-like format");
+    }
   }
-
-  const title = args._.join(" ");
-  const result = checkTitle(title);
-
-  if (!result.valid) {
-    console.error(result.error);
-
-    Deno.exit(1);
-  }
-
-  console.log("PR title conforms to Angular-flavored Conventional Commits-like format");
 }

@@ -1,7 +1,6 @@
 [tools]
 node = "lts"
 bun = "latest"
-deno = "latest"
 "github:ajeetdsouza/zoxide" = "latest"
 "github:BurntSushi/ripgrep" = "latest"
 "github:sharkdp/bat" = "latest"

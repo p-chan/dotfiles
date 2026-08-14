@@ -1,109 +1,113 @@
-import { assertEquals } from "@std/assert";
-import { dirname, fromFileUrl, join } from "@std/path";
+import assert from "node:assert/strict";
+import { spawnSync } from "node:child_process";
+import { lstat, mkdir, mkdtemp, readlink, rm, writeFile } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { dirname, join } from "node:path";
+import test from "node:test";
+import { fileURLToPath } from "node:url";
 
-const scriptPath = join(dirname(fromFileUrl(import.meta.url)), "configure-profiles.sh");
+const scriptPath = join(dirname(fileURLToPath(import.meta.url)), "configure-profiles.sh");
 
 async function createDotfilesFixture(): Promise<string> {
-  const root = await Deno.makeTempDir();
+  const root = await mkdtemp(join(tmpdir(), "configure-profiles-"));
   const profilesDir = join(root, "home/.config/mise/profiles");
-  await Deno.mkdir(profilesDir, { recursive: true });
+  await mkdir(profilesDir, { recursive: true });
   await Promise.all([
-    Deno.writeTextFile(join(profilesDir, "desktop.toml"), "[bootstrap]\n"),
-    Deno.writeTextFile(join(profilesDir, "server.toml"), "[bootstrap]\n"),
+    writeFile(join(profilesDir, "desktop.toml"), "[bootstrap]\n"),
+    writeFile(join(profilesDir, "server.toml"), "[bootstrap]\n"),
   ]);
   return root;
 }
 
-async function configure(root: string, profiles?: string): Promise<Deno.CommandOutput> {
+function configure(root: string, profiles?: string): { code: number; stdout: string } {
   const env: Record<string, string> = {
-    HOME: Deno.env.get("HOME") ?? "/tmp",
-    PATH: Deno.env.get("PATH") ?? "/usr/bin:/bin",
+    HOME: process.env.HOME ?? "/tmp",
+    PATH: process.env.PATH ?? "/usr/bin:/bin",
   };
   if (profiles !== undefined) env.DOTFILES_PROFILES = profiles;
 
-  return await new Deno.Command("bash", {
-    args: [scriptPath, root],
-    clearEnv: true,
+  const result = spawnSync("bash", [scriptPath, root], {
     env,
-    stdout: "piped",
-    stderr: "piped",
-  }).output();
+    encoding: "utf8",
+  });
+  if (result.error) throw result.error;
+  return { code: result.status ?? 1, stdout: result.stdout };
 }
 
 function activationPath(root: string, profile: string): string {
   return join(root, `home/.config/mise/conf.d/profile-${profile}.toml`);
 }
 
-Deno.test("configure-profiles", async (t) => {
-  await t.step("defaults to desktop on first run", async () => {
+test("configure-profiles", async (t) => {
+  await t.test("defaults to desktop on first run", async () => {
     const root = await createDotfilesFixture();
     try {
-      const result = await configure(root);
-      assertEquals(result.code, 0);
-      assertEquals(await Deno.readLink(activationPath(root, "desktop")), "../profiles/desktop.toml");
-      assertEquals(await exists(activationPath(root, "server")), false);
+      const result = configure(root);
+      assert.equal(result.code, 0);
+      assert.equal(await readlink(activationPath(root, "desktop")), "../profiles/desktop.toml");
+      assert.equal(await exists(activationPath(root, "server")), false);
     } finally {
-      await Deno.remove(root, { recursive: true });
+      await rm(root, { recursive: true });
     }
   });
 
-  await t.step("normalizes and composes explicit profiles", async () => {
+  await t.test("normalizes and composes explicit profiles", async () => {
     const root = await createDotfilesFixture();
     try {
-      const result = await configure(root, "server, desktop,server");
-      assertEquals(result.code, 0);
-      assertEquals(new TextDecoder().decode(result.stdout), "Active dotfiles profiles: desktop,server\n");
-      assertEquals(await Deno.readLink(activationPath(root, "desktop")), "../profiles/desktop.toml");
-      assertEquals(await Deno.readLink(activationPath(root, "server")), "../profiles/server.toml");
+      const result = configure(root, "server, desktop,server");
+      assert.equal(result.code, 0);
+      assert.equal(result.stdout, "Active dotfiles profiles: desktop,server\n");
+      assert.equal(await readlink(activationPath(root, "desktop")), "../profiles/desktop.toml");
+      assert.equal(await readlink(activationPath(root, "server")), "../profiles/server.toml");
     } finally {
-      await Deno.remove(root, { recursive: true });
+      await rm(root, { recursive: true });
     }
   });
 
-  await t.step("preserves the saved selection when no override is provided", async () => {
+  await t.test("preserves the saved selection when no override is provided", async () => {
     const root = await createDotfilesFixture();
     try {
-      assertEquals((await configure(root, "server")).code, 0);
-      assertEquals((await configure(root)).code, 0);
-      assertEquals(await exists(activationPath(root, "desktop")), false);
-      assertEquals(await Deno.readLink(activationPath(root, "server")), "../profiles/server.toml");
+      assert.equal(configure(root, "server").code, 0);
+      assert.equal(configure(root).code, 0);
+      assert.equal(await exists(activationPath(root, "desktop")), false);
+      assert.equal(await readlink(activationPath(root, "server")), "../profiles/server.toml");
     } finally {
-      await Deno.remove(root, { recursive: true });
+      await rm(root, { recursive: true });
     }
   });
 
-  await t.step("replaces the saved selection with an explicit profile", async () => {
+  await t.test("replaces the saved selection with an explicit profile", async () => {
     const root = await createDotfilesFixture();
     try {
-      assertEquals((await configure(root, "server")).code, 0);
-      assertEquals((await configure(root, "desktop")).code, 0);
-      assertEquals(await Deno.readLink(activationPath(root, "desktop")), "../profiles/desktop.toml");
-      assertEquals(await exists(activationPath(root, "server")), false);
+      assert.equal(configure(root, "server").code, 0);
+      assert.equal(configure(root, "desktop").code, 0);
+      assert.equal(await readlink(activationPath(root, "desktop")), "../profiles/desktop.toml");
+      assert.equal(await exists(activationPath(root, "server")), false);
     } finally {
-      await Deno.remove(root, { recursive: true });
+      await rm(root, { recursive: true });
     }
   });
 
-  await t.step("rejects unknown profiles without changing the saved selection", async () => {
+  await t.test("rejects unknown profiles without changing the saved selection", async () => {
     const root = await createDotfilesFixture();
     try {
-      assertEquals((await configure(root, "desktop")).code, 0);
-      const result = await configure(root, "desktop,unknown");
-      assertEquals(result.code, 1);
-      assertEquals(await Deno.readLink(activationPath(root, "desktop")), "../profiles/desktop.toml");
-      assertEquals(await exists(activationPath(root, "server")), false);
+      assert.equal(configure(root, "desktop").code, 0);
+      const result = configure(root, "desktop,unknown");
+      assert.equal(result.code, 1);
+      assert.equal(await readlink(activationPath(root, "desktop")), "../profiles/desktop.toml");
+      assert.equal(await exists(activationPath(root, "server")), false);
     } finally {
-      await Deno.remove(root, { recursive: true });
+      await rm(root, { recursive: true });
     }
   });
 });
 
 async function exists(path: string): Promise<boolean> {
   try {
-    await Deno.lstat(path);
+    await lstat(path);
     return true;
   } catch (error) {
-    if (error instanceof Deno.errors.NotFound) return false;
+    if (error && typeof error === "object" && "code" in error && error.code === "ENOENT") return false;
     throw error;
   }
 }
