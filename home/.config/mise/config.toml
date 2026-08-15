@@ -84,6 +84,7 @@ pre-packages = 'if command -v brew >/dev/null 2>&1; then brew bundle --file="$(m
 
 [bootstrap.packages]
 "brew:git" = "latest"
+"brew:mosh" = "latest"
 "brew:tailscale" = "latest"
 "brew:vim" = "latest"
 "brew:zsh" = "latest"
