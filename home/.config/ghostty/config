@@ -8,7 +8,7 @@ theme = one-dark-pro
 cursor-style = block
 background-opacity = 0.75
 background-opacity-cells = true
-command = zsh -l -i -c "herdr --session main"
+command = zsh -l -i -c "herdr"
 maximize = true
 keybind = global:alt+space=toggle_visibility
 keybind = cmd+r=text:\x0c
