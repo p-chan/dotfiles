@@ -75,6 +75,7 @@ Configure applications that require manual setup:
 
 - [1Password](docs/apps/1password.md)
 - [Arc](docs/apps/arc.md)
+- [Chrome](docs/apps/chrome.md)
 - [Fantastical](docs/apps/fantastical.md)
 - [Logi Options+](docs/apps/logi-options-plus.md)
 - [iStat Menus](docs/apps/istat-menus.md)
