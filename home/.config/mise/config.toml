@@ -95,6 +95,7 @@ pre-packages = 'if command -v brew >/dev/null 2>&1; then brew bundle --file="$(m
 "~/.apm/apm.lock.yaml" = {}
 "~/.apm/apm.yml" = {}
 "~/.claude/CLAUDE.md" = {}
+"~/.claude/commands" = {}
 "~/.claude/hooks" = {}
 "~/.claude/rules" = {}
 "~/.claude/settings.json" = {}
