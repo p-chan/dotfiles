@@ -104,6 +104,7 @@ pre-packages = 'if command -v brew >/dev/null 2>&1; then brew bundle --file="$(m
 "~/.codex/AGENTS.md" = {}
 "~/.codex/skills" = {}
 "~/.config/fixpack" = {}
+"~/.config/gh-dash/config.yml" = {}
 "~/.config/gh/config.yml" = {}
 "~/.config/herdr/config.toml" = {}
 "~/.config/homebrew" = {}
