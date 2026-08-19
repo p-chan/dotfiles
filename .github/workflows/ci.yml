@@ -46,6 +46,7 @@ jobs:
           NONINTERACTIVE=1 \
           HOMEBREW_BUNDLE_CASK_SKIP="${{ needs.get-cask-packages.outputs.packages }}" \
           MISE_GPG_VERIFY=false \
+          AUBE_TRUST_POLICY=off \
           bash scripts/install.sh
       - name: Doctor
         run: zsh scripts/doctor.sh
