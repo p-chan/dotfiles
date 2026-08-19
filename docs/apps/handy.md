@@ -1,0 +1,45 @@
+# Handy
+
+## Settings
+
+- General
+  - General
+    - Transcribe Shortcut: **fn**
+    - ☐ Push To Talk
+    - Cancel Shortcut: **Escape**
+  - Nemotron Streaming 3.5 Settings
+    - Language: **Japanese**
+  - Sound
+    - Microphone: **Default**
+    - ☐ Mute While Recording
+    - ✅ Audio Feedback
+    - Output Device: **Default**
+    - Volume: **50%**
+- Models
+  - Downloaded Models
+    - **Nemotron Streaming 3.5**
+- Advanced
+  - App
+    - ☐ Start Hidden
+    - ✅ Launch on Startup
+    - ✅ Show Tray Icon
+    - Overlay: **Live**
+    - Overlay Position: **Bottom**
+    - Unload Model: **After 5 minutes**
+    - ☐ Experimental Features
+  - Output
+    - Paste Method: **Clipboard (Cmd+V)**
+    - Clipboard Handling: **Don't Modify Clipboard**
+    - Auto Submit: **Off**
+  - Transcription
+    - ✅ Voice Activity Detection
+    - Custom Words: **-**
+    - ✅ Append Trailing Space
+  - History
+    - History Limit: **9999 entries**
+    - Auto-Delete Recordings: **After 3 days**
+- About
+  - About
+    - Application Language: **English**
+    - Application Theme: **System**
+    - ✅ Show What's New

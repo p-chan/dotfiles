@@ -77,6 +77,7 @@ Configure applications that require manual setup:
 - [Arc](docs/apps/arc.md)
 - [Chrome](docs/apps/chrome.md)
 - [Fantastical](docs/apps/fantastical.md)
+- [Handy](docs/apps/handy.md)
 - [Logi Options+](docs/apps/logi-options-plus.md)
 - [iStat Menus](docs/apps/istat-menus.md)
 - [Slack](docs/apps/slack.md)
