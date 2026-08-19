@@ -59,7 +59,7 @@ if type gh >/dev/null 2>&1; then
       ''|'#'*) continue ;;
     esac
     gh extension install "$extension"
-  done < "$DOTFILES_DIR/gh-extensions"
+  done < "$DOTFILES_DIR/home/.config/gh/extensions"
 fi
 
 if type apm >/dev/null 2>&1 && [ -f "$DOTFILES_DIR/home/.apm/apm.yml" ]; then
