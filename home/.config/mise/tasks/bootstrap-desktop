@@ -16,6 +16,7 @@ export DOTFILES_DIR
 
 if [ "${CI:-}" != "true" ]; then
   defaults write NSGlobalDomain AppleLanguages -array "en" "ja"
+  defaults write com.apple.HIToolbox AppleFnUsageType -int 0
   defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 60 "<dict><key>enabled</key><false/></dict>"
   defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 64 "<dict><key>enabled</key><false/></dict>"
 
