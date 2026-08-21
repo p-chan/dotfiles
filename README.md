@@ -71,16 +71,39 @@ macOS settings automatically.
 
 ## Setup
 
-Configure applications that require manual setup:
+GUI applications installed by Homebrew. **Dotfiles** is the config path
+this repo symlinks into place, and **Document** links to the steps to
+follow by hand after install.
 
-- [1Password](docs/apps/1password.md)
-- [Arc](docs/apps/arc.md)
-- [Chrome](docs/apps/chrome.md)
-- [Fantastical](docs/apps/fantastical.md)
-- [Handy](docs/apps/handy.md)
-- [Logi Options+](docs/apps/logi-options-plus.md)
-- [iStat Menus](docs/apps/istat-menus.md)
-- [Slack](docs/apps/slack.md)
+| App                 | Start at login | Dotfiles                      | Document                                                         |
+| :------------------ | :------------- | :---------------------------- | :--------------------------------------------------------------- |
+| 1Password           | ✅             | —                             | [docs/apps/1password.md](docs/apps/1password.md)                 |
+| Arc                 | ☐              | —                             | [docs/apps/arc.md](docs/apps/arc.md)                             |
+| ChatGPT             | ☐              | —                             | —                                                                |
+| Claude              | ☐              | —                             | —                                                                |
+| CleanShot X         | ✅             | —                             | —                                                                |
+| CodexBar            | ✅             | —                             | —                                                                |
+| Cyberduck           | ☐              | —                             | —                                                                |
+| Docker Desktop      | ✅             | —                             | —                                                                |
+| Fantastical         | ✅             | —                             | [docs/apps/fantastical.md](docs/apps/fantastical.md)             |
+| Figma               | ☐              | —                             | —                                                                |
+| Ghostty             | ☐              | `~/.config/ghostty`           | —                                                                |
+| Google Chrome       | ☐              | —                             | [docs/apps/chrome.md](docs/apps/chrome.md)                       |
+| Google Japanese IME | ☐              | —                             | —                                                                |
+| Handy               | ✅             | —                             | [docs/apps/handy.md](docs/apps/handy.md)                         |
+| iStat Menus         | ✅             | —                             | [docs/apps/istat-menus.md](docs/apps/istat-menus.md)             |
+| Karabiner-Elements  | ✅             | `~/.config/karabiner`         | —                                                                |
+| Logi Options+       | ✅             | —                             | [docs/apps/logi-options-plus.md](docs/apps/logi-options-plus.md) |
+| Mimestream          | ☐              | —                             | —                                                                |
+| Raycast             | ✅             | —                             | —                                                                |
+| Slack               | ✅             | —                             | [docs/apps/slack.md](docs/apps/slack.md)                         |
+| Zed                 | ☐              | `~/.config/zed/settings.json` | —                                                                |
+
+A fresh machine only needs a handful of these before it is workable:
+1Password for the credentials and license keys the other documents link
+to, Arc as the main browser to sign in everywhere else, Karabiner-Elements,
+Google Japanese IME, and Logi Options+ for keyboard and mouse input, and
+Raycast as the launcher. The rest can wait until they are actually needed.
 
 ## Maintenance
 
