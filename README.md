@@ -86,7 +86,7 @@ follow by hand after install.
 | Cyberduck           | ☐              | —                             | —                                                                    |
 | Docker Desktop      | ✅             | —                             | —                                                                    |
 | Fantastical         | ✅             | —                             | [docs/apps/fantastical.md](docs/apps/fantastical.md)                 |
-| Figma               | ☐              | —                             | —                                                                    |
+| Figma               | ☐              | —                             | [docs/apps/figma.md](docs/apps/figma.md)                             |
 | Ghostty             | ☐              | `~/.config/ghostty`           | —                                                                    |
 | Google Chrome       | ☐              | —                             | [docs/apps/chrome.md](docs/apps/chrome.md)                           |
 | Google Japanese IME | ☐              | —                             | [docs/apps/google-japanese-ime.md](docs/apps/google-japanese-ime.md) |
