@@ -69,6 +69,7 @@
     "defaultMode": "auto"
   },
   "model": "opus",
+  "outputStyle": "Concise",
   "hooks": {
     "PermissionRequest": [
       {
