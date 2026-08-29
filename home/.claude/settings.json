@@ -97,6 +97,10 @@
           {
             "type": "command",
             "command": "~/.claude/hooks/block-git-c.sh"
+          },
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/block-git-add-all.sh"
           }
         ]
       }
