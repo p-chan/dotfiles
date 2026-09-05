@@ -68,6 +68,10 @@
     ],
     "defaultMode": "auto"
   },
+  "attribution": {
+    "pr": "",
+    "sessionUrl": false
+  },
   "model": "opus",
   "outputStyle": "Concise",
   "hooks": {
