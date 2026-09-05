@@ -15,7 +15,7 @@ const skillsDir = join(dotfilesDir, "home/.agents/skills");
 
 function usage() {
   console.error(`Usage:
-  agent-skills add <source> <path> [--name <name>] [--ref <ref>]
+  agent-skills add <source> <path> [--name <name>]
   agent-skills remove <name>...
   agent-skills install [name...]
   agent-skills update [name...] [--all] [--dry-run]`);
@@ -48,12 +48,7 @@ function validateCommit(commit) {
 function validateSkill(name, skill) {
   validateName(name);
   if (!skill || typeof skill !== "object") fail(`invalid skill: ${name}`);
-  if (
-    typeof skill.source !== "string" ||
-    typeof skill.path !== "string" ||
-    typeof skill.ref !== "string" ||
-    typeof skill.commit !== "string"
-  ) {
+  if (typeof skill.source !== "string" || typeof skill.path !== "string" || typeof skill.commit !== "string") {
     fail(`invalid skill: ${name}`);
   }
   normalizeSource(skill.source);
@@ -156,13 +151,11 @@ async function add(arguments_) {
   if (!sourceArgument || !path) return usage();
 
   let name;
-  let ref = "HEAD";
   for (let index = 0; index < options.length; index += 2) {
     const option = options[index];
     const value = options[index + 1];
-    if (!value || (option !== "--name" && option !== "--ref")) return usage();
+    if (!value || option !== "--name") return usage();
     if (option === "--name") name = value;
-    if (option === "--ref") ref = value;
   }
 
   name ??= path === "." ? undefined : basename(path);
@@ -173,7 +166,7 @@ async function add(arguments_) {
   const manifest = await loadManifest();
   if (manifest.skills[name]) fail(`skill already exists: ${name}`);
   const source = normalizeSource(sourceArgument);
-  const skill = { source, path, ref, commit: await resolveCommit(source, ref) };
+  const skill = { source, path, commit: await resolveCommit(source, "HEAD") };
   await installSkill(name, skill);
   manifest.skills[name] = skill;
   await saveManifest(manifest);
@@ -215,7 +208,7 @@ async function update(arguments_) {
   const updates = [];
   for (const name of selectedSkills(manifest, all ? [] : names)) {
     const skill = manifest.skills[name];
-    const commit = await resolveCommit(skill.source, skill.ref);
+    const commit = await resolveCommit(skill.source, "HEAD");
     if (commit !== skill.commit) updates.push({ name, skill: { ...skill, commit }, previousCommit: skill.commit });
   }
 

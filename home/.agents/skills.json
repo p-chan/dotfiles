@@ -4,31 +4,26 @@
     "grill-me": {
       "source": "https://github.com/mattpocock/skills.git",
       "path": "skills/productivity/grill-me",
-      "ref": "HEAD",
       "commit": "26ba8ae34bb3657e7dd85939fce8a5a166439f8b"
     },
     "japanese-tech-writing": {
       "source": "https://gist.github.com/k16shikano/fd287c3133457c4fd8f5601d34aa817d.git",
       "path": ".",
-      "ref": "HEAD",
       "commit": "5ed08e4475365fd233aa0d3ab71c19b87e1a5732"
     },
     "notion-cli": {
       "source": "https://github.com/makenotion/skills.git",
       "path": "skills/notion-cli",
-      "ref": "HEAD",
       "commit": "423af2bf546cd0354e5cc871017251945d9ad14f"
     },
     "opensrc": {
       "source": "https://github.com/vercel-labs/opensrc.git",
       "path": "skills/opensrc",
-      "ref": "HEAD",
       "commit": "2efd74e8f1755f15ed8f5a3445e1f5c80b6362c4"
     },
     "playwright-cli": {
       "source": "https://github.com/microsoft/playwright-cli.git",
       "path": "skills/playwright-cli",
-      "ref": "HEAD",
       "commit": "9b118a1a737662fa118d591b5687340b86005d5c"
     }
   }

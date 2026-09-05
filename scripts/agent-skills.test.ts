@@ -43,7 +43,9 @@ test("agent-skills manages a pinned skill lifecycle", async () => {
     const firstCommit = git(source, "rev-parse", "HEAD").trim();
 
     assert.match(run(root, "add", `file://${source}`, "skills/example"), /Installed example/);
-    assert.equal(JSON.parse(await readFile(manifestPath, "utf8")).skills.example.commit, firstCommit);
+    const installedSkill = JSON.parse(await readFile(manifestPath, "utf8")).skills.example;
+    assert.equal(installedSkill.commit, firstCommit);
+    assert.equal("ref" in installedSkill, false);
     assert.equal(await readFile(installedSkillPath, "utf8"), "first\n");
 
     await writeFile(join(skillPath, "SKILL.md"), "second\n");
