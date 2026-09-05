@@ -4,7 +4,7 @@
 
 ## Supported environments
 
-- macOS 14 or later (Apple Silicon only)
+- macOS 26 or later (Apple Silicon only)
 
 ## Install
 
