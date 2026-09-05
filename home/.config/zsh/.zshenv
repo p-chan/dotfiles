@@ -13,7 +13,7 @@ else
   export DOTFILES_DIR="$HOME/src/github.com/p-chan/dotfiles"
 fi
 export PATH="$HOME/.local/bin:$PATH"
-# Interactive activation moves real tools ahead; shims remain as an update-safe fallback.
+# Let interactive activation retain shims behind real tools as an update-safe fallback.
 export PATH="$HOME/.local/share/mise/shims:$PATH"
 export PATH="$DOTFILES_DIR/bin:$PATH"
 
