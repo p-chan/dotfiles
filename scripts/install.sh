@@ -247,6 +247,8 @@ if type mise &>/dev/null; then
   MISE_CONFIG_DIR="$DOTFILES_DIR/home/.config/mise" \
   mise bootstrap --yes $extra_args
 
+  node "$DOTFILES_DIR/bin/agent-skills" install
+
   log_success "Successfully ran mise bootstrap."
 else
   log_warn "mise command not found. Skipping mise bootstrap."

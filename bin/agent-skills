@@ -1,0 +1,250 @@
+#!/usr/bin/env node
+
+import { execFile as execFileCallback } from "node:child_process";
+import { cp, mkdir, mkdtemp, readFile, rename, rm, writeFile } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { basename, dirname, join, relative, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
+import { promisify } from "node:util";
+
+const execFile = promisify(execFileCallback);
+const scriptPath = fileURLToPath(import.meta.url);
+const dotfilesDir = resolve(process.env.DOTFILES_DIR ?? join(dirname(scriptPath), ".."));
+const manifestPath = join(dotfilesDir, "home/.agents/skills.json");
+const skillsDir = join(dotfilesDir, "home/.agents/skills");
+
+function usage() {
+  console.error(`Usage:
+  agent-skills add <source> <path> [--name <name>]
+  agent-skills remove <name>...
+  agent-skills install [name...]
+  agent-skills update [name...] [--all] [--dry-run]`);
+  process.exitCode = 1;
+}
+
+function fail(message) {
+  throw new Error(`agent-skills: ${message}`);
+}
+
+function normalizeSource(source) {
+  if (/^[\w.-]+\/[\w.-]+$/.test(source)) return `https://github.com/${source}.git`;
+  if (/^(https?|ssh|file):\/\//.test(source) || source.startsWith("git@")) return source;
+  fail(`invalid source: ${source}`);
+}
+
+function validateName(name) {
+  if (!/^[a-zA-Z0-9][a-zA-Z0-9._-]*$/.test(name)) fail(`invalid skill name: ${name}`);
+}
+
+function validatePath(path) {
+  if (path === ".") return;
+  if (path.startsWith("/") || path.split("/").includes("..")) fail(`invalid skill path: ${path}`);
+}
+
+function validateCommit(commit) {
+  if (!/^[0-9a-f]{40}$/.test(commit)) fail(`invalid commit SHA: ${commit}`);
+}
+
+function validateSkill(name, skill) {
+  validateName(name);
+  if (!skill || typeof skill !== "object") fail(`invalid skill: ${name}`);
+  if (typeof skill.source !== "string" || typeof skill.path !== "string" || typeof skill.commit !== "string") {
+    fail(`invalid skill: ${name}`);
+  }
+  normalizeSource(skill.source);
+  validatePath(skill.path);
+  validateCommit(skill.commit);
+}
+
+async function loadManifest() {
+  let manifest;
+  try {
+    manifest = JSON.parse(await readFile(manifestPath, "utf8"));
+  } catch (error) {
+    fail(`could not read ${manifestPath}: ${error.message}`);
+  }
+
+  if (
+    manifest.version !== 1 ||
+    !manifest.skills ||
+    typeof manifest.skills !== "object" ||
+    Array.isArray(manifest.skills)
+  ) {
+    fail(`invalid manifest: ${manifestPath}`);
+  }
+  for (const [name, skill] of Object.entries(manifest.skills)) validateSkill(name, skill);
+  return manifest;
+}
+
+async function saveManifest(manifest) {
+  const sortedSkills = Object.fromEntries(
+    Object.entries(manifest.skills).sort(([left], [right]) => left.localeCompare(right)),
+  );
+  const temporaryPath = `${manifestPath}.tmp-${process.pid}`;
+  await writeFile(temporaryPath, `${JSON.stringify({ version: 1, skills: sortedSkills }, null, 2)}\n`);
+  await rename(temporaryPath, manifestPath);
+}
+
+async function git(args, options = {}) {
+  try {
+    const { stdout } = await execFile("git", args, { encoding: "utf8", maxBuffer: 10 * 1024 * 1024, ...options });
+    return stdout;
+  } catch (error) {
+    const detail = error.stderr?.trim() || error.message;
+    fail(`git ${args.join(" ")} failed: ${detail}`);
+  }
+}
+
+async function resolveCommit(source, ref) {
+  const output = await git(["ls-remote", source, ref]);
+  const commit = output.trim().split(/\s+/)[0];
+  if (!commit) fail(`could not resolve ${ref} from ${source}`);
+  validateCommit(commit);
+  return commit;
+}
+
+function selectedSkills(manifest, names) {
+  const selected = names.length === 0 ? Object.keys(manifest.skills) : names;
+  for (const name of selected) {
+    if (!manifest.skills[name]) fail(`skill not found: ${name}`);
+  }
+  return selected;
+}
+
+async function installSkill(name, skill) {
+  const temporaryDir = await mkdtemp(join(tmpdir(), "agent-skills-"));
+  const checkoutDir = join(temporaryDir, "repository");
+  const targetDir = join(skillsDir, name);
+  const stagingDir = join(skillsDir, `.${name}.tmp-${process.pid}`);
+
+  try {
+    await git(["init", "--quiet", checkoutDir]);
+    await git(["-C", checkoutDir, "remote", "add", "origin", skill.source]);
+    await git(["-C", checkoutDir, "fetch", "--depth=1", "--quiet", "origin", skill.commit]);
+    await git(["-C", checkoutDir, "checkout", "--detach", "--quiet", "FETCH_HEAD"]);
+    const resolvedCommit = (await git(["-C", checkoutDir, "rev-parse", "HEAD"])).trim();
+    if (resolvedCommit !== skill.commit) fail(`resolved a different commit for ${name}`);
+
+    const sourceDir = resolve(checkoutDir, skill.path);
+    if (relative(checkoutDir, sourceDir).startsWith("..") || basename(sourceDir) === "..")
+      fail(`invalid skill path: ${skill.path}`);
+    try {
+      await readFile(join(sourceDir, "SKILL.md"));
+    } catch {
+      fail(`SKILL.md not found for ${name}`);
+    }
+
+    await mkdir(skillsDir, { recursive: true });
+    await rm(stagingDir, { recursive: true, force: true });
+    await cp(sourceDir, stagingDir, { recursive: true });
+    await rm(targetDir, { recursive: true, force: true });
+    await rename(stagingDir, targetDir);
+    console.log(`Installed ${name}`);
+  } finally {
+    await rm(stagingDir, { recursive: true, force: true });
+    await rm(temporaryDir, { recursive: true, force: true });
+  }
+}
+
+async function add(arguments_) {
+  const [sourceArgument, path, ...options] = arguments_;
+  if (!sourceArgument || !path) return usage();
+
+  let name;
+  for (let index = 0; index < options.length; index += 2) {
+    const option = options[index];
+    const value = options[index + 1];
+    if (!value || option !== "--name") return usage();
+    if (option === "--name") name = value;
+  }
+
+  name ??= path === "." ? undefined : basename(path);
+  if (!name) fail("--name is required when path is .");
+  validateName(name);
+  validatePath(path);
+
+  const manifest = await loadManifest();
+  if (manifest.skills[name]) fail(`skill already exists: ${name}`);
+  const source = normalizeSource(sourceArgument);
+  const skill = { source, path, commit: await resolveCommit(source, "HEAD") };
+  await installSkill(name, skill);
+  manifest.skills[name] = skill;
+  await saveManifest(manifest);
+}
+
+async function remove(arguments_) {
+  if (arguments_.length === 0) return usage();
+  const manifest = await loadManifest();
+  const names = selectedSkills(manifest, arguments_);
+  for (const name of names) {
+    await rm(join(skillsDir, name), { recursive: true, force: true });
+    delete manifest.skills[name];
+    console.log(`Removed ${name}`);
+  }
+  await saveManifest(manifest);
+}
+
+async function install(arguments_) {
+  const manifest = await loadManifest();
+  for (const name of selectedSkills(manifest, arguments_)) {
+    await installSkill(name, manifest.skills[name]);
+  }
+}
+
+async function update(arguments_) {
+  const names = [];
+  let all = false;
+  let dryRun = false;
+  for (const argument of arguments_) {
+    if (argument === "--all") all = true;
+    else if (argument === "--dry-run") dryRun = true;
+    else if (argument.startsWith("--")) return usage();
+    else names.push(argument);
+  }
+  if (all && names.length > 0) fail("--all cannot be combined with skill names");
+  if (!all && names.length === 0) return usage();
+
+  const manifest = await loadManifest();
+  const updates = [];
+  for (const name of selectedSkills(manifest, all ? [] : names)) {
+    const skill = manifest.skills[name];
+    const commit = await resolveCommit(skill.source, "HEAD");
+    if (commit !== skill.commit) updates.push({ name, skill: { ...skill, commit }, previousCommit: skill.commit });
+  }
+
+  if (updates.length === 0) {
+    console.log("All selected skills are up to date.");
+    return;
+  }
+  for (const update of updates) console.log(`${update.name}: ${update.previousCommit} -> ${update.skill.commit}`);
+  if (dryRun) return;
+
+  for (const update of updates) await installSkill(update.name, update.skill);
+  for (const update of updates) manifest.skills[update.name] = update.skill;
+  await saveManifest(manifest);
+}
+
+async function main() {
+  const [command, ...arguments_] = process.argv.slice(2);
+  switch (command) {
+    case "add":
+      await add(arguments_);
+      break;
+    case "remove":
+      await remove(arguments_);
+      break;
+    case "install":
+      await install(arguments_);
+      break;
+    case "update":
+      await update(arguments_);
+      break;
+    default:
+      usage();
+  }
+}
+
+main().catch((error) => {
+  console.error(error.message);
+  process.exitCode = 1;
+});
