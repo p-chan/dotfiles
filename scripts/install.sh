@@ -247,6 +247,8 @@ if type mise &>/dev/null; then
   MISE_CONFIG_DIR="$DOTFILES_DIR/home/.config/mise" \
   mise bootstrap --yes $extra_args
 
+  bash "$DOTFILES_DIR/scripts/sync-agent-skills.sh" "$DOTFILES_DIR"
+
   log_success "Successfully ran mise bootstrap."
 else
   log_warn "mise command not found. Skipping mise bootstrap."

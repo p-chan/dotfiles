@@ -9,7 +9,6 @@ bun = "latest"
 "github:jkfran/killport" = "latest"
 "github:ogulcancelik/herdr" = "latest"
 "github:junegunn/fzf" = "latest"
-"github:microsoft/apm" = "latest"
 "github:k1LoW/git-wt" = "latest"
 "github:rossmacarthur/sheldon" = "latest"
 "github:sharkdp/fd" = "latest"
@@ -92,8 +91,6 @@ pre-packages = 'if command -v brew >/dev/null 2>&1; then brew bundle --file="$(m
 
 [dotfiles]
 "~/.agents" = {}
-"~/.apm/apm.lock.yaml" = {}
-"~/.apm/apm.yml" = {}
 "~/.claude/CLAUDE.md" = {}
 "~/.claude/commands" = {}
 "~/.claude/hooks" = {}
