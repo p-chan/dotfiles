@@ -48,7 +48,12 @@ function validateCommit(commit) {
 function validateSkill(name, skill) {
   validateName(name);
   if (!skill || typeof skill !== "object") fail(`invalid skill: ${name}`);
-  if (typeof skill.source !== "string" || typeof skill.path !== "string" || typeof skill.ref !== "string" || typeof skill.commit !== "string") {
+  if (
+    typeof skill.source !== "string" ||
+    typeof skill.path !== "string" ||
+    typeof skill.ref !== "string" ||
+    typeof skill.commit !== "string"
+  ) {
     fail(`invalid skill: ${name}`);
   }
   normalizeSource(skill.source);
@@ -64,7 +69,12 @@ async function loadManifest() {
     fail(`could not read ${manifestPath}: ${error.message}`);
   }
 
-  if (manifest.version !== 1 || !manifest.skills || typeof manifest.skills !== "object" || Array.isArray(manifest.skills)) {
+  if (
+    manifest.version !== 1 ||
+    !manifest.skills ||
+    typeof manifest.skills !== "object" ||
+    Array.isArray(manifest.skills)
+  ) {
     fail(`invalid manifest: ${manifestPath}`);
   }
   for (const [name, skill] of Object.entries(manifest.skills)) validateSkill(name, skill);
@@ -72,7 +82,9 @@ async function loadManifest() {
 }
 
 async function saveManifest(manifest) {
-  const sortedSkills = Object.fromEntries(Object.entries(manifest.skills).sort(([left], [right]) => left.localeCompare(right)));
+  const sortedSkills = Object.fromEntries(
+    Object.entries(manifest.skills).sort(([left], [right]) => left.localeCompare(right)),
+  );
   const temporaryPath = `${manifestPath}.tmp-${process.pid}`;
   await writeFile(temporaryPath, `${JSON.stringify({ version: 1, skills: sortedSkills }, null, 2)}\n`);
   await rename(temporaryPath, manifestPath);
@@ -119,7 +131,8 @@ async function installSkill(name, skill) {
     if (resolvedCommit !== skill.commit) fail(`resolved a different commit for ${name}`);
 
     const sourceDir = resolve(checkoutDir, skill.path);
-    if (relative(checkoutDir, sourceDir).startsWith("..") || basename(sourceDir) === "..") fail(`invalid skill path: ${skill.path}`);
+    if (relative(checkoutDir, sourceDir).startsWith("..") || basename(sourceDir) === "..")
+      fail(`invalid skill path: ${skill.path}`);
     try {
       await readFile(join(sourceDir, "SKILL.md"));
     } catch {
