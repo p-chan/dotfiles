@@ -1,3 +1,12 @@
+_sheldon_data_dir="${SHELDON_DATA_DIR:-${XDG_DATA_HOME:-$HOME/.local/share}/sheldon}"
+# Completion paths must be available before compinit; Sheldon sources plugins later.
+fpath=(
+  "$_sheldon_data_dir/repos/github.com/olets/zsh-abbr/completions"
+  "$_sheldon_data_dir/repos/github.com/zsh-users/zsh-completions/src"
+  $fpath
+)
+unset _sheldon_data_dir
+
 autoload -Uz compinit
 _zcompdump="${ZDOTDIR:-$HOME}/.zcompdump"
 # Recheck completion files and permissions daily; trust the dump between checks.
@@ -23,12 +32,12 @@ if type mise &>/dev/null; then
   eval "$(mise activate zsh)"
 fi
 
-if type sheldon &>/dev/null; then
-  eval "$(sheldon source)"
-fi
-
 if type fzf &>/dev/null; then
   source <(fzf --zsh)
+fi
+
+if type sheldon &>/dev/null; then
+  eval "$(sheldon source)"
 fi
 
 if type zoxide &>/dev/null; then
