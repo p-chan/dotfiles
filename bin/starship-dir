@@ -18,42 +18,40 @@
 pwd_path="$PWD"
 
 if git_root=$(git rev-parse --show-toplevel 2>/dev/null); then
-  common_dir=$(git rev-parse --git-common-dir 2>/dev/null)
-  case "$common_dir" in
-    /*) ;;
-    *) common_dir="$pwd_path/$common_dir" ;;
-  esac
-  main_root=$(cd "$(dirname "$common_dir")" 2>/dev/null && pwd)
-  [ -z "$main_root" ] && main_root="$git_root"
-
-  repo_name="$(basename "$main_root")"
-  rel="${pwd_path#"$git_root"}"
-
-  segs=()
-  if [ -n "$rel" ]; then
-    parts=()
-    IFS='/' read -ra parts <<<"$rel"
-    for part in "${parts[@]}"; do
-      [ -n "$part" ] && segs+=("$part")
-    done
-  fi
-
-  if [ "${#segs[@]}" -le 2 ]; then
-    out="$repo_name"
-    for s in "${segs[@]}"; do
-      out+="/$s"
-    done
+  if [ -d "$git_root/.git" ]; then
+    main_root=$git_root
   else
-    n=${#segs[@]}
-    out="$repo_name/…/${segs[$((n - 2))]}/${segs[$((n - 1))]}"
+    common_dir=$(git rev-parse --git-common-dir 2>/dev/null)
+    case "$common_dir" in
+      /*) ;;
+      *) common_dir="$pwd_path/$common_dir" ;;
+    esac
+    main_root=$(cd "${common_dir%/*}" 2>/dev/null && pwd)
+    [ -n "$main_root" ] || main_root=$git_root
   fi
+  repo_name=${main_root##*/}
+  [ -n "$repo_name" ] || repo_name=/
+  rel=${pwd_path#"$git_root"}
+  rel=${rel#/}
+
+  case "$rel" in
+    "") out=$repo_name ;;
+    */*/*)
+      tail=${rel##*/}
+      parent=${rel%/*}
+      out="$repo_name/…/${parent##*/}/$tail"
+      ;;
+    *) out="$repo_name/$rel" ;;
+  esac
 
   printf '%s' "$out"
 elif [ "$pwd_path" = "$HOME" ]; then
   printf '~'
 else
-  tail="$(basename "$pwd_path")"
-  prefix="$(dirname "$pwd_path")"
+  tail=${pwd_path##*/}
+  [ -n "$tail" ] || tail=/
+  prefix=${pwd_path%/*}
+  [ -n "$prefix" ] || prefix=/
 
   case "$prefix" in
     "$HOME") short="~" ;;
@@ -69,7 +67,7 @@ else
   for part in "${parts[@]}"; do
     [ -z "$part" ] && continue
     if [ "$part" = "~" ]; then
-      out+="~/"
+      out+="$part/"
     elif [[ "$part" == .* ]]; then
       out+="${part:0:2}/"
     else
