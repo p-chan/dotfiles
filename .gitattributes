@@ -1,2 +1,2 @@
-# Claude Code が並び順を変えても意味のある差分だけを表示する。
+# Claude Code が並び順を変えても意味のある差分だけを表示する
 home/.claude/settings.json filter=jsonsort
