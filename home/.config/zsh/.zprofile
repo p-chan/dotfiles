@@ -5,3 +5,5 @@ fi
 if [[ -f "${ZDOTDIR:-$HOME}/.zprofile.local" ]]; then
   source "${ZDOTDIR:-$HOME}/.zprofile.local"
 fi
+
+path=("${path[@]}")
