@@ -24,29 +24,43 @@ bindkey '^[[1;2D' backward-word
 # Forward word (Shift + Arrow Right)
 bindkey '^[[1;2C' forward-word
 
+# Bypass mise shims for startup generators without changing the shell's PATH.
+_zsh_init_path="${(j/:/)${(@)path:#$HOME/.local/share/mise/shims}}"
+function _zsh_init_command() {
+  local command_name=$1
+  local executable
+  shift
+
+  executable=$(PATH="$_zsh_init_path" whence -p "$command_name")
+  "${executable:-$command_name}" "$@"
+}
+
 if type starship &>/dev/null; then
-  eval "$(starship init zsh)"
+  eval "$(_zsh_init_command starship init zsh)"
 fi
 
 if type mise &>/dev/null; then
-  eval "$(mise activate zsh)"
+  eval "$(_zsh_init_command mise activate zsh)"
 fi
 
 if type fzf &>/dev/null; then
-  source <(fzf --zsh)
+  source <(_zsh_init_command fzf --zsh)
 fi
 
 if type sheldon &>/dev/null; then
-  eval "$(sheldon source)"
+  eval "$(_zsh_init_command sheldon source)"
 fi
 
 if type zoxide &>/dev/null; then
-  eval "$(zoxide init zsh)"
+  eval "$(_zsh_init_command zoxide init zsh)"
 fi
 
 if type git-wt &>/dev/null; then
-  eval "$(git wt --init zsh)"
+  eval "$(_zsh_init_command git-wt --init zsh)"
 fi
+
+unfunction _zsh_init_command
+unset _zsh_init_path
 
 # git switch/sw → git-fallback-switch; composes with git-wt wrapper if present
 if typeset -f git > /dev/null 2>&1; then
