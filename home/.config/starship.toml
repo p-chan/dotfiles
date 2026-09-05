@@ -9,13 +9,16 @@ command_timeout = 1000
 format = "[⋊>](blue) "
 
 [custom.dir]
-command = "starship-dir"
-when = "true"
+command = "source starship-dir"
+shell = ["/bin/bash", "--noprofile", "--norc"]
+when = true
 format = "[$output](yellow) "
 
 [custom.git_branch]
-command = 'out=$(git status --porcelain --branch 2>/dev/null); branch=$(printf "%s" "$out" | head -1 | sed -E "s/^## //; s/\.\.\..*//; s/ .*//"); [ "$(printf "%s\n" "$out" | wc -l)" -gt 1 ] && dirty="*" || dirty=""; printf "%s%s" "$branch" "$dirty"'
-when = 'git rev-parse --git-dir > /dev/null 2>&1'
+command = 'git status --porcelain --branch 2>/dev/null | { IFS= read -r branch || exit; IFS= read -r _ && dirty="*" || dirty=""; branch=${branch#\#\# }; branch=${branch%%...*}; branch=${branch%% *}; printf "%s%s" "$branch" "$dirty"; }'
+shell = ["/bin/sh"]
+require_repo = true
+when = true
 format = "on [$output](green) "
 
 [time]
