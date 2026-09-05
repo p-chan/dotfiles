@@ -1,5 +1,12 @@
 autoload -Uz compinit
-compinit
+_zcompdump="${ZDOTDIR:-$HOME}/.zcompdump"
+# Recheck completion files and permissions daily; trust the dump between checks.
+if [[ -s "$_zcompdump" && -n "$_zcompdump"(#qN.mh-24) ]]; then
+  compinit -C -d "$_zcompdump"
+else
+  compinit -d "$_zcompdump" && command touch "$_zcompdump"
+fi
+unset _zcompdump
 
 bindkey -v
 
