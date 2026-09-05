@@ -34,6 +34,10 @@
   process = git-lfs filter-process
   required = true
 
+[filter "jsonsort"]
+  # オブジェクトのキーと配列を正規化してから Git に保存する。
+  clean = jq -S 'walk(if type == \"array\" then sort else . end)'
+
 [ghq]
   root = ~/src
 
