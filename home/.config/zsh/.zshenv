@@ -13,13 +13,14 @@ else
   export DOTFILES_DIR="$HOME/src/github.com/p-chan/dotfiles"
 fi
 export PATH="$HOME/.local/bin:$PATH"
+# Let interactive activation retain shims behind real tools as an update-safe fallback.
 export PATH="$HOME/.local/share/mise/shims:$PATH"
 export PATH="$DOTFILES_DIR/bin:$PATH"
 
-if type mise &>/dev/null; then
-  # Set PATH and mise-managed env vars
+# Interactive shells use `mise activate` from .zshrc; scripts need the
+# environment immediately and stable shims across `mise up`.
+if [[ ! -o interactive ]] && type mise &>/dev/null; then
   eval "$(mise env -s zsh)"
-  # Prepend shims to PATH so commands resolve correctly after `mise up`
   path=("$HOME/.local/share/mise/shims" "${path[@]}")
 fi
 
