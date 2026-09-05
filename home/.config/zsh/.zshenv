@@ -20,7 +20,7 @@ if type mise &>/dev/null; then
   # Set PATH and mise-managed env vars
   eval "$(mise env -s zsh)"
   # Prepend shims to PATH so commands resolve correctly after `mise up`
-  eval "$(mise activate zsh --shims)"
+  path=("$HOME/.local/share/mise/shims" "${path[@]}")
 fi
 
 if [[ -f "${ZDOTDIR:-$HOME}/.zshenv.local" ]]; then
