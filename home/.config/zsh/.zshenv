@@ -1,6 +1,8 @@
 export EDITOR="vim"
 export VISUAL="vim"
 
+typeset -U path fpath
+
 # ~/.zshenv is a symlink into <repo>/home, managed by mise's dotfiles
 # feature from the dotfiles.root setting. Resolving it locates the repo
 # without forking a process on every shell startup (:A resolves symlinks in
@@ -24,3 +26,5 @@ fi
 if [[ -f "${ZDOTDIR:-$HOME}/.zshenv.local" ]]; then
   source "${ZDOTDIR:-$HOME}/.zshenv.local"
 fi
+
+path=("${path[@]}")
