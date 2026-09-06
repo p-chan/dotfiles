@@ -5,7 +5,7 @@
   "scripts": {
     "check": "prettier --check .",
     "format": "prettier --write .",
-    "test": "node --test .github/scripts/check-pr-title.test.ts scripts/*.test.ts"
+    "test": "node --test .github/scripts/check-pr-title.test.ts scripts/*.test.ts home/.agents/skills/*/scripts/*.test.ts"
   },
   "devDependencies": {
     "prettier": "3.7.4"
