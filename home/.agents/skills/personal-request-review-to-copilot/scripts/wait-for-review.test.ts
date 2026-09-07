@@ -375,19 +375,27 @@ test("wait-for-review", async (t) => {
     });
   });
 
+  // ポーリング間隔を待機の上限より長くすると、最初の反復で必ず残り時間側に入る。
+  // SECONDS は整数秒しか持たず、開始を読む位相によって経過が 1 秒ぶれるため、
+  // 待ち時間の列を厳密に指定すると不安定になる。ここでは待ちが残り時間に
+  // 収まっていることだけを確かめる
   await t.test("waits only the remaining time when it is shorter than the poll interval", async () => {
     await withFixture({ calls: [[[request(REQUESTED_AT)]]] }, async (root) => {
       const result = await runScript(root, [
         "--pr",
         "100",
         "--poll-interval",
-        "2",
+        "10",
         "--timeout",
-        "3",
+        "2",
         "--request-grace",
         "0",
       ]);
-      assert.deepEqual(result.sleeps, ["2", "1"]);
+      assert.equal(result.sleeps.length, 1);
+      const slept = Number(result.sleeps[0]);
+      assert.ok(slept > 0, `expected a positive wait, got: ${result.sleeps[0]}`);
+      assert.ok(slept < 10, `expected the poll interval to be clamped, got: ${result.sleeps[0]}`);
+      assert.ok(slept <= 2, `expected the wait to fit in the timeout, got: ${result.sleeps[0]}`);
     });
   });
 
