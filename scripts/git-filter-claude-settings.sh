@@ -7,7 +7,7 @@ portable_command='bash "$HOME/.claude/hooks/herdr-agent-state.sh" session'
 
 case "$mode" in
   clean)
-    jq -S --arg portable_command "$portable_command" '
+    jq --arg portable_command "$portable_command" '
       walk(
         if type == "string" and test("^bash '\''[^'\'']*/\\.claude/hooks/herdr-agent-state\\.sh'\'' session$") then
           $portable_command
