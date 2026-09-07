@@ -15,7 +15,7 @@ home/.config/mise/conf.d/
 
 # Keep only self-managed Claude Code hooks under version control.
 home/.claude/hooks/*
-!home/.claude/hooks/personal-*.sh
+!home/.claude/hooks/personal-*
 
 # Others
 *.bak
