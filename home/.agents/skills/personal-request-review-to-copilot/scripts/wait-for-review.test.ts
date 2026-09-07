@@ -151,7 +151,9 @@ async function createFixture({ calls = [], failCalls = "", prNumber = "4242" }: 
   return root;
 }
 
-async function runScript(root: string, args: string[] = ["--pr", "100", "--poll-interval", "1", "--timeout", "2"]) {
+const DEFAULT_ARGS = ["--pr", "100", "--poll-interval", "1", "--timeout", "2", "--request-grace", "0"];
+
+async function runScript(root: string, args: string[] = DEFAULT_ARGS) {
   const { failCalls, prNumber } = JSON.parse(await readFile(join(root, "env"), "utf8"));
   const sleepLog = join(root, "state/sleep.log");
   await writeFile(sleepLog, "");
@@ -215,6 +217,90 @@ test("wait-for-review", async (t) => {
       assert.equal(result.code, 1);
       assert.match(result.stdout, /^NOT_REQUESTED: /m);
       assert.deepEqual(result.sleeps, []);
+    });
+  });
+
+  await t.test("waits for a request that the timeline has not reflected yet", async () => {
+    await withFixture({ calls: [[[]], [[request(REQUESTED_AT), review(REVIEWED_AT)]]] }, async (root) => {
+      const result = await runScript(root, [
+        "--pr",
+        "100",
+        "--poll-interval",
+        "1",
+        "--timeout",
+        "2",
+        "--request-grace",
+        "2",
+      ]);
+      assert.equal(result.code, 0);
+      assert.match(result.stdout, /^REVIEWED: /m);
+    });
+  });
+
+  // 猶予は 2 秒以上にする。SECONDS は整数秒しか持たず、開始を読む位相によって
+  // 最初の反復の経過が 1 秒ぶれるため、猶予が 1 秒だと待たずに判定することがある
+  await t.test("reports NOT_REQUESTED at the grace when it is shorter than the timeout", async () => {
+    await withFixture({ calls: [[[unrelated()]]] }, async (root) => {
+      const result = await runScript(root, [
+        "--pr",
+        "100",
+        "--poll-interval",
+        "1",
+        "--timeout",
+        "9",
+        "--request-grace",
+        "3",
+      ]);
+      assert.equal(result.code, 1);
+      assert.match(result.stdout, /^NOT_REQUESTED: /m);
+      // 猶予の間は待ってから判定し、待機の上限までは待たない
+      assert.notDeepEqual(result.sleeps, []);
+      assert.ok(result.sleeps.length < 9, `expected to stop at the grace, got: ${result.sleeps.join(",")}`);
+    });
+  });
+
+  await t.test("reports NOT_REQUESTED when the grace equals the timeout", async () => {
+    await withFixture({ calls: [[[unrelated()]]] }, async (root) => {
+      const result = await runScript(root, [
+        "--pr",
+        "100",
+        "--poll-interval",
+        "1",
+        "--timeout",
+        "2",
+        "--request-grace",
+        "2",
+      ]);
+      assert.equal(result.code, 1);
+      assert.match(result.stdout, /^NOT_REQUESTED: /m);
+    });
+  });
+
+  // 猶予を待機の上限まで切り詰めるため、猶予のほうが長くても NOT_REQUESTED に到達する
+  await t.test("clamps a grace longer than the timeout so NOT_REQUESTED stays reachable", async () => {
+    await withFixture({ calls: [[[unrelated()]]] }, async (root) => {
+      const result = await runScript(root, [
+        "--pr",
+        "100",
+        "--poll-interval",
+        "1",
+        "--timeout",
+        "2",
+        "--request-grace",
+        "600",
+      ]);
+      assert.equal(result.code, 1);
+      assert.match(result.stdout, /^NOT_REQUESTED: /m);
+    });
+  });
+
+  // 既定の猶予が 0 に退化していないことを、待たずに終わらないことで確かめる
+  await t.test("waits before reporting NOT_REQUESTED when the grace is left at its default", async () => {
+    await withFixture({ calls: [[[unrelated()]]] }, async (root) => {
+      const result = await runScript(root, ["--pr", "100", "--poll-interval", "1", "--timeout", "2"]);
+      assert.equal(result.code, 1);
+      assert.match(result.stdout, /^NOT_REQUESTED: /m);
+      assert.notDeepEqual(result.sleeps, []);
     });
   });
 
@@ -284,14 +370,23 @@ test("wait-for-review", async (t) => {
 
   await t.test("falls back to the PR of the current branch when --pr is omitted", async () => {
     await withFixture({ calls: [[[unrelated()]]], prNumber: "4242" }, async (root) => {
-      const result = await runScript(root, ["--poll-interval", "1", "--timeout", "2"]);
+      const result = await runScript(root, ["--poll-interval", "1", "--timeout", "2", "--request-grace", "0"]);
       assert.match(result.stdout, /^NOT_REQUESTED: PR #4242 /m);
     });
   });
 
   await t.test("waits only the remaining time when it is shorter than the poll interval", async () => {
     await withFixture({ calls: [[[request(REQUESTED_AT)]]] }, async (root) => {
-      const result = await runScript(root, ["--pr", "100", "--poll-interval", "2", "--timeout", "3"]);
+      const result = await runScript(root, [
+        "--pr",
+        "100",
+        "--poll-interval",
+        "2",
+        "--timeout",
+        "3",
+        "--request-grace",
+        "0",
+      ]);
       assert.deepEqual(result.sleeps, ["2", "1"]);
     });
   });
@@ -314,6 +409,8 @@ test("wait-for-review", async (t) => {
       ["--pr", "x"],
       ["--timeout", "1.5"],
       ["--poll-interval", "0"],
+      ["--request-grace"],
+      ["--request-grace", "x"],
     ];
     await withFixture({}, async (root) => {
       for (const args of invalid) {

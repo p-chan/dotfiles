@@ -6,7 +6,8 @@ set -euo pipefail
 
 usage() {
   cat <<'EOF'
-Usage: wait-for-review.sh [--pr <number>] [--poll-interval <seconds>] [--timeout <seconds>] [--help|-h]
+Usage: wait-for-review.sh [--pr <number>] [--poll-interval <seconds>] [--timeout <seconds>]
+                          [--request-grace <seconds>] [--help|-h]
 
 GitHub Copilot がレビューを投稿するまで待ちます。レビューの依頼は行いません。
 
@@ -14,6 +15,8 @@ Options:
   --pr <number>              対象の PR 番号（省略時は gh pr view で現在のブランチの PR）
   --poll-interval <seconds>  ポーリング間隔（既定: 30）
   --timeout <seconds>        待機の上限（既定: 900）
+  --request-grace <seconds>  依頼が timeline に現れるのを待つ猶予（既定: 60）
+                             --timeout の内側で数え、--timeout より長い値は切り詰める
   --help, -h                 このヘルプを表示して終了
 
 完了判定（最終行に結果を出力する）
@@ -23,9 +26,17 @@ Options:
   過去のレビューを新しいレビューと誤認しない。
 
   最後の依頼より新しいレビューがある → REVIEWED（exit 0）
-  Copilot へのレビュー依頼が無い     → NOT_REQUESTED（exit 1）
+  --request-grace 経過しても依頼が無い → NOT_REQUESTED（exit 1）
   --timeout 経過                     → TIMEOUT（exit 1）
   API の取得に失敗したまま期限経過   → ERROR（exit 1）
+
+  レビュー依頼の直後は timeline API への反映が遅れることがあるため、依頼が見つからなくても
+  --request-grace の間は再試行する。依頼済みの PR を未依頼と誤判定しないため。
+
+  猶予は --timeout とは別枠ではなく、待機時間の内側で数える。--timeout を短くしたときに
+  猶予だけが残って NOT_REQUESTED に到達できなくなるのを避けるため、--timeout より長い猶予は
+  --timeout まで切り詰める。これにより NOT_REQUESTED は依頼が見つからなかった場合に限り、
+  TIMEOUT は依頼はあるがレビューが投稿されなかった場合に限る。
 
   timeline API の取得に失敗しても即座には終了せず、期限内は再試行する。通信断や
   一時的な API エラーで待機が終わらないようにするため。
@@ -38,6 +49,7 @@ readonly COPILOT_LOGIN='Copilot'
 PR=""
 POLL_INTERVAL=30
 TIMEOUT=900
+REQUEST_GRACE=60
 
 # 数値の引数を検証して、10 進数に正規化した結果を NUMBER に入れる。
 # bash の算術評価は先頭ゼロ付きの値を 8 進数として解釈するため、10# を付けて渡す。
@@ -92,12 +104,26 @@ while [[ $# -gt 0 ]]; do
       TIMEOUT="${NUMBER}"
       shift 2
       ;;
+    --request-grace)
+      if [[ $# -lt 2 ]]; then
+        echo "error: --request-grace requires seconds" >&2
+        exit 1
+      fi
+      require_number --request-grace "$2" 0
+      REQUEST_GRACE="${NUMBER}"
+      shift 2
+      ;;
     *)
       echo "error: unknown argument: $1" >&2
       exit 1
       ;;
   esac
 done
+
+# 猶予は待機の上限を超えて延長しない。詳細は usage() の完了判定を参照
+if ((REQUEST_GRACE > TIMEOUT)); then
+  REQUEST_GRACE=${TIMEOUT}
+fi
 
 if [[ -z "${PR}" ]]; then
   if ! PR="$(gh pr view --json number --jq '.number')"; then
@@ -141,12 +167,14 @@ while true; do
     requested_at="${times%% *}"
     reviewed_at="${times#* }"
 
+    # 依頼の直後は timeline API への反映が遅れることがあるため、猶予の間は取得し直す。
+    # gh pr edit --add-reviewer の直後に実行しても未依頼と誤判定しないようにするため
     if [[ -z "${requested_at}" ]]; then
-      echo "NOT_REQUESTED: PR #${PR} に Copilot へのレビュー依頼がありません"
-      exit 1
-    fi
-
-    if [[ -n "${reviewed_at}" && "${reviewed_at}" > "${requested_at}" ]]; then
+      if ((SECONDS - started_at >= REQUEST_GRACE)); then
+        echo "NOT_REQUESTED: PR #${PR} に Copilot へのレビュー依頼がありません"
+        exit 1
+      fi
+    elif [[ -n "${reviewed_at}" && "${reviewed_at}" > "${requested_at}" ]]; then
       echo "REVIEWED: Copilot がレビューを投稿しました（依頼: ${requested_at}, 投稿: ${reviewed_at}）"
       exit 0
     fi

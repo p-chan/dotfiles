@@ -22,6 +22,8 @@ gh pr edit --add-reviewer @copilot
 bash ~/.agents/skills/personal-request-review-to-copilot/scripts/wait-for-review.sh
 ```
 
+レビュー依頼の直後は timeline API への反映が遅れることがあるため、依頼が見つからなくても既定で 60 秒は待ち直します。この猶予は待機の上限（既定 900 秒）の内側で数えます。手順 1 を経ずに実行して未依頼をすぐ知りたい場合は `--request-grace 0` を渡します。
+
 対象の PR を明示する場合は `--pr` を渡します。省略した場合は現在のブランチの PR を対象にします。
 
 ```bash
@@ -33,7 +35,7 @@ bash ~/.agents/skills/personal-request-review-to-copilot/scripts/wait-for-review
 | 出力            | 意味                                       | 次の対応                             |
 | :-------------- | :----------------------------------------- | :----------------------------------- |
 | `REVIEWED`      | レビューが投稿された                       | 手順 3 に進む                        |
-| `NOT_REQUESTED` | Copilot へのレビュー依頼が無い             | 手順 1 を実行してから再実行する      |
+| `NOT_REQUESTED` | 猶予を過ぎても Copilot への依頼が無い      | 手順 1 を実行してから再実行する      |
 | `TIMEOUT`       | 制限時間内にレビューが投稿されなかった     | ユーザーに報告し、待ち直すか確認する |
 | `ERROR`         | API の取得に失敗したまま制限時間が経過した | ユーザーに報告する                   |
 
