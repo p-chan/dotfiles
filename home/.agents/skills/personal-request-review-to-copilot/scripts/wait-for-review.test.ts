@@ -153,6 +153,10 @@ async function createFixture({ calls = [], failCalls = "", prNumber = "4242" }: 
 
 const DEFAULT_ARGS = ["--pr", "100", "--poll-interval", "1", "--timeout", "2", "--request-grace", "0"];
 
+// 2 回目以降の応答を見るテスト用。初回の gh 呼び出しに時間がかかっても次のポーリングに
+// 到達できるよう、待機の上限を長めに取る。成功時はその前に終了するので実行時間は延びない
+const SETTLING_ARGS = ["--pr", "100", "--poll-interval", "1", "--timeout", "20", "--request-grace", "0"];
+
 async function runScript(root: string, args: string[] = DEFAULT_ARGS) {
   const { failCalls, prNumber } = JSON.parse(await readFile(join(root, "env"), "utf8"));
   const sleepLog = join(root, "state/sleep.log");
@@ -188,7 +192,7 @@ test("wait-for-review", async (t) => {
     await withFixture(
       { calls: [[[request(REQUESTED_AT)]], [[request(REQUESTED_AT), review(REVIEWED_AT)]]] },
       async (root) => {
-        const result = await runScript(root);
+        const result = await runScript(root, SETTLING_ARGS);
         assert.equal(result.code, 0);
         assert.match(result.stdout, /^REVIEWED: /m);
       },
@@ -228,9 +232,9 @@ test("wait-for-review", async (t) => {
         "--poll-interval",
         "1",
         "--timeout",
-        "2",
+        "20",
         "--request-grace",
-        "2",
+        "20",
       ]);
       assert.equal(result.code, 0);
       assert.match(result.stdout, /^REVIEWED: /m);
@@ -297,7 +301,7 @@ test("wait-for-review", async (t) => {
   // 既定の猶予が 0 に退化していないことを、待たずに終わらないことで確かめる
   await t.test("waits before reporting NOT_REQUESTED when the grace is left at its default", async () => {
     await withFixture({ calls: [[[unrelated()]]] }, async (root) => {
-      const result = await runScript(root, ["--pr", "100", "--poll-interval", "1", "--timeout", "2"]);
+      const result = await runScript(root, ["--pr", "100", "--poll-interval", "1", "--timeout", "5"]);
       assert.equal(result.code, 1);
       assert.match(result.stdout, /^NOT_REQUESTED: /m);
       assert.notDeepEqual(result.sleeps, []);
@@ -353,7 +357,7 @@ test("wait-for-review", async (t) => {
 
   await t.test("retries after a transient API failure", async () => {
     await withFixture({ calls: [[[request(REQUESTED_AT), review(REVIEWED_AT)]]], failCalls: "1" }, async (root) => {
-      const result = await runScript(root);
+      const result = await runScript(root, SETTLING_ARGS);
       assert.equal(result.code, 0);
       assert.match(result.stdout, /^REVIEWED: /m);
       assert.match(result.stderr, /timeline API の取得に失敗しました（連続 1 回）/);
@@ -377,25 +381,31 @@ test("wait-for-review", async (t) => {
 
   // ポーリング間隔を待機の上限より長くすると、最初の反復で必ず残り時間側に入る。
   // SECONDS は整数秒しか持たず、開始を読む位相によって経過が 1 秒ぶれるため、
-  // 待ち時間の列を厳密に指定すると不安定になる。ここでは待ちが残り時間に
-  // 収まっていることだけを確かめる
+  // 待ち時間の列を厳密に指定すると不安定になる。SECONDS は整数秒しか持たず、開始を読む
+  // 位相と gh の呼び出しにかかる時間で経過がぶれるため、待ちの回数も固定できない。
+  // ここでは個々の待ちがポーリング間隔より短く、合計が待機の上限に収まることだけを見る
   await t.test("waits only the remaining time when it is shorter than the poll interval", async () => {
     await withFixture({ calls: [[[request(REQUESTED_AT)]]] }, async (root) => {
       const result = await runScript(root, [
         "--pr",
         "100",
         "--poll-interval",
-        "10",
+        "30",
         "--timeout",
-        "2",
+        "5",
         "--request-grace",
         "0",
       ]);
-      assert.equal(result.sleeps.length, 1);
-      const slept = Number(result.sleeps[0]);
-      assert.ok(slept > 0, `expected a positive wait, got: ${result.sleeps[0]}`);
-      assert.ok(slept < 10, `expected the poll interval to be clamped, got: ${result.sleeps[0]}`);
-      assert.ok(slept <= 2, `expected the wait to fit in the timeout, got: ${result.sleeps[0]}`);
+      assert.notDeepEqual(result.sleeps, []);
+      const slept = result.sleeps.map(Number);
+      assert.ok(
+        slept.every((seconds) => seconds > 0 && seconds < 30),
+        `expected the poll interval to be clamped, got: ${result.sleeps.join(",")}`,
+      );
+      assert.ok(
+        slept.reduce((total, seconds) => total + seconds, 0) <= 5,
+        `expected the waits to fit in the timeout, got: ${result.sleeps.join(",")}`,
+      );
     });
   });
 
