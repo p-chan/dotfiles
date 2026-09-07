@@ -1,2 +1,3 @@
-# Claude Code が並び順を変えても意味のある差分だけを表示する
-home/.claude/settings.json filter=jsonsort
+# Claude Code が並び順を変えても意味のある差分だけを表示し、Herdr の
+# マシン固有パスをポータブルな $HOME 表現として管理する
+home/.claude/settings.json filter=claude-settings
