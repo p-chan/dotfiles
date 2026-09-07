@@ -15,8 +15,7 @@ Options:
   --pr <number>              対象の PR 番号（省略時は gh pr view で現在のブランチの PR）
   --poll-interval <seconds>  ポーリング間隔（既定: 30）
   --timeout <seconds>        待機の上限（既定: 900）
-  --request-grace <seconds>  依頼が timeline に現れるのを待つ猶予（既定: 60）
-                             --timeout の内側で数え、--timeout より長い値は切り詰める
+  --request-grace <seconds>  依頼が timeline に現れるのを待つ猶予（既定: 60、--timeout 以内）
   --help, -h                 このヘルプを表示して終了
 
 完了判定（最終行に結果を出力する）
