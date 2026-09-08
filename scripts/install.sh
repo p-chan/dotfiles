@@ -248,10 +248,6 @@ if type mise &>/dev/null; then
   mise bootstrap --yes $extra_args
 
   CLAUDE_SETTINGS_FILTER="$DOTFILES_DIR/scripts/git-filter-claude-settings.sh"
-  CLAUDE_SETTINGS_FILTER_COMMAND="$(printf '%q' "$CLAUDE_SETTINGS_FILTER")"
-
-  git -C "$DOTFILES_DIR" config filter.claude-settings.clean "$CLAUDE_SETTINGS_FILTER_COMMAND clean"
-  git -C "$DOTFILES_DIR" config filter.claude-settings.smudge "$CLAUDE_SETTINGS_FILTER_COMMAND smudge"
 
   # Git stores the Herdr hook path as $HOME but Herdr itself requires the
   # concrete path for idempotent integration updates.

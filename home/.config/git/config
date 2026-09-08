@@ -34,6 +34,10 @@
   process = git-lfs filter-process
   required = true
 
+[filter "claude-settings"]
+  clean = scripts/git-filter-claude-settings.sh clean
+  smudge = scripts/git-filter-claude-settings.sh smudge
+
 [ghq]
   root = ~/src
 
