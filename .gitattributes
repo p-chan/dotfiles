@@ -1,2 +1,2 @@
-# Claude Code の並び順と Herdr hook path を正規化し、ローカル path を archive に含めない
-home/.claude/settings.json filter=pchan-dotfiles-claude-settings export-ignore
+# Claude Code の並び順と Herdr hook path を正規化する
+home/.claude/settings.json filter=pchan-dotfiles-claude-settings

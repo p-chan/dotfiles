@@ -164,10 +164,9 @@ test("installer configures Herdr without dirtying Claude settings", async () => 
     assert.equal(before.hooks.SessionStart[0].hooks[0].command, portableCommand);
     const modeBefore = (await lstat(repositorySettingsPath)).mode & 0o777;
 
-    const attributes = git(fixture, "check-attr", "filter", "export-ignore", "--", settingsRelativePath);
+    const attributes = git(fixture, "check-attr", "filter", "--", settingsRelativePath);
     assert.equal(attributes.status, 0, attributes.stderr);
     assert.match(attributes.stdout, /filter: pchan-dotfiles-claude-settings/);
-    assert.match(attributes.stdout, /export-ignore: set/);
 
     const firstRun = runInstaller(fixture);
     assert.equal(firstRun.status, 0, firstRun.stderr);
@@ -179,18 +178,6 @@ test("installer configures Herdr without dirtying Claude settings", async () => 
     const indexedSettings = JSON.parse(git(fixture, "show", `:${settingsRelativePath}`).stdout);
     assert.equal(indexedSettings.hooks.SessionStart[0].hooks[0].command, portableCommand);
     assert.equal(git(fixture, "status", "--porcelain").stdout, "");
-
-    const archive = spawnSync("git", ["-C", fixture.repository, "archive", "--format=tar", "HEAD"], {
-      env: fixture.environment,
-    });
-    assert.equal(archive.status, 0, archive.stderr.toString());
-    const archivedFiles = spawnSync("tar", ["-tf", "-"], {
-      encoding: "utf8",
-      env: fixture.environment,
-      input: archive.stdout,
-    });
-    assert.equal(archivedFiles.status, 0, archivedFiles.stderr);
-    assert.doesNotMatch(archivedFiles.stdout, /home\/\.claude\/settings\.json/);
 
     const worktreeContent = await readFile(repositorySettingsPath, "utf8");
     const secondRun = runInstaller(fixture);
