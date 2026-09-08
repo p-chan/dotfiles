@@ -28,7 +28,7 @@
       {
         "hooks": [
           {
-            "command": "~/.claude/hooks/notify.sh",
+            "command": "~/.claude/hooks/personal-notify.sh",
             "type": "command"
           }
         ],
@@ -39,7 +39,7 @@
       {
         "hooks": [
           {
-            "command": "~/.claude/hooks/log-web-fetch.sh",
+            "command": "~/.claude/hooks/personal-log-web-fetch.sh",
             "type": "command"
           }
         ],
@@ -50,19 +50,19 @@
       {
         "hooks": [
           {
-            "command": "~/.claude/hooks/block-find.sh",
+            "command": "~/.claude/hooks/personal-block-find.sh",
             "type": "command"
           },
           {
-            "command": "~/.claude/hooks/block-git-add-all.sh",
+            "command": "~/.claude/hooks/personal-block-git-add-all.sh",
             "type": "command"
           },
           {
-            "command": "~/.claude/hooks/block-git-c.sh",
+            "command": "~/.claude/hooks/personal-block-git-c.sh",
             "type": "command"
           },
           {
-            "command": "~/.claude/hooks/block-grep.sh",
+            "command": "~/.claude/hooks/personal-block-grep.sh",
             "type": "command"
           }
         ],
@@ -73,7 +73,7 @@
       {
         "hooks": [
           {
-            "command": "~/.claude/hooks/notify.sh",
+            "command": "~/.claude/hooks/personal-notify.sh",
             "type": "command"
           }
         ]
