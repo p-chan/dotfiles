@@ -1,2 +1,2 @@
-# Claude Code の並び順と Herdr hook のマシン固有パスを正規化する
-home/.claude/settings.json filter=claude-settings
+# Claude Code が並び順を変えても意味のある差分だけを表示する
+home/.claude/settings.json filter=jsonsort

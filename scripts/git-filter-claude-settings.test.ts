@@ -1,10 +1,14 @@
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
+import { chmodSync, existsSync, mkdirSync, mkdtempSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
 
-const scriptPath = join(dirname(fileURLToPath(import.meta.url)), "git-filter-claude-settings.sh");
+const repositoryRoot = join(dirname(fileURLToPath(import.meta.url)), "..");
+const scriptPath = join(repositoryRoot, "home/.config/git/filters/claude-settings.sh");
+const gitConfigPath = join(repositoryRoot, "home/.config/git/config");
 const portableCommand = 'bash "$HOME/.claude/hooks/herdr-agent-state.sh" session';
 
 function localCommand(home: string): string {
@@ -12,12 +16,16 @@ function localCommand(home: string): string {
   return `bash '${path}' session`;
 }
 
-function run(mode: "clean" | "smudge", input: object, home = "/Users/example"): object {
-  const result = spawnSync("bash", [scriptPath, mode], {
+function invoke(mode: "clean" | "smudge", input: string, home = "/Users/example") {
+  return spawnSync("bash", [scriptPath, mode], {
     encoding: "utf8",
     env: { ...process.env, HOME: home },
-    input: JSON.stringify(input),
+    input,
   });
+}
+
+function run(mode: "clean" | "smudge", input: object, home = "/Users/example"): object {
+  const result = invoke(mode, JSON.stringify(input), home);
   if (result.error) throw result.error;
   assert.equal(result.status, 0, result.stderr);
   return JSON.parse(result.stdout);
@@ -61,4 +69,87 @@ test("quotes apostrophes in the local hook path", () => {
 
   assert.equal(smudged.command, localCommand(home));
   assert.equal(run("clean", smudged, home).command, portableCommand);
+});
+
+test("is idempotent across repeated clean and smudge operations", () => {
+  const portable = { command: portableCommand, values: ["z", "a"] };
+  const cleaned = run("clean", portable);
+  const smudged = run("smudge", cleaned);
+
+  assert.deepEqual(run("clean", cleaned), cleaned);
+  assert.deepEqual(run("smudge", smudged), smudged);
+  assert.deepEqual(run("clean", smudged), cleaned);
+});
+
+test("rejects unsupported Herdr hook paths and invalid JSON", () => {
+  const unsupported = invoke(
+    "clean",
+    JSON.stringify({ command: "bash '/Users/other/.claude/hooks/herdr-agent-state.sh' session" }),
+  );
+  assert.notEqual(unsupported.status, 0);
+  assert.match(unsupported.stderr, /unsupported Herdr Claude hook command/);
+
+  assert.notEqual(invoke("clean", "not JSON").status, 0);
+});
+
+test("uses the trusted global filter and fails closed", () => {
+  const temporaryDirectory = mkdtempSync(join(tmpdir(), "claude-settings-filter-"));
+  const home = join(temporaryDirectory, "home O'Neil");
+  const repository = join(temporaryDirectory, "untrusted-repository");
+  const trustedFilterDirectory = join(home, ".config/git/filters");
+  const maliciousScriptDirectory = join(repository, "scripts");
+  const maliciousMarker = join(repository, "malicious-filter-ran");
+  const environment = {
+    ...process.env,
+    GIT_CONFIG_GLOBAL: gitConfigPath,
+    GIT_CONFIG_NOSYSTEM: "1",
+    HOME: home,
+    XDG_CONFIG_HOME: join(home, ".config"),
+  };
+
+  try {
+    mkdirSync(trustedFilterDirectory, { recursive: true });
+    mkdirSync(maliciousScriptDirectory, { recursive: true });
+    symlinkSync(scriptPath, join(trustedFilterDirectory, "claude-settings.sh"));
+    writeFileSync(
+      join(maliciousScriptDirectory, "git-filter-claude-settings.sh"),
+      `#!/bin/sh\ntouch '${maliciousMarker}'\ncat\n`,
+    );
+    chmodSync(join(maliciousScriptDirectory, "git-filter-claude-settings.sh"), 0o755);
+
+    assert.equal(spawnSync("git", ["init", "--quiet", repository], { env: environment }).status, 0);
+    writeFileSync(join(repository, ".gitattributes"), "settings.json filter=pchan-dotfiles-claude-settings-v1\n");
+    writeFileSync(join(repository, "settings.json"), JSON.stringify({ values: ["z", "a"], command: portableCommand }));
+
+    const added = spawnSync("git", ["-C", repository, "add", ".gitattributes", "settings.json"], {
+      encoding: "utf8",
+      env: environment,
+    });
+    assert.equal(added.status, 0, added.stderr);
+    assert.equal(existsSync(maliciousMarker), false);
+
+    const indexedBeforeFailure = spawnSync("git", ["-C", repository, "show", ":settings.json"], {
+      encoding: "utf8",
+      env: environment,
+    }).stdout;
+    assert.deepEqual(JSON.parse(indexedBeforeFailure).values, ["a", "z"]);
+
+    writeFileSync(
+      join(repository, "settings.json"),
+      JSON.stringify({ command: "bash '/Users/other/.claude/hooks/herdr-agent-state.sh' session" }),
+    );
+    const rejected = spawnSync("git", ["-C", repository, "add", "settings.json"], {
+      encoding: "utf8",
+      env: environment,
+    });
+    assert.notEqual(rejected.status, 0);
+
+    const indexedAfterFailure = spawnSync("git", ["-C", repository, "show", ":settings.json"], {
+      encoding: "utf8",
+      env: environment,
+    }).stdout;
+    assert.equal(indexedAfterFailure, indexedBeforeFailure);
+  } finally {
+    rmSync(temporaryDirectory, { force: true, recursive: true });
+  }
 });

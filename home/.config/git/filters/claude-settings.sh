@@ -22,6 +22,14 @@ case "$mode" in
           .
         end
       )
+      | if any(
+          .. | strings;
+          contains("/.claude/hooks/herdr-agent-state.sh") and . != $portable_command
+        ) then
+          error("unsupported Herdr Claude hook command")
+        else
+          .
+        end
     '
     ;;
   smudge)
@@ -36,7 +44,7 @@ case "$mode" in
     '
     ;;
   *)
-    echo "Usage: git-filter-claude-settings.sh <clean|smudge>" >&2
+    echo "Usage: claude-settings.sh <clean|smudge>" >&2
     exit 1
     ;;
 esac

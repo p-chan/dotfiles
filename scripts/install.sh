@@ -247,30 +247,6 @@ if type mise &>/dev/null; then
   MISE_CONFIG_DIR="$DOTFILES_DIR/home/.config/mise" \
   mise bootstrap --yes $extra_args
 
-  CLAUDE_SETTINGS_FILTER="$DOTFILES_DIR/scripts/git-filter-claude-settings.sh"
-
-  # Git stores the Herdr hook path as $HOME but Herdr itself requires the
-  # concrete path for idempotent integration updates.
-  CLAUDE_SETTINGS_PATH="$DOTFILES_DIR/home/.claude/settings.json"
-  CLAUDE_SETTINGS_TEMP_PATH="$(mktemp)"
-  mise exec "github:jqlang/jq@latest" -- bash "$CLAUDE_SETTINGS_FILTER" smudge \
-    < "$CLAUDE_SETTINGS_PATH" > "$CLAUDE_SETTINGS_TEMP_PATH"
-  mv "$CLAUDE_SETTINGS_TEMP_PATH" "$CLAUDE_SETTINGS_PATH"
-
-  log_info "Installing Herdr integrations..."
-
-  # Copilot CLI creates its config directory on first launch, but Herdr
-  # requires it before installing the integration.
-  if [ -z "${COPILOT_HOME:-}" ]; then
-    mkdir -p "$HOME/.copilot"
-  fi
-
-  for integration in claude codex copilot opencode; do
-    mise exec "github:ogulcancelik/herdr@latest" -- herdr integration install "$integration"
-  done
-
-  log_success "Successfully installed Herdr integrations."
-
   node "$DOTFILES_DIR/bin/agent-skills" install
 
   log_success "Successfully ran mise bootstrap."

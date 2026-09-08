@@ -34,9 +34,14 @@
   process = git-lfs filter-process
   required = true
 
-[filter "claude-settings"]
-  clean = scripts/git-filter-claude-settings.sh clean
-  smudge = scripts/git-filter-claude-settings.sh smudge
+[filter "jsonsort"]
+  # オブジェクトのキーと配列を正規化してから Git に保存する
+  clean = jq -S 'walk(if type == \"array\" then sort else . end)'
+
+[filter "pchan-dotfiles-claude-settings-v1"]
+  clean = /bin/bash \"$HOME/.config/git/filters/claude-settings.sh\" clean
+  smudge = /bin/bash \"$HOME/.config/git/filters/claude-settings.sh\" smudge
+  required = true
 
 [ghq]
   root = ~/src
