@@ -183,7 +183,7 @@ test("uses the trusted global filter and fails closed", () => {
     chmodSync(join(maliciousScriptDirectory, "git-filter-claude-settings.sh"), 0o755);
 
     assert.equal(spawnSync("git", ["init", "--quiet", repository], { env: environment }).status, 0);
-    writeFileSync(join(repository, ".gitattributes"), "settings.json filter=pchan-dotfiles-claude-settings-v1\n");
+    writeFileSync(join(repository, ".gitattributes"), "settings.json filter=pchan-dotfiles-claude-settings\n");
     writeFileSync(join(repository, "settings.json"), JSON.stringify({ values: ["z", "a"], command: portableCommand }));
 
     const added = spawnSync("git", ["-C", repository, "add", ".gitattributes", "settings.json"], {
