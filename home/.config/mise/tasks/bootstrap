@@ -65,3 +65,5 @@ fi
 if type apm >/dev/null 2>&1 && [ -f "$DOTFILES_DIR/home/.apm/apm.yml" ]; then
   apm install -g --target agent-skills
 fi
+
+bash "$DOTFILES_DIR/scripts/install-herdr-claude-integration.sh"
