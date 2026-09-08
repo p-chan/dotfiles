@@ -13,16 +13,17 @@ portable_command='bash "$HOME/.claude/hooks/herdr-agent-state.sh" session'
 
 validate_json() {
   node -e '
-    let input = "";
-    process.stdin.setEncoding("utf8");
-    process.stdin.on("data", (chunk) => { input += chunk; });
+    const { TextDecoder } = require("node:util");
+    const chunks = [];
+    process.stdin.on("data", (chunk) => { chunks.push(chunk); });
     process.stdin.on("end", () => {
       try {
-        const value = JSON.parse(input);
+        const input = Buffer.concat(chunks);
+        const value = JSON.parse(new TextDecoder("utf-8", { fatal: true }).decode(input));
         if (value === null || Array.isArray(value) || typeof value !== "object") {
           throw new Error("Claude settings must be a JSON object");
         }
-        process.stdout.write(JSON.stringify(value));
+        process.stdout.write(input);
       } catch (error) {
         console.error(error.message);
         process.exitCode = 1;
@@ -34,6 +35,13 @@ validate_json() {
 case "$mode" in
   clean)
     validate_json | jq -S --arg local_command "$local_command" --arg portable_command "$portable_command" '
+      def references_herdr_script:
+        explode
+        | map(select(. != 34 and . != 39 and . != 92))
+        | implode
+        | ascii_downcase
+        | contains("herdr-agent-state.sh");
+
       walk(
         if type == "string" and . == $local_command then
           $portable_command
@@ -45,7 +53,7 @@ case "$mode" in
       )
       | if any(
           .. | strings;
-          contains("herdr-agent-state.sh") and . != $portable_command
+          references_herdr_script and . != $portable_command
         ) then
           error("unsupported Herdr Claude hook command")
         else
@@ -55,6 +63,13 @@ case "$mode" in
     ;;
   smudge)
     validate_json | jq --arg local_command "$local_command" --arg portable_command "$portable_command" '
+      def references_herdr_script:
+        explode
+        | map(select(. != 34 and . != 39 and . != 92))
+        | implode
+        | ascii_downcase
+        | contains("herdr-agent-state.sh");
+
       walk(
         if type == "string" and . == $portable_command then
           $local_command
@@ -64,7 +79,7 @@ case "$mode" in
       )
       | if any(
           .. | strings;
-          contains("herdr-agent-state.sh") and . != $local_command
+          references_herdr_script and . != $local_command
         ) then
           error("unsupported Herdr Claude hook command")
         else
