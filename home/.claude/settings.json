@@ -1,47 +1,127 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "agentPushNotifEnabled": true,
+  "alwaysThinkingEnabled": true,
+  "attribution": {
+    "pr": "",
+    "sessionUrl": false
+  },
+  "autoMemoryEnabled": false,
+  "enabledPlugins": {
+    "codex@openai-codex": true,
+    "example-skills@anthropic-agent-skills": true
+  },
   "env": {
     "CLAUDE_CODE_NO_FLICKER": "1"
   },
+  "extraKnownMarketplaces": {
+    "openai-codex": {
+      "source": {
+        "repo": "openai/codex-plugin-cc",
+        "source": "github"
+      }
+    }
+  },
+  "feedbackSurveyRate": 0,
+  "hooks": {
+    "Notification": [
+      {
+        "hooks": [
+          {
+            "command": "~/.claude/hooks/notify.sh",
+            "type": "command"
+          }
+        ],
+        "matcher": "permission_prompt"
+      }
+    ],
+    "PermissionRequest": [
+      {
+        "hooks": [
+          {
+            "command": "~/.claude/hooks/log-web-fetch.sh",
+            "type": "command"
+          }
+        ],
+        "matcher": "WebFetch"
+      }
+    ],
+    "PreToolUse": [
+      {
+        "hooks": [
+          {
+            "command": "~/.claude/hooks/block-find.sh",
+            "type": "command"
+          },
+          {
+            "command": "~/.claude/hooks/block-git-add-all.sh",
+            "type": "command"
+          },
+          {
+            "command": "~/.claude/hooks/block-git-c.sh",
+            "type": "command"
+          },
+          {
+            "command": "~/.claude/hooks/block-grep.sh",
+            "type": "command"
+          }
+        ],
+        "matcher": "Bash"
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "command": "~/.claude/hooks/notify.sh",
+            "type": "command"
+          }
+        ]
+      }
+    ]
+  },
+  "model": "opus",
+  "outputStyle": "Concise",
   "permissions": {
     "allow": [
       "Bash(fd -u *)",
-      "Bash(git diff)",
-      "Bash(git diff *)",
-      "Bash(git fetch)",
-      "Bash(git fetch *)",
-      "Bash(git log)",
-      "Bash(git log *)",
-      "Bash(git ls-remote)",
-      "Bash(git ls-remote *)",
-      "Bash(gh release list)",
-      "Bash(gh release list *)",
-      "Bash(gh release view)",
-      "Bash(gh release view *)",
-      "Bash(gh repo view)",
-      "Bash(gh repo view *)",
-      "Bash(gh issue list)",
       "Bash(gh issue list *)",
+      "Bash(gh issue list)",
       "Bash(gh issue view *)",
-      "Bash(gh pr checks)",
       "Bash(gh pr checks *)",
-      "Bash(gh pr diff)",
+      "Bash(gh pr checks)",
       "Bash(gh pr diff *)",
-      "Bash(gh pr list)",
+      "Bash(gh pr diff)",
       "Bash(gh pr list *)",
-      "Bash(gh pr view)",
+      "Bash(gh pr list)",
       "Bash(gh pr view *)",
-      "Bash(gh run list)",
-      "Bash(gh run list *)",
-      "Bash(gh run view)",
-      "Bash(gh run view *)",
-      "Bash(gh review-comment list)",
+      "Bash(gh pr view)",
+      "Bash(gh release list *)",
+      "Bash(gh release list)",
+      "Bash(gh release view *)",
+      "Bash(gh release view)",
+      "Bash(gh repo view *)",
+      "Bash(gh repo view)",
       "Bash(gh review-comment list *)",
+      "Bash(gh review-comment list)",
+      "Bash(gh run list *)",
+      "Bash(gh run list)",
+      "Bash(gh run view *)",
+      "Bash(gh run view)",
+      "Bash(git diff *)",
+      "Bash(git diff)",
+      "Bash(git fetch *)",
+      "Bash(git fetch)",
+      "Bash(git log *)",
+      "Bash(git log)",
+      "Bash(git ls-remote *)",
+      "Bash(git ls-remote)",
       "Bash(head *)",
       "Bash(npm view *)",
       "Bash(opensrc *)",
       "Bash(rg -uuu *)",
       "Bash(tail *)",
+      "Skill",
       "WebFetch(domain:docs.github.com)",
       "WebFetch(domain:github.com)",
       "WebFetch(domain:qiita.com)",
@@ -49,7 +129,6 @@
       "WebFetch(domain:vitest.dev)",
       "WebFetch(domain:zenn.dev)",
       "WebSearch",
-      "Skill",
       "mcp__figma-desktop__get_code_connect_map",
       "mcp__figma-desktop__get_code_connect_suggestions",
       "mcp__figma-desktop__get_design_context",
@@ -57,102 +136,23 @@
       "mcp__figma-desktop__get_screenshot",
       "mcp__figma-desktop__get_variable_defs"
     ],
+    "defaultMode": "auto",
     "deny": [
       "Bash(git add -A)",
       "Bash(sudo *)",
-      "Edit(.env*)",
       "Edit(!.env*.example)",
-      "Read(.env*)",
+      "Edit(.env*)",
+      "Edit(~/.npmrc)",
       "Read(!.env*.example)",
-      "Edit(~/.npmrc)"
-    ],
-    "defaultMode": "auto"
-  },
-  "attribution": {
-    "pr": "",
-    "sessionUrl": false
-  },
-  "model": "opus",
-  "outputStyle": "Concise",
-  "hooks": {
-    "PermissionRequest": [
-      {
-        "matcher": "WebFetch",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.claude/hooks/log-web-fetch.sh"
-          }
-        ]
-      }
-    ],
-    "PreToolUse": [
-      {
-        "matcher": "Bash",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.claude/hooks/block-grep.sh"
-          },
-          {
-            "type": "command",
-            "command": "~/.claude/hooks/block-find.sh"
-          },
-          {
-            "type": "command",
-            "command": "~/.claude/hooks/block-git-c.sh"
-          },
-          {
-            "type": "command",
-            "command": "~/.claude/hooks/block-git-add-all.sh"
-          }
-        ]
-      }
-    ],
-    "Notification": [
-      {
-        "matcher": "permission_prompt",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.claude/hooks/notify.sh"
-          }
-        ]
-      }
-    ],
-    "Stop": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.claude/hooks/notify.sh"
-          }
-        ]
-      }
+      "Read(.env*)"
     ]
   },
-  "statusLine": {
-    "type": "command",
-    "command": "bash ~/.claude/statusline.sh"
-  },
-  "enabledPlugins": {
-    "codex@openai-codex": true,
-    "example-skills@anthropic-agent-skills": true
-  },
-  "extraKnownMarketplaces": {
-    "openai-codex": {
-      "source": {
-        "source": "github",
-        "repo": "openai/codex-plugin-cc"
-      }
-    }
-  },
-  "feedbackSurveyRate": 0,
-  "alwaysThinkingEnabled": true,
-  "autoMemoryEnabled": false,
-  "theme": "dark",
   "remoteControlAtStartup": true,
-  "agentPushNotifEnabled": true,
   "skipAutoPermissionPrompt": true,
+  "statusLine": {
+    "command": "bash ~/.claude/statusline.sh",
+    "type": "command"
+  },
+  "theme": "dark",
   "voiceEnabled": true
 }
