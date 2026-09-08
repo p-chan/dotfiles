@@ -12,8 +12,13 @@ portable_command='bash "$HOME/.claude/hooks/herdr-agent-state.sh" session'
 
 case "$mode" in
   clean)
-    jq -S --arg local_command "$local_command" --arg portable_command "$portable_command" '
-      walk(
+    jq -S --slurp --arg local_command "$local_command" --arg portable_command "$portable_command" '
+      if length == 1 and (.[0] | type) == "object" then
+        .[0]
+      else
+        error("Claude settings must be a single JSON object")
+      end
+      | walk(
         if type == "string" and . == $local_command then
           $portable_command
         elif type == "array" then
@@ -33,8 +38,13 @@ case "$mode" in
     '
     ;;
   smudge)
-    jq --arg local_command "$local_command" --arg portable_command "$portable_command" '
-      walk(
+    jq --slurp --arg local_command "$local_command" --arg portable_command "$portable_command" '
+      if length == 1 and (.[0] | type) == "object" then
+        .[0]
+      else
+        error("Claude settings must be a single JSON object")
+      end
+      | walk(
         if type == "string" and . == $portable_command then
           $local_command
         else

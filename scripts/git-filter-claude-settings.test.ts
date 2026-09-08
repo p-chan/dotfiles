@@ -81,15 +81,23 @@ test("is idempotent across repeated clean and smudge operations", () => {
   assert.deepEqual(run("clean", smudged), cleaned);
 });
 
-test("rejects unsupported Herdr hook paths and invalid JSON", () => {
+test("rejects unsupported Herdr hook paths", () => {
   const unsupported = invoke(
     "clean",
     JSON.stringify({ command: "bash '/Users/other/.claude/hooks/herdr-agent-state.sh' session" }),
   );
   assert.notEqual(unsupported.status, 0);
   assert.match(unsupported.stderr, /unsupported Herdr Claude hook command/);
+});
 
-  assert.notEqual(invoke("clean", "not JSON").status, 0);
+test("accepts exactly one top-level JSON object", () => {
+  for (const input of ["", " ", "not JSON", "{}{}", "{}\n{}", "[]", "null", '"value"']) {
+    assert.notEqual(invoke("clean", input).status, 0, JSON.stringify(input));
+    assert.notEqual(invoke("smudge", input).status, 0, JSON.stringify(input));
+  }
+
+  assert.deepEqual(run("clean", {}), {});
+  assert.deepEqual(run("smudge", {}), {});
 });
 
 test("uses the trusted global filter and fails closed", () => {
