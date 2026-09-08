@@ -8,17 +8,33 @@ single_quote="'"
 single_quote_escape="'\"'\"'"
 escaped_hook_path="${hook_path//$single_quote/$single_quote_escape}"
 local_command="bash '$escaped_hook_path' session"
+# shellcheck disable=SC2016
 portable_command='bash "$HOME/.claude/hooks/herdr-agent-state.sh" session'
+
+validate_json() {
+  node -e '
+    let input = "";
+    process.stdin.setEncoding("utf8");
+    process.stdin.on("data", (chunk) => { input += chunk; });
+    process.stdin.on("end", () => {
+      try {
+        const value = JSON.parse(input);
+        if (value === null || Array.isArray(value) || typeof value !== "object") {
+          throw new Error("Claude settings must be a JSON object");
+        }
+        process.stdout.write(JSON.stringify(value));
+      } catch (error) {
+        console.error(error.message);
+        process.exitCode = 1;
+      }
+    });
+  '
+}
 
 case "$mode" in
   clean)
-    jq -S --slurp --arg local_command "$local_command" --arg portable_command "$portable_command" '
-      if length == 1 and (.[0] | type) == "object" then
-        .[0]
-      else
-        error("Claude settings must be a single JSON object")
-      end
-      | walk(
+    validate_json | jq -S --arg local_command "$local_command" --arg portable_command "$portable_command" '
+      walk(
         if type == "string" and . == $local_command then
           $portable_command
         elif type == "array" then
@@ -29,7 +45,7 @@ case "$mode" in
       )
       | if any(
           .. | strings;
-          contains("/.claude/hooks/herdr-agent-state.sh") and . != $portable_command
+          contains("herdr-agent-state.sh") and . != $portable_command
         ) then
           error("unsupported Herdr Claude hook command")
         else
@@ -38,19 +54,22 @@ case "$mode" in
     '
     ;;
   smudge)
-    jq --slurp --arg local_command "$local_command" --arg portable_command "$portable_command" '
-      if length == 1 and (.[0] | type) == "object" then
-        .[0]
-      else
-        error("Claude settings must be a single JSON object")
-      end
-      | walk(
+    validate_json | jq --arg local_command "$local_command" --arg portable_command "$portable_command" '
+      walk(
         if type == "string" and . == $portable_command then
           $local_command
         else
           .
         end
       )
+      | if any(
+          .. | strings;
+          contains("herdr-agent-state.sh") and . != $local_command
+        ) then
+          error("unsupported Herdr Claude hook command")
+        else
+          .
+        end
     '
     ;;
   *)

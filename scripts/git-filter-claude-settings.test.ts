@@ -81,17 +81,40 @@ test("is idempotent across repeated clean and smudge operations", () => {
   assert.deepEqual(run("clean", smudged), cleaned);
 });
 
-test("rejects unsupported Herdr hook paths", () => {
-  const unsupported = invoke(
-    "clean",
-    JSON.stringify({ command: "bash '/Users/other/.claude/hooks/herdr-agent-state.sh' session" }),
-  );
-  assert.notEqual(unsupported.status, 0);
-  assert.match(unsupported.stderr, /unsupported Herdr Claude hook command/);
+test("rejects unsupported Herdr hook commands", () => {
+  const unsupportedCommands = [
+    "bash '/Users/other/.claude/hooks/herdr-agent-state.sh' session",
+    "bash '/Users/other/.claude/./hooks/herdr-agent-state.sh' session",
+    "bash '/Users/other/.claude/hooks//herdr-agent-state.sh' session",
+    "bash ./herdr-agent-state.sh session",
+  ];
+
+  for (const command of unsupportedCommands) {
+    for (const mode of ["clean", "smudge"] as const) {
+      const unsupported = invoke(mode, JSON.stringify({ command }));
+      assert.notEqual(unsupported.status, 0, `${mode}: ${command}`);
+      assert.match(unsupported.stderr, /unsupported Herdr Claude hook command/);
+    }
+  }
 });
 
 test("accepts exactly one top-level JSON object", () => {
-  for (const input of ["", " ", "not JSON", "{}{}", "{}\n{}", "[]", "null", '"value"']) {
+  const invalidInputs = [
+    "",
+    " ",
+    "not JSON",
+    "{}{}",
+    "{}\n{}",
+    "[]",
+    "null",
+    '"value"',
+    '{"value":NaN}',
+    '{"value":Infinity}',
+    '{"value":-Infinity}',
+    '{"value":01}',
+  ];
+
+  for (const input of invalidInputs) {
     assert.notEqual(invoke("clean", input).status, 0, JSON.stringify(input));
     assert.notEqual(invoke("smudge", input).status, 0, JSON.stringify(input));
   }
@@ -142,9 +165,16 @@ test("uses the trusted global filter and fails closed", () => {
     }).stdout;
     assert.deepEqual(JSON.parse(indexedBeforeFailure).values, ["a", "z"]);
 
+    writeFileSync(join(repository, "settings.json"), '{"value":NaN}');
+    const invalidJsonRejected = spawnSync("git", ["-C", repository, "add", "settings.json"], {
+      encoding: "utf8",
+      env: environment,
+    });
+    assert.notEqual(invalidJsonRejected.status, 0);
+
     writeFileSync(
       join(repository, "settings.json"),
-      JSON.stringify({ command: "bash '/Users/other/.claude/hooks/herdr-agent-state.sh' session" }),
+      JSON.stringify({ command: "bash '/Users/other/.claude/./hooks/herdr-agent-state.sh' session" }),
     );
     const rejected = spawnSync("git", ["-C", repository, "add", "settings.json"], {
       encoding: "utf8",
@@ -157,6 +187,37 @@ test("uses the trusted global filter and fails closed", () => {
       env: environment,
     }).stdout;
     assert.equal(indexedAfterFailure, indexedBeforeFailure);
+
+    const unsupportedBlob = JSON.stringify({
+      command: "bash '/Users/other/.claude/hooks//herdr-agent-state.sh' session",
+    });
+    const blob = spawnSync("git", ["-C", repository, "hash-object", "-w", "--stdin"], {
+      encoding: "utf8",
+      env: environment,
+      input: unsupportedBlob,
+    });
+    assert.equal(blob.status, 0, blob.stderr);
+
+    const updatedIndex = spawnSync(
+      "git",
+      ["-C", repository, "update-index", "--cacheinfo", "100644", blob.stdout.trim(), "settings.json"],
+      { encoding: "utf8", env: environment },
+    );
+    assert.equal(updatedIndex.status, 0, updatedIndex.stderr);
+    rmSync(join(repository, "settings.json"));
+
+    const checkoutRejected = spawnSync("git", ["-C", repository, "checkout", "--", "settings.json"], {
+      encoding: "utf8",
+      env: environment,
+    });
+    assert.notEqual(checkoutRejected.status, 0);
+
+    const indexedAfterCheckoutFailure = spawnSync("git", ["-C", repository, "show", ":settings.json"], {
+      encoding: "utf8",
+      env: environment,
+    });
+    assert.equal(indexedAfterCheckoutFailure.status, 0, indexedAfterCheckoutFailure.stderr);
+    assert.equal(indexedAfterCheckoutFailure.stdout, unsupportedBlob);
   } finally {
     rmSync(temporaryDirectory, { force: true, recursive: true });
   }
