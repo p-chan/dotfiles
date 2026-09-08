@@ -33,13 +33,6 @@ so plain `mise bootstrap` invocations need no environment setup afterwards.
 To move the checkout later, move the directory and re-run `install.sh` with
 `DOTFILES_DIR` pointing at the new path.
 
-## Herdr Claude Integration
-
-Herdr generates its Claude hook locally. Git's clean filter stores its absolute
-path in `settings.json` as `$HOME`, while the smudge filter restores the local
-absolute path before Herdr runs. This keeps the settings portable without
-interfering with Herdr's TUI and CLI integration updates.
-
 ## Profiles
 
 The shared configuration is always active. Machine-specific behavior is added
