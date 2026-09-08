@@ -98,6 +98,8 @@ test("rejects unsupported Herdr hook commands", () => {
     "bash ./herdr-agent-state.sh session",
     'bash /Users/other/.claude/hooks/herdr-agent-"state".sh session',
     "bash /Users/other/.claude/hooks/herdr-agent-state.s\\h session",
+    "bash /Users/other/.claude/hooks/herdr-agent-\\" + "\n" + "state.sh session",
+    "bash /Users/other/.claude/hooks/herdr-agent-$'state'.sh session",
   ];
 
   for (const command of unsupportedCommands) {
@@ -133,6 +135,10 @@ test("accepts exactly one top-level JSON object", () => {
   const invalidUtf8 = Buffer.from([0x7b, 0x22, 0x78, 0x22, 0x3a, 0x22, 0xff, 0x22, 0x7d]);
   assert.notEqual(invoke("clean", invalidUtf8).status, 0);
   assert.notEqual(invoke("smudge", invalidUtf8).status, 0);
+
+  const malformed = invoke("clean", '{"SECRET_TOKEN":x}');
+  assert.match(malformed.stderr, /invalid Claude settings JSON/);
+  assert.doesNotMatch(malformed.stderr, /SECRET_TOKEN/);
 
   assert.deepEqual(run("clean", {}), {});
   assert.deepEqual(run("smudge", {}), {});

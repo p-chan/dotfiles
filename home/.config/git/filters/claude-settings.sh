@@ -24,8 +24,8 @@ validate_json() {
           throw new Error("Claude settings must be a JSON object");
         }
         process.stdout.write(input);
-      } catch (error) {
-        console.error(error.message);
+      } catch {
+        console.error("invalid Claude settings JSON");
         process.exitCode = 1;
       }
     });
@@ -36,9 +36,7 @@ case "$mode" in
   clean)
     validate_json | jq -S --arg local_command "$local_command" --arg portable_command "$portable_command" '
       def references_herdr_script:
-        explode
-        | map(select(. != 34 and . != 39 and . != 92))
-        | implode
+        gsub("[^A-Za-z0-9.-]"; "")
         | ascii_downcase
         | contains("herdr-agent-state.sh");
 
@@ -64,9 +62,7 @@ case "$mode" in
   smudge)
     validate_json | jq --arg local_command "$local_command" --arg portable_command "$portable_command" '
       def references_herdr_script:
-        explode
-        | map(select(. != 34 and . != 39 and . != 92))
-        | implode
+        gsub("[^A-Za-z0-9.-]"; "")
         | ascii_downcase
         | contains("herdr-agent-state.sh");
 
