@@ -3,6 +3,11 @@
 set -euo pipefail
 
 dots_up() {
+  if [[ -z "${DOTFILES_DIR:-}" ]]; then
+    echo "DOTFILES_DIR is not defined"
+    return 1
+  fi
+
   echo "Updating Command Line Tools..."
   local clt_label
   clt_label=$(softwareupdate -l 2>&1 | grep "Label: Command Line Tools" | sed 's/.*Label: //' | head -1 || true)
@@ -37,6 +42,9 @@ dots_up() {
 
   echo "\nUpdating Claude Code..."
   claude update
+
+  echo "\nRefreshing the Herdr Claude integration..."
+  bash "$DOTFILES_DIR/scripts/install-herdr-claude-integration.sh"
 
   echo "\nDone!"
 }

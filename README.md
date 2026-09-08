@@ -33,6 +33,14 @@ so plain `mise bootstrap` invocations need no environment setup afterwards.
 To move the checkout later, move the directory and re-run `install.sh` with
 `DOTFILES_DIR` pointing at the new path.
 
+## Herdr Claude integration
+
+`mise bootstrap` installs the Herdr integration for Claude Code. Herdr requires
+an absolute path for its hook, so Git keeps the portable `$HOME` form in the
+index and restores the local path in the work tree. The generated hook remains
+local, and `settings.json` is omitted from Git archives to avoid exporting a
+machine-specific path.
+
 ## Profiles
 
 The shared configuration is always active. Machine-specific behavior is added
