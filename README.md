@@ -70,11 +70,12 @@ DOTFILES_PROFILES=desktop,server \
 mise bootstrap
 ```
 
-The `server` profile disables idle system sleep on AC power and enables restart
-after power loss. Its first convergence requires an administrator password; run
-`mise run bootstrap-server` to apply only those settings. Removing a profile
-stops managing its settings but does not uninstall packages or restore previous
-macOS settings automatically.
+The `server` profile disables idle system sleep on AC power, enables restart
+after power loss, and waits for you to enable Remote Login in System Settings.
+Its first convergence requires an administrator password; run `mise run
+bootstrap-server` to apply only those settings. Removing a profile stops
+managing its settings but does not uninstall packages or restore previous macOS
+settings automatically.
 
 ## Setup
 
