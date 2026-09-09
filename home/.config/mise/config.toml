@@ -26,7 +26,7 @@ bun = "latest"
 "npm:npmrc" = "latest"
 "npm:ntn" = "latest"
 "npm:opensrc" = "latest"
-"npm:pnpm" = "latest"
+"npm:pnpm" = { version = "latest", allow_builds = ["pnpm"] }
 "npm:yarn" = "latest"
 
 [tools."github:jqlang/jq"]
