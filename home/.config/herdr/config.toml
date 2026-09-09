@@ -42,6 +42,7 @@ switch_workspace = "prefix+shift+1..9"
 focus_agent = "prefix+alt+1..9"
 
 [ui]
+pane_borders = "always"
 show_agent_labels_on_pane_borders = true
 prompt_new_tab_name = false
 
