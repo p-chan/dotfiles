@@ -23,6 +23,8 @@ peach = "#d19a66"
 surface0 = "#21252b"
 # list.hoverBackground / list.activeSelectionBackground
 surface1 = "#2c313a"
+# One Dark Pro list.activeSelectionBackground.
+active_row_bg = "#2c313a"
 # editorGroup.background (darkest tone in the palette)
 surface_dim = "#181a1f"
 # herdr uses overlay0 for bold sidebar headers/buttons (Spaces, Agents, new,
@@ -42,6 +44,9 @@ focus_agent = "prefix+alt+1..9"
 [ui]
 show_agent_labels_on_pane_borders = true
 prompt_new_tab_name = false
+
+[ui.sidebar.spaces]
+rows = [["state_icon", "workspace"]]
 
 [experimental]
 reveal_hidden_cursor_for_cjk_ime = true
