@@ -12,16 +12,22 @@ interface Fixture {
   root: string;
   statePath: string;
   sudoLogPath: string;
+  sshStatePath: string;
+  openLogPath: string;
 }
 
-async function createFixture(sleep: number, autorestart: number): Promise<Fixture> {
+async function createFixture(sleep: number, autorestart: number, remoteLogin = true): Promise<Fixture> {
   const root = await mkdtemp(join(tmpdir(), "bootstrap-server-"));
   const binDir = join(root, "bin");
   const statePath = join(root, "pmset-state");
   const sudoLogPath = join(root, "sudo-log");
+  const sshStatePath = join(root, "ssh-state");
+  const openLogPath = join(root, "open-log");
   await mkdir(binDir);
   await writeFile(statePath, powerSettings(sleep, autorestart));
   await writeFile(sudoLogPath, "");
+  await writeFile(sshStatePath, remoteLogin ? "on" : "off");
+  await writeFile(openLogPath, "");
 
   await writeExecutable(
     join(binDir, "uname"),
@@ -46,8 +52,21 @@ if [ "\${SUDO_APPLY:-false}" = "true" ]; then
 fi
 `,
   );
+  await writeExecutable(
+    join(binDir, "nc"),
+    `#!/bin/bash
+[ "$(<"$SSH_STATE")" = "on" ]
+`,
+  );
+  await writeExecutable(
+    join(binDir, "open"),
+    `#!/bin/bash
+printf '%s\\n' "$*" >> "$OPEN_LOG"
+printf 'on' > "$SSH_STATE"
+`,
+  );
 
-  return { root, statePath, sudoLogPath };
+  return { root, statePath, sudoLogPath, sshStatePath, openLogPath };
 }
 
 function powerSettings(sleep: number, autorestart: number): string {
@@ -70,6 +89,8 @@ function runTask(fixture: Fixture, apply: boolean): { code: number; stderr: stri
       PMSET_STATE: fixture.statePath,
       SUDO_APPLY: String(apply),
       SUDO_LOG: fixture.sudoLogPath,
+      SSH_STATE: fixture.sshStatePath,
+      OPEN_LOG: fixture.openLogPath,
     },
     encoding: "utf8",
   });
@@ -83,6 +104,7 @@ test("bootstrap-server", async (t) => {
     try {
       assert.equal(runTask(fixture, false).code, 0);
       assert.equal(await readFile(fixture.sudoLogPath, "utf8"), "");
+      assert.equal(await readFile(fixture.openLogPath, "utf8"), "");
     } finally {
       await rm(fixture.root, { recursive: true });
     }
@@ -105,6 +127,20 @@ test("bootstrap-server", async (t) => {
       const result = runTask(fixture, false);
       assert.equal(result.code, 1);
       assert.match(result.stderr, /Failed to apply the server power settings\./);
+    } finally {
+      await rm(fixture.root, { recursive: true });
+    }
+  });
+
+  await t.test("opens Sharing settings and waits for Remote Login", async () => {
+    const fixture = await createFixture(0, 1, false);
+    try {
+      assert.equal(runTask(fixture, false).code, 0);
+      assert.equal(
+        await readFile(fixture.openLogPath, "utf8"),
+        "x-apple.systempreferences:com.apple.Sharing-Settings.extension\n",
+      );
+      assert.equal(await readFile(fixture.sshStatePath, "utf8"), "on");
     } finally {
       await rm(fixture.root, { recursive: true });
     }

@@ -22,14 +22,21 @@ ac_setting() {
 current_sleep="$(ac_setting sleep)"
 current_autorestart="$(ac_setting autorestart)"
 
-if [ "$current_sleep" = "0" ] && [ "$current_autorestart" = "1" ]; then
-  exit 0
+if [ "$current_sleep" != "0" ] || [ "$current_autorestart" != "1" ]; then
+  sudo pmset -c sleep 0 autorestart 1
+
+  POWER_SETTINGS="$(pmset -g custom)"
+  if [ "$(ac_setting sleep)" != "0" ] || [ "$(ac_setting autorestart)" != "1" ]; then
+    echo "Failed to apply the server power settings." >&2
+    exit 1
+  fi
 fi
 
-sudo pmset -c sleep 0 autorestart 1
+if ! nc -z -w 1 127.0.0.1 22 >/dev/null 2>&1; then
+  echo "Enable Remote Login in System Settings > General > Sharing, then return here."
+  open 'x-apple.systempreferences:com.apple.Sharing-Settings.extension'
 
-POWER_SETTINGS="$(pmset -g custom)"
-if [ "$(ac_setting sleep)" != "0" ] || [ "$(ac_setting autorestart)" != "1" ]; then
-  echo "Failed to apply the server power settings." >&2
-  exit 1
+  until nc -z -w 1 127.0.0.1 22 >/dev/null 2>&1; do
+    sleep 2
+  done
 fi
