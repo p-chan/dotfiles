@@ -60,6 +60,7 @@ appendFileSync(process.env.HERDR_LOG, process.argv.slice(2).join(" ") + "\\n");
     });
 
     let snapshotCalls = 0;
+    let subscriptionSocket;
     server.on("connection", (socket) => {
       let buffer = "";
 
@@ -71,6 +72,7 @@ appendFileSync(process.env.HERDR_LOG, process.argv.slice(2).join(" ") + "\\n");
         for (const line of lines) {
           const request = JSON.parse(line);
           if (request.method === "events.subscribe") {
+            subscriptionSocket = socket;
             assert.deepEqual(request.params.subscriptions, [{ type: "pane.updated" }]);
             socket.write(`${JSON.stringify({ id: request.id, result: { type: "events_subscribed" } })}\n`);
             writeUtf8Split(
@@ -105,6 +107,7 @@ appendFileSync(process.env.HERDR_LOG, process.argv.slice(2).join(" ") + "\\n");
             );
           }
           if (request.method === "session.snapshot") {
+            assert.notStrictEqual(socket, subscriptionSocket);
             const snapshotIndex = snapshotCalls++;
             const title = snapshotIndex === 0 ? "⠋ 認証をリファクタリング" : "⠙ 認証をリファクタリング";
             const label = snapshotIndex === 0 ? "Claude" : snapshotIndex === 1 ? "手動ラベル" : title;
