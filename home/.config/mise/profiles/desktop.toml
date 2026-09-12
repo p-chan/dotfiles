@@ -18,7 +18,9 @@ pre-packages = 'if command -v brew >/dev/null 2>&1; then brew bundle --file="$(m
 final = 'mise run -C "$HOME" bootstrap-desktop'
 
 [bootstrap.macos.launchd.agents.herdr-terminal-title-label]
-program = "~/.config/herdr/services/terminal-title-label/run.sh"
+program = "~/.local/bin/mise"
+args = ["exec", "--", "node", ".config/herdr/services/terminal-title-label/daemon.mjs"]
+working_directory = "~"
 run_at_load = true
 keep_alive = true
 throttle_interval = 10
