@@ -6,8 +6,10 @@ import { createConnection } from "node:net";
 const socketPath = process.env.HERDR_SOCKET_PATH ?? join(homedir(), ".config", "herdr", "herdr.sock");
 const reconnectDelay = 1_000;
 const snapshotInterval = Number(process.env.HERDR_SNAPSHOT_INTERVAL_MS) || 1_000;
+const snapshotTimeout = 5_000;
 
 let reconnectTimer;
+let snapshotInProgress = false;
 const pendingTitles = new Map();
 
 function scheduleReconnect() {
@@ -23,7 +25,7 @@ function renamePane(pane) {
   const { agent, label, pane_id: paneId, terminal_title: title } = pane;
   if (!agent || !paneId) return;
 
-  const desiredLabel = title || null;
+  const desiredLabel = title?.trim() || null;
   if (desiredLabel === label) {
     if (pendingTitles.get(paneId) === desiredLabel) pendingTitles.delete(paneId);
     return;
@@ -32,7 +34,7 @@ function renamePane(pane) {
 
   pendingTitles.set(paneId, desiredLabel);
   const args = ["pane", "rename", paneId];
-  if (desiredLabel) args.push(desiredLabel);
+  if (desiredLabel) args.push(desiredLabel === "--clear" ? ` ${desiredLabel}` : desiredLabel);
   else args.push("--clear");
   const child = spawn("herdr", args, { stdio: "ignore" });
   const clearPendingTitle = () => {
@@ -44,9 +46,20 @@ function renamePane(pane) {
 }
 
 function synchronizeSnapshot() {
+  if (snapshotInProgress) return;
+  snapshotInProgress = true;
+
   const socket = createConnection(socketPath);
   socket.setEncoding("utf8");
   let buffer = "";
+  let complete = false;
+  const finish = () => {
+    if (complete) return;
+    complete = true;
+    clearTimeout(timeout);
+    snapshotInProgress = false;
+  };
+  const timeout = setTimeout(() => socket.destroy(), snapshotTimeout);
 
   socket.on("connect", () => {
     socket.write(
@@ -70,7 +83,8 @@ function synchronizeSnapshot() {
       }
     }
   });
-  socket.on("error", () => {});
+  socket.on("error", finish);
+  socket.on("close", finish);
 }
 
 function connect() {

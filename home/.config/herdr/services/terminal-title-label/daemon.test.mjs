@@ -105,12 +105,33 @@ appendFileSync(process.env.HERDR_LOG, process.argv.slice(2).join(" ") + "\\n");
                 },
               }),
             );
+            writeUtf8Split(
+              socket,
+              JSON.stringify({
+                event: "pane.updated",
+                data: {
+                  type: "pane_updated",
+                  pane: {
+                    agent: "opencode",
+                    label: "OpenCode",
+                    pane_id: "w1:p3",
+                    terminal_title: "--clear",
+                  },
+                },
+              }),
+            );
           }
           if (request.method === "session.snapshot") {
             assert.notStrictEqual(socket, subscriptionSocket);
             const snapshotIndex = snapshotCalls++;
-            const title = snapshotIndex === 0 ? "⠋ 認証をリファクタリング" : "⠙ 認証をリファクタリング";
-            const label = snapshotIndex === 0 ? "Claude" : snapshotIndex === 1 ? "手動ラベル" : title;
+            const title =
+              snapshotIndex === 0
+                ? "⠋ 認証をリファクタリング"
+                : snapshotIndex === 1
+                  ? "⠙ 認証をリファクタリング"
+                  : " ⠙ 認証をリファクタリング ";
+            const label =
+              snapshotIndex === 0 ? "Claude" : snapshotIndex === 1 ? "手動ラベル" : "⠙ 認証をリファクタリング";
             writeUtf8Split(
               socket,
               JSON.stringify({
@@ -146,11 +167,15 @@ appendFileSync(process.env.HERDR_LOG, process.argv.slice(2).join(" ") + "\\n");
 
     await waitFor(async () => {
       const output = await readFile(log, "utf8");
+      const spinnerRenames = output.match(/pane rename w1:p1 ⠙ 認証をリファクタリング\n/g) ?? [];
       return (
+        snapshotCalls >= 3 &&
         output.includes("pane rename w1:p1 ⠋ 認証をリファクタリング\n") &&
         output.includes("pane rename w1:p1 ⠙ 認証をリファクタリング\n") &&
         output.includes("pane rename w1:p2 認証タイトルを同期\n") &&
-        output.includes("pane rename w1:p2 --clear\n")
+        output.includes("pane rename w1:p2 --clear\n") &&
+        output.includes("pane rename w1:p3  --clear\n") &&
+        spinnerRenames.length === 1
       );
     });
   } finally {
