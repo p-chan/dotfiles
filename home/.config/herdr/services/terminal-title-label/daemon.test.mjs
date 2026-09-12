@@ -59,9 +59,9 @@ appendFileSync(process.env.HERDR_LOG, process.argv.slice(2).join(" ") + "\\n");
       server.listen(socketPath, resolve);
     });
 
+    let snapshotCalls = 0;
     server.on("connection", (socket) => {
       let buffer = "";
-      let snapshotCalls = 0;
 
       socket.on("data", (data) => {
         buffer += data;

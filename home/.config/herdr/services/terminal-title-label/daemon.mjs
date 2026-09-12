@@ -43,8 +43,34 @@ function renamePane(pane) {
   child.unref();
 }
 
-function requestSnapshot(socket, requestId) {
-  socket.write(`${JSON.stringify({ id: requestId, method: "session.snapshot", params: {} })}\n`);
+function synchronizeSnapshot() {
+  const socket = createConnection(socketPath);
+  socket.setEncoding("utf8");
+  let buffer = "";
+
+  socket.on("connect", () => {
+    socket.write(
+      `${JSON.stringify({ id: "terminal-title-label-snapshot", method: "session.snapshot", params: {} })}\n`,
+    );
+  });
+  socket.on("data", (chunk) => {
+    buffer += chunk;
+    const lines = buffer.split("\n");
+    buffer = lines.pop();
+
+    for (const line of lines) {
+      try {
+        const message = JSON.parse(line);
+        if (message.id !== "terminal-title-label-snapshot") continue;
+
+        for (const pane of message.result?.snapshot?.panes ?? []) renamePane(pane);
+        socket.end();
+      } catch {
+        // A malformed snapshot should not stop later synchronization.
+      }
+    }
+  });
+  socket.on("error", () => {});
 }
 
 function connect() {
@@ -54,7 +80,6 @@ function connect() {
   let closed = false;
 
   const subscriptionId = "terminal-title-label-subscription";
-  const snapshotId = "terminal-title-label-snapshot";
   let snapshotTimer;
 
   socket.on("connect", () => {
@@ -76,11 +101,8 @@ function connect() {
       try {
         const message = JSON.parse(line);
         if (message.id === subscriptionId) {
-          requestSnapshot(socket, snapshotId);
-          snapshotTimer = setInterval(() => requestSnapshot(socket, snapshotId), snapshotInterval);
-        }
-        if (message.id === snapshotId) {
-          for (const pane of message.result?.snapshot?.panes ?? []) renamePane(pane);
+          synchronizeSnapshot();
+          snapshotTimer = setInterval(synchronizeSnapshot, snapshotInterval);
         }
         if (message.event === "pane.updated") renamePane(message.data?.pane);
       } catch {
