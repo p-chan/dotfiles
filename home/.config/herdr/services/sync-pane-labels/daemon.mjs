@@ -63,7 +63,7 @@ function synchronizeSnapshot() {
 
   socket.on("connect", () => {
     socket.write(
-      `${JSON.stringify({ id: "terminal-title-label-snapshot", method: "session.snapshot", params: {} })}\n`,
+      `${JSON.stringify({ id: "sync-pane-labels-snapshot", method: "session.snapshot", params: {} })}\n`,
     );
   });
   socket.on("data", (chunk) => {
@@ -74,7 +74,7 @@ function synchronizeSnapshot() {
     for (const line of lines) {
       try {
         const message = JSON.parse(line);
-        if (message.id !== "terminal-title-label-snapshot") continue;
+        if (message.id !== "sync-pane-labels-snapshot") continue;
 
         for (const pane of message.result?.snapshot?.panes ?? []) renamePane(pane);
         socket.end();
@@ -93,7 +93,7 @@ function connect() {
   let buffer = "";
   let closed = false;
 
-  const subscriptionId = "terminal-title-label-subscription";
+  const subscriptionId = "sync-pane-labels-subscription";
   let snapshotTimer;
 
   socket.on("connect", () => {

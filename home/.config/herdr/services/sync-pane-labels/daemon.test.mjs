@@ -36,7 +36,7 @@ function waitFor(condition, timeout = 2_000) {
 }
 
 test("mirrors agent terminal titles from pane updates", async () => {
-  const root = await mkdtemp(join(tmpdir(), "terminal-title-label-"));
+  const root = await mkdtemp(join(tmpdir(), "sync-pane-labels-"));
   const socketPath = join(root, "herdr.sock");
   const bin = join(root, "bin");
   const log = join(root, "herdr.log");
