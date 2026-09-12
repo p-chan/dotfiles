@@ -42,6 +42,7 @@ function synchronizeSnapshot() {
   const child = spawn("herdr", ["api", "snapshot"], { stdio: ["ignore", "pipe", "ignore"] });
   let output = "";
 
+  child.stdout.setEncoding("utf8");
   child.stdout.on("data", (chunk) => {
     output += chunk;
   });
@@ -58,6 +59,7 @@ function synchronizeSnapshot() {
 
 function connect() {
   const socket = createConnection(socketPath);
+  socket.setEncoding("utf8");
   let buffer = "";
   let closed = false;
 

@@ -14,6 +14,13 @@ async function writeExecutable(path, content) {
   await chmod(path, 0o755);
 }
 
+function writeUtf8Split(socket, message) {
+  const output = Buffer.from(`${message}\n`);
+  const split = output.indexOf(Buffer.from("認")) + 1;
+  socket.write(output.subarray(0, split));
+  socket.write(output.subarray(split));
+}
+
 function waitFor(condition, timeout = 2_000) {
   const deadline = Date.now() + timeout;
 
@@ -40,12 +47,17 @@ test("mirrors agent terminal titles from pane updates", async () => {
     await writeFile(log, "");
     await writeExecutable(
       join(bin, "herdr"),
-      `#!/bin/sh
-if [ "$1" = api ] && [ "$2" = snapshot ]; then
-  printf '%s\\n' "$HERDR_SNAPSHOT_JSON"
-  exit 0
-fi
-printf '%s\\n' "$*" >> "$HERDR_LOG"
+      `#!/usr/bin/env node
+import { appendFileSync } from "node:fs";
+
+if (process.argv[2] === "api" && process.argv[3] === "snapshot") {
+  const output = Buffer.from(process.env.HERDR_SNAPSHOT_JSON + "\\n");
+  const split = output.indexOf(Buffer.from("認")) + 1;
+  process.stdout.write(output.subarray(0, split));
+  process.stdout.write(output.subarray(split));
+} else {
+  appendFileSync(process.env.HERDR_LOG, process.argv.slice(2).join(" ") + "\\n");
+}
 `,
     );
     await new Promise((resolve, reject) => {
@@ -66,8 +78,9 @@ printf '%s\\n' "$*" >> "$HERDR_LOG"
           if (request.method === "events.subscribe") {
             assert.deepEqual(request.params.subscriptions, [{ type: "pane.updated" }]);
             socket.write(`${JSON.stringify({ id: request.id, result: { type: "events_subscribed" } })}\n`);
-            socket.write(
-              `${JSON.stringify({
+            writeUtf8Split(
+              socket,
+              JSON.stringify({
                 event: "pane.updated",
                 data: {
                   type: "pane_updated",
@@ -75,10 +88,10 @@ printf '%s\\n' "$*" >> "$HERDR_LOG"
                     agent: "opencode",
                     label: "OpenCode",
                     pane_id: "w1:p2",
-                    terminal_title: "Add title synchronization",
+                    terminal_title: "認証タイトルを同期",
                   },
                 },
-              })}\n`,
+              }),
             );
           }
         }
@@ -98,7 +111,7 @@ printf '%s\\n' "$*" >> "$HERDR_LOG"
                   agent: "claude",
                   label: "Claude",
                   pane_id: "w1:p1",
-                  terminal_title: "Refactor authentication",
+                  terminal_title: "認証をリファクタリング",
                 },
               ],
             },
@@ -111,8 +124,8 @@ printf '%s\\n' "$*" >> "$HERDR_LOG"
     await waitFor(async () => {
       const output = await readFile(log, "utf8");
       return (
-        output.includes("pane rename w1:p1 Refactor authentication\n") &&
-        output.includes("pane rename w1:p2 Add title synchronization\n")
+        output.includes("pane rename w1:p1 認証をリファクタリング\n") &&
+        output.includes("pane rename w1:p2 認証タイトルを同期\n")
       );
     });
   } finally {
