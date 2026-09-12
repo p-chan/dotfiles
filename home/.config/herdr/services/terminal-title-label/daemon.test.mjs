@@ -16,7 +16,8 @@ async function writeExecutable(path, content) {
 
 function writeUtf8Split(socket, message) {
   const output = Buffer.from(`${message}\n`);
-  const split = output.indexOf(Buffer.from("認")) + 1;
+  const marker = output.indexOf(Buffer.from("認"));
+  const split = marker === -1 ? 0 : marker + 1;
   socket.write(output.subarray(0, split));
   socket.write(output.subarray(split));
 }
@@ -50,14 +51,7 @@ test("mirrors agent terminal titles from pane updates", async () => {
       `#!/usr/bin/env node
 import { appendFileSync } from "node:fs";
 
-if (process.argv[2] === "api" && process.argv[3] === "snapshot") {
-  const output = Buffer.from(process.env.HERDR_SNAPSHOT_JSON + "\\n");
-  const split = output.indexOf(Buffer.from("認")) + 1;
-  process.stdout.write(output.subarray(0, split));
-  process.stdout.write(output.subarray(split));
-} else {
-  appendFileSync(process.env.HERDR_LOG, process.argv.slice(2).join(" ") + "\\n");
-}
+appendFileSync(process.env.HERDR_LOG, process.argv.slice(2).join(" ") + "\\n");
 `,
     );
     await new Promise((resolve, reject) => {
@@ -67,6 +61,7 @@ if (process.argv[2] === "api" && process.argv[3] === "snapshot") {
 
     server.on("connection", (socket) => {
       let buffer = "";
+      let snapshotCalls = 0;
 
       socket.on("data", (data) => {
         buffer += data;
@@ -93,6 +88,44 @@ if (process.argv[2] === "api" && process.argv[3] === "snapshot") {
                 },
               }),
             );
+            writeUtf8Split(
+              socket,
+              JSON.stringify({
+                event: "pane.updated",
+                data: {
+                  type: "pane_updated",
+                  pane: {
+                    agent: "opencode",
+                    label: "認証タイトルを同期",
+                    pane_id: "w1:p2",
+                    terminal_title: null,
+                  },
+                },
+              }),
+            );
+          }
+          if (request.method === "session.snapshot") {
+            const snapshotIndex = snapshotCalls++;
+            const title = snapshotIndex === 0 ? "⠋ 認証をリファクタリング" : "⠙ 認証をリファクタリング";
+            const label = snapshotIndex === 0 ? "Claude" : snapshotIndex === 1 ? "手動ラベル" : title;
+            writeUtf8Split(
+              socket,
+              JSON.stringify({
+                id: request.id,
+                result: {
+                  snapshot: {
+                    panes: [
+                      {
+                        agent: "claude",
+                        label,
+                        pane_id: "w1:p1",
+                        terminal_title: title,
+                      },
+                    ],
+                  },
+                },
+              }),
+            );
           }
         }
       });
@@ -103,20 +136,7 @@ if (process.argv[2] === "api" && process.argv[3] === "snapshot") {
         ...process.env,
         HERDR_LOG: log,
         HERDR_SOCKET_PATH: socketPath,
-        HERDR_SNAPSHOT_JSON: JSON.stringify({
-          result: {
-            snapshot: {
-              panes: [
-                {
-                  agent: "claude",
-                  label: "Claude",
-                  pane_id: "w1:p1",
-                  terminal_title: "認証をリファクタリング",
-                },
-              ],
-            },
-          },
-        }),
+        HERDR_SNAPSHOT_INTERVAL_MS: "10",
         PATH: `${bin}:${process.env.PATH}`,
       },
     });
@@ -124,8 +144,10 @@ if (process.argv[2] === "api" && process.argv[3] === "snapshot") {
     await waitFor(async () => {
       const output = await readFile(log, "utf8");
       return (
-        output.includes("pane rename w1:p1 認証をリファクタリング\n") &&
-        output.includes("pane rename w1:p2 認証タイトルを同期\n")
+        output.includes("pane rename w1:p1 ⠋ 認証をリファクタリング\n") &&
+        output.includes("pane rename w1:p1 ⠙ 認証をリファクタリング\n") &&
+        output.includes("pane rename w1:p2 認証タイトルを同期\n") &&
+        output.includes("pane rename w1:p2 --clear\n")
       );
     });
   } finally {

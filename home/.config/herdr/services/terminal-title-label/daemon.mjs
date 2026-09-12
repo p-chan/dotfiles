@@ -5,6 +5,7 @@ import { createConnection } from "node:net";
 
 const socketPath = process.env.HERDR_SOCKET_PATH ?? join(homedir(), ".config", "herdr", "herdr.sock");
 const reconnectDelay = 1_000;
+const snapshotInterval = Number(process.env.HERDR_SNAPSHOT_INTERVAL_MS) || 1_000;
 
 let reconnectTimer;
 const pendingTitles = new Map();
@@ -20,41 +21,30 @@ function scheduleReconnect() {
 
 function renamePane(pane) {
   const { agent, label, pane_id: paneId, terminal_title: title } = pane;
-  if (!agent || !paneId || !title) return;
-  if (title === label) {
-    if (pendingTitles.get(paneId) === title) pendingTitles.delete(paneId);
+  if (!agent || !paneId) return;
+
+  const desiredLabel = title || null;
+  if (desiredLabel === label) {
+    if (pendingTitles.get(paneId) === desiredLabel) pendingTitles.delete(paneId);
     return;
   }
-  if (pendingTitles.get(paneId) === title) return;
+  if (pendingTitles.get(paneId) === desiredLabel) return;
 
-  pendingTitles.set(paneId, title);
-  const child = spawn("herdr", ["pane", "rename", paneId, title], { stdio: "ignore" });
-  child.once("error", () => {
-    if (pendingTitles.get(paneId) === title) pendingTitles.delete(paneId);
-  });
-  child.once("exit", (code) => {
-    if (code !== 0 && pendingTitles.get(paneId) === title) pendingTitles.delete(paneId);
-  });
+  pendingTitles.set(paneId, desiredLabel);
+  const args = ["pane", "rename", paneId];
+  if (desiredLabel) args.push(desiredLabel);
+  else args.push("--clear");
+  const child = spawn("herdr", args, { stdio: "ignore" });
+  const clearPendingTitle = () => {
+    if (pendingTitles.get(paneId) === desiredLabel) pendingTitles.delete(paneId);
+  };
+  child.once("error", clearPendingTitle);
+  child.once("exit", clearPendingTitle);
   child.unref();
 }
 
-function synchronizeSnapshot() {
-  const child = spawn("herdr", ["api", "snapshot"], { stdio: ["ignore", "pipe", "ignore"] });
-  let output = "";
-
-  child.stdout.setEncoding("utf8");
-  child.stdout.on("data", (chunk) => {
-    output += chunk;
-  });
-  child.once("close", (code) => {
-    if (code !== 0) return;
-
-    try {
-      for (const pane of JSON.parse(output).result?.snapshot?.panes ?? []) renamePane(pane);
-    } catch {
-      // Live pane updates continue when a snapshot is unavailable.
-    }
-  });
+function requestSnapshot(socket, requestId) {
+  socket.write(`${JSON.stringify({ id: requestId, method: "session.snapshot", params: {} })}\n`);
 }
 
 function connect() {
@@ -64,6 +54,8 @@ function connect() {
   let closed = false;
 
   const subscriptionId = "terminal-title-label-subscription";
+  const snapshotId = "terminal-title-label-snapshot";
+  let snapshotTimer;
 
   socket.on("connect", () => {
     socket.write(
@@ -84,7 +76,11 @@ function connect() {
       try {
         const message = JSON.parse(line);
         if (message.id === subscriptionId) {
-          synchronizeSnapshot();
+          requestSnapshot(socket, snapshotId);
+          snapshotTimer = setInterval(() => requestSnapshot(socket, snapshotId), snapshotInterval);
+        }
+        if (message.id === snapshotId) {
+          for (const pane of message.result?.snapshot?.panes ?? []) renamePane(pane);
         }
         if (message.event === "pane.updated") renamePane(message.data?.pane);
       } catch {
@@ -97,6 +93,7 @@ function connect() {
   socket.on("close", () => {
     if (closed) return;
     closed = true;
+    clearInterval(snapshotTimer);
     scheduleReconnect();
   });
 }
