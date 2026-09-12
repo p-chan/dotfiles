@@ -231,11 +231,6 @@ if type mise &>/dev/null; then
 
   mise trust "$DOTFILES_DIR/home/.config/mise/config.toml"
 
-  # npm-backed tools are installed alongside Node during bootstrap. Install the
-  # configured Node version first so their install dependency is available.
-  MISE_CONFIG_DIR="$DOTFILES_DIR/home/.config/mise" \
-  mise install "node@lts"
-
   # macOS GUI provisioning (Dock, Finder, hostname, etc.) doesn't make sense on
   # an ephemeral CI runner, so skip it there like the old provisioning.sh did.
   # The runner also ships its own ~/.ssh, which conflicts with the dotfiles
