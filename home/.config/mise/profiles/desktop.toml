@@ -17,6 +17,14 @@ autohide = true
 pre-packages = 'if command -v brew >/dev/null 2>&1; then brew bundle --file="$(mise settings get dotfiles.root)/.config/homebrew/profiles/Brewfile.desktop"; fi'
 final = 'mise run -C "$HOME" bootstrap-desktop'
 
+[bootstrap.macos.launchd.agents.herdr-terminal-title-label]
+program = "~/.config/herdr/services/terminal-title-label/run.sh"
+run_at_load = true
+keep_alive = true
+throttle_interval = 10
+stdout_path = "~/Library/Logs/herdr-terminal-title-label.log"
+stderr_path = "~/Library/Logs/herdr-terminal-title-label.err.log"
+
 [dotfiles]
 "~/.config/ghostty" = {}
 "~/.config/karabiner" = {}

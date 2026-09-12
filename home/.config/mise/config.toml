@@ -104,6 +104,7 @@ pre-packages = 'if command -v brew >/dev/null 2>&1; then brew bundle --file="$(m
 "~/.config/fixpack" = {}
 "~/.config/gh/config.yml" = {}
 "~/.config/herdr/config.toml" = {}
+"~/.config/herdr/services" = {}
 "~/.config/homebrew" = {}
 "~/.config/hunk/config.toml" = {}
 "~/.config/git" = {}
