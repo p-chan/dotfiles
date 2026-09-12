@@ -17,6 +17,16 @@ autohide = true
 pre-packages = 'if command -v brew >/dev/null 2>&1; then brew bundle --file="$(mise settings get dotfiles.root)/.config/homebrew/profiles/Brewfile.desktop"; fi'
 final = 'mise run -C "$HOME" bootstrap-desktop'
 
+[bootstrap.macos.launchd.agents.herdr-sync-pane-labels]
+program = "~/.local/bin/mise"
+args = ["exec", "--", "node", ".config/herdr/services/sync-pane-labels/daemon.mjs"]
+working_directory = "~"
+run_at_load = true
+keep_alive = true
+throttle_interval = 10
+stdout_path = "~/Library/Logs/herdr-sync-pane-labels.log"
+stderr_path = "~/Library/Logs/herdr-sync-pane-labels.err.log"
+
 [dotfiles]
 "~/.config/ghostty" = {}
 "~/.config/karabiner" = {}
