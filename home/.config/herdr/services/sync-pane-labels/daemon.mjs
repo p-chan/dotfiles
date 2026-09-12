@@ -62,9 +62,7 @@ function synchronizeSnapshot() {
   const timeout = setTimeout(() => socket.destroy(), snapshotTimeout);
 
   socket.on("connect", () => {
-    socket.write(
-      `${JSON.stringify({ id: "sync-pane-labels-snapshot", method: "session.snapshot", params: {} })}\n`,
-    );
+    socket.write(`${JSON.stringify({ id: "sync-pane-labels-snapshot", method: "session.snapshot", params: {} })}\n`);
   });
   socket.on("data", (chunk) => {
     buffer += chunk;
