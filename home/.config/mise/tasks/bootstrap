@@ -21,16 +21,24 @@ fi
 
 export DOTFILES_DIR
 
-if [ "${CI:-}" != "true" ]; then
-  MODEL_NAME=$(system_profiler SPHardwareDataType | awk -F': ' '/Model Name/ {print $2}')
-  COMPUTER_NAME="P-Chan's $MODEL_NAME"
-  LOCAL_HOST_NAME="p-chan-$(echo "$MODEL_NAME" | tr '[:upper:]' '[:lower:]' | sed 's/ /-/g')"
+mdm_enrolled () {
+  profiles status -type enrollment 2>/dev/null | grep -q '^MDM enrollment: Yes'
+}
 
-  if [ "$(scutil --get ComputerName 2>/dev/null || true)" != "$COMPUTER_NAME" ]; then
-    sudo scutil --set ComputerName "$COMPUTER_NAME"
-  fi
-  if [ "$(scutil --get LocalHostName 2>/dev/null || true)" != "$LOCAL_HOST_NAME" ]; then
-    sudo scutil --set LocalHostName "$LOCAL_HOST_NAME"
+if [ "${CI:-}" != "true" ]; then
+  if mdm_enrolled; then
+    echo "Skipping the machine rename: this Mac is MDM-enrolled and named by its MDM."
+  else
+    MODEL_NAME=$(system_profiler SPHardwareDataType | awk -F': ' '/Model Name/ {print $2}')
+    COMPUTER_NAME="P-Chan's $MODEL_NAME"
+    LOCAL_HOST_NAME="p-chan-$(echo "$MODEL_NAME" | tr '[:upper:]' '[:lower:]' | sed 's/ /-/g')"
+
+    if [ "$(scutil --get ComputerName 2>/dev/null || true)" != "$COMPUTER_NAME" ]; then
+      sudo scutil --set ComputerName "$COMPUTER_NAME"
+    fi
+    if [ "$(scutil --get LocalHostName 2>/dev/null || true)" != "$LOCAL_HOST_NAME" ]; then
+      sudo scutil --set LocalHostName "$LOCAL_HOST_NAME"
+    fi
   fi
 fi
 
