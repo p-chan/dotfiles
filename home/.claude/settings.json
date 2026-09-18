@@ -24,17 +24,6 @@
   },
   "feedbackSurveyRate": 0,
   "hooks": {
-    "Notification": [
-      {
-        "hooks": [
-          {
-            "command": "~/.claude/hooks/personal-notify.sh",
-            "type": "command"
-          }
-        ],
-        "matcher": "permission_prompt"
-      }
-    ],
     "PreToolUse": [
       {
         "hooks": [
@@ -68,16 +57,6 @@
           }
         ],
         "matcher": "*"
-      }
-    ],
-    "Stop": [
-      {
-        "hooks": [
-          {
-            "command": "~/.claude/hooks/personal-notify.sh",
-            "type": "command"
-          }
-        ]
       }
     ]
   },
