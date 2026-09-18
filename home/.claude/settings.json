@@ -35,17 +35,6 @@
         "matcher": "permission_prompt"
       }
     ],
-    "PermissionRequest": [
-      {
-        "hooks": [
-          {
-            "command": "~/.claude/hooks/personal-log-web-fetch.sh",
-            "type": "command"
-          }
-        ],
-        "matcher": "WebFetch"
-      }
-    ],
     "PreToolUse": [
       {
         "hooks": [
