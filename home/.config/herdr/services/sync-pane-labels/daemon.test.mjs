@@ -35,7 +35,7 @@ function waitFor(condition, timeout = 2_000) {
   });
 }
 
-test("mirrors agent terminal titles from pane updates", async () => {
+test("mirrors agent terminal titles and clears owned labels after exit", async () => {
   const root = await mkdtemp(join(tmpdir(), "sync-pane-labels-"));
   const socketPath = join(root, "herdr.sock");
   const bin = join(root, "bin");
@@ -73,18 +73,19 @@ appendFileSync(process.env.HERDR_LOG, process.argv.slice(2).join(" ") + "\\n");
           const request = JSON.parse(line);
           if (request.method === "events.subscribe") {
             subscriptionSocket = socket;
-            assert.deepEqual(request.params.subscriptions, [{ type: "pane.updated" }]);
+            assert.deepEqual(request.params.subscriptions, [{ type: "pane.updated" }, { type: "pane.agent_detected" }]);
             socket.write(`${JSON.stringify({ id: request.id, result: { type: "events_subscribed" } })}\n`);
             writeUtf8Split(
               socket,
               JSON.stringify({
-                event: "pane.updated",
+                event: "pane_updated",
                 data: {
                   type: "pane_updated",
                   pane: {
                     agent: "opencode",
                     label: "OpenCode",
                     pane_id: "w1:p2",
+                    terminal_id: "term-2",
                     terminal_title: "認証タイトルを同期",
                   },
                 },
@@ -93,13 +94,14 @@ appendFileSync(process.env.HERDR_LOG, process.argv.slice(2).join(" ") + "\\n");
             writeUtf8Split(
               socket,
               JSON.stringify({
-                event: "pane.updated",
+                event: "pane_updated",
                 data: {
                   type: "pane_updated",
                   pane: {
                     agent: "opencode",
                     label: "認証タイトルを同期",
                     pane_id: "w1:p2",
+                    terminal_id: "term-2",
                     terminal_title: null,
                   },
                 },
@@ -108,15 +110,62 @@ appendFileSync(process.env.HERDR_LOG, process.argv.slice(2).join(" ") + "\\n");
             writeUtf8Split(
               socket,
               JSON.stringify({
-                event: "pane.updated",
+                event: "pane_updated",
                 data: {
                   type: "pane_updated",
                   pane: {
                     agent: "opencode",
                     label: "OpenCode",
                     pane_id: "w1:p3",
+                    terminal_id: "term-3",
                     terminal_title: "--clear",
                   },
+                },
+              }),
+            );
+            writeUtf8Split(
+              socket,
+              JSON.stringify({
+                event: "pane_updated",
+                data: {
+                  type: "pane_updated",
+                  pane: {
+                    agent: "opencode",
+                    label: "OC | 認証を修正",
+                    pane_id: "w1:p4",
+                    terminal_id: "term-4",
+                    terminal_title: "OC | 認証を修正",
+                  },
+                },
+              }),
+            );
+            writeUtf8Split(
+              socket,
+              JSON.stringify({
+                event: "pane_updated",
+                data: {
+                  type: "pane_updated",
+                  pane: {
+                    agent: "opencode",
+                    label: "OC | 手動変更前",
+                    pane_id: "w1:p5",
+                    terminal_id: "term-5",
+                    terminal_title: "OC | 手動変更前",
+                  },
+                },
+              }),
+            );
+            writeUtf8Split(
+              socket,
+              JSON.stringify({
+                event: "pane_agent_detected",
+                data: {
+                  type: "pane_agent_detected",
+                  pane_id: "w1:p4",
+                  workspace_id: "w1",
+                  agent: "opencode",
+                  released: true,
+                  final_status: "idle",
                 },
               }),
             );
@@ -143,7 +192,20 @@ appendFileSync(process.env.HERDR_LOG, process.argv.slice(2).join(" ") + "\\n");
                         agent: "claude",
                         label,
                         pane_id: "w1:p1",
+                        terminal_id: "term-1",
                         terminal_title: title,
+                      },
+                      {
+                        label: "OC | 認証を修正",
+                        pane_id: "w1:p4",
+                        terminal_id: "term-4",
+                        terminal_title: null,
+                      },
+                      {
+                        label: "手動ラベル",
+                        pane_id: "w1:p5",
+                        terminal_id: "term-5",
+                        terminal_title: null,
                       },
                     ],
                   },
@@ -175,9 +237,14 @@ appendFileSync(process.env.HERDR_LOG, process.argv.slice(2).join(" ") + "\\n");
         output.includes("pane rename w1:p2 認証タイトルを同期\n") &&
         output.includes("pane rename w1:p2 --clear\n") &&
         output.includes("pane rename w1:p3  --clear\n") &&
+        output.includes("pane rename w1:p4 --clear\n") &&
         spinnerRenames.length === 1
       );
     });
+
+    const output = await readFile(log, "utf8");
+    assert.equal(output.match(/pane rename w1:p4 --clear\n/g)?.length, 1);
+    assert.doesNotMatch(output, /pane rename w1:p5 /);
   } finally {
     daemon?.kill();
     await new Promise((resolve) => server.close(() => resolve()));
