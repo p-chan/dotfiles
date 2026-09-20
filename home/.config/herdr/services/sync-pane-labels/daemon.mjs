@@ -11,6 +11,8 @@ const snapshotTimeout = 5_000;
 let reconnectTimer;
 let snapshotInProgress = false;
 const pendingTitles = new Map();
+// Track labels sourced from each terminal so cleanup never removes a manual label.
+const mirroredLabels = new Map();
 
 function scheduleReconnect() {
   if (reconnectTimer) return;
@@ -22,26 +24,49 @@ function scheduleReconnect() {
 }
 
 function renamePane(pane) {
-  const { agent, label, pane_id: paneId, terminal_title: title } = pane;
-  if (!agent || !paneId) return;
+  const { agent, label, pane_id: paneId, terminal_id: terminalId, terminal_title: title } = pane;
+  if (!paneId || !terminalId) return;
 
-  const desiredLabel = title?.trim() || null;
+  let mirrored = mirroredLabels.get(paneId);
+  if (mirrored && mirrored.terminalId !== terminalId) {
+    mirroredLabels.delete(paneId);
+    mirrored = undefined;
+  }
+
+  let desiredLabel;
+  if (agent) {
+    desiredLabel = title?.trim() || null;
+    if (!mirrored) {
+      mirrored = { terminalId, labels: new Set() };
+      mirroredLabels.set(paneId, mirrored);
+    }
+    if (desiredLabel) mirrored.labels.add(desiredLabel);
+  } else {
+    mirroredLabels.delete(paneId);
+    if (!label || !mirrored?.labels.has(label)) return;
+    desiredLabel = null;
+  }
+
   if (desiredLabel === label) {
     if (pendingTitles.get(paneId) === desiredLabel) pendingTitles.delete(paneId);
     return;
   }
   if (pendingTitles.get(paneId) === desiredLabel) return;
 
+  const releasedMirror = agent ? undefined : mirrored;
   pendingTitles.set(paneId, desiredLabel);
   const args = ["pane", "rename", paneId];
   if (desiredLabel) args.push(desiredLabel === "--clear" ? ` ${desiredLabel}` : desiredLabel);
   else args.push("--clear");
   const child = spawn("herdr", args, { stdio: "ignore" });
-  const clearPendingTitle = () => {
+  const finishRename = (succeeded) => {
     if (pendingTitles.get(paneId) === desiredLabel) pendingTitles.delete(paneId);
+    if (!succeeded && releasedMirror && !mirroredLabels.has(paneId)) {
+      mirroredLabels.set(paneId, releasedMirror);
+    }
   };
-  child.once("error", clearPendingTitle);
-  child.once("exit", clearPendingTitle);
+  child.once("error", () => finishRename(false));
+  child.once("exit", (code) => finishRename(code === 0));
   child.unref();
 }
 
@@ -99,7 +124,7 @@ function connect() {
       `${JSON.stringify({
         id: subscriptionId,
         method: "events.subscribe",
-        params: { subscriptions: [{ type: "pane.updated" }] },
+        params: { subscriptions: [{ type: "pane.updated" }, { type: "pane.agent_detected" }] },
       })}\n`,
     );
   });
@@ -116,7 +141,8 @@ function connect() {
           synchronizeSnapshot();
           snapshotTimer = setInterval(synchronizeSnapshot, snapshotInterval);
         }
-        if (message.event === "pane.updated") renamePane(message.data?.pane);
+        if (message.event === "pane_updated") renamePane(message.data?.pane);
+        if (message.event === "pane_agent_detected" && message.data?.released) synchronizeSnapshot();
       } catch {
         // A malformed message should not stop synchronization for later events.
       }
