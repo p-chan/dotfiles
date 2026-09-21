@@ -49,6 +49,8 @@ git diff <base-branch>...HEAD
 
 その後、言語とスタイル、テンプレート、差分をもとに、タイトルと本文を生成します。
 
+スタイルが `conventional-commits` の場合は、[personal-git スキルの Conventional Commits リファレンス](../../personal-git/references/conventional-commits.md)を参照し、そのタイトル行（`<型>[任意のスコープ]: <説明>`）の形式に従います。
+
 テンプレートが存在しない場合は、以下のテンプレートを利用してください。
 
 ```md
