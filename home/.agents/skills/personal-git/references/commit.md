@@ -18,7 +18,7 @@
 git branch --show-current
 ```
 
-現在のブランチが `main` または `master` の場合、[規約の検出](convention.md)の手順に従い `convention.branch-strategy` を判定します。
+現在のブランチが `main` または `master` の場合、規約の検出（`references/convention.md`）の手順に従い `convention.branch-strategy` を判定します。
 
 - `pull-request` の場合: 新しいブランチを作成してから次のステップに進みます。
 - `direct-commit` の場合: そのまま次のステップに進みます。
@@ -39,7 +39,7 @@ git diff
 
 ### 3. 判定
 
-[規約の検出](convention.md)の手順に従い、以下を判定します。
+規約の検出（`references/convention.md`）の手順に従い、以下を判定します。
 
 - 言語（`convention.language`）
 - コミットメッセージスタイル（`convention.commit-message-style`）
@@ -62,9 +62,7 @@ git log --oneline -n 999 --perl-regexp --author='^((?!\[bot\]).)*$' | sed -n 's/
 - **ボディ（本文）**: Why（なぜしたか）を必要に応じて補足
 - **コード参照**: コードやパスを表す場合はバッククォートで囲む
 - **言語**: 判定した言語に合わせる
-- **スタイル**: 判定したスタイルに従う（必ず判定したスタイルのリファレンスを参照する）
-  - [Conventional Commits](conventional-commits.md)
-  - [gitmoji](gitmoji.md)
+- **スタイル**: 判定したスタイルに従う（必ず判定したスタイルのリファレンス `references/conventional-commits.md` または `references/gitmoji.md` を参照する）
 - **スコープ**: スコープ一覧から適切なものを選択（該当する場合）
 
 ### 5. コミット作成

@@ -6,10 +6,9 @@ allowed-tools: Bash(git status), Bash(git status *), Bash(git diff), Bash(git di
 
 # Git
 
-作業内容に応じて、対応するリファレンスを読んでから、その手順に従います。
+作業内容に応じて、対応するリファレンスをすべて読んでから、その手順に従います。
 
-| 作業                         | リファレンス                                               |
-| ---------------------------- | ---------------------------------------------------------- |
-| コミットの作成               | [references/commit.md](references/commit.md)               |
-| ブランチ・worktree の作成    | [references/create-branch.md](references/create-branch.md) |
-| リポジトリの規約の検出・参照 | [references/convention.md](references/convention.md)       |
+- **コミットの作成**: [references/commit.md](references/commit.md)、[references/convention.md](references/convention.md)、判定したコミットメッセージスタイルのリファレンス（[references/conventional-commits.md](references/conventional-commits.md) または [references/gitmoji.md](references/gitmoji.md)）
+- **ブランチ・worktree の作成**: [references/create-branch.md](references/create-branch.md)、[references/convention.md](references/convention.md)
+- **リポジトリの規約の検出・参照**: [references/convention.md](references/convention.md)
+- **Conventional Commits 形式の文章の作成（他のスキルからの参照を含む）**: [references/conventional-commits.md](references/conventional-commits.md)

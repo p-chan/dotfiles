@@ -8,7 +8,7 @@
 
 ### 1. worktree 運用の確認
 
-[規約の検出](convention.md)の手順に従い、`convention.use-worktree` を確認します。
+規約の検出（`references/convention.md`）の手順に従い、`convention.use-worktree` を確認します。
 
 ```bash
 git config --local --get convention.use-worktree
@@ -16,7 +16,7 @@ git config --local --get convention.use-worktree
 
 - `true` の場合: worktree を作成します（ステップ 4-a）
 - `false` の場合: 現在の working tree にブランチを作成します（ステップ 4-b）
-- 未設定の場合: [規約の検出](convention.md)の手順で判定・キャッシュしてから、その結果に従います
+- 未設定の場合: 規約の検出（`references/convention.md`）の手順で判定・キャッシュしてから、その結果に従います
 
 worktree を使うかどうかは、常に規約に従って判断します。「ブランチを作って」のような依頼は、worktree を使うかどうかの指定ではありません（worktree の作成はブランチの作成を兼ねます）。規約より優先するのは、ユーザーが worktree を使う・使わないに直接言及した場合だけです。
 

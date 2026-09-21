@@ -57,4 +57,4 @@ gh api "repos/{owner}/{repo}/pulls/<PR番号>/comments?per_page=100" --paginate 
 > [!IMPORTANT]
 > 対応するかどうかの判断はユーザーに委ねてください。妥当性についての見解を求められた場合は、該当コードを読んで評価したうえで答えます。
 
-修正する方針が決まった場合、レビューコメントへの返信は [レビュースレッドの操作](review-comment.md)に従ってください。
+修正する方針が決まった場合、レビューコメントへの返信はレビュースレッドの操作（`references/review-comment.md`）に従ってください。

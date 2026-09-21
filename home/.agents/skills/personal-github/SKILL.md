@@ -7,15 +7,13 @@ allowed-tools: Read(*), Bash(fd *), Bash(rg *), Bash(git config --local --get *)
 
 # GitHub
 
-作業内容に応じて、対応するリファレンスを読んでから、その手順に従います。
+作業内容に応じて、対応するリファレンスをすべて読んでから、その手順に従います。
 
-| 作業                                                | リファレンス                                                                       |
-| --------------------------------------------------- | ---------------------------------------------------------------------------------- |
-| PR の作成                                           | [references/create-pr.md](references/create-pr.md)                                 |
-| PR のマージ                                         | [references/merge-pr.md](references/merge-pr.md)                                   |
-| Issue の作成                                        | [references/create-issue.md](references/create-issue.md)                           |
-| 既存 Issue の整理・再構成                           | [references/clarify-issue.md](references/clarify-issue.md)                         |
-| Copilot へのレビュー依頼                            | [references/request-review-to-copilot.md](references/request-review-to-copilot.md) |
-| レビュースレッドの取得・返信・解決                  | [references/review-comment.md](references/review-comment.md)                       |
-| Issue や PR に貼るファイルのアップロード            | [references/upload-attachment.md](references/upload-attachment.md)                 |
-| GitHub Actions のワークフローの追加・変更・レビュー | [references/github-actions.md](references/github-actions.md)                       |
+- **PR の作成**: [references/create-pr.md](references/create-pr.md)（規約の判定と Conventional Commits の形式は personal-git スキルを使う）
+- **PR のマージ**: [references/merge-pr.md](references/merge-pr.md)
+- **Issue の作成**: [references/create-issue.md](references/create-issue.md)
+- **既存 Issue の整理・再構成**: [references/clarify-issue.md](references/clarify-issue.md)
+- **Copilot へのレビュー依頼**: [references/request-review-to-copilot.md](references/request-review-to-copilot.md)（指摘に返信・解決する場合は [references/review-comment.md](references/review-comment.md) も読む）
+- **レビュースレッドの取得・返信・解決**: [references/review-comment.md](references/review-comment.md)
+- **Issue や PR に貼るファイルのアップロード**: [references/upload-attachment.md](references/upload-attachment.md)
+- **GitHub Actions のワークフローの追加・変更・レビュー**: [references/pin-latest-version-sha.md](references/pin-latest-version-sha.md)

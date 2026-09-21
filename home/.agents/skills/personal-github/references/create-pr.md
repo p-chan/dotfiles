@@ -4,7 +4,7 @@
 
 ### 1. 判定
 
-[personal-git スキルの規約の検出](../../personal-git/references/convention.md)の手順に従い、以下を判定します。
+personal-git スキルの規約の検出の手順に従い、以下を判定します。
 
 - 言語（`convention.language`）
 - PR タイトルスタイル（`convention.pull-request-title-style`）
@@ -49,7 +49,7 @@ git diff <base-branch>...HEAD
 
 その後、言語とスタイル、テンプレート、差分をもとに、タイトルと本文を生成します。
 
-スタイルが `conventional-commits` の場合は、[personal-git スキルの Conventional Commits リファレンス](../../personal-git/references/conventional-commits.md)を参照し、そのタイトル行（`<型>[任意のスコープ]: <説明>`）の形式に従います。
+スタイルが `conventional-commits` の場合は、personal-git スキルの Conventional Commits リファレンスを参照し、そのタイトル行（`<型>[任意のスコープ]: <説明>`）の形式に従います。
 
 テンプレートが存在しない場合は、以下のテンプレートを利用してください。
 
