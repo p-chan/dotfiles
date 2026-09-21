@@ -1,9 +1,3 @@
----
-name: personal-merge-pr
-description: ユーザーが PR のマージを求めたときや、エージェントが PR をマージするときに必ず使用してください。
-allowed-tools: Bash(gh review-comment list *), Bash(gh pr checks), Bash(gh pr list *), Bash(gh pr edit *), Bash(gh repo view *), Bash(git fetch), Bash(git log *), Bash(git rev-parse *)
----
-
 # GitHub PR マージ
 
 ## ワークフロー

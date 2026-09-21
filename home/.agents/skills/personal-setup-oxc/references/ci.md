@@ -9,7 +9,7 @@ ESLint、Prettier、Biome を実行していたジョブやステップがあれ
 ## 既存の CI ワークフローがない場合
 
 `.github/workflows/` に、`lint` と `format:check` を実行する最小限のワークフローを新規作成する。
-[personal-github-actions-best-practices スキル](../../personal-github-actions-best-practices/SKILL.md)に従い、`actions/checkout` などのバージョンを SHA で固定する。
+[personal-github スキルの GitHub Actions ベストプラクティス](../../personal-github/references/github-actions.md)に従い、`actions/checkout` などのバージョンを SHA で固定する。
 
 ```yaml
 name: CI

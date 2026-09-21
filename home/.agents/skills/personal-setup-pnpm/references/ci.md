@@ -5,7 +5,7 @@
 ## セットアップ手順
 
 既存ジョブの Node.js セットアップステップを以下のパターンに置き換える。
-`actions/checkout`、`pnpm/action-setup`、`actions/setup-node` のバージョンは、[personal-github-actions-best-practices スキル](../../personal-github-actions-best-practices/SKILL.md)に従い、最新版を SHA で固定する。
+`actions/checkout`、`pnpm/action-setup`、`actions/setup-node` のバージョンは、[personal-github スキルの GitHub Actions ベストプラクティス](../../personal-github/references/github-actions.md)に従い、最新版を SHA で固定する。
 
 ```yaml
 - uses: actions/checkout@<SHA> # <最新タグ>

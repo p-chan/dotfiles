@@ -1,17 +1,10 @@
----
-name: personal-create-pr
-description: GitHub の PR を作成します。ユーザーが PR の作成を求めたときや、エージェントが PR を作成するときに使用してください。
-compatibility: Claude Code
-allowed-tools: Bash(git config --local --get *), Bash(gh pr list *), Bash(git ls-remote *), Bash(git log:*), Bash(gh issue list *), Bash(fd *), Read(*)
----
-
 # GitHub PR 作成
 
 ## ワークフロー
 
 ### 1. 判定
 
-[personal-git スキルの規約の検出](../personal-git/references/convention.md)の手順に従い、以下を判定します。
+[personal-git スキルの規約の検出](../../personal-git/references/convention.md)の手順に従い、以下を判定します。
 
 - 言語（`convention.language`）
 - PR タイトルスタイル（`convention.pull-request-title-style`）

@@ -1,11 +1,4 @@
----
-name: personal-clarify-issue
-description: 既存の GitHub Issue を整理・再構成します。ユーザーが Issue を「整理して」「構造化して」「書き直して」「わかりやすくして」「clarify して」などと依頼したときに使用してください。
-compatibility: Claude Code
-allowed-tools: Read(*), Bash(fd *), Bash(rg *), Bash(gh repo view *), Bash(gh issue view *), Bash(gh issue edit *), Bash(gh issue list *), Bash(gh pr view *), Bash(gh pr list *), Bash(gh label list *), Bash(git config --local --get *), Bash(git config --local convention.language *)
----
-
-# personal-clarify-issue
+# GitHub Issue 整理
 
 ## 目的
 
@@ -113,9 +106,9 @@ allowed-tools: Read(*), Bash(fd *), Bash(rg *), Bash(gh repo view *), Bash(gh is
 リポジトリにテンプレートがない場合は、このスキルの fallback テンプレートを使う。
 
 ```txt
-Feature     -> templates/feature.md
-Improvement -> templates/improvement.md
-Bug         -> templates/bug.md
+Feature     -> templates/issue/feature.md
+Improvement -> templates/issue/improvement.md
+Bug         -> templates/issue/bug.md
 ```
 
 ## 情報のマッピング方針
@@ -226,12 +219,12 @@ gh pr list --search "キーワード"
 
 ## Fallback テンプレート
 
-Fallback テンプレートはこのファイルと同階層の `templates/` に置く。
+Fallback テンプレートは personal-github スキルの `templates/issue/` に置く。
 
 ```txt
-templates/feature.md
-templates/improvement.md
-templates/bug.md
+templates/issue/feature.md
+templates/issue/improvement.md
+templates/issue/bug.md
 ```
 
 これらは、リポジトリに適切な Issue テンプレートが存在しない場合にのみ使う。
