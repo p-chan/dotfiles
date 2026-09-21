@@ -1,9 +1,3 @@
----
-name: personal-detect-git-convention
-description: 各リポジトリの既存の慣習からコミットメッセージ・PR タイトルの言語/スタイルを検出し、それに従うための手順をまとめたリファレンスです。ユーザーが Git の規約について尋ねたときや、他のスキルがコミット・PR 作成時に規約判定を必要とするときに使用してください。
-allowed-tools: Bash(git config --local --get *), Bash(git config --local convention.language *), Bash(git config --local convention.commit-message-style *), Bash(git config --local convention.pull-request-title-style *), Bash(git config --local convention.branch-strategy *), Bash(git config --local convention.use-worktree *), Bash(git log:*), Bash(gh pr list *), Bash(gh issue list *), Bash(gh repo view *), Bash(gh api repos/*/branches/*/protection*), Bash(fd *), Read(*)
----
-
 # Git 規約の検出
 
 コミットメッセージ・PR タイトルについて、特定のスタイルを一律に強制するのではなく、対象リポジトリの `git log` や既存 PR から実際の慣習を検出し、それに従うための手順をまとめたリファレンスです。

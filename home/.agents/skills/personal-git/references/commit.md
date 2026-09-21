@@ -1,9 +1,3 @@
----
-name: personal-commit
-description: Git リポジトリのスタイルに合わせてコミットを作成します。ユーザーがコミットを求めたときや、エージェントがコミットするときに必ず使用してください。
-allowed-tools: Bash(git diff:*), Bash(git log:*), Bash(git config --local --get *), Bash(git config --local convention.branch-strategy *), Bash(sed:*), Bash(tr:*), Bash(sort:*), Bash(xargs:*), Bash(gh issue list *), Bash(gh pr list *), Bash(gh repo view *), Bash(gh api repos/*/branches/*/protection*), Bash(fd *), Read(*)
----
-
 # Git コミット作成
 
 ## 前提
@@ -24,7 +18,7 @@ allowed-tools: Bash(git diff:*), Bash(git log:*), Bash(git config --local --get 
 git branch --show-current
 ```
 
-現在のブランチが `main` または `master` の場合、[personal-detect-git-convention スキル](../personal-detect-git-convention/SKILL.md)の手順に従い `convention.branch-strategy` を判定します。
+現在のブランチが `main` または `master` の場合、[規約の検出](convention.md)の手順に従い `convention.branch-strategy` を判定します。
 
 - `pull-request` の場合: 新しいブランチを作成してから次のステップに進みます。
 - `direct-commit` の場合: そのまま次のステップに進みます。
@@ -45,7 +39,7 @@ git diff
 
 ### 3. 判定
 
-[personal-detect-git-convention スキル](../personal-detect-git-convention/SKILL.md)の手順に従い、以下を判定します。
+[規約の検出](convention.md)の手順に従い、以下を判定します。
 
 - 言語（`convention.language`）
 - コミットメッセージスタイル（`convention.commit-message-style`）
@@ -69,8 +63,8 @@ git log --oneline -n 999 --perl-regexp --author='^((?!\[bot\]).)*$' | sed -n 's/
 - **コード参照**: コードやパスを表す場合はバッククォートで囲む
 - **言語**: 判定した言語に合わせる
 - **スタイル**: 判定したスタイルに従う（必ず判定したスタイルのリファレンスを参照する）
-  - [Conventional Commits](references/conventional-commits.md)
-  - [gitmoji](references/gitmoji.md)
+  - [Conventional Commits](conventional-commits.md)
+  - [gitmoji](gitmoji.md)
 - **スコープ**: スコープ一覧から適切なものを選択（該当する場合）
 
 ### 5. コミット作成

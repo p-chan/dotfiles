@@ -11,7 +11,7 @@ allowed-tools: Bash(git config --local --get *), Bash(gh pr list *), Bash(git ls
 
 ### 1. 判定
 
-[personal-detect-git-convention スキル](../personal-detect-git-convention/SKILL.md)の手順に従い、以下を判定します。
+[personal-git スキルの規約の検出](../personal-git/references/convention.md)の手順に従い、以下を判定します。
 
 - 言語（`convention.language`）
 - PR タイトルスタイル（`convention.pull-request-title-style`）
