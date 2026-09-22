@@ -17,7 +17,13 @@ allowed-tools: Bash(gh pr list *), Bash(git ls-remote *), Bash(git log:*), Bash(
 gh pr list --state all --limit 10 --json title,author --jq '[.[] | select(.author.login | test("\\[bot\\]$") | not) | .title]'
 ```
 
-PR がない場合は、コミットメッセージ（`git log --oneline -10 --perl-regexp --author='^((?!\[bot\]).)*$'`）から判定します。どちらもない場合や、言語やスタイルがバラバラで判定できない場合は、ユーザーに確認します。
+PR がない場合は、以下のコマンドで bot を除いた直近のコミットメッセージを取得し、判定します。
+
+```sh
+git log --oneline -10 --perl-regexp --author='^((?!\[bot\]).)*$'
+```
+
+言語やスタイルがバラバラで判定できない場合は、ユーザーに確認します。
 
 ### 2. テンプレート確認
 
