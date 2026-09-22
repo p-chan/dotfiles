@@ -1,7 +1,6 @@
 [bootstrap.packages]
 "brew:defaultbrowser" = "latest"
 "brew:dockutil" = "latest"
-"brew:terminal-notifier" = "latest"
 
 [bootstrap.macos.dock]
 autohide = true
