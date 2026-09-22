@@ -2,7 +2,7 @@
 name: personal-create-pr
 description: GitHub の PR を作成します。ユーザーが PR の作成を求めたときや、エージェントが PR を作成するときに使用してください。
 compatibility: Claude Code
-allowed-tools: Bash(git config --local --get *), Bash(gh pr list *), Bash(git ls-remote *), Bash(git log:*), Bash(gh issue list *), Bash(fd *), Read(*)
+allowed-tools: Bash(gh pr list *), Bash(git ls-remote *), Bash(git log:*), Bash(gh issue list *), Bash(fd *), Read(*)
 ---
 
 # GitHub PR 作成
@@ -11,10 +11,13 @@ allowed-tools: Bash(git config --local --get *), Bash(gh pr list *), Bash(git ls
 
 ### 1. 判定
 
-[personal-detect-git-convention スキル](../personal-detect-git-convention/SKILL.md)の手順に従い、以下を判定します。
+以下のコマンドで、bot を除いた直近の PR タイトルを取得し、言語とスタイルを判定します。
 
-- 言語（`convention.language`）
-- PR タイトルスタイル（`convention.pull-request-title-style`）
+```sh
+gh pr list --state all --limit 10 --json title,author --jq '[.[] | select(.author.login | test("\\[bot\\]$") | not) | .title]'
+```
+
+PR がない場合は、コミットメッセージ（`git log --oneline -10 --perl-regexp --author='^((?!\[bot\]).)*$'`）から判定します。どちらもない場合や、言語やスタイルがバラバラで判定できない場合は、ユーザーに確認します。
 
 ### 2. テンプレート確認
 
@@ -50,8 +53,8 @@ git diff <base-branch>...HEAD
 
 タイトルと本文を生成する前に、生成に使う設定値を出力します。
 
-- 言語: `<convention.language の値>`
-- スタイル: `<convention.pull-request-title-style の値>`
+- 言語: `<判定した言語>`
+- スタイル: `<判定したスタイル>`
 - テンプレート: `<テンプレートのパス or なし>`
 
 その後、言語とスタイル、テンプレート、差分をもとに、タイトルと本文を生成します。
