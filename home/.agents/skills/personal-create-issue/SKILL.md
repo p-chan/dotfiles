@@ -2,7 +2,7 @@
 name: personal-create-issue
 description: ユーザーの説明から新しい GitHub Issue を作成します。ユーザーが Issue を「作って」「起票して」「立てて」「登録して」などと依頼したときに使用してください。
 compatibility: Claude Code
-allowed-tools: Bash(fd *), Bash(gh repo view *), Bash(gh issue list *), Bash(gh label list *), Bash(gh issue create *), Bash(git config --local --get *), Bash(git config --local convention.language *)
+allowed-tools: Bash(fd *), Bash(gh repo view *), Bash(gh issue list *), Bash(gh label list *), Bash(gh issue create *)
 ---
 
 # personal-create-issue

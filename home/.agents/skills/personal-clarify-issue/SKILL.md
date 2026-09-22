@@ -2,7 +2,7 @@
 name: personal-clarify-issue
 description: 既存の GitHub Issue を整理・再構成します。ユーザーが Issue を「整理して」「構造化して」「書き直して」「わかりやすくして」「clarify して」などと依頼したときに使用してください。
 compatibility: Claude Code
-allowed-tools: Read(*), Bash(fd *), Bash(rg *), Bash(gh repo view *), Bash(gh issue view *), Bash(gh issue edit *), Bash(gh issue list *), Bash(gh pr view *), Bash(gh pr list *), Bash(gh label list *), Bash(git config --local --get *), Bash(git config --local convention.language *)
+allowed-tools: Read(*), Bash(fd *), Bash(rg *), Bash(gh repo view *), Bash(gh issue view *), Bash(gh issue edit *), Bash(gh issue list *), Bash(gh pr view *), Bash(gh pr list *), Bash(gh label list *)
 ---
 
 # personal-clarify-issue
