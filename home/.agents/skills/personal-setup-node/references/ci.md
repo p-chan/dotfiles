@@ -12,7 +12,7 @@
     node-version-file: .node-version
 ```
 
-`actions/setup-node` のバージョンは、[personal-github-actions-best-practices スキル](../../personal-github-actions-best-practices/SKILL.md)に従い、最新版を SHA で固定する。
+`actions/setup-node` のバージョンは、最新版を SHA で固定する。
 
 ## 既存の指定を置き換える場合
 

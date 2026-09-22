@@ -1,10 +1,3 @@
----
-name: personal-create-branch
-description: ブランチを作成し、新しい worktree にチェックアウトします。ユーザーがブランチや worktree の作成を求めたときや、エージェントが `git branch`、`git switch -c`、`git worktree add` などでブランチや worktree を作成しようとするときに必ず使用してください。
-compatibility: git-wt が必要です
-allowed-tools: Bash(git status), Bash(git status *), Bash(git diff), Bash(git diff *)
----
-
 # Git ブランチ作成
 
 ## 前提

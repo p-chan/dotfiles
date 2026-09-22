@@ -1,9 +1,3 @@
----
-name: personal-request-review-to-copilot
-description: GitHub Copilot に PR のレビューを依頼し、レビューが投稿されるまで待って指摘内容を報告します。ユーザーが GitHub Copilot にレビューの依頼を求めたときや、エージェントが GitHub Copilot にレビューを依頼するときに使用してください。
-compatibility: gh、jq が必要です
----
-
 # GitHub Copilot にレビューを依頼する
 
 ## ワークフロー
@@ -19,7 +13,7 @@ gh pr edit --add-reviewer @copilot
 `run_in_background` で実行してください。数分かかるため、待っている間はユーザーが別の作業を進められるようにし、スクリプトの終了通知を受けて手順 3 に進みます。
 
 ```bash
-bash ~/.agents/skills/personal-request-review-to-copilot/scripts/wait-for-review.sh
+bash ~/.agents/skills/personal-github/scripts/wait-for-review.sh
 ```
 
 レビュー依頼の直後は timeline API への反映が遅れることがあるため、依頼が見つからなくても既定で 60 秒は待ち直します。この猶予は待機の上限（既定 900 秒）の内側で数えます。手順 1 を経ずに実行して未依頼をすぐ知りたい場合は `--request-grace 0` を渡します。
@@ -27,7 +21,7 @@ bash ~/.agents/skills/personal-request-review-to-copilot/scripts/wait-for-review
 対象の PR を明示する場合は `--pr` を渡します。省略した場合は現在のブランチの PR を対象にします。
 
 ```bash
-bash ~/.agents/skills/personal-request-review-to-copilot/scripts/wait-for-review.sh --pr 123
+bash ~/.agents/skills/personal-github/scripts/wait-for-review.sh --pr 123
 ```
 
 最終行に結果を出力します。
@@ -63,4 +57,4 @@ gh api "repos/{owner}/{repo}/pulls/<PR番号>/comments?per_page=100" --paginate 
 > [!IMPORTANT]
 > 対応するかどうかの判断はユーザーに委ねてください。妥当性についての見解を求められた場合は、該当コードを読んで評価したうえで答えます。
 
-修正する方針が決まった場合、レビューコメントへの返信は [personal-use-gh-review-comment](../personal-use-gh-review-comment/SKILL.md) スキルに従ってください。
+修正する方針が決まった場合、レビューコメントへの返信はレビュースレッドの操作手順に従ってください。

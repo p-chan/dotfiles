@@ -1,8 +1,3 @@
----
-name: personal-use-gh-review-comment
-description: gh コマンドの拡張機能である gh-review-comment を用いて GitHub のレビュースレッドを操作します。 ユーザーがレビュースレッドの操作を求めたときや、エージェントがレビュースレッドを操作するときに使います。
----
-
 # [gh-review-comment](https://github.com/p-chan/gh-review-comment) を利用する
 
 ## 取得する
