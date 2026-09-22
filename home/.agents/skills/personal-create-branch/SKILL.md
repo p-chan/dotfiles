@@ -1,40 +1,27 @@
 ---
 name: personal-create-branch
-description: Git リポジトリの慣習に則って新しいブランチや worktree を作成します。ユーザーがブランチや worktree の作成を求めたときや、エージェントが `git branch` や `git switch -c`、`git worktree add` などを用いて新しい作業を開始するときに必ず使用してください。
-allowed-tools: Bash(git status), Bash(git status *), Bash(git diff), Bash(git diff *), Bash(git config --local --get *)
+description: ブランチを作成し、新しい worktree にチェックアウトします。ユーザーがブランチや worktree の作成を求めたときや、エージェントが `git branch`、`git switch -c`、`git worktree add` などでブランチや worktree を作成しようとするときに必ず使用してください。
+compatibility: git-wt が必要です
+allowed-tools: Bash(git status), Bash(git status *), Bash(git diff), Bash(git diff *)
 ---
 
-# Git ブランチ・worktree 作成
+# Git ブランチ作成
 
 ## 前提
 
-メモリファイル（`AGENTS.md` や `CLAUDE.md` など）にブランチ名の規約がある場合は、メモリファイルに従います。
+リポジトリにブランチのルールがある場合は、そのルールを優先します。
 
 ## ワークフロー
 
-### 1. worktree 運用の確認
+### 1. 情報収集
 
-[personal-detect-git-convention スキル](../personal-detect-git-convention/SKILL.md)の手順に従い、`convention.use-worktree` を確認します。
+今までのコンテキストをもとに、ブランチを作成する目的を理解します。
 
-```bash
-git config --local --get convention.use-worktree
-```
+コンテキストが不足している場合は `git status` や `git diff` で情報収集して、ブランチを作成する目的を理解します。
 
-- `true` の場合: worktree を作成します（ステップ 4-a）
-- `false` の場合: 現在の working tree にブランチを作成します（ステップ 4-b）
-- 未設定の場合: personal-detect-git-convention スキルの手順で判定・キャッシュしてから、その結果に従います
+### 2. ブランチ名生成
 
-worktree を使うかどうかは、常に規約に従って判断します。「ブランチを作って」のような依頼は、worktree を使うかどうかの指定ではありません（worktree の作成はブランチの作成を兼ねます）。規約より優先するのは、ユーザーが worktree を使う・使わないに直接言及した場合だけです。
-
-### 2. 情報収集
-
-今までのコンテキストをもとに、作業の目的を理解します。
-
-コンテキストが不足している場合は `git status` や `git diff` で情報収集して、作業の目的を理解します。
-
-### 3. ブランチ名生成
-
-作業の目的をもとに 2〜5 単語程度のブランチ名を生成します。
+目的をもとに 2〜5 単語程度のブランチ名を生成します。
 
 - 動詞で始める（`add`、`update`、`fix`、`remove` など）
 - スラッシュを使わない
@@ -48,9 +35,9 @@ worktree を使うかどうかは、常に規約に従って判断します。�
 - update-baz
 - remove-qux
 
-### 4-a. worktree 作成
+### 3. ブランチ作成
 
-生成されたブランチ名を表示し、worktree を作成します。ブランチが存在しない場合は、ブランチも同時に作成されます。
+ブランチを作成し、新しい worktree にチェックアウトします。
 
 ```bash
 git wt <branch-name>
@@ -60,11 +47,3 @@ git wt <branch-name>
 
 > [!NOTE]
 > シェル統合が有効なインタラクティブシェルでは自動で移動しますが、エージェントの実行環境では自動で移動しないため、明示的に `cd` してください。
-
-### 4-b. ブランチ作成
-
-生成されたブランチ名を表示し、ブランチを作成します。
-
-```bash
-git switch -c <branch-name>
-```

@@ -112,7 +112,7 @@ function reload() {
 }
 
 # PR ごとに worktree を作成して移動する（fork からの PR は非対応）
-# convention.use-worktree=false のリポジトリでは gh pr checkout にフォールバックする
+# dotfiles は worktree を使わないため、gh pr checkout にフォールバックする
 function _gh_pr_fuzzy_worktree() {
   selected=$(
     GH_FORCE_TTY=100% \
@@ -124,7 +124,8 @@ function _gh_pr_fuzzy_worktree() {
 
   if [[ -n "$selected" ]]; then
     number=$(echo "$selected" | awk '{print $1}' | sed 's/^#//')
-    if [[ "$(git config --local --get convention.use-worktree 2>/dev/null)" == "false" ]]; then
+    # mise の dotfiles.root は dotfiles リポジトリの home/ を指す
+    if [[ "$(git rev-parse --show-toplevel 2>/dev/null)" == "${$(mise settings get dotfiles.root 2>/dev/null):h}" ]]; then
       BUFFER="gh pr checkout $number"
     else
       # 表示上の headRefName は truncate されうるので、API から正確な値を取得する
