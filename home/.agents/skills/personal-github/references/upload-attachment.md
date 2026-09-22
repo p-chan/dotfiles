@@ -1,10 +1,3 @@
----
-name: personal-upload-attachment-to-github
-description: ローカルのファイル（スクリーンショットや画面収録など）を GitHub にアップロードし、Issue や PR の本文に貼れる URL を取得します。ユーザーがファイルの添付や添付用 URL の取得を求めたときや、エージェントが Issue や PR にファイルを貼りたいときに使用してください。
-argument-hint: "<file-path>"
-compatibility: gh、curl、jq が必要です
----
-
 # GitHub への添付ファイルのアップロード
 
 ## 背景
@@ -25,7 +18,7 @@ private リポジトリでは `raw.githubusercontent.com` の URL が画像と�
 ### 1. アップロードする
 
 ```bash
-bash ~/.agents/skills/personal-upload-attachment-to-github/scripts/upload.sh <file-path>
+bash ~/.agents/skills/personal-github/scripts/upload-attachment.sh <file-path>
 ```
 
 成功すると URL が出力されます。ファイルごとに 1 回ずつ実行してください。
@@ -33,7 +26,7 @@ bash ~/.agents/skills/personal-upload-attachment-to-github/scripts/upload.sh <fi
 カレントディレクトリの `git remote` とは別のリポジトリを対象にする場合は、第 2 引数に repository_id を渡します。
 
 ```bash
-bash ~/.agents/skills/personal-upload-attachment-to-github/scripts/upload.sh <file-path> <repository_id>
+bash ~/.agents/skills/personal-github/scripts/upload-attachment.sh <file-path> <repository_id>
 ```
 
 ### 2. 本文に貼る

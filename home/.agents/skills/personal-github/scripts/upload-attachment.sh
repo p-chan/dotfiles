@@ -7,7 +7,7 @@
 # 予告なく仕様が変わる可能性がある。
 # 参考: https://github.com/cli/cli/issues/13256
 #
-# 使い方: upload.sh <file-path> [repository_id]
+# 使い方: upload-attachment.sh <file-path> [repository_id]
 #
 # - repository_id を省略した場合、カレントディレクトリの git remote から解決する
 # - Content-Type は拡張子から判定し、未知の拡張子は file コマンドにフォールバックする
@@ -20,7 +20,7 @@ file_path="${1:-}"
 repository_id="${2:-}"
 
 if [[ -z "$file_path" ]]; then
-  echo "使い方: upload.sh <file-path> [repository_id]" >&2
+  echo "使い方: upload-attachment.sh <file-path> [repository_id]" >&2
   exit 1
 fi
 

@@ -1,11 +1,4 @@
----
-name: personal-create-issue
-description: ユーザーの説明から新しい GitHub Issue を作成します。ユーザーが Issue を「作って」「起票して」「立てて」「登録して」などと依頼したときに使用してください。
-compatibility: Claude Code
-allowed-tools: Bash(fd *), Bash(gh repo view *), Bash(gh issue list *), Bash(gh label list *), Bash(gh issue create *)
----
-
-# personal-create-issue
+# GitHub Issue 作成
 
 ## 目的
 
@@ -46,7 +39,7 @@ GitHub における Issue テンプレートの標準的な場所は以下であ
 .github/ISSUE_TEMPLATE/
 ```
 
-このスキル内の `templates/` は fallback 用であり、リポジトリに適切な Issue テンプレートがない場合にのみ使う。
+このスキル内の `templates/issue/` は fallback 用であり、リポジトリに適切な Issue テンプレートがない場合にのみ使う。
 
 ## リポジトリ確認順
 
@@ -57,7 +50,7 @@ Issue を作成する前に、対象リポジトリで以下を確認する。
 3. `.github/ISSUE_TEMPLATE/*.md`
 4. `.github/ISSUE_TEMPLATE/config.yml`
 5. 既存のリポジトリラベル
-6. このスキルの fallback テンプレート `templates/`
+6. このスキルの fallback テンプレート `templates/issue/`
 
 もし `CONTRIBUTING.md`、`.github/CONTRIBUTING.md` などが存在し、簡単に確認できる場合は補助情報として参照してよい。
 
@@ -126,9 +119,9 @@ Bug         -> bug_report.yml, bug.yml
 使えるローカルテンプレートがない場合は、このスキルの fallback テンプレートを使う。
 
 ```txt
-Feature     -> templates/feature.md
-Improvement -> templates/improvement.md
-Bug         -> templates/bug.md
+Feature     -> templates/issue/feature.md
+Improvement -> templates/issue/improvement.md
+Bug         -> templates/issue/bug.md
 ```
 
 リポジトリ側に独自の命名がある場合、GitHub 上で `Feature` / `Improvement` / `Bug` という名前を強制しない。
@@ -273,12 +266,12 @@ Issue 作成時は、以下の順で進める。
 
 ## Fallback テンプレート
 
-Fallback テンプレートはこのファイルと同階層の `templates/` に置く。
+Fallback テンプレートはこのスキルの `templates/issue/` に置く。
 
 ```txt
-templates/feature.md
-templates/improvement.md
-templates/bug.md
+templates/issue/feature.md
+templates/issue/improvement.md
+templates/issue/bug.md
 ```
 
 これらは、リポジトリに適切な Issue テンプレートが存在しない場合にのみ使う。
