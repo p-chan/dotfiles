@@ -39,6 +39,10 @@ P-Chan's portable dev environment as code.
 
 - Do not use worktrees in this repository. Files under `home/` are live configuration referenced via symlinks from the home directory, so changes made in a worktree take no effect. Switch branches in the current working tree instead.
 
+## Confidentiality
+
+This repository is public, but changes are often motivated by problems or findings in other repositories, including private ones. Do not include information about them in this repository. Describe the problem in generic terms instead.
+
 ## Verification
 
 - `scripts/doctor.sh`: Check existence of required commands
