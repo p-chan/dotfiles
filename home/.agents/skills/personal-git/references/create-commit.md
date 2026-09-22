@@ -1,9 +1,3 @@
----
-name: personal-commit
-description: Git リポジトリのスタイルに合わせてコミットを作成します。ユーザーがコミットを求めたときや、エージェントがコミットするときに必ず使用してください。
-allowed-tools: Bash(git diff:*), Bash(git log:*), Bash(sed:*), Bash(tr:*), Bash(sort:*), Bash(xargs:*), Read(*)
----
-
 # Git コミット作成
 
 ## 前提
@@ -69,8 +63,6 @@ git log --oneline -n 999 --perl-regexp --author='^((?!\[bot\]).)*$' | sed -n 's/
 - **コード参照**: コードやパスを表す場合はバッククォートで囲む
 - **言語**: 判定した言語に合わせる
 - **スタイル**: 判定したスタイルに従う（必ず判定したスタイルのリファレンスを参照する）
-  - [Conventional Commits](references/conventional-commits.md)
-  - [gitmoji](references/gitmoji.md)
 - **スコープ**: スコープ一覧から適切なものを選択（該当する場合）
 
 ### 5. コミット作成
