@@ -1,5 +1,6 @@
 export EDITOR="vim"
 export VISUAL="vim"
+export RIPGREP_CONFIG_PATH="$HOME/.config/ripgrep/config"
 
 typeset -U path fpath
 

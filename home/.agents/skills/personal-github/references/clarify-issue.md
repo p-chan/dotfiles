@@ -144,7 +144,7 @@ Bug         -> templates/issue/bug.md
 
 ```bash
 # コードベースを検索する
-rg -uuu "キーワード" .
+rg "キーワード" .
 
 # 関連 Issue を探す
 gh issue list --search "キーワード"

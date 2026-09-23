@@ -119,7 +119,7 @@
       "Bash(head *)",
       "Bash(npm view *)",
       "Bash(opensrc *)",
-      "Bash(rg -uuu *)",
+      "Bash(rg *)",
       "Bash(tail *)",
       "Skill",
       "WebFetch(domain:docs.github.com)",

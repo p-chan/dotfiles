@@ -1,0 +1,15 @@
+--hidden
+--glob=!.git
+
+# Exclude .env* except .env*.example, even with -u/-uu/-uuu.
+# A non-negated glob would turn into an allowlist, so .env*.example cannot be
+# re-included. Instead, exclude .env* names that do not end with .example.
+--glob=!.env
+--glob=!.env*[!e]
+--glob=!.env*[!l]e
+--glob=!.env*[!p]le
+--glob=!.env*[!m]ple
+--glob=!.env*[!a]mple
+--glob=!.env*[!x]ample
+--glob=!.env*[!e]xample
+--glob=!.env*[!.]example
