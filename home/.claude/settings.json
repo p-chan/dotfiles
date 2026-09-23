@@ -39,6 +39,15 @@
       {
         "hooks": [
           {
+            "command": "~/.claude/hooks/personal-block-env.sh",
+            "type": "command"
+          }
+        ],
+        "matcher": "Read|Edit|Write|MultiEdit|NotebookEdit"
+      },
+      {
+        "hooks": [
+          {
             "command": "~/.claude/hooks/personal-block-find.sh",
             "type": "command"
           },
@@ -131,11 +140,12 @@
     "deny": [
       "Bash(git add -A)",
       "Bash(sudo *)",
-      "Edit(!.env*.example)",
-      "Edit(.env*)",
       "Edit(~/.npmrc)",
-      "Read(!.env*.example)",
-      "Read(.env*)"
+      "Read(.env)",
+      "Read(.env.*.local)",
+      "Read(.env.development)",
+      "Read(.env.local)",
+      "Read(.env.production)"
     ]
   },
   "remoteControlAtStartup": true,
