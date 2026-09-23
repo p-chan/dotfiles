@@ -17,6 +17,11 @@ export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.local/share/mise/shims:$PATH"
 export PATH="$DOTFILES_DIR/bin:$PATH"
 
+# Claude Code searches with `rg -uuu`, which would otherwise read .env secrets
+if [[ -n "$CLAUDECODE" ]]; then
+  rg() { command rg --ignore-file="$DOTFILES_DIR/home/.claude/rgignore" "$@"; }
+fi
+
 # Interactive shells use `mise activate` from .zshrc; scripts need the
 # environment immediately and stable shims across `mise up`.
 if [[ ! -o interactive ]] && type mise &>/dev/null; then
