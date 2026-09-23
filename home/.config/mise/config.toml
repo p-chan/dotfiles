@@ -111,6 +111,7 @@ pre-packages = 'if command -v brew >/dev/null 2>&1; then brew bundle --file="$(m
 "~/.config/mise" = {}
 "~/.config/opencode/AGENTS.md" = {}
 "~/.config/opencode/opencode.jsonc" = {}
+"~/.config/ripgrep" = {}
 "~/.config/sheldon" = {}
 "~/.config/tmux" = {}
 "~/.config/vim" = {}

@@ -8,7 +8,7 @@ if echo "$cmd" | grep -qE '^grep\b'; then
     hookSpecificOutput: {
       hookEventName: "PreToolUse",
       permissionDecision: "deny",
-      permissionDecisionReason: "Use rg -uuu instead of grep"
+      permissionDecisionReason: "Use rg instead of grep"
     }
   }'
 fi

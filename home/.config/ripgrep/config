@@ -1,0 +1,17 @@
+--hidden
+--glob=!.git
+
+# Exclude .env* except .env*.example, even with -u/-uu/-uuu.
+# A non-negated glob would turn into an allowlist, so .env*.example cannot be
+# re-included. Instead, exclude .env* names that do not end with .example.
+# --iglob matches case-insensitively, as the default macOS file system does.
+--iglob=!.env
+--iglob=!.env{e,le,ple,mple,ample,xample,example}
+--iglob=!.env*[!e]
+--iglob=!.env*[!l]e
+--iglob=!.env*[!p]le
+--iglob=!.env*[!m]ple
+--iglob=!.env*[!a]mple
+--iglob=!.env*[!x]ample
+--iglob=!.env*[!e]xample
+--iglob=!.env*[!.]example
