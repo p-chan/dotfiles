@@ -140,7 +140,12 @@
     "deny": [
       "Bash(git add -A)",
       "Bash(sudo *)",
-      "Edit(~/.npmrc)"
+      "Edit(~/.npmrc)",
+      "Read(.env)",
+      "Read(.env.*.local)",
+      "Read(.env.development)",
+      "Read(.env.local)",
+      "Read(.env.production)"
     ]
   },
   "remoteControlAtStartup": true,
