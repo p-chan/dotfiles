@@ -1,0 +1,80 @@
+#!/usr/bin/env zsh
+
+# Review the changes the current branch introduces in Hunk.
+# Diffs from the merge-base with the review base to the working tree, so
+# uncommitted edits (e.g. an agent addressing review notes) show up as well.
+#
+# Usage: local-review [base] [hunk diff options...]
+#
+# The base is resolved in this order:
+#   1. the explicit argument
+#   2. the base branch of the current branch's open PR
+#   3. the default branch (origin/HEAD)
+#   4. main or master
+
+set -euo pipefail
+
+fail() {
+  echo "local-review: $1" >&2
+  exit 1
+}
+
+# Prefer origin/<base> over the local branch, which may lag behind.
+# Fetch only when the base is missing locally: the merge-base only needs the
+# commit the branch forked from, which a stale origin/<base> already contains.
+resolve_ref() {
+  local name="$1"
+
+  if git rev-parse --verify --quiet "refs/remotes/origin/$name" >/dev/null; then
+    echo "origin/$name"
+    return
+  fi
+
+  if git rev-parse --verify --quiet "$name^{commit}" >/dev/null; then
+    echo "$name"
+    return
+  fi
+
+  if git remote get-url origin >/dev/null 2>&1 &&
+    git fetch --quiet origin "$name" 2>/dev/null &&
+    git rev-parse --verify --quiet "refs/remotes/origin/$name" >/dev/null; then
+    echo "origin/$name"
+    return
+  fi
+
+  return 1
+}
+
+git rev-parse --is-inside-work-tree >/dev/null 2>&1 || fail "not a git repository"
+
+base=""
+if [[ $# -gt 0 && "$1" != -* ]]; then
+  base="$1"
+  shift
+fi
+
+if [[ -z "$base" ]] && command -v gh >/dev/null; then
+  base=$(gh pr view --json baseRefName,state --jq 'select(.state == "OPEN") | .baseRefName' 2>/dev/null || true)
+fi
+
+if [[ -z "$base" ]]; then
+  base=$(git symbolic-ref --quiet --short refs/remotes/origin/HEAD 2>/dev/null || true)
+  base="${base#origin/}"
+fi
+
+if [[ -z "$base" ]]; then
+  for candidate in main master; do
+    if git rev-parse --verify --quiet "$candidate" >/dev/null ||
+      git rev-parse --verify --quiet "refs/remotes/origin/$candidate" >/dev/null; then
+      base="$candidate"
+      break
+    fi
+  done
+fi
+
+[[ -n "$base" ]] || fail "could not determine the base; pass it as an argument"
+
+ref=$(resolve_ref "$base") || fail "base not found: $base"
+merge_base=$(git merge-base HEAD "$ref") || fail "no merge-base between HEAD and $ref"
+
+exec hunk diff "$merge_base" "$@"
