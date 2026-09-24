@@ -36,7 +36,7 @@ resolve_ref() {
   fi
 
   if git remote get-url origin >/dev/null 2>&1 &&
-    git fetch --quiet origin "$name" 2>/dev/null &&
+    git fetch --quiet origin "refs/heads/${name}:refs/remotes/origin/${name}" 2>/dev/null &&
     git rev-parse --verify --quiet "refs/remotes/origin/$name" >/dev/null; then
     echo "origin/$name"
     return
@@ -48,13 +48,20 @@ resolve_ref() {
 git rev-parse --is-inside-work-tree >/dev/null 2>&1 || fail "not a git repository"
 
 base=""
+# The PR base's tip commit. Used directly when it exists locally, so the base
+# is right even if origin/<base> is stale or the PR targets another remote.
+base_oid=""
 if [[ $# -gt 0 && "$1" != -* ]]; then
   base="$1"
   shift
 fi
 
 if [[ -z "$base" ]] && command -v gh >/dev/null; then
-  base=$(gh pr view --json baseRefName,state --jq 'select(.state == "OPEN") | .baseRefName' 2>/dev/null || true)
+  pr_base=$(gh pr view --json baseRefName,baseRefOid,state --jq 'select(.state == "OPEN") | "\(.baseRefName) \(.baseRefOid)"' 2>/dev/null || true)
+  if [[ -n "$pr_base" ]]; then
+    base="${pr_base% *}"
+    base_oid="${pr_base#* }"
+  fi
 fi
 
 if [[ -z "$base" ]]; then
@@ -74,7 +81,11 @@ fi
 
 [[ -n "$base" ]] || fail "could not determine the base; pass it as an argument"
 
-ref=$(resolve_ref "$base") || fail "base not found: $base"
+if [[ -n "$base_oid" ]] && git rev-parse --verify --quiet "$base_oid^{commit}" >/dev/null; then
+  ref="$base_oid"
+else
+  ref=$(resolve_ref "$base") || fail "base not found: $base"
+fi
 merge_base=$(git merge-base HEAD "$ref") || fail "no merge-base between HEAD and $ref"
 
 exec hunk diff "$merge_base" "$@"
