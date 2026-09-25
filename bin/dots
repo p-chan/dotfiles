@@ -23,11 +23,11 @@ dots_up() {
 
   echo "\nUpdating mise..."
   mise self-update --yes
-  mise up
+  mise up --yes
 
   echo "\nUpdating system packages for active profiles..."
   mise bootstrap --only packages --update --yes
-  mise bootstrap packages upgrade
+  mise bootstrap packages upgrade --yes
 
   echo "\nUpdating yazi plugins and flavors..."
   ya pkg upgrade
