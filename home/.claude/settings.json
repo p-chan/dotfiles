@@ -138,7 +138,6 @@
     ],
     "defaultMode": "auto",
     "deny": [
-      "Bash(git add -A)",
       "Bash(sudo *)",
       "Edit(~/.npmrc)",
       "Read(.env)",
