@@ -13,6 +13,7 @@ allowed-tools: Bash(git status), Bash(git status *), Bash(git diff), Bash(git di
 
 作業内容に応じて、該当するリファレンスをすべて読んでから、その内容に従います。
 
+- `use-git-wt` - worktree を操作するとき
 - `create-commit` - コミットを作成するとき
 - `create-branch` - ブランチや worktree を作成するとき
 - `conventional-commits` - 判定したスタイルが Conventional Commits のとき
