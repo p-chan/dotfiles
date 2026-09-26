@@ -49,7 +49,7 @@
 [wt]
   copyignored = true
   nocopy = node_modules/
-  # Not &&: a hook that exits non-zero aborts git wt and blocks its cd.
+  # && でつながない。フックが 0 以外で終了すると git wt が中断され、cd できなくなるため
   hook = "! [ -f package.json ] || ni"
 
 [include]

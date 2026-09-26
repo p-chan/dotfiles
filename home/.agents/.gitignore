@@ -1,2 +1,2 @@
-# Local state maintained by gh skill.
+# gh skill が管理するローカルの状態
 .skill-lock.json

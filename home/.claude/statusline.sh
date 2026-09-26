@@ -1,46 +1,46 @@
 #!/usr/bin/env bash
-# Claude Code statusline
-# Format: currentDir on branchName* (#PR1, #PR2)
+# Claude Code のステータスライン
+# 形式: currentDir on branchName* (#PR1, #PR2)
 #         Model: <model> | Context: <pct>% | 5h: <pct>% (<time>) | 7d: <pct>% (<time>)
 
-# Read JSON input from stdin (if available)
+# 標準入力から JSON を読み込む（入力がある場合）
 input=$(cat 2>/dev/null || echo '{}')
 
-# Check if jq is available
+# jq が使えるか確認する
 if ! command -v jq >/dev/null 2>&1; then
   printf 'Claude Code (jq not found)'
   exit 0
 fi
 
-# ANSI color codes
+# ANSI カラーコード
 GREEN=$'\033[32m'
 YELLOW=$'\033[33m'
 GRAY=$'\033[90m'
 RESET=$'\033[0m'
 
-# Anthropic brand color (True Color)
+# Anthropic のブランドカラー（True Color）
 ORANGE=$'\033[38;2;217;119;87m'  # #d97757
 
-# PR state colors (GitHub style - True Color)
+# PR の状態ごとの色（GitHub 風、True Color）
 PR_OPEN_FG=$'\033[38;2;63;185;80m'      # #3fb950
 PR_CLOSED_FG=$'\033[38;2;248;81;73m'    # #f85149
 PR_DRAFT_FG=$'\033[38;2;145;152;161m'   # #9198a1
 PR_MERGED_FG=$'\033[38;2;171;125;248m'  # #ab7df8
 
-# PR state icons (Nerd Font)
+# PR の状態ごとのアイコン（Nerd Font）
 ICON_OPEN=$(printf '\xEF\x90\x87')     # nf-oct-git_pull_request (U+F407)
 ICON_CLOSED=$(printf '\xEF\x93\x9C')   # nf-oct-git_pull_request_closed (U+F4DC)
 ICON_DRAFT=$(printf '\xEF\x93\x9D')    # nf-oct-git_pull_request_draft (U+F4DD)
 ICON_MERGED=$(printf '\xEF\x90\x99')   # nf-oct-git_merge (U+F419)
 
-# Extract current directory from JSON
+# JSON から現在のディレクトリを取り出す
 raw_dir=$(echo "$input" | jq -r '.workspace.current_dir // empty' 2>/dev/null)
 if [[ -z "$raw_dir" || "$raw_dir" == "null" ]]; then
   raw_dir="$PWD"
 fi
 current_dir=$(basename "$raw_dir")
 
-# Get Git branch and dirty state
+# Git のブランチと未コミットの変更の有無を取得する
 git_branch=""
 git_diff=""
 if git rev-parse --git-dir >/dev/null 2>&1; then
@@ -49,10 +49,8 @@ if git rev-parse --git-dir >/dev/null 2>&1; then
     git_diff="*"
   fi
 
-  # If inside a worktree (e.g. one created by git-wt), show the main repo's
-  # name instead of the worktree directory name. Worktree directories are
-  # often named after the branch, which would otherwise duplicate the
-  # branch shown after "on" (e.g. "branch-name on branch-name").
+  # worktree（git-wt で作成したものなど）の中では、worktree のディレクトリ名ではなくメインのリポジトリ名を表示する
+  # worktree のディレクトリはブランチ名で命名されることが多く、"on" のあとに表示するブランチ名と重複するため（"branch-name on branch-name" など）
   git_common_dir=$(git rev-parse --git-common-dir 2>/dev/null)
   if [[ -n "$git_common_dir" ]]; then
     [[ "$git_common_dir" != /* ]] && git_common_dir="$raw_dir/$git_common_dir"
@@ -61,12 +59,12 @@ if git rev-parse --git-dir >/dev/null 2>&1; then
   fi
 fi
 
-# Get PR numbers with hyperlinks (if gh CLI is available)
+# PR の番号をハイパーリンク付きで取得する（gh CLI が使える場合）
 pr_numbers=""
 if command -v gh >/dev/null 2>&1; then
   repo_url=$(gh repo view --json url -q .url 2>/dev/null)
   if [[ -n "$repo_url" ]]; then
-    # Get all PRs with number, state, and draft status
+    # すべての PR の番号、状態、ドラフトかどうかを取得する
     pr_list=$(gh pr list --head "$git_branch" --json number,state,isDraft 2>/dev/null)
     pr_links=""
     while IFS= read -r pr_json; do
@@ -75,7 +73,7 @@ if command -v gh >/dev/null 2>&1; then
       state=$(echo "$pr_json" | jq -r '.state')
       is_draft=$(echo "$pr_json" | jq -r '.isDraft')
 
-      # Determine color and icon based on state
+      # 状態に応じて色とアイコンを決める
       if [[ "$is_draft" == "true" ]]; then
         fg="$PR_DRAFT_FG"
         icon="$ICON_DRAFT"
@@ -90,15 +88,15 @@ if command -v gh >/dev/null 2>&1; then
         icon="$ICON_OPEN"
       fi
 
-      # Determine link style based on terminal
+      # ターミナルに応じてリンクのスタイルを決める
       if [[ "$TERM_PROGRAM" == "ghostty" ]]; then
-        link_style=$'\033[4m'  # underline
+        link_style=$'\033[4m'  # 下線
       else
         link_style=""
       fi
 
-      # Icon with state color, then hyperlink for #NUM
-      # OSC 8 hyperlink format: \033]8;;URL\007text\033]8;;\007
+      # 状態の色を付けたアイコンのあとに、#NUM のハイパーリンクを続ける
+      # OSC 8 のハイパーリンクの形式: \033]8;;URL\007text\033]8;;\007
       link="${fg}${icon}${RESET} ${link_style}"$'\033]8;;'"${repo_url}/pull/${num}"$'\007'"#${num}"$'\033]8;;\007'"${RESET}"
       if [[ -n "$pr_links" ]]; then
         pr_links+=", ${link}"
@@ -110,18 +108,18 @@ if command -v gh >/dev/null 2>&1; then
   fi
 fi
 
-# Extract information from JSON
+# JSON から情報を取り出す
 model=$(echo "$input" | jq -r '.model.display_name // empty' 2>/dev/null)
 effort=$(echo "$input" | jq -r '.effort.level // empty' 2>/dev/null)
 context_pct=$(echo "$input" | jq -r '.context_window.used_percentage // empty' 2>/dev/null)
 
-# Extract usage percentages and reset times from stdin JSON
+# 標準入力の JSON から使用率とリセット時刻を取り出す
 five_hour_pct=$(echo "$input" | jq -r '.rate_limits.five_hour.used_percentage // empty' 2>/dev/null)
 seven_day_pct=$(echo "$input" | jq -r '.rate_limits.seven_day.used_percentage // empty' 2>/dev/null)
 five_hour_reset=$(echo "$input" | jq -r '.rate_limits.five_hour.resets_at // empty' 2>/dev/null)
 seven_day_reset=$(echo "$input" | jq -r '.rate_limits.seven_day.resets_at // empty' 2>/dev/null)
 
-# Function to calculate human-readable time until reset
+# リセットまでの時間を読みやすい形式で算出する
 time_until() {
   local reset_epoch=$1
   if [[ -z "$reset_epoch" || "$reset_epoch" == "null" ]]; then
@@ -137,7 +135,7 @@ time_until() {
     return
   fi
 
-  # Convert to human-readable format
+  # 読みやすい形式に変換する
   local days=$((diff / 86400))
   local hours=$(((diff % 86400) / 3600))
   local minutes=$(((diff % 3600) / 60))
@@ -153,10 +151,10 @@ time_until() {
   fi
 }
 
-# Build output parts
+# 出力する要素を組み立てる
 output=""
 
-# Directory, branch, and PR (colors match starship.toml)
+# ディレクトリ、ブランチ、PR（色は starship.toml に合わせる）
 output+="${YELLOW}${current_dir}${RESET}"
 if [[ -n "$git_branch" ]]; then
   output+=" on ${GREEN}${git_branch}${git_diff}${RESET}"
@@ -165,7 +163,7 @@ if [[ -n "$pr_numbers" ]]; then
   output+=" (${pr_numbers})"
 fi
 
-# Model
+# モデル
 if [[ -n "$model" && "$model" != "null" ]]; then
   output+=$'\n'
   output+="Model: ${ORANGE}${model}${RESET}"
@@ -174,34 +172,34 @@ if [[ -n "$model" && "$model" != "null" ]]; then
   fi
 fi
 
-# Context usage
+# コンテキストの使用率
 if [[ -n "$context_pct" && "$context_pct" != "null" ]]; then
   percent=$(printf "%.0f" "$context_pct" 2>/dev/null || echo "$context_pct")
   output+=" ${GRAY}|${RESET} Context: ${percent}%"
 fi
 
-# Usage section
+# 使用量
 usage_parts=""
 
-# Five hour limit
+# 5 時間の上限
 if [[ -n "$five_hour_pct" && "$five_hour_pct" != "null" ]]; then
   five_hour_int=$(printf "%.0f" "$five_hour_pct" 2>/dev/null || echo "$five_hour_pct")
   usage_parts+="5h: ${five_hour_int}%"
 
-  # Add reset time
+  # リセット時刻を追加する
   five_hour_time=$(time_until "$five_hour_reset")
   if [[ -n "$five_hour_time" ]]; then
     usage_parts+=" (${five_hour_time})"
   fi
 fi
 
-# Seven day limit
+# 7 日間の上限
 if [[ -n "$seven_day_pct" && "$seven_day_pct" != "null" ]]; then
   seven_day_int=$(printf "%.0f" "$seven_day_pct" 2>/dev/null || echo "$seven_day_pct")
   [[ -n "$usage_parts" ]] && usage_parts+=" ${GRAY}|${RESET} "
   usage_parts+="7d: ${seven_day_int}%"
 
-  # Add reset time
+  # リセット時刻を追加する
   seven_day_time=$(time_until "$seven_day_reset")
   if [[ -n "$seven_day_time" ]]; then
     usage_parts+=" (${seven_day_time})"
@@ -213,7 +211,7 @@ if [[ -n "$usage_parts" ]]; then
   output+="${usage_parts}"
 fi
 
-# Fallback if no data available
+# データがない場合のフォールバック
 if [[ -z "$output" ]]; then
   output="Claude Code"
 fi

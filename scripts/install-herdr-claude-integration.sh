@@ -25,7 +25,7 @@ trap - EXIT
 
 herdr integration install claude
 
-# Refresh the stat cache only when neither index nor worktree has semantic changes.
+# インデックスと作業ツリーのどちらにも意味のある変更がない場合だけ、stat のキャッシュを更新する
 if git -C "$DOTFILES_DIR" diff --cached --quiet -- "$CLAUDE_SETTINGS_RELATIVE_PATH"; then
   if git -C "$DOTFILES_DIR" diff --quiet -- "$CLAUDE_SETTINGS_RELATIVE_PATH"; then
     git -C "$DOTFILES_DIR" add -- "$CLAUDE_SETTINGS_RELATIVE_PATH"

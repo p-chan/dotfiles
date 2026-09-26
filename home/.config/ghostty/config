@@ -14,18 +14,15 @@ keybind = global:alt+space=toggle_visibility
 keybind = cmd+r=text:\x0c
 # https://github.com/anthropics/claude-code/issues/1282
 keybind = shift+enter=text:\n
-# herdr keybindings: each action is sent as the prefix (\x02) plus its key, so
-# the prefix never has to be typed. Payloads follow herdr's default keymap.
-# Deliberately only the everyday operations get a chord — space/agent/tab
-# movement, tab handling, and pane splitting/handling. herdr has four nested
-# levels (space, tab, pane, plus the cross-space agent list) and binding all of
-# them globally needs more comfortable modifier families than macOS has left,
-# which is what the prefix exists to solve. The rest stays on the prefix.
-# One modifier family per level: cmd for pane/tab, cmd+alt for pane focus,
-# cmd+ctrl for pane swap, cmd+shift for space, alt for agent. Shift is reserved
-# for space, so nothing else uses it — except cmd+shift+d below, which keeps the
-# iTerm2 split-down convention.
-# Pane
+# herdr のキーバインド: 各アクションをプレフィックス（\x02）とキーの組み合わせとして送るので、プレフィックスを入力する必要がない
+# 送る内容は herdr のデフォルトのキーマップに従う
+# ショートカットを割り当てるのは、日常的に使う操作（スペース、エージェント、タブの移動、タブの操作、ペインの分割と操作）に意図的に限定している
+# herdr には 4 つの階層（スペース、タブ、ペイン、スペースをまたぐエージェントの一覧）があり、すべてをグローバルに割り当てるには、macOS で空いている押しやすい修飾キーの組み合わせが足りない
+# この問題を解決するためにプレフィックスがあるので、残りの操作はプレフィックスで行う
+# 修飾キーの組み合わせは階層ごとに 1 つ割り当てる（ペインとタブは cmd、ペインのフォーカスは cmd+alt、ペインの入れ替えは cmd+ctrl、スペースは cmd+shift、エージェントは alt）
+# shift はスペース専用なので、他では使わない
+# ただし、後述の cmd+shift+d は iTerm2 の下方向に分割する慣習に合わせている
+# ペイン
 keybind = cmd+d=text:\x02v
 keybind = cmd+shift+d=text:\x02-
 keybind = cmd+w=text:\x02x
@@ -34,16 +31,16 @@ keybind = cmd+alt+left=text:\x02h
 keybind = cmd+alt+right=text:\x02l
 keybind = cmd+alt+up=text:\x02k
 keybind = cmd+alt+down=text:\x02j
-# Ghostty's own resize_split default, which herdr makes meaningless.
+# Ghostty のデフォルトの resize_split は、herdr を使うと意味がないため
 keybind = cmd+ctrl+left=text:\x02H
 keybind = cmd+ctrl+right=text:\x02L
 keybind = cmd+ctrl+up=text:\x02K
 keybind = cmd+ctrl+down=text:\x02J
-# Tab
+# タブ
 keybind = cmd+t=text:\x02c
-# Both spellings are needed: Ghostty matches physical keys (bracket_left) and
-# translated keys ([) as separate bindings, and its own goto_split default sits
-# on the translated form. Overriding only one leaves the other one live.
+# 両方の表記が必要
+# Ghostty は物理キー（bracket_left）と変換後のキー（[）を別々のバインドとして扱い、デフォルトの goto_split は変換後のキーに割り当てられている
+# 片方だけを上書きすると、もう一方が有効なまま残る
 keybind = cmd+bracket_left=text:\x02p
 keybind = cmd+[=text:\x02p
 keybind = cmd+bracket_right=text:\x02n
@@ -66,16 +63,15 @@ keybind = cmd+digit_8=text:\x028
 keybind = cmd+8=text:\x028
 keybind = cmd+digit_9=text:\x029
 keybind = cmd+9=text:\x029
-# Space
-# Takes over Ghostty's new_window; a herdr space is what a window would be for.
+# スペース
+# herdr のスペースはウィンドウの役割を担うので、Ghostty の new_window のキーを引き継ぐ
 keybind = cmd+n=text:\x02N
 keybind = cmd+shift+up=text:\x02\x1b[A
 keybind = cmd+shift+down=text:\x02\x1b[B
-# These are the wire, not the intended chord: macOS eats cmd+shift+3/4/5 for
-# screenshots before any app sees them, so Karabiner rewrites cmd+shift+1..9 to
-# ctrl+1..9 while Ghostty is frontmost. Pressing ctrl+1..9 directly also works,
-# which is the fallback if Karabiner is not running. Ghostty swallowing
-# ctrl+1..9 costs panes the legacy ctrl+3..8 control codes; nothing here uses them.
+# これは実際に受け取るキーであり、意図したショートカットではない
+# macOS は cmd+shift+3/4/5 をアプリより先にスクリーンショットに使うので、Ghostty が最前面にあるときは Karabiner が cmd+shift+1..9 を ctrl+1..9 に書き換える
+# ctrl+1..9 を直接押しても動作するので、Karabiner が動いていないときはこれで代用できる
+# Ghostty が ctrl+1..9 を受け取るので、ペインでは従来の ctrl+3..8 の制御コードを使えなくなるが、ここでは使っていない
 keybind = ctrl+digit_1=text:\x02!
 keybind = ctrl+digit_2=text:\x02@
 keybind = ctrl+digit_3=text:\x02#
@@ -85,7 +81,7 @@ keybind = ctrl+digit_6=text:\x02^
 keybind = ctrl+digit_7=text:\x02&
 keybind = ctrl+digit_8=text:\x02*
 keybind = ctrl+digit_9=text:\x02(
-# Agent
+# エージェント
 keybind = alt+digit_1=text:\x02\x1b1
 keybind = alt+digit_2=text:\x02\x1b2
 keybind = alt+digit_3=text:\x02\x1b3
@@ -95,7 +91,7 @@ keybind = alt+digit_6=text:\x02\x1b6
 keybind = alt+digit_7=text:\x02\x1b7
 keybind = alt+digit_8=text:\x02\x1b8
 keybind = alt+digit_9=text:\x02\x1b9
-# Cross-cutting navigation
+# 階層をまたぐ移動
 keybind = cmd+k=text:\x02g
 window-padding-x = 8
 window-padding-y = 8

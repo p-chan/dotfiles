@@ -1,16 +1,15 @@
 #!/bin/bash
 
 #MISE description="Bootstrap this machine"
-# bash, not zsh: zsh sources ~/.zshenv on every invocation, including
-# scripts. By the time this task runs, the dotfiles phase has already
-# symlinked it, so a zsh task would needlessly redo its PATH/mise-activate
-# setup. bash doesn't source any rc file for a script invocation.
+# zsh ではなく bash を使う
+# zsh はスクリプトを含むすべての起動時に ~/.zshenv を読み込む
+# このタスクが実行される時点では dotfiles のフェーズで ~/.zshenv がすでにシンボリックリンクされているので、zsh のタスクでは PATH や mise activate の設定を無駄にやり直すことになる
+# bash はスクリプトの実行時に rc ファイルを読み込まない
 
 set -e
 
-# The steps below read files from the dotfiles checkout. Its location is
-# mise's dotfiles.root setting (recorded by scripts/install.sh as
-# <checkout>/home), so a bare `mise bootstrap` works with no env setup.
+# 以降の手順は dotfiles のチェックアウトからファイルを読み込む
+# その場所は mise の dotfiles.root 設定（scripts/install.sh が <checkout>/home として記録する）にあるので、環境変数を設定しなくても `mise bootstrap` を実行できる
 DOTFILES_ROOT="$(mise settings get dotfiles.root 2>/dev/null || true)"
 DOTFILES_DIR="${DOTFILES_ROOT%/home}"
 
@@ -43,8 +42,7 @@ if [ "${CI:-}" != "true" ]; then
 fi
 
 if type ya >/dev/null 2>&1; then
-  # `ya pkg add` exits non-zero for an already-registered package, so skip
-  # entries `ya pkg list` already reports to keep this task idempotent.
+  # `ya pkg add` は登録済みのパッケージに対して 0 以外で終了するので、`ya pkg list` に表示されるものはスキップして、このタスクを冪等に保つ
   registered_packages="$(ya pkg list 2>/dev/null || true)"
   while IFS= read -r package; do
     case "$package" in

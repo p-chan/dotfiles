@@ -37,7 +37,7 @@ async function createFixture(enrolled: boolean, currentName: string): Promise<Fi
   await writeFile(sudoLogPath, "");
   await writeFile(herdrLogPath, "");
 
-  // The steps after the rename must keep running; this records that they did.
+  // 名前の変更以降の手順も実行され続ける必要があるので、実行されたことを記録する
   await writeExecutable(
     join(dotfilesDir, "scripts/install-herdr-claude-integration.sh"),
     `#!/bin/bash
@@ -75,7 +75,7 @@ printf '%s\\n' "$(<"$NAME_STATE")"
 printf '%s\\n' "$*" >> "$SUDO_LOG"
 `,
   );
-  // Present so the task skips its installer; both are no-ops here.
+  // タスクがインストーラをスキップするように置いておく（どちらもここでは何もしない）
   await writeExecutable(join(binDir, "claude"), "#!/bin/bash\n");
   await writeExecutable(join(binDir, "gh"), "#!/bin/bash\n");
 
