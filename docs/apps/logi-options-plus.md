@@ -1,6 +1,6 @@
 # Logi Options+
 
-- LOG IN
-- Click MX Master 3S
-- Click SETTINGS from sidebar
-- Click RESTORE SETTINGS FROM BACKUP under Restore backup
+- LOG IN からログインする
+- MX Master 3S をクリックする
+- サイドバーの SETTINGS をクリックする
+- Restore backup の RESTORE SETTINGS FROM BACKUP をクリックする

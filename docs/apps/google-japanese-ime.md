@@ -1,8 +1,8 @@
 # Google Japanese IME
 
-- Open **System Settings > Keyboard > Text Input > Input Sources > Edit**
-- Press **+** and add **Japanese > Hiragana (Google)**
-- Press **+** and add **Japanese > Alphanumeric (Google)**
-- Select **Japanese - Romaji** and check **Romaji** under Input modes
-- Select **ABC** and press **−**
-- Select **Japanese - Romaji** and press **−**
+- **System Settings > Keyboard > Text Input > Input Sources > Edit** を開く
+- **+** を押して **Japanese > Hiragana (Google)** を追加する
+- **+** を押して **Japanese > Alphanumeric (Google)** を追加する
+- **Japanese - Romaji** を選び、Input modes の **Romaji** にチェックを入れる
+- **ABC** を選んで **−** を押す
+- **Japanese - Romaji** を選んで **−** を押す

@@ -1,6 +1,6 @@
 # Handy
 
-## Settings
+## 設定
 
 - General
   - General
