@@ -15,6 +15,7 @@ interface Fixture {
   namePath: string;
   sudoLogPath: string;
   herdrLogPath: string;
+  agentSkillsLogPath: string;
 }
 
 async function createFixture(enrolled: boolean, currentName: string): Promise<Fixture> {
@@ -25,8 +26,10 @@ async function createFixture(enrolled: boolean, currentName: string): Promise<Fi
   const namePath = join(root, "name");
   const sudoLogPath = join(root, "sudo-log");
   const herdrLogPath = join(root, "herdr-log");
+  const agentSkillsLogPath = join(root, "agent-skills-log");
 
   await mkdir(binDir);
+  await mkdir(join(dotfilesDir, "bin"), { recursive: true });
   await mkdir(join(dotfilesDir, "scripts"), { recursive: true });
   await mkdir(join(dotfilesDir, "home/.config/yazi"), { recursive: true });
   await mkdir(join(dotfilesDir, "home/.config/gh"), { recursive: true });
@@ -36,12 +39,20 @@ async function createFixture(enrolled: boolean, currentName: string): Promise<Fi
   await writeFile(namePath, currentName);
   await writeFile(sudoLogPath, "");
   await writeFile(herdrLogPath, "");
+  await writeFile(agentSkillsLogPath, "");
 
   // 名前の変更以降の手順も実行され続ける必要があるので、実行されたことを記録する
   await writeExecutable(
     join(dotfilesDir, "scripts/install-herdr-claude-integration.sh"),
     `#!/bin/bash
 printf 'installed\\n' >> "$HERDR_LOG"
+`,
+  );
+
+  await writeExecutable(
+    join(dotfilesDir, "bin/agent-skills"),
+    `#!/bin/bash
+printf '%s\\n' "$*" >> "$AGENT_SKILLS_LOG"
 `,
   );
 
@@ -79,7 +90,7 @@ printf '%s\\n' "$*" >> "$SUDO_LOG"
   await writeExecutable(join(binDir, "claude"), "#!/bin/bash\n");
   await writeExecutable(join(binDir, "gh"), "#!/bin/bash\n");
 
-  return { root, dotfilesDir, enrollmentPath, namePath, sudoLogPath, herdrLogPath };
+  return { root, dotfilesDir, enrollmentPath, namePath, sudoLogPath, herdrLogPath, agentSkillsLogPath };
 }
 
 async function writeExecutable(path: string, content: string): Promise<void> {
@@ -97,6 +108,7 @@ function runTask(fixture: Fixture): { code: number; stdout: string; stderr: stri
       NAME_STATE: fixture.namePath,
       SUDO_LOG: fixture.sudoLogPath,
       HERDR_LOG: fixture.herdrLogPath,
+      AGENT_SKILLS_LOG: fixture.agentSkillsLogPath,
     },
     encoding: "utf8",
   });
@@ -112,6 +124,7 @@ test("bootstrap", async (t) => {
       assert.equal(result.code, 0);
       assert.match(result.stdout, /Skipping the machine rename/);
       assert.equal(await readFile(fixture.sudoLogPath, "utf8"), "");
+      assert.equal(await readFile(fixture.agentSkillsLogPath, "utf8"), "install\n");
       assert.equal(await readFile(fixture.herdrLogPath, "utf8"), "installed\n");
     } finally {
       await rm(fixture.root, { recursive: true });
