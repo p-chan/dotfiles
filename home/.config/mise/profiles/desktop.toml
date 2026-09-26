@@ -16,18 +16,14 @@ autohide = true
 pre-packages = 'if command -v brew >/dev/null 2>&1; then brew bundle --file="$(mise settings get dotfiles.root)/.config/homebrew/profiles/Brewfile.desktop"; fi'
 final = 'mise run -C "$HOME" bootstrap-desktop'
 
-[bootstrap.macos.launchd.agents.herdr-sync-pane-labels]
-program = "~/.local/bin/mise"
-args = ["exec", "--", "node", ".config/herdr/services/sync-pane-labels/daemon.mjs"]
+# mise bootstrap は launchd エージェントをツールより先に読み込むので、エージェントの mise exec がツールをインストールして bootstrap と競合する
+# requires_tools を付けたユーザーサービスは、ツールをインストールしたあとに起動される
+[bootstrap.services.herdr-sync-pane-labels]
+scope = "user"
+command = "~/.local/bin/mise exec -- node .config/herdr/services/sync-pane-labels/daemon.mjs"
 working_directory = "~"
-run_at_load = true
-keep_alive = true
-throttle_interval = 10
-stdout_path = "~/Library/Logs/herdr-sync-pane-labels.log"
-stderr_path = "~/Library/Logs/herdr-sync-pane-labels.err.log"
-# mise bootstrap はツールより先に launchd エージェントを読み込むので、mise exec が足りないツールをインストールすると bootstrap のインストールと競合する
-# node が入るまでは起動に失敗するが、keep_alive で再起動されるので、bootstrap が node を入れたあとに動き出す
-environment = { MISE_EXEC_AUTO_INSTALL = "false" }
+restart = "always"
+requires_tools = true
 
 [dotfiles]
 "~/.config/ghostty" = {}
