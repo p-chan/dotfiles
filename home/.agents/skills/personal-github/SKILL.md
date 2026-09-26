@@ -13,6 +13,7 @@ allowed-tools: Read(*), Bash(fd *), Bash(rg *), Bash(git fetch), Bash(git ls-rem
 
 作業内容に応じて、該当するリファレンスをすべて読んでから、その内容に従います。
 
+- `use-gh` - GitHub のリソースを読み書きするとき
 - `create-pr` - PR を作成するとき
 - `merge-pr` - PR をマージするとき
 - `create-issue` - Issue を「作って」「起票して」などと依頼されたとき
