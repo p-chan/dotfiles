@@ -4,7 +4,7 @@ export RIPGREP_CONFIG_PATH="$HOME/.config/ripgrep/config"
 
 typeset -U path fpath
 
-# ~/.zshenv は <repo>/home へのシンボリックリンクで、mise の dotfiles の機能が dotfiles.root 設定をもとに管理している
+# ~/.zshenv は <repo>/home 内のファイルへのシンボリックリンクで、mise の dotfiles の機能が dotfiles.root 設定をもとに管理している
 # このリンクを解決すれば、シェルを起動するたびにプロセスを fork しなくてもリポジトリの場所がわかる（:A は zsh だけでシンボリックリンクを解決する）
 # フォールバックは、初回のインストールが終わる前のシェルのためにある
 if [[ -L "$HOME/.zshenv" ]]; then
