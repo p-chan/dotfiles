@@ -1,27 +1,24 @@
-# Review Guidelines
+# レビューガイドライン
 
-## Comment Prefixes
+## コメントのプレフィックス
 
-When writing Pull Request review comments, always use one of the following
-prefixes.
+Pull Request のレビューコメントには、必ず以下のいずれかのプレフィックスを付けます。
 
-### Prefix Types
+### プレフィックスの種類
 
-- **MUST**: Critical issues that must be fixed (security, bugs, specification
-  violations, etc.)
-- **SHOULD**: Recommended changes (performance, maintainability, best practices,
-  etc.)
-- **IMO**: Personal opinions or suggestions (In My Opinion)
-- **NITS**: Minor issues (typos, formatting, small naming improvements, etc.)
+- **MUST**: 必ず修正が必要な問題（セキュリティ、バグ、仕様違反など）
+- **SHOULD**: 推奨する変更（パフォーマンス、保守性、ベストプラクティスなど）
+- **IMO**: 個人的な意見や提案（In My Opinion）
+- **NITS**: 細かい指摘（typo、フォーマット、命名の小さな改善など）
 
-### Examples
+### 例
 
 ```
-MUST: This implementation may introduce an XSS vulnerability. Please add input escaping.
+MUST: この実装は XSS 脆弱性を生む可能性があります。入力をエスケープしてください。
 
-SHOULD: This process can be parallelized using Promise.all.
+SHOULD: この処理は Promise.all で並列化できます。
 
-IMO: I think `userData` would be a clearer variable name here.
+IMO: ここは `userData` という変数名のほうがわかりやすいと思います。
 
-NITS: Indentation is inconsistent.
+NITS: インデントが揃っていません。
 ```
