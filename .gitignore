@@ -15,6 +15,3 @@ home/.config/mise/conf.d/
 
 # Others
 *.bak
-
-# APM dependencies
-apm_modules/

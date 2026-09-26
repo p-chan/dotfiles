@@ -68,8 +68,6 @@ if type gh >/dev/null 2>&1; then
   done < "$DOTFILES_DIR/home/.config/gh/extensions"
 fi
 
-if type apm >/dev/null 2>&1 && [ -f "$DOTFILES_DIR/home/.apm/apm.yml" ]; then
-  apm install -g --target agent-skills
-fi
+"$DOTFILES_DIR/bin/agent-skills" install
 
 bash "$DOTFILES_DIR/scripts/install-herdr-claude-integration.sh"
