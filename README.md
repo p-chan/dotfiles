@@ -2,56 +2,49 @@
 
 > The dotfiles for fuckin' awesome development environment
 
-## Supported environments
+## 対応環境
 
-- macOS 26 or later (Apple Silicon only)
+- macOS 26 以降（Apple Silicon のみ）
 
-## Install
+## インストール
 
-Before anything else, open **System Settings > General > Software Update**
-and update macOS to the latest version. On a brand-new Mac (or one that was
-just reinstalled), the update catalog can be stale and block jumping straight
-to the latest version — if that happens, install the
-[full installer](https://support.apple.com/en-us/HT201475) or step through
-the intermediate versions it offers first.
+最初に **System Settings > General > Software Update** を開き、macOS を最新バージョンにアップデートします。
+新品の Mac や再インストールした直後の Mac では、アップデートのカタログが古く、最新バージョンに直接アップデートできないことがあります。
+その場合は、[フルインストーラ](https://support.apple.com/en-us/HT201475)を使うか、提示される中間のバージョンを順にインストールします。
 
 ```sh
 bash -c "$(curl -fsSL https://raw.githubusercontent.com/p-chan/dotfiles/main/scripts/install.sh)"
 ```
 
-By default the repo is cloned to `~/src/github.com/p-chan/dotfiles`. To use
-another location (CI, a temporary macOS environment, or an existing
-checkout), set `DOTFILES_DIR`:
+リポジトリは、デフォルトで `~/src/github.com/p-chan/dotfiles` にクローンされます。
+別の場所（CI、一時的な macOS 環境、既存のチェックアウトなど）を使うときは、`DOTFILES_DIR` を指定します。
 
 ```sh
 DOTFILES_DIR="$PWD" bash scripts/install.sh
 ```
 
-`install.sh` records the location as mise's `dotfiles.root` setting in
-`home/.config/mise/conf.d/dotfiles-root.toml` (machine-local, gitignored),
-so plain `mise bootstrap` invocations need no environment setup afterwards.
-To move the checkout later, move the directory and re-run `install.sh` with
-`DOTFILES_DIR` pointing at the new path.
+`install.sh` は、この場所を mise の `dotfiles.root` 設定として `home/.config/mise/conf.d/dotfiles-root.toml`（マシン固有で、Git の管理対象外）に記録します。
+そのため、以降は環境変数を設定しなくても `mise bootstrap` を実行できます。
+あとでチェックアウトの場所を変えるときは、ディレクトリを移動してから、新しいパスを `DOTFILES_DIR` に指定して `install.sh` を再実行します。
 
-## Herdr Claude integration
+## Herdr の Claude 連携
 
-`mise bootstrap` installs the Herdr integration for Claude Code. Herdr requires
-an absolute path for its hook, so Git keeps the portable `$HOME` form in the
-index and restores the local path in the work tree. The generated hook remains
-local.
+`mise bootstrap` は、Claude Code 向けの Herdr 連携をインストールします。
+Herdr はフックに絶対パスを要求するので、Git のインデックスには移植可能な `$HOME` 形式で保持し、作業ツリーではローカルのパスに復元します。
+生成されたフックはローカルに残ります。
 
-## Profiles
+## プロファイル
 
-The shared configuration is always active. Machine-specific behavior is added
-with one or both of these profiles:
+共通の設定は常に有効です。
+マシン固有の動作は、以下のプロファイルの一方または両方で追加します。
 
-| Profile   | Purpose                                                  |
-| :-------- | :------------------------------------------------------- |
-| `desktop` | GUI apps, Dock/Finder preferences, and editor settings   |
-| `server`  | Always-on power settings for unattended remote operation |
+| プロファイル | 用途                                               |
+| :----------- | :------------------------------------------------- |
+| `desktop`    | GUI アプリ、Dock と Finder の設定、エディタの設定  |
+| `server`     | 無人でリモート操作するための常時稼働向けの電源設定 |
 
-The first install defaults to `desktop`. Select a headless server or compose
-both roles with `DOTFILES_PROFILES`:
+初回のインストールでは `desktop` が選ばれます。
+ヘッドレスのサーバーにしたり、両方の役割を組み合わせたりするときは、`DOTFILES_PROFILES` を指定します。
 
 ```sh
 DOTFILES_PROFILES=server \
@@ -60,9 +53,8 @@ DOTFILES_PROFILES=desktop,server \
   bash -c "$(curl -fsSL https://raw.githubusercontent.com/p-chan/dotfiles/main/scripts/install.sh)"
 ```
 
-The selection is persisted as machine-local symlinks under
-`home/.config/mise/conf.d/`, so subsequent `mise bootstrap` and `install.sh`
-runs preserve it. To change the selection later, run:
+選んだプロファイルは `home/.config/mise/conf.d/` 以下にマシン固有のシンボリックリンクとして保存されるので、以降の `mise bootstrap` や `install.sh` の実行でも維持されます。
+あとで変更するときは、以下を実行します。
 
 ```sh
 DOTFILES_PROFILES=desktop,server \
@@ -70,63 +62,58 @@ DOTFILES_PROFILES=desktop,server \
 mise bootstrap
 ```
 
-The `server` profile disables idle system sleep on AC power, enables restart
-after power loss, and waits for you to enable Remote Login in System Settings.
-Its first convergence requires an administrator password; run `mise run
-bootstrap-server` to apply only those settings. Removing a profile stops
-managing its settings but does not uninstall packages or restore previous macOS
-settings automatically.
+`server` プロファイルは、AC 電源接続時のアイドルによるシステムスリープを無効にし、停電後の自動再起動を有効にしたうえで、System Settings で Remote Login が有効になるまで待機します。
+初回の適用には管理者パスワードが必要です。
+これらの設定だけを適用するときは、`mise run bootstrap-server` を実行します。
+プロファイルを外すと、その設定は管理対象から外れますが、パッケージのアンインストールや macOS の設定の復元は自動では行いません。
 
-## Setup
+## セットアップ
 
-GUI applications installed by Homebrew. **Dotfiles** is the config path
-this repo symlinks into place, and **Document** links to the steps to
-follow by hand after install.
+Homebrew でインストールする GUI アプリの一覧です。
+**設定ファイル**はこのリポジトリがシンボリックリンクする設定のパスで、**ドキュメント**はインストール後に手作業で行う手順へのリンクです。
 
-| App                 | Start at login | Dotfiles                      | Document                                                             |
-| :------------------ | :------------- | :---------------------------- | :------------------------------------------------------------------- |
-| 1Password           | ✅             | —                             | [docs/apps/1password.md](docs/apps/1password.md)                     |
-| Arc                 | ☐              | —                             | [docs/apps/arc.md](docs/apps/arc.md)                                 |
-| ChatGPT             | ☐              | —                             | —                                                                    |
-| Claude              | ☐              | —                             | —                                                                    |
-| CleanShot X         | ✅             | —                             | —                                                                    |
-| CodexBar            | ✅             | —                             | —                                                                    |
-| Cyberduck           | ☐              | —                             | —                                                                    |
-| Docker Desktop      | ✅             | —                             | —                                                                    |
-| Fantastical         | ✅             | —                             | [docs/apps/fantastical.md](docs/apps/fantastical.md)                 |
-| Figma               | ☐              | —                             | [docs/apps/figma.md](docs/apps/figma.md)                             |
-| Ghostty             | ☐              | `~/.config/ghostty`           | —                                                                    |
-| Google Chrome       | ☐              | —                             | [docs/apps/chrome.md](docs/apps/chrome.md)                           |
-| Google Japanese IME | ☐              | —                             | [docs/apps/google-japanese-ime.md](docs/apps/google-japanese-ime.md) |
-| Handy               | ✅             | —                             | [docs/apps/handy.md](docs/apps/handy.md)                             |
-| iStat Menus         | ✅             | —                             | [docs/apps/istat-menus.md](docs/apps/istat-menus.md)                 |
-| Karabiner-Elements  | ✅             | `~/.config/karabiner`         | —                                                                    |
-| Logi Options+       | ✅             | —                             | [docs/apps/logi-options-plus.md](docs/apps/logi-options-plus.md)     |
-| Mimestream          | ☐              | —                             | —                                                                    |
-| Raycast             | ✅             | —                             | —                                                                    |
-| Slack               | ✅             | —                             | [docs/apps/slack.md](docs/apps/slack.md)                             |
-| Zed                 | ☐              | `~/.config/zed/settings.json` | —                                                                    |
+| アプリ              | ログイン時に起動 | 設定ファイル                  | ドキュメント                                                         |
+| :------------------ | :--------------- | :---------------------------- | :------------------------------------------------------------------- |
+| 1Password           | ✅               | —                             | [docs/apps/1password.md](docs/apps/1password.md)                     |
+| Arc                 | ☐                | —                             | [docs/apps/arc.md](docs/apps/arc.md)                                 |
+| ChatGPT             | ☐                | —                             | —                                                                    |
+| Claude              | ☐                | —                             | —                                                                    |
+| CleanShot X         | ✅               | —                             | —                                                                    |
+| CodexBar            | ✅               | —                             | —                                                                    |
+| Cyberduck           | ☐                | —                             | —                                                                    |
+| Docker Desktop      | ✅               | —                             | —                                                                    |
+| Fantastical         | ✅               | —                             | [docs/apps/fantastical.md](docs/apps/fantastical.md)                 |
+| Figma               | ☐                | —                             | [docs/apps/figma.md](docs/apps/figma.md)                             |
+| Ghostty             | ☐                | `~/.config/ghostty`           | —                                                                    |
+| Google Chrome       | ☐                | —                             | [docs/apps/chrome.md](docs/apps/chrome.md)                           |
+| Google Japanese IME | ☐                | —                             | [docs/apps/google-japanese-ime.md](docs/apps/google-japanese-ime.md) |
+| Handy               | ✅               | —                             | [docs/apps/handy.md](docs/apps/handy.md)                             |
+| iStat Menus         | ✅               | —                             | [docs/apps/istat-menus.md](docs/apps/istat-menus.md)                 |
+| Karabiner-Elements  | ✅               | `~/.config/karabiner`         | —                                                                    |
+| Logi Options+       | ✅               | —                             | [docs/apps/logi-options-plus.md](docs/apps/logi-options-plus.md)     |
+| Mimestream          | ☐                | —                             | —                                                                    |
+| Raycast             | ✅               | —                             | —                                                                    |
+| Slack               | ✅               | —                             | [docs/apps/slack.md](docs/apps/slack.md)                             |
+| Zed                 | ☐                | `~/.config/zed/settings.json` | —                                                                    |
 
-A fresh machine only needs a handful of these before it is workable:
-1Password for the credentials and license keys the other documents link
-to, Arc as the main browser to sign in everywhere else, Karabiner-Elements,
-Google Japanese IME, and Logi Options+ for keyboard and mouse input, and
-Raycast as the launcher. The rest can wait until they are actually needed.
+新しいマシンを使える状態にするまでに必要なアプリは、ごく一部です。
+他のドキュメントからリンクしている認証情報とライセンスキーのための 1Password、他のサービスにサインインするためのメインのブラウザである Arc、キーボードとマウスの入力のための Karabiner-Elements、Google Japanese IME、Logi Options+、ランチャーの Raycast があれば十分です。
+残りのアプリは、実際に必要になってからで構いません。
 
-## Maintenance
+## メンテナンス
 
-### Upgrade
+### アップグレード
 
-Upgrade Homebrew packages and mise tools.
+Homebrew のパッケージと mise のツールをアップグレードします。
 
 ```sh
 dots up
 ```
 
-## Author
+## 作者
 
 [@p-chan](https://github.com/p-chan)
 
-## License
+## ライセンス
 
 [MIT License](LICENSE)

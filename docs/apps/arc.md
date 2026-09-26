@@ -1,12 +1,12 @@
 # Arc
 
-- Sign in
-- Right-click the sidebar, then deselect Live Folder > GitHub
-- Open [arc://settings/languages](arc://settings/languages) and set Preferred languages to:
+- サインインする
+- サイドバーを右クリックし、Live Folder > GitHub の選択を外す
+- [arc://settings/languages](arc://settings/languages) を開き、Preferred languages を以下の順に設定する
   1. Japanese
   2. English (United States)
 
-## Settings
+## 設定
 
 - General
   - ☐ Automatically update my Arc
@@ -57,7 +57,7 @@
   - ✅ Allow websites to get your theme data
   - ✅ Enable Boosts on websites you visit
 
-## Extensions
+## 拡張機能
 
 - [1Password](https://chromewebstore.google.com/detail/aeblfdkhhhdcdjpifhhbdiojplfjncoa)
 - [Google Translate](https://chromewebstore.google.com/detail/aapbdbdomjkkjkaonfhkkikfgjllcleb)

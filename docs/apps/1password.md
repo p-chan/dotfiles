@@ -1,6 +1,6 @@
 # 1Password
 
-## Settings
+## 設定
 
 - General
   - ✅ Keep 1Password in the menu bar
