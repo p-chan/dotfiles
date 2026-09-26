@@ -1,37 +1,36 @@
 {
-  // Zed settings
+  // Zed の設定
   ////zed.dev/docs/configuring-zed
   //
-  // To see all of Zed's default settings without changing your
-  // custom settings, run `zed: open default settings` from the
-  // command palette (cmd-shift-p / ctrl-shift-p)
-  // General
+  // カスタムの設定を変更せずに Zed のデフォルトの設定をすべて確認するには、
+  // コマンドパレット（cmd-shift-p / ctrl-shift-p）から `zed: open default settings` を実行する
+  // 一般
   "cli_default_open_behavior": "new_window",
   "session": {
     "trust_all_worktrees": true
   },
-  // Extensions
-  // Merged with Zed's own defaults rather than replacing them.
+  // 拡張機能
+  // Zed のデフォルトを置き換えるのではなく、マージされる
   "auto_install_extensions": {
     "one-dark-pro": true,
     "file-icons": true,
     "toml": true
   },
-  // Appearance
+  // 外観
   "theme": "One Dark Pro",
   "icon_theme": "File Icons",
   "buffer_font_family": "Source Han Code JP",
   "buffer_font_size": 13.0,
   "ui_font_family": ".SystemUIFont",
   "ui_font_size": 15.0,
-  // Editor
+  // エディタ
   "scroll_beyond_last_line": "off",
-  // Window & Layout
+  // ウィンドウとレイアウト
   "title_bar": {
     "show_sign_in": false,
     "show_user_menu": false
   },
-  // Panels
+  // パネル
   "project_panel": {
     "dock": "left",
     "default_width": 320,
@@ -58,7 +57,7 @@
   "agent": {
     "enabled": false
   },
-  // Terminal
+  // ターミナル
   "terminal": {
     "button": false
   },

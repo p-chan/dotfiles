@@ -14,29 +14,23 @@ log_success () {
   echo "✅ $1"
 }
 
-# Where this repo lives is machine-specific state, recorded as mise's
-# dotfiles.root setting in a gitignored fragment inside the checkout
-# (home/.config/mise/conf.d/dotfiles-root.toml). Once installed,
-# ~/.config/mise symlinks into the checkout, so mise reads the fragment as
-# part of its global config. Resolution order for $DOTFILES_DIR:
-# explicit env > persisted setting > legacy dotfiles-dir file > default.
+# このリポジトリの場所はマシン固有の状態で、チェックアウト内の Git の管理対象外のファイル（home/.config/mise/conf.d/dotfiles-root.toml）に mise の dotfiles.root 設定として記録する
+# インストール後は ~/.config/mise がチェックアウトへのシンボリックリンクになるので、mise はこのファイルをグローバルの設定の一部として読み込む
+# $DOTFILES_DIR は、明示した環境変数 > 記録済みの設定 > 旧来の dotfiles-dir ファイル > デフォルト の順に決める
 
 XDG_CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}"
 
 if [ -z "$DOTFILES_DIR" ] && type mise &>/dev/null && [ -f "$XDG_CONFIG_DIR/mise/conf.d/dotfiles-root.toml" ]; then
-  # `mise settings get` merges every config file it can see; run from $HOME
-  # so a project config can't shadow the global value. dotfiles.root is
-  # always written as <checkout>/home (and its builtin default doesn't match
-  # that shape), so only */home values count as persisted.
+  # `mise settings get` は参照できるすべての設定ファイルをマージするので、プロジェクトの設定がグローバルの値を隠さないように $HOME から実行する
+  # dotfiles.root は常に <checkout>/home の形式で書き込む（組み込みのデフォルト値はこの形式に一致しない）ので、*/home の値だけを記録済みとみなす
   PERSISTED_ROOT="$( (cd "$HOME" && mise settings get dotfiles.root) 2>/dev/null || true)"
   case "$PERSISTED_ROOT" in
     */home) DOTFILES_DIR="${PERSISTED_ROOT%/home}" ;;
   esac
 fi
 
-# Migration from the pre-mise layout where ~/.config/dotfiles/dotfiles-dir
-# held the path (it was read by .zshenv on every shell startup). Remove this
-# block, and the cleanup below, once every machine has re-run install.sh.
+# mise を使う前の構成（~/.config/dotfiles/dotfiles-dir にパスを保持し、シェルの起動のたびに .zshenv が読み込んでいた）からの移行
+# すべてのマシンで install.sh を再実行したら、このブロックと後述のクリーンアップを削除する
 LEGACY_DOTFILES_DIR_FILE="$XDG_CONFIG_DIR/dotfiles/dotfiles-dir"
 
 if [ -z "$DOTFILES_DIR" ] && [ -f "$LEGACY_DOTFILES_DIR_FILE" ]; then
@@ -79,15 +73,13 @@ else
   log_info "dotfiles already cloned."
 fi;
 
-# Normalize $DOTFILES_DIR to an absolute, symlink-free path now that the
-# checkout exists. Every resolution path (explicit env, persisted setting,
-# legacy file, default) funnels through this: a relative path would change
-# meaning with the caller's cwd — the steps below cd around, and the
-# persisted dotfiles.root must stay valid from any directory. `pwd -P`
-# resolves symlinks so the recorded path doesn't depend on how the checkout
-# was reached; set -e aborts here if the directory is missing. An inherited
-# CDPATH would make `cd` echo the resolved dir into the substitution, hence
-# the blanking.
+# チェックアウトが存在するので、$DOTFILES_DIR をシンボリックリンクを含まない絶対パスに正規化する
+# どの方法（明示した環境変数、記録済みの設定、旧来のファイル、デフォルト）で決めた場合も、ここを通る
+# 相対パスは呼び出し元のカレントディレクトリによって意味が変わるため
+# 以降の手順ではディレクトリを移動するし、記録する dotfiles.root はどのディレクトリからでも有効である必要がある
+# `pwd -P` はシンボリックリンクを解決するので、記録するパスがチェックアウトへのたどり方に依存しない
+# ディレクトリが存在しなければ、set -e によってここで中断する
+# CDPATH を引き継ぐと `cd` が解決したディレクトリを出力し、コマンド置換の結果に混ざるので、空にしている
 DOTFILES_DIR="$(CDPATH= cd -- "$DOTFILES_DIR" && pwd -P)"
 
 if [ -d "$DOTFILES_DIR" ]; then
@@ -104,13 +96,12 @@ else
   log_warn "$DOTFILES_DIR not found. Skipping dotfiles remote URL changing."
 fi
 
-# Record the machine-local checkout location as mise's dotfiles.root. The
-# fragment lives inside the checkout (gitignored) because ~/.config/mise is
-# symlinked to home/.config/mise as a whole directory; a dedicated file keeps
-# install.sh from ever touching config.toml or other conf.d fragments.
+# マシン固有のチェックアウトの場所を、mise の dotfiles.root として記録する
+# ~/.config/mise はディレクトリごと home/.config/mise にシンボリックリンクされるので、このファイルはチェックアウト内（Git の管理対象外）に置く
+# 専用のファイルにすることで、install.sh が config.toml や他の conf.d のファイルに触れないようにしている
 MISE_DOTFILES_ROOT_FRAGMENT="$DOTFILES_DIR/home/.config/mise/conf.d/dotfiles-root.toml"
 
-# TOML basic strings need backslashes and double quotes escaped.
+# TOML の基本文字列では、バックスラッシュとダブルクォートをエスケープする必要がある
 TOML_ESCAPED_DIR="${DOTFILES_DIR//\\/\\\\}"
 TOML_ESCAPED_DIR="${TOML_ESCAPED_DIR//\"/\\\"}"
 
@@ -138,8 +129,8 @@ bash "$DOTFILES_DIR/scripts/configure-profiles.sh" "$DOTFILES_DIR"
 
 log_success "Successfully configured dotfiles profiles."
 
-# Migration cleanup: the legacy file duplicates what dotfiles.root records
-# now. Remove together with the migration block above.
+# 移行のクリーンアップ: 旧来のファイルは、現在 dotfiles.root が記録している内容と重複する
+# 前述の移行のブロックと一緒に削除する
 if [ -f "$LEGACY_DOTFILES_DIR_FILE" ]; then
   rm "$LEGACY_DOTFILES_DIR_FILE"
   rmdir "$(dirname "$LEGACY_DOTFILES_DIR_FILE")" 2>/dev/null || true
@@ -157,8 +148,7 @@ else
   log_info "mise already installed."
 fi
 
-# mise.run installs to ~/.local/bin by default; make it available for the
-# rest of this script without requiring a new shell.
+# mise.run はデフォルトで ~/.local/bin にインストールするので、新しいシェルを起動しなくても、このスクリプトの残りで使えるようにする
 export PATH="$HOME/.local/bin:$PATH"
 
 if ! type brew &>/dev/null; then
@@ -184,29 +174,22 @@ fi
 if type mise &>/dev/null; then
   log_info "Running mise bootstrap..."
 
-  # mise bootstrap installs several github: tools, each resolved through the
-  # unauthenticated GitHub API (60 requests/hour) unless gh is available and
-  # logged in. On a fresh machine gh itself is one of those tools, so install
-  # and authenticate it here first, ahead of the rest of the batch.
+  # mise bootstrap は github: のツールをいくつかインストールする
+  # gh が使えてログイン済みでない限り、それぞれ認証なしの GitHub API（1 時間あたり 60 リクエスト）で解決される
+  # 新しいマシンでは gh 自体もそうしたツールの 1 つなので、他のツールより先に、ここで gh をインストールして認証する
   log_info "Installing and authenticating gh..."
 
   mise install "github:cli/cli@latest"
 
   if ! mise exec "github:cli/cli@latest" -- gh auth status &>/dev/null; then
-    # This login only needs to mint an API token for mise's credential_command;
-    # it runs before the dotfiles phase symlinks the real
-    # home/.config/gh/config.yml (git_protocol = ssh), so force https here to
-    # skip the SSH key detection/upload prompt, which would otherwise depend
-    # on 1Password's SSH agent already being set up.
+    # このログインは、mise の credential_command 用の API トークンを発行するためだけに行う
+    # dotfiles のフェーズで実際の home/.config/gh/config.yml（git_protocol = ssh）がシンボリックリンクされる前に実行するので、ここでは https を強制する
+    # SSH キーの検出とアップロードのプロンプトを省くため（省かないと、1Password の SSH エージェントがセットアップ済みであることに依存する）
     #
-    # Log in through a scratch GH_CONFIG_DIR rather than the real
-    # ~/.config/gh: --git-protocol makes gh write a full config.yml, but that
-    # path is a dotfiles-managed symlink created later in the dotfiles phase
-    # below. Writing there first would conflict with that symlink on a first
-    # install, or silently overwrite the checked-in file through it on a
-    # re-run. Only hosts.yml (gh's auth reference; the token itself lives in
-    # the system keychain) needs to land in the real location, and it isn't
-    # dotfiles-managed, so copying it there directly is safe.
+    # 実際の ~/.config/gh ではなく、一時的な GH_CONFIG_DIR でログインする
+    # --git-protocol を付けると gh は config.yml を丸ごと書き込むが、そのパスは後述の dotfiles のフェーズで作成される、dotfiles が管理するシンボリックリンクであるため
+    # 先に書き込むと、初回のインストールではシンボリックリンクと競合し、再実行ではリンク先のリポジトリのファイルを黙って上書きしてしまう
+    # 実際の場所に置く必要があるのは hosts.yml（gh の認証情報への参照で、トークン自体はシステムのキーチェーンにある）だけで、dotfiles の管理対象ではないので、直接コピーしても安全
     GH_AUTH_TMP_CONFIG_DIR="$(mktemp -d)"
 
     GH_CONFIG_DIR="$GH_AUTH_TMP_CONFIG_DIR" \
@@ -219,10 +202,9 @@ if type mise &>/dev/null; then
 
   log_success "Successfully authenticated gh."
 
-  # If a previous install symlinked ~/.config/mise to another checkout,
-  # repoint it now: mise would otherwise keep reading (and converging to)
-  # the old location's config. A real directory or file is left for the
-  # dotfiles phase to resolve interactively.
+  # 以前のインストールで ~/.config/mise が別のチェックアウトにシンボリックリンクされていたら、ここで張り替える
+  # 張り替えないと、mise は古い場所の設定を読み続ける（そしてその設定に収束させる）ため
+  # 実体のディレクトリやファイルの場合は、dotfiles のフェーズで対話的に解決させる
   if [ -L "$XDG_CONFIG_DIR/mise" ] && [ "$(readlink "$XDG_CONFIG_DIR/mise")" != "$DOTFILES_DIR/home/.config/mise" ]; then
     ln -sfn "$DOTFILES_DIR/home/.config/mise" "$XDG_CONFIG_DIR/mise"
 
@@ -231,19 +213,16 @@ if type mise &>/dev/null; then
 
   mise trust "$DOTFILES_DIR/home/.config/mise/config.toml"
 
-  # macOS GUI provisioning (Dock, Finder, hostname, etc.) doesn't make sense on
-  # an ephemeral CI runner, so skip it there like the old provisioning.sh did.
-  # The runner also ships its own ~/.ssh, which conflicts with the dotfiles
-  # entry; forcing it is safe on a throwaway runner.
+  # macOS の GUI のプロビジョニング（Dock、Finder、ホスト名など）は使い捨ての CI ランナーでは意味がないので、以前の provisioning.sh と同様にスキップする
+  # また、ランナーには独自の ~/.ssh があり dotfiles のエントリと競合するが、使い捨てのランナーなので強制的に上書きしても安全
   extra_args=""
   if [ "$CI" = "true" ]; then
     extra_args="--skip macos-defaults --force-dotfiles"
   fi
 
-  # MISE_CONFIG_DIR makes mise treat the checkout's mise directory as its
-  # global config dir, so config.toml AND conf.d/*.toml load before the
-  # ~/.config/mise symlink exists. Once the dotfiles phase creates that
-  # symlink, the default location resolves to the same files.
+  # MISE_CONFIG_DIR を指定すると、mise はチェックアウト内の mise ディレクトリをグローバルの設定ディレクトリとして扱う
+  # そのため、~/.config/mise のシンボリックリンクが存在する前でも、config.toml と conf.d/*.toml の両方が読み込まれる
+  # dotfiles のフェーズでシンボリックリンクが作成されたあとは、デフォルトの場所も同じファイルを指す
   MISE_CONFIG_DIR="$DOTFILES_DIR/home/.config/mise" \
   mise bootstrap --yes $extra_args
 

@@ -75,8 +75,8 @@ fi
 
 mkdir -p "$CONF_D_DIR"
 
-# Machine roles must remain active when a project selects its own MISE_ENV, so
-# activate tracked profile configs through the global conf.d hierarchy instead.
+# プロジェクトが独自の MISE_ENV を選んだ場合でもマシンの役割は有効なままにする必要があるので、
+# 代わりにグローバルの conf.d の階層を通じて、管理しているプロファイルの設定を有効にする
 for profile in $available_profiles; do
   activation="$CONF_D_DIR/profile-$profile.toml"
   target="../profiles/$profile.toml"

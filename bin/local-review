@@ -1,16 +1,16 @@
 #!/usr/bin/env zsh
 
-# Review the changes the current branch introduces in Hunk.
-# Diffs from the merge-base with the review base to the working tree, so
-# uncommitted edits (e.g. an agent addressing review notes) show up as well.
+# 現在のブランチで加えた変更を Hunk でレビューする
+# レビューのベースとの merge-base から作業ツリーまでの差分を表示するので、
+# コミットしていない変更（エージェントがレビューノートに対応した変更など）も含まれる
 #
-# Usage: local-review [base] [hunk diff options...]
+# 使い方: local-review [base] [hunk diff のオプション...]
 #
-# The base is resolved in this order:
-#   1. the explicit argument
-#   2. the base branch of the current branch's open PR
-#   3. the default branch (origin/HEAD)
-#   4. main or master
+# ベースは以下の順に決める
+#   1. 明示した引数
+#   2. 現在のブランチで開いている PR のベースブランチ
+#   3. デフォルトブランチ（origin/HEAD）
+#   4. main または master
 
 set -euo pipefail
 
@@ -19,9 +19,9 @@ fail() {
   exit 1
 }
 
-# Prefer origin/<base> over the local branch, which may lag behind.
-# Fetch only when the base is missing locally: the merge-base only needs the
-# commit the branch forked from, which a stale origin/<base> already contains.
+# ローカルのブランチは遅れている可能性があるので、origin/<base> を優先する
+# fetch はベースがローカルにない場合だけ行う
+# merge-base の算出に必要なのはブランチの分岐元のコミットだけで、古い origin/<base> にもすでに含まれているため
 resolve_ref() {
   local name="$1"
 
@@ -48,8 +48,8 @@ resolve_ref() {
 git rev-parse --is-inside-work-tree >/dev/null 2>&1 || fail "not a git repository"
 
 base=""
-# The PR base's tip commit. Used directly when it exists locally, so the base
-# is right even if origin/<base> is stale or the PR targets another remote.
+# PR のベースの先頭コミット
+# ローカルに存在すればそのまま使うので、origin/<base> が古い場合や、PR が別のリモートを対象にしている場合でも正しいベースになる
 base_oid=""
 if [[ $# -gt 0 && "$1" != -* ]]; then
   base="$1"

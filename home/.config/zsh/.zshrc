@@ -1,5 +1,5 @@
 _sheldon_data_dir="${SHELDON_DATA_DIR:-${XDG_DATA_HOME:-$HOME/.local/share}/sheldon}"
-# Completion paths must be available before compinit; Sheldon sources plugins later.
+# Sheldon がプラグインを読み込むのは後なので、補完のパスは compinit の前に設定する
 fpath=(
   "$_sheldon_data_dir/repos/github.com/olets/zsh-abbr/completions"
   "$_sheldon_data_dir/repos/github.com/zsh-users/zsh-completions/src"
@@ -9,7 +9,7 @@ unset _sheldon_data_dir
 
 autoload -Uz compinit
 _zcompdump="${ZDOTDIR:-$HOME}/.zcompdump"
-# Recheck completion files and permissions daily; trust the dump between checks.
+# 補完ファイルとパーミッションは 1 日 1 回確認し、確認の間はダンプを信頼する
 if [[ -s "$_zcompdump" && -n "$_zcompdump"(#qN.mh-24) ]]; then
   compinit -C -d "$_zcompdump"
 else
@@ -19,9 +19,9 @@ unset _zcompdump
 
 bindkey -v
 
-# Backward word (Shift + Arrow Left)
+# 1 単語戻る（Shift + ←）
 bindkey '^[[1;2D' backward-word
-# Forward word (Shift + Arrow Right)
+# 1 単語進む（Shift + →）
 bindkey '^[[1;2C' forward-word
 
 if type mise &>/dev/null; then
@@ -48,7 +48,7 @@ if type git-wt &>/dev/null; then
   eval "$(git wt --init zsh)"
 fi
 
-# git switch/sw → git-fallback-switch; composes with git-wt wrapper if present
+# git switch と git sw を git-fallback-switch に振り向ける（git-wt のラッパーがあれば組み合わせる）
 if typeset -f git > /dev/null 2>&1; then
   functions[_git_before_switch]=${functions[git]}
   unfunction git
@@ -76,7 +76,7 @@ _fzf_colors=(
 
 export FZF_DEFAULT_OPTS="--layout=reverse ${_fzf_colors[*]}"
 
-# fzf-tab ignores FZF_DEFAULT_OPTS by default; pass colors explicitly
+# fzf-tab はデフォルトで FZF_DEFAULT_OPTS を無視するので、色を明示的に渡す
 zstyle ':fzf-tab:*' fzf-flags $_fzf_colors
 
 HISTSIZE=100000

@@ -1,18 +1,18 @@
-# Swap
+# スワップファイル
 [._]*.s[a-v][a-z]
 [._]*.sw[a-p]
 [._]s[a-v][a-z]
 [._]sw[a-p]
 
-# Session
+# セッション
 Session.vim
 
-# Temporary
+# 一時ファイル
 .netrwhist
 *~
 
-# Auto-generated tag files
+# 自動生成されるタグファイル
 tags
 
-# Persistent undo
+# 永続化した undo の履歴
 [._]*.un~

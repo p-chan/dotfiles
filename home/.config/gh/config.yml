@@ -1,7 +1,7 @@
 version: 1
 git_protocol: ssh
 aliases:
-  # No args
+  # 引数なし
   only-merge-commit: "repo edit --enable-merge-commit=true --enable-squash-merge=false --enable-rebase-merge=false"
   only-squash-merge: "repo edit --enable-merge-commit=false --enable-squash-merge=true --enable-rebase-merge=false"
   only-rebase-merge: "repo edit --enable-merge-commit=false --enable-squash-merge=false --enable-rebase-merge=true"

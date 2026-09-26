@@ -1,19 +1,15 @@
 #!/usr/bin/env bash
-# Prints the directory segment for the starship prompt's [custom.dir] module.
+# starship のプロンプトの [custom.dir] モジュールに表示するディレクトリを出力する
 #
-# Inside a git repository: shows the path relative to the repo root,
-# anchored at the repo name (no home-relative ancestor prefix). Long
-# subpaths collapse the middle into "…", keeping only the last two path
-# components, so deeply nested files stay identifiable without growing
-# the prompt unbounded. Worktrees (e.g. from git-wt) are normalized to
-# their logical position in the main repository, hiding the physical
-# ".wt/branch-name" layout: "~/dotfiles/.wt/branch-name/home/.config"
-# reads as "dotfiles/home/.config" (the branch itself is shown by
-# [custom.git_branch], so the worktree's own root would be noise here).
+# Git リポジトリの中では、リポジトリ名を起点に、リポジトリのルートからの相対パスを表示する（ホームからの祖先のパスは付けない）
+# 長いサブパスは中間を "…" に畳み、末尾の 2 つの要素だけを残す
+# 深い階層のファイルでも場所を特定でき、プロンプトが際限なく長くならないようにするため
+# worktree（git-wt で作成したものなど）は、メインのリポジトリでの論理的な位置に正規化し、物理的な ".wt/branch-name" の構成を隠す
+# たとえば "~/dotfiles/.wt/branch-name/home/.config" は "dotfiles/home/.config" と表示する
+# ブランチは [custom.git_branch] が表示するので、worktree のルートまで表示すると冗長になるため
 #
-# Outside a git repository: falls back to fish-shell-style shortening
-# (ancestors abbreviated to their first character, final dir in full)
-# relative to $HOME.
+# Git リポジトリの外では、$HOME からの相対パスを fish shell 風に短縮して表示する
+# （祖先のディレクトリは先頭の 1 文字に省略し、最後のディレクトリは省略しない）
 
 pwd_path="$PWD"
 

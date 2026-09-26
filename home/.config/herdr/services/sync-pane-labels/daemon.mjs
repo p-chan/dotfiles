@@ -11,7 +11,7 @@ const snapshotTimeout = 5_000;
 let reconnectTimer;
 let snapshotInProgress = false;
 const pendingTitles = new Map();
-// Track labels sourced from each terminal so cleanup never removes a manual label.
+// 手動で付けたラベルをクリーンアップで消さないように、各ターミナルから取得したラベルを記録する
 const mirroredLabels = new Map();
 
 function scheduleReconnect() {
@@ -102,7 +102,7 @@ function synchronizeSnapshot() {
         for (const pane of message.result?.snapshot?.panes ?? []) renamePane(pane);
         socket.end();
       } catch {
-        // A malformed snapshot should not stop later synchronization.
+        // 不正なスナップショットがあっても、以降の同期は止めない
       }
     }
   });
@@ -144,7 +144,7 @@ function connect() {
         if (message.event === "pane_updated") renamePane(message.data?.pane);
         if (message.event === "pane_agent_detected" && message.data?.released) synchronizeSnapshot();
       } catch {
-        // A malformed message should not stop synchronization for later events.
+        // 不正なメッセージがあっても、以降のイベントの同期は止めない
       }
     }
   });

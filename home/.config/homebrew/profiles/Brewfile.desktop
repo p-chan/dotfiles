@@ -1,5 +1,5 @@
-# Homebrew requires non-official taps to be explicitly trusted (tap trust);
-# trust only the cask we actually use instead of the whole tap.
+# Homebrew では、公式でない tap を明示的に信頼する必要がある（tap trust）
+# tap 全体ではなく、実際に使う cask だけを信頼する
 tap "steipete/tap", trusted: { cask: "codexbar" }
 cask "1password"
 cask "arc"

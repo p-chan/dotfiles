@@ -1,10 +1,10 @@
 --hidden
 --glob=!.git
 
-# Exclude .env* except .env*.example, even with -u/-uu/-uuu.
-# A non-negated glob would turn into an allowlist, so .env*.example cannot be
-# re-included. Instead, exclude .env* names that do not end with .example.
-# --iglob matches case-insensitively, as the default macOS file system does.
+# -u、-uu、-uuu を付けた場合も含め、.env*.example 以外の .env* を除外する
+# 否定でない glob は許可リストになってしまうので、.env*.example を含め直すことはできない
+# 代わりに、.example で終わらない .env* を除外する
+# --iglob は、macOS のデフォルトのファイルシステムと同じく大文字と小文字を区別せずにマッチする
 --iglob=!.env
 --iglob=!.env{e,le,ple,mple,ample,xample,example}
 --iglob=!.env*[!e]

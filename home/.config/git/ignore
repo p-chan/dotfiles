@@ -4,7 +4,7 @@
 # Windows
 Thumbs.db
 
-# Others
+# その他
 .playwright-cli/
 .playwright-mcp/
 .pnpm-store/

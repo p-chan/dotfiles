@@ -22,8 +22,8 @@ if [ "${CI:-}" != "true" ]; then
 
   defaultbrowser browser
 
-  # Defer the Dock restart until every item is configured so repeated
-  # relaunches cannot race subsequent dockutil invocations.
+  # Dock の再起動は、すべての項目を設定し終えるまで遅らせる
+  # 再起動を繰り返すと、後続の dockutil の呼び出しと競合する可能性があるため
   dockutil --remove all --no-restart
   for app in Fantastical Mimestream Arc Slack Figma 1Password Zed Ghostty; do
     [ -d "/Applications/$app.app" ] && dockutil --add "/Applications/$app.app" --no-restart
