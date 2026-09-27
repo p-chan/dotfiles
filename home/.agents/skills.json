@@ -1,6 +1,11 @@
 {
   "version": 1,
   "skills": {
+    "changeset": {
+      "source": "https://github.com/p-chan/agent-skills.git",
+      "path": "skills/changeset",
+      "commit": "7c2d6ad2536c8a4b1bc9a470119154fed2abae5e"
+    },
     "grill-me": {
       "source": "https://github.com/mattpocock/skills.git",
       "path": "skills/productivity/grill-me",
