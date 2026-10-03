@@ -81,7 +81,6 @@ zstyle ':fzf-tab:*' fzf-flags $_fzf_colors
 
 HISTSIZE=100000
 SAVEHIST=100000
-setopt inc_append_history
 setopt share_history
 setopt hist_ignore_dups
 setopt hist_ignore_space
