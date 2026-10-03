@@ -6,8 +6,8 @@ on:
       - main
   pull_request:
 
-env:
-  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+permissions:
+  contents: read
 
 jobs:
   get-cask-packages:
@@ -34,6 +34,9 @@ jobs:
     defaults:
       run:
         shell: zsh -l {0}
+    # mise が github: のツールを解決するときに、認証なしの GitHub API のレート制限にかからないようにする
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v5
       # チェックアウトした場所をそのまま dotfiles の場所として使う
