@@ -6,7 +6,8 @@
 # このタスクが実行される時点では dotfiles のフェーズで ~/.zshenv がすでにシンボリックリンクされているので、zsh のタスクでは PATH や mise activate の設定を無駄にやり直すことになる
 # bash はスクリプトの実行時に rc ファイルを読み込まない
 
-set -e
+# パイプラインの途中のコマンド（curl など）が失敗したときも中断する
+set -eo pipefail
 
 # 以降の手順は dotfiles のチェックアウトからファイルを読み込む
 # その場所は mise の dotfiles.root 設定（scripts/install.sh が <checkout>/home として記録する）にあるので、環境変数を設定しなくても `mise bootstrap` を実行できる
@@ -21,7 +22,8 @@ fi
 export DOTFILES_DIR
 
 mdm_enrolled () {
-  profiles status -type enrollment 2>/dev/null | grep -q '^MDM enrollment: Yes'
+  # grep -q は一致した時点で終了し、profiles が SIGPIPE で失敗しうるので、pipefail の下では最後まで読み込む
+  profiles status -type enrollment 2>/dev/null | grep '^MDM enrollment: Yes' >/dev/null
 }
 
 if [ "${CI:-}" != "true" ]; then

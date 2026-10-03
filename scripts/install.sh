@@ -1,6 +1,7 @@
 #!/bin/bash
 
-set -e
+# パイプラインの途中のコマンド（curl など）が失敗したときも中断する
+set -eo pipefail
 
 log_info () {
   echo "ℹ️ $1"
@@ -141,7 +142,7 @@ fi
 if ! type mise &>/dev/null; then
   log_info "Installing mise..."
 
-  curl https://mise.run | sh
+  curl -fsSL https://mise.run | sh
 
   log_success "Successfully installed mise."
 else
