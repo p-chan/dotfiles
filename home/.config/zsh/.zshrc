@@ -114,6 +114,7 @@ function reload() {
 # PR ごとに worktree を作成して移動する（fork からの PR は非対応）
 # dotfiles は worktree を使わないため、gh pr checkout にフォールバックする
 function _gh_pr_fuzzy_worktree() {
+  local selected number branch
   selected=$(
     GH_FORCE_TTY=100% \
     gh pr list --limit 100 \
