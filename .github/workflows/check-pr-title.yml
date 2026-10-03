@@ -13,5 +13,8 @@ jobs:
         with:
           node-version-file: ".node-version"
       - name: Check PR Title
+        # タイトルを run に直接展開すると、タイトルに含めたシェル構文が実行されるので、環境変数を経由して渡す
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
         run: |
-          node .github/scripts/check-pr-title.ts "${{ github.event.pull_request.title }}"
+          node .github/scripts/check-pr-title.ts "$PR_TITLE"
