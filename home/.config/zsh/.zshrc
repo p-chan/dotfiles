@@ -202,7 +202,7 @@ function _ghq_fuzzy_cd() {
     fi
   ")
   if [[ -n "$selected" ]]; then
-    BUFFER="cd $root/$selected"
+    BUFFER="cd ${(q):-$root/$selected}"
     zle accept-line
   fi
 }
