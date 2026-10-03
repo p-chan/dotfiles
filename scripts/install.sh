@@ -1,6 +1,7 @@
 #!/bin/bash
 
-set -e
+# パイプラインの途中のコマンド（curl など）が失敗したときも中断する
+set -eo pipefail
 
 log_info () {
   echo "ℹ️ $1"
@@ -154,7 +155,9 @@ export PATH="$HOME/.local/bin:$PATH"
 if ! type brew &>/dev/null; then
   log_info "Installing Homebrew..."
 
-  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  # コマンド置換を引数に直接書くと、取得に失敗しても空のスクリプトを実行して成功してしまうので、先に変数に代入して set -e で中断させる
+  homebrew_installer="$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  /bin/bash -c "$homebrew_installer"
 
   log_success "Successfully installed Homebrew."
 else
