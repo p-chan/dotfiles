@@ -3,3 +3,6 @@ pnpm-lock.yaml
 
 # Karabiner-Elements
 karabiner.json
+
+# gh skill で取り込んだ外部のスキル
+.agents/skills/
