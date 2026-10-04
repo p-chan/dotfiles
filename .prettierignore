@@ -6,3 +6,11 @@ karabiner.json
 
 # gh skill で取り込んだ外部のスキル
 .agents/skills/
+
+# ネストした .gitignore で除外しているファイル（Prettier はルートの .gitignore しか読まない）
+home/.agents/.skill-lock.json
+home/.agents/skills/*
+!home/.agents/skills/personal-*/
+
+# playwright-cli の出力（グローバルの Git の ignore で除外している）
+.playwright-cli/

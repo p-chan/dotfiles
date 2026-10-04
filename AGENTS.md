@@ -6,35 +6,12 @@ P-Chan のポータブルな開発環境をコードで管理します。
 
 ## ディレクトリ構成
 
-- `home/`: 主要な設定ファイル。`mise bootstrap` でホームディレクトリにシンボリックリンクされます（`home/.config/mise/config.toml` の `[dotfiles]` を参照）
-  - `.config/`:
-    - `zsh/`
-    - `tmux/`
-    - `vim/`
-    - `git/`
-    - `ghostty/`
-    - `mise/`
-    - `gh/`
-    - `homebrew/`: 共通とプロファイル別の `Brewfile`
-    - `karabiner/`
-    - `sheldon/`
-    - `zsh-abbr/`
-    - `fixpack/`
-    - `starship.toml`
+- `home/`: 設定ファイルの実体。`mise bootstrap` でホームディレクトリにシンボリックリンクされます。リンク対象は `home/.config/mise/config.toml` の `[dotfiles]` で定義します
   - `.agents/`: コーディングエージェント向けの共通 AGENTS.md と Agent Skills
-  - `.claude/`
-  - `.codex/`
-  - `.ssh/`
-  - `.zshenv`
-  - `.editorconfig`
 - `.agents/skills/`: このリポジトリで作業するときに使う Agent Skills。`gh skill install <repo> <path> --agent universal --scope project` で取り込み、`gh skill update` で更新します。`.claude/skills` はここへのシンボリックリンクです
 - `scripts/`: dotfiles の操作に使うスクリプト
 - `bin/`: システム全体で使う自作コマンド
-
-## 技術スタック
-
-- シェルスクリプト
-- Node.js
+- `docs/apps/`: コードで管理できないアプリの手動設定の手順。README のアプリ一覧からリンクします
 
 ## 言語
 
@@ -46,6 +23,7 @@ P-Chan のポータブルな開発環境をコードで管理します。
 
 - このリポジトリでは worktree を使いません。`home/` 以下のファイルはホームディレクトリからシンボリックリンクで参照される設定の実体なので、worktree で変更しても反映されません。代わりに、現在の作業ツリーでブランチを切り替えます
 - `git clean -x` など、Git の管理対象外のファイルを削除するコマンドを実行しません。`~/.config/zsh` や `~/.ssh` などはディレクトリごとリンクしているので、シェルの履歴、`known_hosts`、マシン固有の mise の設定（`home/.config/mise/conf.d/`）など、復元できないマシン固有のファイルの実体がこのリポジトリ内にあります
+- `home/.claude/settings.json` は Git のフィルタ（`.gitattributes` と `home/.config/git/filters/claude-settings.sh`）を通してコミットされます。コミット時にキーがソートされ、Herdr のフックのパスが `$HOME` 形式に置き換わるので、作業ツリーとインデックスの内容は一致しません。キーの順序は気にせず編集し、差分は `git diff` で確認します。背景は README の「Herdr の Claude 連携」を参照します
 
 ## 機密情報
 
@@ -53,4 +31,10 @@ P-Chan のポータブルな開発環境をコードで管理します。
 
 ## 検証
 
-- `scripts/doctor.sh`: 必要なコマンドがインストールされているか確認します
+変更後は、CI と同じく次のコマンドが通ることを確認します。
+
+- `pnpm check`: Prettier による整形の確認
+- `pnpm test`: テスト
+- `editorconfig-checker`: `.editorconfig` に沿っているかの確認。mise でグローバルにインストールされています
+
+インストール手順（`scripts/install.sh` や `mise bootstrap`）を変更したときは、`zsh scripts/doctor.sh` で必要なコマンドがインストールされているかも確認します。
