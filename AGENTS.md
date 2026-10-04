@@ -27,6 +27,7 @@ P-Chan のポータブルな開発環境をコードで管理します。
   - `.ssh/`
   - `.zshenv`
   - `.editorconfig`
+- `.agents/skills/`: このリポジトリで作業するときに使う Agent Skills。`gh skill install <repo> <path> --agent universal --scope project` で取り込み、`gh skill update` で更新します。`.claude/skills` はここへのシンボリックリンクです
 - `scripts/`: dotfiles の操作に使うスクリプト
 - `bin/`: システム全体で使う自作コマンド
 
