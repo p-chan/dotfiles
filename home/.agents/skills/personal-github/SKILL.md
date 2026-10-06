@@ -18,6 +18,7 @@ allowed-tools: Read(*), Bash(fd *), Bash(rg *), Bash(git fetch), Bash(git ls-rem
 - `merge-pr` - PR をマージするとき
 - `create-issue` - Issue を「作って」「起票して」などと依頼されたとき
 - `clarify-issue` - 既存の Issue を「整理して」「書き直して」などと依頼されたとき
+- `link-issue-relationships` - Issue が他の Issue と親子・依存・関連の関係にあるとき
 - `request-copilot-review` - Copilot にレビューを依頼するとき
 - `upload-attachment` - Issue や PR にファイルを添付するとき
 - `use-gh-review-comment` - レビュースレッドを確認・返信・解決するとき
