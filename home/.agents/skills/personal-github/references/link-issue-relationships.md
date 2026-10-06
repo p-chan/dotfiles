@@ -16,34 +16,13 @@ Issue が他の Issue と関係しているときは、本文に書くだけで�
 
 ## 設定方法
 
-`<number>` には Issue 番号か URL を渡す。複数指定するときはカンマで区切る。
+`gh` のフラグで設定できる関係は、`gh` で設定する。フラグは `gh` のバージョンによって変わるので、使う前に `gh issue create --help` や `gh issue edit --help` で確認し、ヘルプの記述に従う。
 
-### 親子
-
-```bash
-# 新しい Issue を子として作成する
-gh issue create --parent <parent-number> ...
-
-# 既存の Issue に親を設定する
-gh issue edit <number> --parent <parent-number>
-
-# 既存の Issue に子を追加する
-gh issue edit <number> --add-sub-issue <child-number>
-```
-
-### 依存
-
-```bash
-# 新しい Issue の依存を設定する
-gh issue create --blocked-by <number> --blocking <number> ...
-
-# 既存の Issue の依存を設定する
-gh issue edit <number> --add-blocked-by <number> --add-blocking <number>
-```
+`gh` にフラグがない関係だけ、GraphQL API で設定する。
 
 ### 単純な関連
 
-`gh` にフラグがないので、GraphQL の `addRelatesTo` を使う。関係は双方向に表示されるので、片方の Issue から設定すればよい。
+ヘルプに関連を設定するフラグがなければ、GraphQL の `addRelatesTo` を使う。
 
 ```bash
 issue_id=$(gh issue view <number> --json id --jq .id)
@@ -57,10 +36,9 @@ gh api graphql \
 
 ## 設定済みの関係を確認する
 
-```bash
-# 親子と依存
-gh issue view <number> --json parent,subIssues,blockedBy,blocking
+`gh issue view --help` の JSON FIELDS にある関係のフィールドは、`gh issue view <number> --json <fields>` で確認する。ない関係だけ、GraphQL API で確認する。
 
+```bash
 # 単純な関連
 gh api graphql \
   -f query='query($owner: String!, $repo: String!, $number: Int!) { repository(owner: $owner, name: $repo) { issue(number: $number) { relatesTo(first: 50) { nodes { number title url } } } } }' \
