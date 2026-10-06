@@ -16,7 +16,7 @@ Issue が他の Issue と関係しているときは、本文に書くだけで�
 
 ## 設定方法
 
-`gh` のフラグで設定できる関係は、`gh` で設定する。フラグは `gh` のバージョンによって変わるので、使う前に `gh issue create --help` や `gh issue edit --help` で確認し、ヘルプの記述に従う。
+`gh` のフラグで設定できる関係は、`gh` で設定する。フラグは `gh issue create --help` や `gh issue edit --help` で確認する。
 
 `gh` にフラグがない関係だけ、GraphQL API で設定する。
 
