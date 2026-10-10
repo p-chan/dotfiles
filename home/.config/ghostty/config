@@ -9,6 +9,7 @@ cursor-style = block
 background-opacity = 0.75
 background-opacity-cells = true
 command = zsh -l -i -c "herdr"
+quit-after-last-window-closed = true
 maximize = true
 keybind = global:alt+space=toggle_visibility
 keybind = cmd+r=text:\x0c
