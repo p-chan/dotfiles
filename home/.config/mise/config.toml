@@ -58,6 +58,8 @@ macos-arm64 = { asset_pattern = "opencode-darwin-arm64.zip" }
 experimental = true
 idiomatic_version_file_enable_tools = ['node']
 npm.shell_out = true
+self_update.auto = true
+tool_update.global_auto = true
 # dotfiles.root はマシンごとに異なる（マシンごとにこのリポジトリを別のパスにチェックアウトする）ので、conf.d/dotfiles-root.toml に置く
 # このファイルは scripts/install.sh が生成し、Git の管理対象外にしている
 # settings の値はリテラルとして扱われ（mise は環境変数やテンプレートを展開しない）、パスをここで宣言できないため
