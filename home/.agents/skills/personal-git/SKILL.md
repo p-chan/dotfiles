@@ -15,7 +15,7 @@ allowed-tools: Bash(git status), Bash(git status *), Bash(git diff), Bash(git di
 
 - `use-git-wt` - worktree を操作するとき
 - `create-commit` - コミットを作成するとき
-- `create-branch` - ブランチや worktree を作成するとき
+- `create-branch` - ブランチや worktree を作成するとき（コミットの流れでブランチを作成するときも含む）
 - `conventional-commits` - 判定したスタイルが Conventional Commits のとき
 - `gitmoji` - 判定したスタイルが gitmoji のとき
 
