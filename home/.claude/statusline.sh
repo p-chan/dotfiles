@@ -89,7 +89,7 @@ if command -v gh >/dev/null 2>&1; then
       fi
 
       # ターミナルに応じてリンクのスタイルを決める
-      if [[ "$TERM_PROGRAM" == "ghostty" ]]; then
+      if [[ "$TERM_PROGRAM" == "ghostty" || "$TERM_PROGRAM" == "herdr" ]]; then
         link_style=$'\033[4m'  # 下線
       else
         link_style=""
