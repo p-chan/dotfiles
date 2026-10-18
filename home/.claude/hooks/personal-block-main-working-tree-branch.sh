@@ -7,13 +7,13 @@ cmd=$(jq -r '.tool_input.command // ""' <<<"$input")
 dir=$(jq -r '.cwd // ""' <<<"$input")
 cmd=${cmd//ALLOW_MAIN_WORKING_TREE=1 git/:}
 
-# && でつなげたコマンドの途中も対象にする。git branch は、オプションを付けずに名前を渡したとき（ブランチの作成）だけを対象にする
-if ! echo "$cmd" | grep -qE '(^|[;&|(])[[:space:]]*([A-Za-z_][A-Za-z0-9_]*=[^[:space:]]*[[:space:]]+)*git[[:space:]]+((switch[[:space:]]+(-c|-C|--create)|checkout[[:space:]]+(-b|-B))([[:space:]=]|$)|branch[[:space:]]+[^-[:space:]])'; then
+# && でつなげたコマンドの途中も対象にする。git switch と git checkout は前に別のオプションがあっても対象にする。git branch は、オプションを付けずに名前を渡したとき（ブランチの作成）だけを対象にする
+if ! echo "$cmd" | grep -qE '(^|[;&|(])[[:space:]]*([A-Za-z_][A-Za-z0-9_]*=[^[:space:]]*[[:space:]]+)*git[[:space:]]+(((switch|checkout)([[:space:]]+-[^[:space:]]*)*[[:space:]]+(-c|-C|--create|--force-create|-b|-B|--orphan))([[:space:]=]|$)|branch[[:space:]]+[^-[:space:]])'; then
   exit 0
 fi
 
-# cd <path> && ... で始まる場合は、移動先で判定する
-if [[ $cmd =~ ^[[:space:]]*cd[[:space:]]+([^;\&|[:space:]]+)[[:space:]]*\&\& ]]; then
+# cd <path> && ... や cd <path>; ... で始まる場合は、移動先で判定する
+if [[ $cmd =~ ^[[:space:]]*cd[[:space:]]+([^;\&|[:space:]]+)[[:space:]]*(\&\&|\;) ]]; then
   target=${BASH_REMATCH[1]}
   target=${target//\"/}
   target=${target//\'/}
