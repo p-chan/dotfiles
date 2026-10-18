@@ -1,5 +1,4 @@
 ---
-allowed-tools: Bash(zed:*), Bash(git rev-parse:*)
 description: 現在のワークツリーのルートを Zed で開く
 ---
 
