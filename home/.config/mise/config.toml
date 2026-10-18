@@ -14,7 +14,6 @@ bun = "latest"
 "github:sharkdp/fd" = "latest"
 "github:starship/starship" = "latest"
 "github:suzuki-shunsuke/pinact" = "latest"
-"github:sxyazi/yazi" = "latest"
 "github:tmux/tmux-builds" = "latest"
 "github:tokuhirom/mdroll" = "latest"
 "github:x-motemen/ghq" = "latest"
@@ -110,7 +109,6 @@ pre-packages = 'if command -v brew >/dev/null 2>&1; then brew bundle --file="$(m
 "~/.config/sheldon" = {}
 "~/.config/tmux" = {}
 "~/.config/vim" = {}
-"~/.config/yazi" = {}
 "~/.config/zsh" = {}
 "~/.config/zsh-abbr" = {}
 "~/.config/starship.toml" = {}
