@@ -2,7 +2,6 @@
 name: personal-git
 description: 個人の慣習とリポジトリの慣習に沿って Git を扱います。Git に関する作業をするときに必ず使用してください。リポジトリに Git のスキルやルールがある場合も併用してください。
 compatibility: git-wt が必要です
-allowed-tools: Bash(git status), Bash(git status *), Bash(git diff), Bash(git diff *), Bash(git diff:*), Bash(git log:*), Bash(sed:*), Bash(tr:*), Bash(sort:*), Bash(xargs:*), Read(*)
 ---
 
 # Git

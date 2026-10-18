@@ -2,7 +2,6 @@
 name: personal-github
 description: 個人の慣習とリポジトリの慣習に沿って GitHub を扱います。GitHub に関する作業をするときに必ず使用してください。
 compatibility: gh、jq、curl が必要です
-allowed-tools: Read(*), Bash(fd *), Bash(rg *), Bash(git fetch), Bash(git ls-remote *), Bash(git log:*), Bash(git log *), Bash(git rev-parse *), Bash(gh repo view *), Bash(gh issue list *), Bash(gh issue view *), Bash(gh issue create *), Bash(gh issue edit *), Bash(gh label list *), Bash(gh pr list *), Bash(gh pr view *), Bash(gh pr edit *), Bash(gh pr checks), Bash(gh review-comment list *), WebFetch(domain:docs.github.com)
 ---
 
 # GitHub
