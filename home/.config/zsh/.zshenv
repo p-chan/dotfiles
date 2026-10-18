@@ -2,8 +2,8 @@ export EDITOR="vim"
 export VISUAL="vim"
 export RIPGREP_CONFIG_PATH="$HOME/.config/ripgrep/config"
 
-# Claude Code は TERM_PROGRAM でハイパーリンクに対応したターミナルかを判定するが、herdr は対象外なので、ステータスラインなどの OSC 8 が取り除かれる
-# herdr は OSC 8 を外側のターミナルに通すので、Claude Code にハイパーリンクの出力を強制する
+# herdr は OSC 8 を外側のターミナルに通すが、Claude Code は TERM_PROGRAM でハイパーリンクに対応したターミナルかを判定していて、herdr を対象外とする
+# そのままだとステータスラインなどの OSC 8 が取り除かれるので、Claude Code にハイパーリンクの出力を強制する
 if [[ "$TERM_PROGRAM" == "herdr" ]]; then
   export FORCE_HYPERLINK=1
 fi
