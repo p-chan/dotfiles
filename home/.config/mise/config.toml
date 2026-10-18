@@ -14,7 +14,6 @@ bun = "latest"
 "github:sharkdp/fd" = "latest"
 "github:starship/starship" = "latest"
 "github:suzuki-shunsuke/pinact" = "latest"
-"github:tmux/tmux-builds" = "latest"
 "github:tokuhirom/mdroll" = "latest"
 "github:x-motemen/ghq" = "latest"
 "npm:@antfu/ni" = "latest"
@@ -107,7 +106,6 @@ pre-packages = 'if command -v brew >/dev/null 2>&1; then brew bundle --file="$(m
 "~/.config/opencode/opencode.jsonc" = {}
 "~/.config/ripgrep" = {}
 "~/.config/sheldon" = {}
-"~/.config/tmux" = {}
 "~/.config/vim" = {}
 "~/.config/zsh" = {}
 "~/.config/zsh-abbr" = {}
