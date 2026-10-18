@@ -29,9 +29,6 @@ dots_up() {
   mise bootstrap --only packages --update --yes
   mise bootstrap packages upgrade --yes
 
-  echo "\nUpdating yazi plugins and flavors..."
-  ya pkg upgrade
-
   echo "\nUpdating gh extensions..."
   gh extension upgrade --all
 

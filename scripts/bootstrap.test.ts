@@ -31,9 +31,7 @@ async function createFixture(enrolled: boolean, currentName: string): Promise<Fi
   await mkdir(binDir);
   await mkdir(join(dotfilesDir, "bin"), { recursive: true });
   await mkdir(join(dotfilesDir, "scripts"), { recursive: true });
-  await mkdir(join(dotfilesDir, "home/.config/yazi"), { recursive: true });
   await mkdir(join(dotfilesDir, "home/.config/gh"), { recursive: true });
-  await writeFile(join(dotfilesDir, "home/.config/yazi/packages.txt"), "");
   await writeFile(join(dotfilesDir, "home/.config/gh/extensions"), "");
   await writeFile(enrollmentPath, enrolled ? "Yes" : "No");
   await writeFile(namePath, currentName);

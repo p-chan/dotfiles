@@ -43,20 +43,6 @@ if [ "${CI:-}" != "true" ]; then
   fi
 fi
 
-if type ya >/dev/null 2>&1; then
-  # `ya pkg add` は登録済みのパッケージに対して 0 以外で終了するので、`ya pkg list` に表示されるものはスキップして、このタスクを冪等に保つ
-  registered_packages="$(ya pkg list 2>/dev/null || true)"
-  while IFS= read -r package; do
-    case "$package" in
-      ''|'#'*) continue ;;
-    esac
-    case "$registered_packages" in
-      *"$package"*) continue ;;
-    esac
-    ya pkg add "$package"
-  done < "$DOTFILES_DIR/home/.config/yazi/packages.txt"
-fi
-
 if ! type claude >/dev/null 2>&1; then
   curl -fsSL https://claude.ai/install.sh | bash
 fi
