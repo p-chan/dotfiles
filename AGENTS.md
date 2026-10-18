@@ -21,7 +21,7 @@ P-Chan のポータブルな開発環境をコードで管理します。
 
 ## Git
 
-- このリポジトリでは worktree を使いません。`home/` 以下のファイルはホームディレクトリからシンボリックリンクで参照される設定の実体なので、worktree で変更しても反映されません。代わりに、現在の作業ツリーでブランチを切り替えます
+- ホームディレクトリのシンボリックリンクは main working tree を指しているので、linked worktree での変更はマージするまで手元の環境に反映されません。変更を手元の環境に反映させて確かめる必要があるときは、linked worktree ではなく `ALLOW_MAIN_WORKING_TREE=1 git switch -c <branch-name>` で main working tree にブランチを作ります。それ以外は linked worktree に作ります
 - `git clean -x` など、Git の管理対象外のファイルを削除するコマンドを実行しません。`~/.config/zsh` や `~/.ssh` などはディレクトリごとリンクしているので、シェルの履歴、`known_hosts`、マシン固有の mise の設定（`home/.config/mise/conf.d/`）など、復元できないマシン固有のファイルの実体がこのリポジトリ内にあります
 - `home/.claude/settings.json` は Git のフィルタ（`.gitattributes` と `home/.config/git/filters/claude-settings.sh`）を通してコミットされます。コミット時にキーがソートされ、Herdr のフックのパスが `$HOME` 形式に置き換わるので、作業ツリーとインデックスの内容は一致しません。キーの順序は気にせず編集し、差分は `git diff` で確認します。背景は README の「Herdr の Claude 連携」を参照します
 
