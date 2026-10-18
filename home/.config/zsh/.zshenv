@@ -2,6 +2,14 @@ export EDITOR="vim"
 export VISUAL="vim"
 export RIPGREP_CONFIG_PATH="$HOME/.config/ripgrep/config"
 
+# herdr の中でも、Claude Code が出力するリンクをクリックできるようにする
+# Claude Code は TERM_PROGRAM を見てリンクに対応したターミナルかを判断し、対応していなければリンクを出力しない
+# herdr はリンクに対応しているが、Claude Code が対応していると判断する TERM_PROGRAM の値に含まれないので、FORCE_HYPERLINK で出力を強制する
+# TODO: Claude Code が herdr をリンクに対応したターミナルと判断するようになったら削除する
+if [[ "$TERM_PROGRAM" == "herdr" ]]; then
+  export FORCE_HYPERLINK=1
+fi
+
 typeset -U path fpath
 
 # ~/.zshenv は <repo>/home 内のファイルへのシンボリックリンクで、mise の dotfiles の機能が dotfiles.root 設定をもとに管理している
