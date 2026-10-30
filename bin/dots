@@ -90,6 +90,123 @@ dots_cleanup() {
   echo "\nCleaned up ${freed} GB (${after[1]} GB used, ${after[2]} GB available)"
 }
 
+# dots cleanup で解放できる容量を見積もります
+dots_cleanup_dry_run() {
+  if [[ "${PWD}" != "${HOME}" ]]; then
+    echo "Error: dots cleanup must be run from the home directory"
+    exit 1
+  fi
+
+  # ディレクトリのサイズをバイト数で出力します。存在しなければ 0 です
+  _dir_bytes() {
+    local total=0 kb
+    for dir in "$@"; do
+      [[ -e "${dir}" ]] || continue
+      kb=$(du -sk "${dir}" 2>/dev/null | awk '{print $1}')
+      total=$((total + ${kb:-0} * 1024))
+    done
+    echo "${total}"
+  }
+
+  # "3GB" や "34.6MB" のような表記をバイト数に変換します
+  _parse_size() {
+    awk -v s="$1" 'BEGIN {
+      if (!match(s, /^[0-9.]+/)) { print 0; exit }
+      n = substr(s, 1, RLENGTH); u = toupper(substr(s, RLENGTH + 1))
+      m = 1
+      if (u ~ /^K/) m = 1e3; else if (u ~ /^M/) m = 1e6
+      else if (u ~ /^G/) m = 1e9; else if (u ~ /^T/) m = 1e12
+      printf "%.0f", n * m
+    }'
+  }
+
+  local total=0 upper=0 failed=0
+
+  # 見積もりを 1 行表示して合計に加えます。上限値のときは第 3 引数に upper を渡します
+  # バイト数が空のときは、取得に失敗したものとして扱います
+  _report() {
+    local name="$1" bytes="$2" kind="${3:-}"
+    if [[ -z "${bytes}" ]]; then
+      printf "  %-10s    %6s\n" "${name}" "failed"
+      failed=1
+      return
+    fi
+    local gb=$(awk "BEGIN {printf \"%.2f\", ${bytes} / 1e9}")
+    if [[ "${kind}" == "upper" ]]; then
+      printf "  %-10s <= %6s GB\n" "${name}" "${gb}"
+      upper=$((upper + bytes))
+    else
+      printf "  %-10s    %6s GB\n" "${name}" "${gb}"
+      total=$((total + bytes))
+    fi
+  }
+
+  local out bytes
+
+  echo "Estimating reclaimable space..."
+
+  if command -v brew &>/dev/null; then
+    bytes=""
+    if out=$(brew cleanup --dry-run 2>/dev/null); then
+      out=$(echo "${out}" | sed -n 's/.*would free approximately \([0-9.]*[A-Za-z]*\).*/\1/p')
+      bytes=$(_parse_size "${out:-0}")
+    fi
+    _report "Homebrew" "${bytes}"
+  fi
+
+  if command -v mise &>/dev/null; then
+    bytes=""
+    if out=$(NO_COLOR=1 mise prune --dry-run 2>&1); then
+      local mise_dirs=("${(@f)$(echo "${out}" | sed -n 's/.*\[dryrun\] *remove //p' | tr ',' '\n' | sed "s|^ *~|${HOME}|")}")
+      bytes=$(_dir_bytes "${mise_dirs[@]}")
+    fi
+    _report "mise" "${bytes}"
+  fi
+
+  if command -v npm &>/dev/null; then
+    bytes=""
+    out=$(npm config get cache 2>/dev/null) && bytes=$(_dir_bytes "${out}/_cacache")
+    _report "npm" "${bytes}"
+  fi
+
+  if command -v yarn &>/dev/null; then
+    bytes=""
+    out=$(yarn cache dir 2>/dev/null) && bytes=$(_dir_bytes "${out}")
+    _report "yarn" "${bytes}"
+  fi
+
+  # pnpm store prune には dry-run がないので、ストア全体のサイズを上限とします
+  if command -v pnpm &>/dev/null; then
+    bytes=""
+    out=$(pnpm store path 2>/dev/null) && bytes=$(_dir_bytes "${out}")
+    _report "pnpm" "${bytes}" upper
+  fi
+
+  # docker system prune は未使用のイメージの一部しか消さないので、上限とします
+  if command -v docker &>/dev/null && docker info &>/dev/null; then
+    bytes=""
+    if out=$(docker system df --format '{{.Reclaimable}}' 2>/dev/null); then
+      bytes=0
+      local size
+      for size in $(echo "${out}" | awk '{print $1}'); do
+        bytes=$((bytes + $(_parse_size "${size}")))
+      done
+    fi
+    _report "Docker" "${bytes}" upper
+  fi
+
+  if command -v opensrc &>/dev/null; then
+    _report "opensrc" "$(_dir_bytes "${HOME}/.opensrc")"
+  fi
+
+  local total_gb=$(awk "BEGIN {printf \"%.2f\", ${total} / 1e9}")
+  local max_gb=$(awk "BEGIN {printf \"%.2f\", (${total} + ${upper}) / 1e9}")
+  echo "\nEstimated: about ${total_gb} GB (up to ${max_gb} GB)"
+  if (( failed )); then
+    echo "Some estimates failed and are not included in the total"
+  fi
+}
+
 dots_edit() {
   local repo_dir
   repo_dir="${DOTFILES_DIR:-}"
@@ -105,7 +222,11 @@ case "${1:-}" in
     dots_up
     ;;
   cleanup)
-    dots_cleanup
+    if [[ "${2:-}" == "--dry-run" ]]; then
+      dots_cleanup_dry_run
+    else
+      dots_cleanup
+    fi
     ;;
   edit)
     dots_edit
@@ -116,6 +237,7 @@ case "${1:-}" in
 Commands:
   up       Update Homebrew and mise
   cleanup  Clean up unused packages and free disk space
+  cleanup --dry-run  Estimate reclaimable space without cleaning
   edit     Open dotfiles with the default editor"
     exit 1
     ;;
