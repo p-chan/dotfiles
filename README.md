@@ -69,32 +69,34 @@ mise bootstrap
 
 ## セットアップ
 
-Homebrew でインストールする GUI アプリの一覧です。
-**設定ファイル**はこのリポジトリがシンボリックリンクする設定のパスで、**ドキュメント**はインストール後に手作業で行う手順へのリンクです。
+GUI アプリの一覧です。
+**インストール**はインストールの方法で、Homebrew のアプリは `mise bootstrap` がインストールし、手動のアプリはドキュメントの手順でインストールします。
+**設定ファイル**はこのリポジトリがシンボリックリンクする設定のパスで、**ドキュメント**は手作業で行うインストールや設定の手順へのリンクです。
 
-| アプリ              | ログイン時に起動 | 設定ファイル                  | ドキュメント                                                         |
-| :------------------ | :--------------- | :---------------------------- | :------------------------------------------------------------------- |
-| 1Password           | ✅               | —                             | [docs/apps/1password.md](docs/apps/1password.md)                     |
-| Arc                 | ☐                | —                             | [docs/apps/arc.md](docs/apps/arc.md)                                 |
-| ChatGPT             | ☐                | —                             | —                                                                    |
-| Claude              | ☐                | —                             | —                                                                    |
-| CleanShot X         | ✅               | —                             | —                                                                    |
-| CodexBar            | ✅               | —                             | —                                                                    |
-| Cyberduck           | ☐                | —                             | —                                                                    |
-| Docker Desktop      | ✅               | —                             | —                                                                    |
-| Fantastical         | ✅               | —                             | [docs/apps/fantastical.md](docs/apps/fantastical.md)                 |
-| Figma               | ☐                | —                             | [docs/apps/figma.md](docs/apps/figma.md)                             |
-| Ghostty             | ☐                | `~/.config/ghostty`           | —                                                                    |
-| Google Chrome       | ☐                | —                             | [docs/apps/chrome.md](docs/apps/chrome.md)                           |
-| Google Japanese IME | ☐                | —                             | [docs/apps/google-japanese-ime.md](docs/apps/google-japanese-ime.md) |
-| Handy               | ✅               | —                             | [docs/apps/handy.md](docs/apps/handy.md)                             |
-| iStat Menus         | ✅               | —                             | [docs/apps/istat-menus.md](docs/apps/istat-menus.md)                 |
-| Karabiner-Elements  | ✅               | `~/.config/karabiner`         | —                                                                    |
-| Logi Options+       | ✅               | —                             | [docs/apps/logi-options-plus.md](docs/apps/logi-options-plus.md)     |
-| Mimestream          | ☐                | —                             | —                                                                    |
-| Raycast             | ✅               | —                             | —                                                                    |
-| Slack               | ✅               | —                             | [docs/apps/slack.md](docs/apps/slack.md)                             |
-| Zed                 | ☐                | `~/.config/zed/settings.json` | —                                                                    |
+| アプリ              | インストール | ログイン時に起動 | 設定ファイル                  | ドキュメント                                                         |
+| :------------------ | :----------- | :--------------- | :---------------------------- | :------------------------------------------------------------------- |
+| 1Password           | Homebrew     | ✅               | —                             | [docs/apps/1password.md](docs/apps/1password.md)                     |
+| Arc                 | Homebrew     | ☐                | —                             | [docs/apps/arc.md](docs/apps/arc.md)                                 |
+| ChatGPT             | Homebrew     | ☐                | —                             | —                                                                    |
+| Claude              | Homebrew     | ☐                | —                             | —                                                                    |
+| CleanShot X         | Homebrew     | ✅               | —                             | —                                                                    |
+| CodexBar            | Homebrew     | ✅               | —                             | —                                                                    |
+| Cyberduck           | Homebrew     | ☐                | —                             | —                                                                    |
+| Docker Desktop      | Homebrew     | ✅               | —                             | —                                                                    |
+| Fantastical         | Homebrew     | ✅               | —                             | [docs/apps/fantastical.md](docs/apps/fantastical.md)                 |
+| Figma               | Homebrew     | ☐                | —                             | [docs/apps/figma.md](docs/apps/figma.md)                             |
+| Ghostty             | Homebrew     | ☐                | `~/.config/ghostty`           | —                                                                    |
+| Google Chrome       | Homebrew     | ☐                | —                             | [docs/apps/chrome.md](docs/apps/chrome.md)                           |
+| Google Japanese IME | Homebrew     | ☐                | —                             | [docs/apps/google-japanese-ime.md](docs/apps/google-japanese-ime.md) |
+| Handy               | Homebrew     | ✅               | —                             | [docs/apps/handy.md](docs/apps/handy.md)                             |
+| iStat Menus         | Homebrew     | ✅               | —                             | [docs/apps/istat-menus.md](docs/apps/istat-menus.md)                 |
+| Karabiner-Elements  | Homebrew     | ✅               | `~/.config/karabiner`         | —                                                                    |
+| Logi Options+       | Homebrew     | ✅               | —                             | [docs/apps/logi-options-plus.md](docs/apps/logi-options-plus.md)     |
+| Mimestream          | Homebrew     | ☐                | —                             | —                                                                    |
+| Raycast             | Homebrew     | ✅               | —                             | —                                                                    |
+| Slack               | Homebrew     | ✅               | —                             | [docs/apps/slack.md](docs/apps/slack.md)                             |
+| Xcode               | 手動         | ☐                | —                             | [docs/apps/xcode.md](docs/apps/xcode.md)                             |
+| Zed                 | Homebrew     | ☐                | `~/.config/zed/settings.json` | —                                                                    |
 
 新しいマシンを使える状態にするまでに必要なアプリは、ごく一部です。
 他のドキュメントからリンクしている認証情報とライセンスキーのための 1Password、他のサービスにサインインするためのメインのブラウザである Arc、キーボードとマウスの入力のための Karabiner-Elements、Google Japanese IME、Logi Options+、ランチャーの Raycast があれば十分です。
