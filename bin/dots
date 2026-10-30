@@ -120,11 +120,17 @@ dots_cleanup_dry_run() {
     }'
   }
 
-  local total=0 upper=0
+  local total=0 upper=0 failed=0
 
   # 見積もりを 1 行表示して合計に加えます。上限値のときは第 3 引数に upper を渡します
+  # バイト数が空のときは、取得に失敗したものとして扱います
   _report() {
     local name="$1" bytes="$2" kind="${3:-}"
+    if [[ -z "${bytes}" ]]; then
+      printf "  %-10s    %6s\n" "${name}" "failed"
+      failed=1
+      return
+    fi
     local gb=$(awk "BEGIN {printf \"%.2f\", ${bytes} / 1e9}")
     if [[ "${kind}" == "upper" ]]; then
       printf "  %-10s <= %6s GB\n" "${name}" "${gb}"
@@ -135,36 +141,58 @@ dots_cleanup_dry_run() {
     fi
   }
 
+  local out bytes
+
   echo "Estimating reclaimable space..."
 
-  local brew_size
-  brew_size=$(brew cleanup --dry-run 2>/dev/null | sed -n 's/.*would free approximately \([0-9.]*[A-Za-z]*\).*/\1/p' || true)
-  _report "Homebrew" "$(_parse_size "${brew_size:-0}")"
+  if command -v brew &>/dev/null; then
+    bytes=""
+    if out=$(brew cleanup --dry-run 2>/dev/null); then
+      out=$(echo "${out}" | sed -n 's/.*would free approximately \([0-9.]*[A-Za-z]*\).*/\1/p')
+      bytes=$(_parse_size "${out:-0}")
+    fi
+    _report "Homebrew" "${bytes}"
+  fi
 
-  local mise_dirs
-  mise_dirs=("${(@f)$(NO_COLOR=1 mise prune --dry-run 2>&1 | sed -n 's/.*\[dryrun\] *remove //p' | tr ',' '\n' | sed "s|^ *~|${HOME}|" || true)}")
-  _report "mise" "$(_dir_bytes "${mise_dirs[@]}")"
+  if command -v mise &>/dev/null; then
+    bytes=""
+    if out=$(NO_COLOR=1 mise prune --dry-run 2>&1); then
+      local mise_dirs=("${(@f)$(echo "${out}" | sed -n 's/.*\[dryrun\] *remove //p' | tr ',' '\n' | sed "s|^ *~|${HOME}|")}")
+      bytes=$(_dir_bytes "${mise_dirs[@]}")
+    fi
+    _report "mise" "${bytes}"
+  fi
 
   if command -v npm &>/dev/null; then
-    _report "npm" "$(_dir_bytes "$(npm config get cache)/_cacache")"
+    bytes=""
+    out=$(npm config get cache 2>/dev/null) && bytes=$(_dir_bytes "${out}/_cacache")
+    _report "npm" "${bytes}"
   fi
 
   if command -v yarn &>/dev/null; then
-    _report "yarn" "$(_dir_bytes "$(yarn cache dir)")"
+    bytes=""
+    out=$(yarn cache dir 2>/dev/null) && bytes=$(_dir_bytes "${out}")
+    _report "yarn" "${bytes}"
   fi
 
   # pnpm store prune には dry-run がないので、ストア全体のサイズを上限とします
   if command -v pnpm &>/dev/null; then
-    _report "pnpm" "$(_dir_bytes "$(pnpm store path)")" upper
+    bytes=""
+    out=$(pnpm store path 2>/dev/null) && bytes=$(_dir_bytes "${out}")
+    _report "pnpm" "${bytes}" upper
   fi
 
   # docker system prune は未使用のイメージの一部しか消さないので、上限とします
   if command -v docker &>/dev/null && docker info &>/dev/null; then
-    local docker_bytes=0 size
-    for size in $(docker system df --format '{{.Reclaimable}}' | awk '{print $1}'); do
-      docker_bytes=$((docker_bytes + $(_parse_size "${size}")))
-    done
-    _report "Docker" "${docker_bytes}" upper
+    bytes=""
+    if out=$(docker system df --format '{{.Reclaimable}}' 2>/dev/null); then
+      bytes=0
+      local size
+      for size in $(echo "${out}" | awk '{print $1}'); do
+        bytes=$((bytes + $(_parse_size "${size}")))
+      done
+    fi
+    _report "Docker" "${bytes}" upper
   fi
 
   if command -v opensrc &>/dev/null; then
@@ -174,6 +202,9 @@ dots_cleanup_dry_run() {
   local total_gb=$(awk "BEGIN {printf \"%.2f\", ${total} / 1e9}")
   local max_gb=$(awk "BEGIN {printf \"%.2f\", (${total} + ${upper}) / 1e9}")
   echo "\nEstimated: about ${total_gb} GB (up to ${max_gb} GB)"
+  if (( failed )); then
+    echo "Some estimates failed and are not included in the total"
+  fi
 }
 
 dots_edit() {
