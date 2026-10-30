@@ -41,6 +41,29 @@ dots_up() {
   echo "\nDone!"
 }
 
+# ghq で管理しているリポジトリから、削除してよい worktree を「リポジトリ<TAB>worktree<TAB>ブランチ」で出力します
+# 未コミットの変更や追跡していないファイルがなく、ブランチの先頭がマージ済みの PR の head と一致するものが対象です
+# デフォルトブランチの祖先かどうかでは判定しません。作ったばかりでコミットのない worktree も祖先になり、消えてしまうためです
+_merged_worktrees() {
+  command -v ghq &>/dev/null && command -v gh &>/dev/null || return 0
+
+  local repo top wt branch out tip
+  for repo in ${(f)"$(ghq list -p)"}; do
+    top=$(git -C "${repo}" rev-parse --show-toplevel 2>/dev/null) || continue
+    git -C "${repo}" worktree list --porcelain 2>/dev/null \
+      | awk '/^worktree /{p=substr($0,10)} /^branch /{print p "\t" substr($0,19)}' \
+      | while IFS=$'\t' read -r wt branch; do
+        [[ "${wt}" != "${top}" ]] || continue
+        out=$(git -C "${wt}" status --porcelain 2>/dev/null) || continue
+        [[ -z "${out}" ]] || continue
+        tip=$(git -C "${repo}" rev-parse "refs/heads/${branch}" 2>/dev/null) || continue
+        out=$(cd "${repo}" && gh pr list --head "${branch}" --state merged --json headRefOid -q '.[].headRefOid' </dev/null 2>/dev/null) || continue
+        [[ "${out}" == *"${tip}"* ]] || continue
+        printf "%s\t%s\t%s\n" "${repo}" "${wt}" "${branch}"
+      done
+  done
+}
+
 dots_cleanup() {
   if [[ "${PWD}" != "${HOME}" ]]; then
     echo "Error: dots cleanup must be run from the home directory"
@@ -83,6 +106,13 @@ dots_cleanup() {
 
   echo "\nCleaning opensrc..."
   command -v opensrc &>/dev/null && opensrc clean || true
+
+  echo "\nCleaning merged worktrees..."
+  local repo wt branch
+  _merged_worktrees | while IFS=$'\t' read -r repo wt branch; do
+    echo "Removing ${wt}"
+    git -C "${repo}" wt -D "${branch}" </dev/null || true
+  done
 
   local after
   after=($(_storage_snapshot))
@@ -201,6 +231,11 @@ dots_cleanup_dry_run() {
 
   if command -v opensrc &>/dev/null; then
     _report "opensrc" "$(_dir_bytes "${HOME}/.opensrc")"
+  fi
+
+  if command -v ghq &>/dev/null && command -v gh &>/dev/null; then
+    local wt_dirs=("${(@f)$(_merged_worktrees | cut -f2)}")
+    _report "worktrees" "$(_dir_bytes "${wt_dirs[@]}")"
   fi
 
   local total_gb=$(awk "BEGIN {printf \"%.2f\", ${total} / 1e9}")
