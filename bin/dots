@@ -107,12 +107,13 @@ dots_cleanup() {
   echo "\nCleaning pnpm..."
   command -v pnpm &>/dev/null && pnpm store prune || true
 
+  # bun pm cache rm は共有ストアも消し、それを使うプロジェクトの node_modules を壊すので、古いパッケージだけを消します
   echo "\nCleaning bun..."
-  command -v bun &>/dev/null && bun pm cache rm || true
+  command -v bun &>/dev/null && bun pm cache prune || true
 
   # node-gyp がビルドのたびにダウンロードする Node.js のヘッダです。必要になればまたダウンロードされます
   echo "\nCleaning node-gyp..."
-  rm -rf "${HOME}/Library/Caches/node-gyp"
+  rm -rf "${HOME}/Library/Caches/node-gyp" || true
 
   echo "\nCleaning Docker..."
   command -v docker &>/dev/null && docker system prune -f || true
@@ -237,7 +238,12 @@ dots_cleanup_dry_run() {
 
   if command -v bun &>/dev/null; then
     bytes=""
-    out=$(bun pm cache 2>/dev/null) && bytes=$(_dir_bytes "${out}") || bytes=""
+    local bun_list
+    if out=$(bun pm cache 2>/dev/null) && bun_list=$(bun pm cache prune --dry-run 2>/dev/null); then
+      # 消す対象のパッケージが「- <キャッシュ内のディレクトリ名>」の形式で並びます
+      local bun_dirs=("${(@f)$(echo "${bun_list}" | sed -n "s|^- |${out}/|p")}")
+      bytes=$(_dir_bytes "${bun_dirs[@]}") || bytes=""
+    fi
     _report "bun" "${bytes}"
   fi
 
