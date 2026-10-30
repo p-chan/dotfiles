@@ -184,9 +184,9 @@ dots_cleanup_dry_run() {
   fi
 
   # docker system prune は未使用のイメージの一部しか消さないので、上限とします
-  # デーモンが止まっているときは見積もれないので、その旨を表示して合計から除きます
+  # デーモンが止まっているときなど、docker info が失敗したときは見積もれないので、その旨を表示して合計から除きます
   if command -v docker &>/dev/null && ! docker info &>/dev/null; then
-    printf "  %-10s    %s\n" "Docker" "skipped (daemon not running)"
+    printf "  %-10s    %s\n" "Docker" "skipped (docker unavailable)"
   elif command -v docker &>/dev/null; then
     bytes=""
     if out=$(docker system df --format '{{.Reclaimable}}' 2>/dev/null); then
