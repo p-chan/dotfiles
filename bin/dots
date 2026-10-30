@@ -87,19 +87,33 @@ dots_cleanup() {
   before=($(_storage_snapshot))
 
   echo "\nCleaning Homebrew..."
-  brew cleanup || true
+  brew cleanup --prune=all -s || true
 
   echo "\nCleaning mise..."
   mise prune --yes || true
+  mise cache prune || true
 
   echo "\nCleaning npm..."
-  command -v npm &>/dev/null && npm cache clean --force || true
+  if command -v npm &>/dev/null; then
+    npm cache clean --force || true
+    # npx のキャッシュは npm cache clean の対象外です
+    local npm_cache
+    npm_cache=$(npm config get cache 2>/dev/null) && rm -rf "${npm_cache}/_npx" || true
+  fi
 
   echo "\nCleaning yarn..."
   command -v yarn &>/dev/null && yarn cache clean || true
 
   echo "\nCleaning pnpm..."
   command -v pnpm &>/dev/null && pnpm store prune || true
+
+  # bun pm cache rm は共有ストアも消し、それを使うプロジェクトの node_modules を壊すので、古いパッケージだけを消します
+  echo "\nCleaning bun..."
+  command -v bun &>/dev/null && bun pm cache prune || true
+
+  # node-gyp がビルドのたびにダウンロードする Node.js のヘッダです。必要になればまたダウンロードされます
+  echo "\nCleaning node-gyp..."
+  rm -rf "${HOME}/Library/Caches/node-gyp" || true
 
   echo "\nCleaning Docker..."
   command -v docker &>/dev/null && docker system prune -f || true
@@ -145,8 +159,10 @@ dots_cleanup_dry_run() {
       if (!match(s, /^[0-9.]+/)) { print 0; exit }
       n = substr(s, 1, RLENGTH); u = toupper(substr(s, RLENGTH + 1))
       m = 1
-      if (u ~ /^K/) m = 1e3; else if (u ~ /^M/) m = 1e6
-      else if (u ~ /^G/) m = 1e9; else if (u ~ /^T/) m = 1e12
+      # "MiB" のような 2 進接頭辞は 1024 の累乗です
+      b = (u ~ /^.I/) ? 1024 : 1000
+      if (u ~ /^K/) m = b; else if (u ~ /^M/) m = b ^ 2
+      else if (u ~ /^G/) m = b ^ 3; else if (u ~ /^T/) m = b ^ 4
       printf "%.0f", n * m
     }'
   }
@@ -178,7 +194,7 @@ dots_cleanup_dry_run() {
 
   if command -v brew &>/dev/null; then
     bytes=""
-    if out=$(brew cleanup --dry-run 2>/dev/null); then
+    if out=$(brew cleanup --prune=all -s --dry-run 2>/dev/null); then
       out=$(echo "${out}" | sed -n 's/.*would free approximately \([0-9.]*[A-Za-z]*\).*/\1/p')
       bytes=$(_parse_size "${out:-0}")
     fi
@@ -192,11 +208,18 @@ dots_cleanup_dry_run() {
       bytes=$(_dir_bytes "${mise_dirs[@]}") || bytes=""
     fi
     _report "mise" "${bytes}"
+
+    bytes=""
+    if out=$(NO_COLOR=1 mise cache prune --dry-run 2>&1); then
+      out=$(echo "${out}" | sed -n 's/.*cache pruned [0-9]* files, \([0-9.]*\) *\([A-Za-z]*\).*/\1\2/p')
+      bytes=$(_parse_size "${out:-0}")
+    fi
+    _report "mise cache" "${bytes}"
   fi
 
   if command -v npm &>/dev/null; then
     bytes=""
-    out=$(npm config get cache 2>/dev/null) && bytes=$(_dir_bytes "${out}/_cacache") || bytes=""
+    out=$(npm config get cache 2>/dev/null) && bytes=$(_dir_bytes "${out}/_cacache" "${out}/_npx") || bytes=""
     _report "npm" "${bytes}"
   fi
 
@@ -212,6 +235,19 @@ dots_cleanup_dry_run() {
     out=$(pnpm store path 2>/dev/null) && bytes=$(_dir_bytes "${out}") || bytes=""
     _report "pnpm" "${bytes}" upper
   fi
+
+  if command -v bun &>/dev/null; then
+    bytes=""
+    local bun_list
+    if out=$(bun pm cache 2>/dev/null) && bun_list=$(bun pm cache prune --dry-run 2>/dev/null); then
+      # 消す対象のパッケージが「- <キャッシュ内のディレクトリ名>」の形式で並びます
+      local bun_dirs=("${(@f)$(echo "${bun_list}" | sed -n "s|^- |${out}/|p")}")
+      bytes=$(_dir_bytes "${bun_dirs[@]}") || bytes=""
+    fi
+    _report "bun" "${bytes}"
+  fi
+
+  _report "node-gyp" "$(_dir_bytes "${HOME}/Library/Caches/node-gyp")"
 
   # docker system prune は未使用のイメージの一部しか消さないので、上限とします
   # デーモンが止まっているときなど、docker info が失敗したときは見積もれないので、その旨を表示して合計から除きます
