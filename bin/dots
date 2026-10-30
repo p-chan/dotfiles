@@ -98,11 +98,12 @@ dots_cleanup_dry_run() {
   fi
 
   # ディレクトリのサイズをバイト数で出力します。存在しなければ 0 です
+  # 権限エラーなどで du が失敗したときは、何も出力せずに失敗します
   _dir_bytes() {
     local total=0 kb
     for dir in "$@"; do
       [[ -e "${dir}" ]] || continue
-      kb=$(du -sk "${dir}" 2>/dev/null | awk '{print $1}')
+      kb=$(du -sk "${dir}" 2>/dev/null | awk '{print $1}') || return 1
       total=$((total + ${kb:-0} * 1024))
     done
     echo "${total}"
@@ -158,32 +159,35 @@ dots_cleanup_dry_run() {
     bytes=""
     if out=$(NO_COLOR=1 mise prune --dry-run 2>&1); then
       local mise_dirs=("${(@f)$(echo "${out}" | sed -n 's/.*\[dryrun\] *remove //p' | tr ',' '\n' | sed "s|^ *~|${HOME}|")}")
-      bytes=$(_dir_bytes "${mise_dirs[@]}")
+      bytes=$(_dir_bytes "${mise_dirs[@]}") || bytes=""
     fi
     _report "mise" "${bytes}"
   fi
 
   if command -v npm &>/dev/null; then
     bytes=""
-    out=$(npm config get cache 2>/dev/null) && bytes=$(_dir_bytes "${out}/_cacache")
+    out=$(npm config get cache 2>/dev/null) && bytes=$(_dir_bytes "${out}/_cacache") || bytes=""
     _report "npm" "${bytes}"
   fi
 
   if command -v yarn &>/dev/null; then
     bytes=""
-    out=$(yarn cache dir 2>/dev/null) && bytes=$(_dir_bytes "${out}")
+    out=$(yarn cache dir 2>/dev/null) && bytes=$(_dir_bytes "${out}") || bytes=""
     _report "yarn" "${bytes}"
   fi
 
   # pnpm store prune には dry-run がないので、ストア全体のサイズを上限とします
   if command -v pnpm &>/dev/null; then
     bytes=""
-    out=$(pnpm store path 2>/dev/null) && bytes=$(_dir_bytes "${out}")
+    out=$(pnpm store path 2>/dev/null) && bytes=$(_dir_bytes "${out}") || bytes=""
     _report "pnpm" "${bytes}" upper
   fi
 
   # docker system prune は未使用のイメージの一部しか消さないので、上限とします
-  if command -v docker &>/dev/null && docker info &>/dev/null; then
+  # デーモンが止まっているときは見積もれないので、その旨を表示して合計から除きます
+  if command -v docker &>/dev/null && ! docker info &>/dev/null; then
+    printf "  %-10s    %s\n" "Docker" "skipped (daemon not running)"
+  elif command -v docker &>/dev/null; then
     bytes=""
     if out=$(docker system df --format '{{.Reclaimable}}' 2>/dev/null); then
       bytes=0
