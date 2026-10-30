@@ -68,3 +68,44 @@ test("agent-skills manages a pinned skill lifecycle", async () => {
     await rm(root, { recursive: true });
   }
 });
+
+test("agent-skills manages local skills in a separate manifest", async () => {
+  const root = await mkdtemp(join(tmpdir(), "agent-skills-"));
+  const source = join(root, "source");
+  const skillPath = join(source, "skills/example");
+  const manifestPath = join(root, "home/.agents/skills.json");
+  const localManifestPath = join(root, "home/.agents/skills.local.json");
+  const installedSkillPath = join(root, "home/.agents/skills/example/SKILL.md");
+
+  try {
+    await mkdir(skillPath, { recursive: true });
+    await mkdir(dirname(manifestPath), { recursive: true });
+    await writeFile(manifestPath, '{"version":1,"skills":{}}\n');
+    await writeFile(join(skillPath, "SKILL.md"), "first\n");
+    git(source, "init", "--quiet");
+    git(source, "add", ".");
+    git(source, "-c", "user.name=test", "-c", "user.email=test@example.com", "commit", "--quiet", "-m", "first");
+
+    run(root, "add", `file://${source}`, "skills/example", "--local");
+    assert.deepEqual(JSON.parse(await readFile(manifestPath, "utf8")).skills, {});
+    assert.ok(JSON.parse(await readFile(localManifestPath, "utf8")).skills.example);
+
+    await writeFile(join(skillPath, "SKILL.md"), "second\n");
+    git(source, "add", ".");
+    git(source, "-c", "user.name=test", "-c", "user.email=test@example.com", "commit", "--quiet", "-m", "second");
+    const secondCommit = git(source, "rev-parse", "HEAD").trim();
+
+    run(root, "update", "--all");
+    assert.equal(JSON.parse(await readFile(localManifestPath, "utf8")).skills.example.commit, secondCommit);
+    assert.deepEqual(JSON.parse(await readFile(manifestPath, "utf8")).skills, {});
+
+    await rm(installedSkillPath);
+    run(root, "install");
+    assert.equal(await readFile(installedSkillPath, "utf8"), "second\n");
+
+    run(root, "remove", "example");
+    assert.deepEqual(JSON.parse(await readFile(localManifestPath, "utf8")).skills, {});
+  } finally {
+    await rm(root, { recursive: true });
+  }
+});

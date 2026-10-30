@@ -11,11 +11,13 @@ const execFile = promisify(execFileCallback);
 const scriptPath = fileURLToPath(import.meta.url);
 const dotfilesDir = resolve(process.env.DOTFILES_DIR ?? join(dirname(scriptPath), ".."));
 const manifestPath = join(dotfilesDir, "home/.agents/skills.json");
+// コミットしないマシン固有のスキルを管理するマニフェスト
+const localManifestPath = join(dotfilesDir, "home/.agents/skills.local.json");
 const skillsDir = join(dotfilesDir, "home/.agents/skills");
 
 function usage() {
   console.error(`Usage:
-  agent-skills add <source> <path> [--name <name>]
+  agent-skills add <source> <path> [--name <name>] [--local]
   agent-skills remove <name>...
   agent-skills install [name...]
   agent-skills update [name...] [--all] [--dry-run]`);
@@ -56,12 +58,13 @@ function validateSkill(name, skill) {
   validateCommit(skill.commit);
 }
 
-async function loadManifest() {
+async function loadManifest(path, { optional = false } = {}) {
   let manifest;
   try {
-    manifest = JSON.parse(await readFile(manifestPath, "utf8"));
+    manifest = JSON.parse(await readFile(path, "utf8"));
   } catch (error) {
-    fail(`could not read ${manifestPath}: ${error.message}`);
+    if (optional && error.code === "ENOENT") return { path, version: 1, skills: {} };
+    fail(`could not read ${path}: ${error.message}`);
   }
 
   if (
@@ -70,9 +73,24 @@ async function loadManifest() {
     typeof manifest.skills !== "object" ||
     Array.isArray(manifest.skills)
   ) {
-    fail(`invalid manifest: ${manifestPath}`);
+    fail(`invalid manifest: ${path}`);
   }
   for (const [name, skill] of Object.entries(manifest.skills)) validateSkill(name, skill);
+  return { path, ...manifest };
+}
+
+async function loadManifests() {
+  const shared = await loadManifest(manifestPath);
+  const local = await loadManifest(localManifestPath, { optional: true });
+  for (const name of Object.keys(local.skills)) {
+    if (shared.skills[name]) fail(`skill exists in both manifests: ${name}`);
+  }
+  return [shared, local];
+}
+
+function findManifest(manifests, name) {
+  const manifest = manifests.find((manifest) => manifest.skills[name]);
+  if (!manifest) fail(`skill not found: ${name}`);
   return manifest;
 }
 
@@ -80,9 +98,9 @@ async function saveManifest(manifest) {
   const sortedSkills = Object.fromEntries(
     Object.entries(manifest.skills).sort(([left], [right]) => left.localeCompare(right)),
   );
-  const temporaryPath = `${manifestPath}.tmp-${process.pid}`;
+  const temporaryPath = `${manifest.path}.tmp-${process.pid}`;
   await writeFile(temporaryPath, `${JSON.stringify({ version: 1, skills: sortedSkills }, null, 2)}\n`);
-  await rename(temporaryPath, manifestPath);
+  await rename(temporaryPath, manifest.path);
 }
 
 async function git(args, options = {}) {
@@ -103,12 +121,9 @@ async function resolveCommit(source, ref) {
   return commit;
 }
 
-function selectedSkills(manifest, names) {
-  const selected = names.length === 0 ? Object.keys(manifest.skills) : names;
-  for (const name of selected) {
-    if (!manifest.skills[name]) fail(`skill not found: ${name}`);
-  }
-  return selected;
+function selectedSkills(manifests, names) {
+  const selected = names.length === 0 ? manifests.flatMap((manifest) => Object.keys(manifest.skills)) : names;
+  return selected.map((name) => ({ name, manifest: findManifest(manifests, name) }));
 }
 
 async function installSkill(name, skill) {
@@ -151,11 +166,16 @@ async function add(arguments_) {
   if (!sourceArgument || !path) return usage();
 
   let name;
-  for (let index = 0; index < options.length; index += 2) {
+  let local = false;
+  for (let index = 0; index < options.length; index++) {
     const option = options[index];
-    const value = options[index + 1];
+    if (option === "--local") {
+      local = true;
+      continue;
+    }
+    const value = options[++index];
     if (!value || option !== "--name") return usage();
-    if (option === "--name") name = value;
+    name = value;
   }
 
   name ??= path === "." ? undefined : basename(path);
@@ -163,8 +183,9 @@ async function add(arguments_) {
   validateName(name);
   validatePath(path);
 
-  const manifest = await loadManifest();
-  if (manifest.skills[name]) fail(`skill already exists: ${name}`);
+  const manifests = await loadManifests();
+  if (manifests.some((manifest) => manifest.skills[name])) fail(`skill already exists: ${name}`);
+  const manifest = local ? manifests[1] : manifests[0];
   const source = normalizeSource(sourceArgument);
   const skill = { source, path, commit: await resolveCommit(source, "HEAD") };
   await installSkill(name, skill);
@@ -174,19 +195,17 @@ async function add(arguments_) {
 
 async function remove(arguments_) {
   if (arguments_.length === 0) return usage();
-  const manifest = await loadManifest();
-  const names = selectedSkills(manifest, arguments_);
-  for (const name of names) {
+  const selected = selectedSkills(await loadManifests(), arguments_);
+  for (const { name, manifest } of selected) {
     await rm(join(skillsDir, name), { recursive: true, force: true });
     delete manifest.skills[name];
     console.log(`Removed ${name}`);
   }
-  await saveManifest(manifest);
+  for (const manifest of new Set(selected.map(({ manifest }) => manifest))) await saveManifest(manifest);
 }
 
 async function install(arguments_) {
-  const manifest = await loadManifest();
-  for (const name of selectedSkills(manifest, arguments_)) {
+  for (const { name, manifest } of selectedSkills(await loadManifests(), arguments_)) {
     await installSkill(name, manifest.skills[name]);
   }
 }
@@ -204,12 +223,12 @@ async function update(arguments_) {
   if (all && names.length > 0) fail("--all cannot be combined with skill names");
   if (!all && names.length === 0) return usage();
 
-  const manifest = await loadManifest();
   const updates = [];
-  for (const name of selectedSkills(manifest, all ? [] : names)) {
+  for (const { name, manifest } of selectedSkills(await loadManifests(), all ? [] : names)) {
     const skill = manifest.skills[name];
     const commit = await resolveCommit(skill.source, "HEAD");
-    if (commit !== skill.commit) updates.push({ name, skill: { ...skill, commit }, previousCommit: skill.commit });
+    if (commit !== skill.commit)
+      updates.push({ name, manifest, skill: { ...skill, commit }, previousCommit: skill.commit });
   }
 
   if (updates.length === 0) {
@@ -220,8 +239,8 @@ async function update(arguments_) {
   if (dryRun) return;
 
   for (const update of updates) await installSkill(update.name, update.skill);
-  for (const update of updates) manifest.skills[update.name] = update.skill;
-  await saveManifest(manifest);
+  for (const update of updates) update.manifest.skills[update.name] = update.skill;
+  for (const manifest of new Set(updates.map(({ manifest }) => manifest))) await saveManifest(manifest);
 }
 
 async function main() {

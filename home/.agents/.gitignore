@@ -1,2 +1,5 @@
 # gh skill が管理するローカルの状態
 .skill-lock.json
+
+# コミットしないマシン固有のスキルのマニフェスト
+skills.local.json
