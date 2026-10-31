@@ -30,6 +30,11 @@
       "source": "https://github.com/microsoft/playwright-cli.git",
       "path": "skills/playwright-cli",
       "commit": "9b118a1a737662fa118d591b5687340b86005d5c"
+    },
+    "playwright-cli-screenshot": {
+      "source": "https://github.com/p-chan/skills.git",
+      "path": "skills/playwright-cli-screenshot",
+      "commit": "026dce1c4927d3c56a8b7ac15898dc48486d81fc"
     }
   }
 }
