@@ -8,8 +8,7 @@
   },
   "autoMemoryEnabled": false,
   "enabledPlugins": {
-    "codex@openai-codex": true,
-    "example-skills@anthropic-agent-skills": true
+    "codex@openai-codex": true
   },
   "env": {
     "CLAUDE_CODE_NO_FLICKER": "1"
