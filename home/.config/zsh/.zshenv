@@ -10,6 +10,14 @@ if [[ "$TERM_PROGRAM" == "herdr" ]]; then
   export FORCE_HYPERLINK=1
 fi
 
+# herdr の中でも、1Password CLI がデスクトップアプリと連携できるようにする
+# 1Password CLI はアプリの設定ファイルを読んで連携が有効か判断するが、herdr の中では macOS のプライバシー保護で読み取りが拒否され、連携が無効と判断される
+# OP_BIOMETRIC_UNLOCK_ENABLED で連携を有効と明示すれば、設定ファイルを読まずにアプリへ接続する。アプリでの承認はこれまでどおり求められる
+# TODO: herdr の中でも設定ファイルを読めるようになったら削除する
+if [[ "$TERM_PROGRAM" == "herdr" ]]; then
+  export OP_BIOMETRIC_UNLOCK_ENABLED=true
+fi
+
 typeset -U path fpath
 
 # ~/.zshenv は <repo>/home 内のファイルへのシンボリックリンクで、mise の dotfiles の機能が dotfiles.root 設定をもとに管理している
