@@ -10,19 +10,19 @@ import { setTimeout as sleep } from "node:timers/promises";
 
 // 英語主体とみなす英字の最小数。1〜2 語の返事（「OK」「Done.」「Sounds good.」は 10 文字以下）を見逃し、
 // 過去の記録で最も短い英語の最終回答（英字 19 文字）は捕まえる
-const MIN_LATIN = 15;
+const MIN_LATIN = 16;
 // 英字が日本語の文字数の何倍を超えたら英語主体とみなすか。過去の記録では、日本語の本文は最大 4.4 倍
 // （英語の部品名を並べた一覧など）、日本語が少し混ざった英語の本文は最小 12 倍だったので、その間のきりのいい値にする
-const LATIN_TO_JAPANESE_RATIO = 10;
+const LATIN_TO_JAPANESE_RATIO = 8;
 // 1 行の途中報告は、英字がこの数以上の長い段落だけを見る。過去の記録では、ツールを呼ぶ前の
 // 1 行の前置き（189 件）は最大 138 文字、画面に出た thinking の段落は 164 文字と 236 文字だった
-const MIN_LATIN_LONG_PARAGRAPH = 150;
+const MIN_LATIN_LONG_PARAGRAPH = 160;
 // 最終回答が transcript に書き込まれるのを待つ上限と間隔。計測では、hook の起動時点では毎回まだ書き込まれておらず、
 // 起動から 51〜71 ms 後に現れた
-const TRANSCRIPT_WAIT_MS = 500;
+const TRANSCRIPT_WAIT_MS = 400;
 const TRANSCRIPT_POLL_MS = 20;
 // reason に挙げる箇所の数と、各箇所の冒頭の長さ
-const MAX_EXCERPTS = 5;
+const MAX_EXCERPTS = 4;
 const EXCERPT_LENGTH = 80;
 
 type Kind = "最終回答" | "途中報告" | "thinking";

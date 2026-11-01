@@ -209,7 +209,7 @@ test("last_assistant_message だけで英語と判定できたときは待たな
     const started = Date.now();
     const output = stop(path, ENGLISH) as { decision: string };
     assert.equal(output.decision, "block");
-    assert.ok(Date.now() - started < 400, "transcript の書き込みを待っていない");
+    assert.ok(Date.now() - started < 300, "transcript の書き込みを待っていない");
   });
 });
 
