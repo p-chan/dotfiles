@@ -22,7 +22,7 @@ const MIN_LATIN_LONG_PARAGRAPH = 150;
 const TRANSCRIPT_WAIT_MS = 500;
 const TRANSCRIPT_POLL_MS = 20;
 // reason に挙げる箇所の数と、各箇所の冒頭の長さ
-const MAX_EXCERPTS = 3;
+const MAX_EXCERPTS = 5;
 const EXCERPT_LENGTH = 80;
 
 type Kind = "最終回答" | "途中報告" | "thinking";
