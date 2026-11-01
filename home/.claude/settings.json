@@ -81,6 +81,16 @@
         ],
         "matcher": "^(startup|resume|clear|compact|fork)$"
       }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "command": "~/.claude/hooks/personal-require-japanese.ts",
+            "type": "command"
+          }
+        ]
+      }
     ]
   },
   "model": "opus",
