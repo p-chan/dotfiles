@@ -70,9 +70,9 @@ function stop(transcriptPath: string, lastAssistantMessage?: string, extra: Entr
 
 // transcript の最後を最終回答にして Stop を呼ぶ
 async function stopWith(entries: Entry[], final: string): Promise<{ decision?: string; reason?: string } | null> {
-  let output: unknown = null;
+  let output: { decision?: string; reason?: string } | null = null;
   await withTranscript(jsonl([...entries, text(final)]), async (path) => {
-    output = stop(path, final);
+    output = stop(path, final) as typeof output;
   });
   return output;
 }

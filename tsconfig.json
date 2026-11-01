@@ -1,0 +1,15 @@
+{
+  "extends": ["@tsconfig/node24/tsconfig.json", "@tsconfig/strictest/tsconfig.json"],
+  "compilerOptions": {
+    "allowImportingTsExtensions": true,
+    "erasableSyntaxOnly": true,
+    "noEmit": true,
+    "types": ["node"]
+  },
+  "include": [
+    ".github/scripts/**/*.ts",
+    "scripts/**/*.ts",
+    "home/.agents/skills/*/scripts/**/*.ts",
+    "home/.claude/hooks/**/*.ts"
+  ]
+}

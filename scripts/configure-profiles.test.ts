@@ -21,10 +21,10 @@ async function createDotfilesFixture(): Promise<string> {
 
 function configure(root: string, profiles?: string): { code: number; stdout: string } {
   const env: Record<string, string> = {
-    HOME: process.env.HOME ?? "/tmp",
-    PATH: process.env.PATH ?? "/usr/bin:/bin",
+    HOME: process.env["HOME"] ?? "/tmp",
+    PATH: process.env["PATH"] ?? "/usr/bin:/bin",
   };
-  if (profiles !== undefined) env.DOTFILES_PROFILES = profiles;
+  if (profiles !== undefined) env["DOTFILES_PROFILES"] = profiles;
 
   const result = spawnSync("bash", [scriptPath, root], {
     env,

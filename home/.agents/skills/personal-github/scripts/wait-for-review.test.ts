@@ -164,7 +164,7 @@ async function runScript(root: string, args: string[] = DEFAULT_ARGS) {
 
   const result = spawnSync("bash", [scriptPath, ...args], {
     env: {
-      PATH: `${join(root, "mocks")}:${process.env.PATH ?? "/usr/bin:/bin"}`,
+      PATH: `${join(root, "mocks")}:${process.env["PATH"] ?? "/usr/bin:/bin"}`,
       MOCK_STATE_DIR: join(root, "state"),
       MOCK_API_FAIL_CALLS: failCalls,
       MOCK_PR_NUMBER: prNumber,

@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { spawnSync } from "node:child_process";
+import { spawnSync, type SpawnSyncReturns } from "node:child_process";
 import { chmod, lstat, mkdir, mkdtemp, readFile, rm, symlink, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
@@ -38,7 +38,7 @@ async function writeExecutable(path: string, content: string): Promise<void> {
   await chmod(path, 0o755);
 }
 
-function git(fixture: Fixture, ...arguments_: string[]): ReturnType<typeof spawnSync> {
+function git(fixture: Fixture, ...arguments_: string[]): SpawnSyncReturns<string> {
   const result = spawnSync("git", ["-C", fixture.repository, ...arguments_], {
     encoding: "utf8",
     env: fixture.environment,
@@ -47,7 +47,7 @@ function git(fixture: Fixture, ...arguments_: string[]): ReturnType<typeof spawn
   return result;
 }
 
-function runInstaller(fixture: Fixture): ReturnType<typeof spawnSync> {
+function runInstaller(fixture: Fixture): SpawnSyncReturns<string> {
   const result = spawnSync("/bin/bash", [installerPath], {
     encoding: "utf8",
     env: fixture.environment,
