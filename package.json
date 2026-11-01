@@ -5,10 +5,15 @@
   "scripts": {
     "check": "prettier --check .",
     "format": "prettier --write .",
+    "typecheck": "tsc --noEmit",
     "test": "node --test home/.claude/hooks/*.test.ts .github/scripts/check-pr-title.test.ts scripts/*.test.ts home/.agents/skills/*/scripts/*.test.ts home/.config/herdr/services/*/*.test.mjs"
   },
   "devDependencies": {
-    "prettier": "3.7.4"
+    "@tsconfig/node24": "24.0.5",
+    "@tsconfig/strictest": "2.0.8",
+    "@types/node": "24.19.2",
+    "prettier": "3.7.4",
+    "typescript": "7.0.2"
   },
   "packageManager": "pnpm@10.27.0"
 }
