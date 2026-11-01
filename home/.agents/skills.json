@@ -11,11 +11,6 @@
       "path": "skills/productivity/grill-me",
       "commit": "26ba8ae34bb3657e7dd85939fce8a5a166439f8b"
     },
-    "japanese-tech-writing": {
-      "source": "https://gist.github.com/k16shikano/fd287c3133457c4fd8f5601d34aa817d.git",
-      "path": ".",
-      "commit": "5ed08e4475365fd233aa0d3ab71c19b87e1a5732"
-    },
     "notion-cli": {
       "source": "https://github.com/makenotion/skills.git",
       "path": "skills/notion-cli",
