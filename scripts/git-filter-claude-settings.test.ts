@@ -33,7 +33,8 @@ function invoke(mode: "clean" | "smudge", input: string | Uint8Array, home = "/U
   });
 }
 
-function run(mode: "clean" | "smudge", input: object, home = "/Users/example"): object {
+// 出力の JSON の形はテストごとに違うので、型を付けずに返す
+function run(mode: "clean" | "smudge", input: object, home = "/Users/example"): any {
   const result = invoke(mode, JSON.stringify(input), home);
   if (result.error) throw result.error;
   assert.equal(result.status, 0, result.stderr);

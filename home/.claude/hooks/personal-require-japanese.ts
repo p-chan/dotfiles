@@ -166,7 +166,8 @@ export function splitTurns(entries: Entry[]): Turn[] {
 
 function lastTurn(content: string): Turn {
   const turns = splitTurns(parseEntries(content));
-  return turns[turns.length - 1];
+  // splitTurns は空の transcript にも 1 件のターンを返す
+  return turns.at(-1) ?? analyzeTurn([], "");
 }
 
 // final が null のときは、transcript の最後の本文を最終回答として扱う
@@ -230,7 +231,13 @@ function stopReason(findings: Finding[]): string {
   ].join("\n");
 }
 
-async function handleStop(input: Record<string, unknown>): Promise<unknown> {
+interface StopInput {
+  stop_hook_active?: unknown;
+  last_assistant_message?: unknown;
+  transcript_path?: unknown;
+}
+
+async function handleStop(input: StopInput): Promise<unknown> {
   if (input.stop_hook_active === true) return null;
   const final = typeof input.last_assistant_message === "string" ? input.last_assistant_message : null;
   const finalIsEnglish = final !== null && isEnglish(final);
