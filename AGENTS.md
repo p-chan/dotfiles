@@ -8,7 +8,7 @@ P-Chan のポータブルな開発環境をコードで管理します。
 
 - `home/`: 設定ファイルの実体。`mise bootstrap` でホームディレクトリにシンボリックリンクされます。リンク対象は `home/.config/mise/config.toml` の `[dotfiles]` で定義します
   - `.agents/`: コーディングエージェント向けの共通 AGENTS.md と Agent Skills
-- `.agents/skills/`: このリポジトリで作業するときに使う Agent Skills。`gh skill install <repo> <path> --agent universal --scope project` で取り込み、`gh skill update` で更新します。`.claude/skills` はここへのシンボリックリンクです
+- `.agents/skills/`: このリポジトリで作業するときに使う Agent Skills。外部のスキルは `gh skill install <repo> <path> --agent universal --scope project` で取り込み、`gh skill update` で更新します。`.claude/skills` はここへのシンボリックリンクです
 - `scripts/`: dotfiles の操作に使うスクリプト
 - `bin/`: システム全体で使う自作コマンド
 - `docs/apps/`: コードで管理できないアプリの手動設定の手順。README のアプリ一覧からリンクします
@@ -24,6 +24,10 @@ P-Chan のポータブルな開発環境をコードで管理します。
 - ホームディレクトリのシンボリックリンクは main working tree を指しているので、linked worktree での変更はマージするまで手元の環境に反映されません。変更を手元の環境に反映させて確かめる必要があるときは、linked worktree ではなく `ALLOW_MAIN_WORKING_TREE=1 git switch -c <branch-name>` で main working tree にブランチを作ります。それ以外は linked worktree に作ります
 - `git clean -x` など、Git の管理対象外のファイルを削除するコマンドを実行しません。`~/.config/zsh` や `~/.ssh` などはディレクトリごとリンクしているので、シェルの履歴、`known_hosts`、マシン固有の mise の設定（`home/.config/mise/conf.d/`）など、復元できないマシン固有のファイルの実体がこのリポジトリ内にあります
 - `home/.claude/settings.json` は Git のフィルタ（`.gitattributes` と `home/.config/git/filters/claude-settings.sh`）を通してコミットされます。コミット時にキーがソートされ、Herdr のフックのパスが `$HOME` 形式に置き換わるので、作業ツリーとインデックスの内容は一致しません。キーの順序は気にせず編集し、差分は `git diff` で確認します。背景は README の「Herdr の Claude 連携」を参照します
+
+## マイグレーション
+
+git pull だけでは既存のマシンに反映されない変更には、同じ PR で `MIGRATIONS.md` にエントリを追加します。たとえば、`dots up` が必要なパッケージの追加、`mise bootstrap` の設定や `[dotfiles]` のエントリの変更、不要になったファイルの削除です。リンク済みのファイルの変更のように、git pull だけで反映されるものには追加しません。
 
 ## 機密情報
 
