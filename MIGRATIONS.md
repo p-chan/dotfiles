@@ -21,3 +21,7 @@
 対象: `desktop`
 
 `mise run -C "$HOME" bootstrap-desktop` を実行する。Dock の項目を入れ直すので、手動で変えた Dock の並びは上書きされ、Dock は再起動する。言語や既定のブラウザなど、このタスクのほかの設定も再度適用される。
+
+### 2026-11-03 codex-review スキルを追加
+
+`agent-skills install codex-review` を実行する。
