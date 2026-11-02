@@ -112,6 +112,10 @@ Homebrew のパッケージと mise のツールをアップグレードしま�
 dots up
 ```
 
+### マイグレーション
+
+Dock の設定など、`git pull` だけでは反映されない変更の手順は `MIGRATIONS.md` に追記されます。別のマシンで `git pull` したあとに、このリポジトリでコーディングエージェントの `migrate` スキルを使うと、増えた分を確認して適用できます。
+
 ## 作者
 
 [@p-chan](https://github.com/p-chan)
