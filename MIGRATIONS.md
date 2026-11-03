@@ -25,3 +25,7 @@
 ### 2026-11-03 codex-review スキルを追加
 
 `agent-skills install codex-review` を実行する。
+
+### 2026-11-03 p-chan/skills のスキルを追加し、重複する personal スキルを削除
+
+`agent-skills install setup-node-version setup-oxc setup-pnpm setup-typescript dependencies github-actions setup-repo setup-skills setup-p-chan-skills` を実行する。personal-setup-node、personal-setup-oxc、personal-setup-pnpm、personal-setup-typescript、personal-installing-npm-packages は git pull で削除される。

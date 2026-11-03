@@ -11,6 +11,16 @@
       "path": "skills/codex-review",
       "commit": "bd13cc5dbe263b54ceda8b4684b2f5b9e788aed1"
     },
+    "dependencies": {
+      "source": "https://github.com/p-chan/skills.git",
+      "path": "skills/dependencies",
+      "commit": "ebd6a62b793adb0cfbe90744c26f7dc601af1ee4"
+    },
+    "github-actions": {
+      "source": "https://github.com/p-chan/skills.git",
+      "path": "skills/github-actions",
+      "commit": "ebd6a62b793adb0cfbe90744c26f7dc601af1ee4"
+    },
     "grill-me": {
       "source": "https://github.com/mattpocock/skills.git",
       "path": "skills/productivity/grill-me",
@@ -35,6 +45,41 @@
       "source": "https://github.com/p-chan/skills.git",
       "path": "skills/playwright-cli-screenshot",
       "commit": "026dce1c4927d3c56a8b7ac15898dc48486d81fc"
+    },
+    "setup-node-version": {
+      "source": "https://github.com/p-chan/skills.git",
+      "path": "skills/setup-node-version",
+      "commit": "ebd6a62b793adb0cfbe90744c26f7dc601af1ee4"
+    },
+    "setup-oxc": {
+      "source": "https://github.com/p-chan/skills.git",
+      "path": "skills/setup-oxc",
+      "commit": "ebd6a62b793adb0cfbe90744c26f7dc601af1ee4"
+    },
+    "setup-p-chan-skills": {
+      "source": "https://github.com/p-chan/skills.git",
+      "path": "skills/setup-p-chan-skills",
+      "commit": "ebd6a62b793adb0cfbe90744c26f7dc601af1ee4"
+    },
+    "setup-pnpm": {
+      "source": "https://github.com/p-chan/skills.git",
+      "path": "skills/setup-pnpm",
+      "commit": "ebd6a62b793adb0cfbe90744c26f7dc601af1ee4"
+    },
+    "setup-repo": {
+      "source": "https://github.com/p-chan/skills.git",
+      "path": "skills/setup-repo",
+      "commit": "ebd6a62b793adb0cfbe90744c26f7dc601af1ee4"
+    },
+    "setup-skills": {
+      "source": "https://github.com/p-chan/skills.git",
+      "path": "skills/setup-skills",
+      "commit": "ebd6a62b793adb0cfbe90744c26f7dc601af1ee4"
+    },
+    "setup-typescript": {
+      "source": "https://github.com/p-chan/skills.git",
+      "path": "skills/setup-typescript",
+      "commit": "ebd6a62b793adb0cfbe90744c26f7dc601af1ee4"
     }
   }
 }
