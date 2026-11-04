@@ -35,3 +35,9 @@
 対象: `desktop`
 
 `dots up` を実行する。
+
+### 2026-11-04 Icon Composer の cask を削除
+
+対象: `desktop`
+
+Xcode に同梱の Icon Composer を使う。cask でインストール済みなら `brew uninstall --cask icon-composer` を実行する。
