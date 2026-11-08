@@ -1,6 +1,9 @@
 # eza は mise で管理できない
 # GitHub Releases に macOS のバイナリがなく（github: は失敗する）、mise の brew バックエンドは、Homebrew がすでに ca-certificates を提供しているマシンでは、依存する ca-certificates をリンクできないため
 brew "eza"
+# oci-cli は mise の github: で管理できない
+# GitHub Releases に macOS のバイナリがなく、Python の wheel だけが配布されているため
+brew "oci-cli"
 cask "1password-cli"
 cask "chatgpt"
 cask "claude"
