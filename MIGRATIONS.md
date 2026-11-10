@@ -45,3 +45,7 @@ Xcode に同梱の Icon Composer を使う。cask でインストール済みな
 ### 2026-11-08 OCI CLI を追加
 
 `dots up` を実行する。
+
+### 2026-11-10 markdown スキルを追加
+
+`agent-skills install markdown` を実行する。

@@ -26,6 +26,11 @@
       "path": "skills/productivity/grill-me",
       "commit": "26ba8ae34bb3657e7dd85939fce8a5a166439f8b"
     },
+    "markdown": {
+      "source": "https://github.com/p-chan/skills.git",
+      "path": "skills/markdown",
+      "commit": "767513d3e3f52e9a2c96ce2c43406feb2c93dc60"
+    },
     "notion-cli": {
       "source": "https://github.com/makenotion/skills.git",
       "path": "skills/notion-cli",
