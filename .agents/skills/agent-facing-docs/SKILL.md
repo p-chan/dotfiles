@@ -4,12 +4,14 @@ metadata:
     github-path: skills/agent-facing-docs
     github-ref: refs/heads/main
     github-repo: https://github.com/p-chan/skills
-    github-tree-sha: 4cba673db6b2d7daa817ff6fe3ff621494214e8d
+    github-tree-sha: b78c8036c8a26dbce4a2b0f36a0e249fc84b3095
 name: agent-facing-docs
 ---
 # エージェント向け文書
 
 エージェント向け文書は、エージェントが必要な情報を、必要なときに、必要なだけ、確実に得られるように設計する。
+
+指示ファイルを扱う場合は、固有のルールについて `references/instruction-files.md` を読む。
 
 Skill を扱う場合は、固有のルールについて `references/skills.md` を読む。
 

@@ -59,3 +59,7 @@ Xcode に同梱の Icon Composer を使う。cask でインストール済みな
 対象: `desktop`
 
 `mise bootstrap` を実行して Tinycast をインストールし、`~/.config/tinycast/settings.json` をリンクする。すでに同じパスにファイルがあると衝突するので、その場合は削除してから実行する。そのあと [docs/apps/tinycast.md](docs/apps/tinycast.md) に沿って設定する。Raycast は `brew uninstall --cask raycast` でアンインストールする。
+
+### 2026-11-21 p-chan/skills のスキルを更新
+
+`agent-skills install changeset codex-review dependencies github-actions markdown playwright-cli-screenshot setup-node-version setup-oxc setup-p-chan-skills setup-pnpm setup-repo setup-skills setup-typescript` を実行する。
