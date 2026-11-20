@@ -4,6 +4,9 @@ pnpm-lock.yaml
 # Karabiner-Elements
 karabiner.json
 
+# Tinycast（アプリが書き換える）
+home/.config/tinycast/settings.json
+
 # gh skill で取り込んだ外部のスキル
 .agents/skills/
 
