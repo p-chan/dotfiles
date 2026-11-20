@@ -49,3 +49,7 @@ Xcode に同梱の Icon Composer を使う。cask でインストール済みな
 ### 2026-11-10 markdown スキルを追加
 
 `agent-skills install markdown` を実行する。
+
+### 2026-11-21 Rust を追加
+
+`mise install rust` を実行する。rustup が `~/.rustup` と `~/.cargo` に Rust のツールチェーンをインストールする。
