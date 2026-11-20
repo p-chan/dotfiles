@@ -58,4 +58,4 @@ Xcode に同梱の Icon Composer を使う。cask でインストール済みな
 
 対象: `desktop`
 
-`dots up` を実行して Tinycast をインストールし、[docs/apps/tinycast.md](docs/apps/tinycast.md) に沿って設定する。`~/.config/tinycast/settings.json` がすでにある場合は削除してから `mise bootstrap` を実行し、このリポジトリの設定ファイルをリンクする。Raycast は `brew uninstall --cask raycast` でアンインストールする。
+`mise bootstrap` を実行して Tinycast をインストールし、`~/.config/tinycast/settings.json` をリンクする。すでに同じパスにファイルがあると衝突するので、その場合は削除してから実行する。そのあと [docs/apps/tinycast.md](docs/apps/tinycast.md) に沿って設定する。Raycast は `brew uninstall --cask raycast` でアンインストールする。

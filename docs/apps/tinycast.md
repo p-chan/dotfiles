@@ -11,4 +11,4 @@
 - Backup
   - Settings File
     - ✅ Sync settings file
-      - `settings.json` がすでにあると聞かれたら、**Import** を選ぶ
+      - `settings.json` をどうするか聞かれたら、**Import** を選ぶ
