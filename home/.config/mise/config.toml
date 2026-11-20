@@ -74,7 +74,16 @@ dotfiles.default_mode = "symlink"
 credential_command = "$HOME/.local/share/mise/installs/github-cli-cli/latest/bin/gh auth token"
 
 [bootstrap.hooks]
-pre-packages = 'if command -v brew >/dev/null 2>&1; then brew bundle --file="$(mise settings get dotfiles.root)/.config/homebrew/Brewfile"; fi'
+# Brewfile.local は、このマシンにだけインストールするパッケージを書くファイル（`*.local` として Git の管理対象外）で、存在するときだけ適用する
+pre-packages = '''
+if command -v brew >/dev/null 2>&1; then
+  homebrew_dir="$(mise settings get dotfiles.root)/.config/homebrew"
+  brew bundle --file="$homebrew_dir/Brewfile"
+  if [ -f "$homebrew_dir/Brewfile.local" ]; then
+    brew bundle --file="$homebrew_dir/Brewfile.local"
+  fi
+fi
+'''
 
 [bootstrap.packages]
 "brew:git" = "latest"
