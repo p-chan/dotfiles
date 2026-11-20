@@ -108,6 +108,7 @@ pre-packages = 'if command -v brew >/dev/null 2>&1; then brew bundle --file="$(m
 "~/.config/opencode/opencode.jsonc" = {}
 "~/.config/ripgrep" = {}
 "~/.config/sheldon" = {}
+"~/.config/tinycast/settings.json" = {}
 "~/.config/vim" = {}
 "~/.config/zsh" = {}
 "~/.config/zsh-abbr" = {}

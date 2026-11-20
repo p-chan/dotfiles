@@ -53,3 +53,9 @@ Xcode に同梱の Icon Composer を使う。cask でインストール済みな
 ### 2026-11-21 Rust を追加
 
 `mise install rust` を実行する。rustup が `~/.rustup` と `~/.cargo` に Rust のツールチェーンをインストールする。
+
+### 2026-11-21 ランチャーを Raycast から Tinycast に変更
+
+対象: `desktop`
+
+`dots up` を実行して Tinycast をインストールし、[docs/apps/tinycast.md](docs/apps/tinycast.md) に沿って設定する。`~/.config/tinycast/settings.json` がすでにある場合は削除してから `mise bootstrap` を実行し、このリポジトリの設定ファイルをリンクする。Raycast は `brew uninstall --cask raycast` でアンインストールする。
