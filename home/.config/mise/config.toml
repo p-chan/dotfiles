@@ -26,6 +26,8 @@ bun = "latest"
 "npm:opensrc" = "latest"
 "npm:pnpm" = { version = "latest", allow_builds = ["pnpm"] }
 "npm:yarn" = "latest"
+# rust-analyzer はエディタの補完や定義ジャンプに使う言語サーバー。cargo、clippy、rustfmt は rustup の default profile に含まれる
+rust = { version = "stable", profile = "default", components = ["rust-analyzer"] }
 
 [tools."github:jqlang/jq"]
 version = "latest"
