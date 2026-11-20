@@ -26,5 +26,6 @@ requires_tools = true
 [dotfiles]
 "~/.config/ghostty" = {}
 "~/.config/karabiner" = {}
+"~/.config/tinycast/settings.json" = {}
 # Zed は生成した状態（prompts/、themes/）を ~/.config/zed に書き込むので、ディレクトリ全体ではなく settings.json だけをリンクする
 "~/.config/zed/settings.json" = {}
