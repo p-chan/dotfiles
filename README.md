@@ -67,6 +67,11 @@ mise bootstrap
 これらの設定だけを適用するときは、`mise run bootstrap-server` を実行します。
 プロファイルを外すと、その設定は管理対象から外れますが、パッケージのアンインストールや macOS の設定の復元は自動では行いません。
 
+### マシン固有のパッケージ
+
+特定のマシンにだけ入れる Homebrew のパッケージは、`home/.config/homebrew/Brewfile.local` に書きます。
+このファイルは Git の管理対象外で、存在するときだけ `mise bootstrap` が共通の `Brewfile` に続けて適用します。
+
 ## セットアップ
 
 GUI アプリの一覧です。
