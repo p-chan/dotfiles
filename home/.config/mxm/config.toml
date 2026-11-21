@@ -1,5 +1,3 @@
-# mxm の設定。書式は https://github.com/p-chan/mxm#config-file-and-resident-mode を参照する
-
 [device."MX Master 4"]
 dpi = 2400
 smartshift = { mode = "freespin", threshold = 12, torque = 75 }
