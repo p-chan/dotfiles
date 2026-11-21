@@ -84,5 +84,3 @@ sudo rm -rf /Applications/Utilities/LogiPluginService.app "/Library/Application 
 sudo pkgutil --forget com.logi.installer.pluginservice.package
 sudo pkgutil --forget com.logi.installer.pluginservice.media.package
 ```
-
-Logitech のウェブカメラの映像とオートフォーカスは Options+ なしで使えるが、RightSight（自動フレーミング）は使えなくなる。
