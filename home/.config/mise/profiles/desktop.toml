@@ -1,3 +1,7 @@
+[tools]
+# 新しいバージョンを入れるたびに、常駐する mxm（LaunchAgent が起動するコピー）を置き換える
+"github:p-chan/mxm" = { version = "latest", postinstall = "mxm service install" }
+
 [bootstrap.packages]
 "brew:defaultbrowser" = "latest"
 "brew:dockutil" = "latest"
@@ -26,6 +30,7 @@ requires_tools = true
 [dotfiles]
 "~/.config/ghostty" = {}
 "~/.config/karabiner" = {}
+"~/.config/mxm" = {}
 "~/.config/tinycast/settings.json" = {}
 # Zed は生成した状態（prompts/、themes/）を ~/.config/zed に書き込むので、ディレクトリ全体ではなく settings.json だけをリンクする
 "~/.config/zed/settings.json" = {}
