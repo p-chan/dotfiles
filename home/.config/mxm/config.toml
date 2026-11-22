@@ -1,7 +1,7 @@
 [device."MX Master 4"]
 dpi = 2400
 smartshift = { threshold = 12, torque = 75 }
-wheel = { hires = true, invert = false }
-thumbwheel = { invert = false }
+wheel = { hires = true, invert = false, speed = 85, smooth = true }
+thumbwheel = { invert = false, speed = 50 }
 haptic = 60
 force = "default"
