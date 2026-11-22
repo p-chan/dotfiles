@@ -68,7 +68,7 @@ Xcode に同梱の Icon Composer を使う。cask でインストール済みな
 
 対象: `desktop`
 
-`~/.config/mxm` がすでにあると衝突するので、中身を退避して削除してから `mise bootstrap` を実行し、`~/.config/mxm` をリンクする。そのあと `mise install github:p-chan/mxm` を実行すると、`postinstall` の `mxm service install` が mxm を常駐させる。初回だけ、表示された実行ファイルをシステム設定 → プライバシーとセキュリティ → 入力監視 で許可する。
+`~/.config/mxm` がすでにあると衝突するので、中身を退避して削除してから `mise bootstrap` を実行し、`~/.config/mxm` をリンクする。そのあと `mise install github:p-chan/mxm` を実行すると、`postinstall` の `mxm service install` が mxm を常駐させる。初回だけ、表示された実行ファイルをシステム設定 → プライバシーとセキュリティ → 入力監視 と アクセシビリティ（ソフトウェアスクロール用）で許可する。
 
 ### 2026-11-21 Logi Options+ を削除
 
