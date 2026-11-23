@@ -84,3 +84,7 @@ sudo rm -rf /Applications/Utilities/LogiPluginService.app "/Library/Application 
 sudo pkgutil --forget com.logi.installer.pluginservice.package
 sudo pkgutil --forget com.logi.installer.pluginservice.media.package
 ```
+
+### 2026-11-23 ios-simulator スキルを追加
+
+`agent-skills install ios-simulator` を実行する。

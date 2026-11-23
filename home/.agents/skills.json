@@ -26,6 +26,11 @@
       "path": "skills/productivity/grill-me",
       "commit": "26ba8ae34bb3657e7dd85939fce8a5a166439f8b"
     },
+    "ios-simulator": {
+      "source": "https://github.com/p-chan/skills.git",
+      "path": "skills/ios-simulator",
+      "commit": "1f99e133119f62b06dff88f004ce526a87b8cc7f"
+    },
     "markdown": {
       "source": "https://github.com/p-chan/skills.git",
       "path": "skills/markdown",
