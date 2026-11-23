@@ -1,5 +1,5 @@
 [tools]
-"github:p-chan/mxm" = { version = "latest", postinstall = "mxm service install" }
+"github:p-chan/mxm" = { version = "latest", minimum_release_age = "0s", postinstall = "mxm service install" }
 
 [bootstrap.packages]
 "brew:defaultbrowser" = "latest"
