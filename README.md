@@ -103,7 +103,7 @@ GUI アプリの一覧です。
 | Zed                 | Homebrew     | ☐                | `~/.config/zed/settings.json`      | —                                                                    |
 
 新しいマシンを使える状態にするまでに必要なアプリは、ごく一部です。
-他のドキュメントからリンクしている認証情報とライセンスキーのための 1Password、他のサービスにサインインするためのメインのブラウザである Arc、キーボードとマウスの入力のための Karabiner-Elements、Google Japanese IME、ランチャーの Tinycast があれば十分です。
+他のドキュメントからリンクしている認証情報とライセンスキーのための 1Password、他のサービスにサインインするためのメインのブラウザである Arc、キーボードの入力のための Karabiner-Elements と Google Japanese IME、ランチャーの Tinycast があれば十分です。
 残りのアプリは、実際に必要になってからで構いません。
 
 ## メンテナンス
