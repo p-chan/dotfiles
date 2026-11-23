@@ -1,5 +1,4 @@
 [tools]
-# 新しいバージョンを入れるたびに、常駐する mxm（LaunchAgent が起動するコピー）を置き換える
 "github:p-chan/mxm" = { version = "latest", postinstall = "mxm service install" }
 
 [bootstrap.packages]
