@@ -1,5 +1,4 @@
 [tools]
-# mxm service update は登録済みのときだけ daemon を新しい版に置き換えるので、新しいマシンでは一度だけ mxm service install を実行する
 "github:p-chan/mxm" = { version = "latest", minimum_release_age = "0s", postinstall = "mxm service update" }
 
 [bootstrap.packages]
