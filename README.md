@@ -96,7 +96,6 @@ GUI アプリの一覧です。
 | Handy               | Homebrew     | ✅               | —                                  | [docs/apps/handy.md](docs/apps/handy.md)                             |
 | iStat Menus         | Homebrew     | ✅               | —                                  | [docs/apps/istat-menus.md](docs/apps/istat-menus.md)                 |
 | Karabiner-Elements  | Homebrew     | ✅               | `~/.config/karabiner`              | —                                                                    |
-| Logi Options+       | Homebrew     | ✅               | —                                  | [docs/apps/logi-options-plus.md](docs/apps/logi-options-plus.md)     |
 | Mimestream          | Homebrew     | ☐                | —                                  | —                                                                    |
 | Slack               | Homebrew     | ✅               | —                                  | [docs/apps/slack.md](docs/apps/slack.md)                             |
 | Tinycast            | Homebrew     | ✅               | `~/.config/tinycast/settings.json` | [docs/apps/tinycast.md](docs/apps/tinycast.md)                       |
@@ -104,7 +103,7 @@ GUI アプリの一覧です。
 | Zed                 | Homebrew     | ☐                | `~/.config/zed/settings.json`      | —                                                                    |
 
 新しいマシンを使える状態にするまでに必要なアプリは、ごく一部です。
-他のドキュメントからリンクしている認証情報とライセンスキーのための 1Password、他のサービスにサインインするためのメインのブラウザである Arc、キーボードとマウスの入力のための Karabiner-Elements、Google Japanese IME、Logi Options+、ランチャーの Tinycast があれば十分です。
+他のドキュメントからリンクしている認証情報とライセンスキーのための 1Password、他のサービスにサインインするためのメインのブラウザである Arc、キーボードとマウスの入力のための Karabiner-Elements、Google Japanese IME、ランチャーの Tinycast があれば十分です。
 残りのアプリは、実際に必要になってからで構いません。
 
 ## メンテナンス
