@@ -88,3 +88,7 @@ sudo pkgutil --forget com.logi.installer.pluginservice.media.package
 ### 2026-11-23 ios-simulator スキルを追加
 
 `agent-skills install ios-simulator` を実行する。
+
+### 2026-11-24 sheldon が依存する openssl@3 を追加
+
+`dots up` を実行する。
